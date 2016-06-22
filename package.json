@@ -1,0 +1,17 @@
+{
+  "author": "prismic.io developers",
+  "license": "Apache 2.0",
+  "name": "prismic-cli",
+  "version": "0.0.1",
+  "description": "Command line to bootstrap prismic projects.",
+  "bin": {
+    "prismic": "bin/prismic.js"
+  },
+  "main": "./lib/index.js",
+  "preferGlobal": "true",
+  "dependencies": {
+    "command-line-commands": "^1.0.3",
+    "form-data": "^1.0.0-rc4",
+    "inquirer": "^1.0.3"
+  }
+}
