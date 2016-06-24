@@ -3,8 +3,9 @@
 
 var pjson = require('../package.json');
 var commandLineCommands = require('command-line-commands');
-var inquirer = require('inquirer');
+var auth = require('../lib/auth');
 var api = require('../lib/api');
+var ui = require('../lib/ui');
 
 function help() {
   console.log('Usage: prismic <command>');
@@ -21,44 +22,27 @@ function version() {
   console.log('prismic.io version ' + pjson.version);
 }
 
-function init() {
-  console.log("TODO: init");
+function init(argv) {
+  var domain = argv[0];
+  auth.read().then(function (data) {
+    if (data) {
+      return data;
+    } else {
+      return ui.signupOrLogin().then(function() {
+        return auth.read();
+      });
+    }
+  }).then(function (cookies) {
+    return ui.createRepository(cookies, domain);
+  }).then(function (domain) {
+    console.log("Repository successfully created: http://" + domain + ".prismic.io");
+  }).catch(function(err) {
+    console.log("Error: " , err);
+  });
 }
 
 function signup() {
-  inquirer.prompt([
-    {
-      type: 'input',
-      name: 'firstname',
-      message: 'First name: '
-    },
-    {
-      type: 'input',
-      name: 'lastname',
-      message: 'Last name: '
-    },
-    {
-      type: 'input',
-      name: 'email',
-      message: 'Email: ',
-      validate: function(email) {
-        return email && email.length > 0;
-      }
-    },
-    {
-      'type': 'password',
-      'name': 'password',
-      'message': 'Password: '
-    },
-    {
-      'type': 'checkbox',
-      'name': 'accept',
-      'message': 'Terms of service: https://prismic.io/legal/terms',
-      'choices': ['I agree']
-    }
-  ]).then(function(answers) {
-    return api.signup(answers.firstname, answers.lastname, answers.email, answers.password, answers.accept.length > 0);
-  }).then(function(success) {
+  ui.signup().then(function(success) {
     if (success) {
       console.log("Successfully created your account! You can now create repositories.");
     } else {
@@ -70,23 +54,7 @@ function signup() {
 }
 
 function login() {
-  inquirer.prompt([
-    {
-      type: 'input',
-      name: 'email',
-      message: 'Email: ',
-      validate: function(email) {
-        return email && email.length > 0;
-      }
-    },
-    {
-      'type': 'password',
-      'name': 'password',
-      'message': 'Password: '
-    }
-  ]).then(function(answers) {
-    return api.login(answers.email, answers.password);
-  }).then(function(success) {
+  ui.login().then(function(success) {
     if (success) {
       console.log("Successfully logged in! You can now create repositories.");
     } else {
@@ -108,7 +76,7 @@ function main() {
     signup();
     break;
   case 'init':
-    init();
+    init(argv);
     break;
   case 'version':
     version();
