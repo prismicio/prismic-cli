@@ -25,8 +25,51 @@ function init() {
   console.log("TODO: init");
 }
 
+function signup() {
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'firstname',
+      message: 'First name: '
+    },
+    {
+      type: 'input',
+      name: 'lastname',
+      message: 'Last name: '
+    },
+    {
+      type: 'input',
+      name: 'email',
+      message: 'Email: ',
+      validate: function(email) {
+        return email && email.length > 0;
+      }
+    },
+    {
+      'type': 'password',
+      'name': 'password',
+      'message': 'Password: '
+    },
+    {
+      'type': 'checkbox',
+      'name': 'accept',
+      'message': 'Terms of service: https://prismic.io/legal/terms',
+      'choices': ['I agree']
+    }
+  ]).then(function(answers) {
+    return api.signup(answers.firstname, answers.lastname, answers.email, answers.password, answers.accept.length > 0);
+  }).then(function(success) {
+    if (success) {
+      console.log("Successfully created your account! You can now create repositories.");
+    } else {
+      console.log("Error");
+    }
+  }).catch(function(err) {
+    console.log("Error: " , err);
+  });
+}
+
 function login() {
-  console.log("TODO: login");
   inquirer.prompt([
     {
       type: 'input',
@@ -50,7 +93,7 @@ function login() {
       console.log("Login error, check your credentials. If you forgot your password, visit http://prismic.io to reset it.");
     }
   }).catch(function(err) {
-    console.log("qu'est ce que le fuck ? " , err);
+    console.log("Error: " , err);
   });
 }
 
@@ -62,7 +105,7 @@ function main() {
     login();
     break;
   case 'signup':
-    login();
+    signup();
     break;
   case 'init':
     init();

@@ -12,6 +12,7 @@
   "dependencies": {
     "command-line-commands": "^1.0.3",
     "form-data": "^1.0.0-rc4",
-    "inquirer": "^1.0.3"
+    "inquirer": "^1.0.3",
+    "request": "^2.72.0"
   }
 }
