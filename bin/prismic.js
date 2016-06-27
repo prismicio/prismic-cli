@@ -3,11 +3,13 @@
 
 var pjson = require('../package.json');
 var commandLineCommands = require('command-line-commands');
-var auth = require('../lib/auth');
-var api = require('../lib/api');
+var configuration = require('../lib/config');
 var ui = require('../lib/ui');
 
-function help() {
+var DEFAULT_BASE = 'https://prismic.io';
+
+function help(config) {
+  console.log(config.base || DEFAULT_BASE);
   console.log('Usage: prismic <command>');
   console.log();
   console.log('Valid commands:');
@@ -22,68 +24,98 @@ function version() {
   console.log('prismic.io version ' + pjson.version);
 }
 
-function init(argv) {
+function subdomain(base, domain) {
+  var arr = /^(https?:\/\/)(.*)/.exec(base);
+  return arr[1] + domain + '.' + arr[2];
+}
+
+function init(config, argv) {
   var domain = argv[0];
-  auth.read().then(function (data) {
-    if (data) {
-      return data;
-    } else {
-      return ui.signupOrLogin().then(function() {
-        return auth.read();
-      });
-    }
-  }).then(function (cookies) {
-    return ui.createRepository(cookies, domain);
-  }).then(function (domain) {
-    console.log("Repository successfully created: http://" + domain + ".prismic.io");
+  var cookiesPromise = config.cookies
+        ? Promise.resolve(config.cookies)
+        : ui.signupOrLogin(config.base || DEFAULT_BASE).then(function() {
+          return configuration.get('cookies');
+        });
+  cookiesPromise.then(function (cookies) {
+    var base = config.base || DEFAULT_BASE;
+    console.log('Create a project on ' + base);
+    return ui.createRepository(cookies, base, domain).then(function (domain) {
+      if (domain) {
+        console.log('Repository successfully created: ' + subdomain(base, domain));
+      } else {
+        console.log('Error creating repository.');
+      }
+    });
   }).catch(function(err) {
-    console.log("Error: " , err);
+    console.log('Error: ' , err);
   });
 }
 
-function signup() {
-  ui.signup().then(function(success) {
+function signup(config) {
+  ui.signup(config.base || DEFAULT_BASE).then(function(success) {
     if (success) {
-      console.log("Successfully created your account! You can now create repositories.");
+      console.log('Successfully created your account! You can now create repositories.');
     } else {
-      console.log("Error");
+      console.log('Error');
     }
   }).catch(function(err) {
-    console.log("Error: " , err);
+    console.log('Error: ' , err);
   });
 }
 
-function login() {
-  ui.login().then(function(success) {
+function login(config) {
+  var base = config.base || DEFAULT_BASE;
+  return ui.login(base).then(function(success) {
     if (success) {
-      console.log("Successfully logged in! You can now create repositories.");
+      console.log('Successfully logged in! You can now create repositories.');
     } else {
-      console.log("Login error, check your credentials. If you forgot your password, visit http://prismic.io to reset it.");
+      console.log('Login error, check your credentials. If you forgot your password, visit ' + base + ' to reset it.');
     }
   }).catch(function(err) {
-    console.log("Error: " , err);
+    console.log('Error: ' , err);
+  });
+}
+
+function base(config, argv) {
+  ui.base(argv[0]).then(function(answers) {
+    return config.set({
+      base: answers.base,
+      cookies: '' // clear the cookie because it won't be valid with the new base
+    }).then(function() {
+      console.log('The base domain is now ' + answers.base);
+    });
+  }).catch(function(err) {
+    console.log('Error: ' , err);
   });
 }
 
 function main() {
-  var validCommands = [ null, 'init', 'login', 'signup', 'version' ];
-  var { command, argv } = commandLineCommands(validCommands);
-  switch (command) {
-  case 'login':
-    login();
-    break;
-  case 'signup':
-    signup();
-    break;
-  case 'init':
-    init(argv);
-    break;
-  case 'version':
-    version();
-    break;
-  default:
-    help();
-  }
+  var validCommands = [ null, 'init', 'login', 'signup', 'base', 'version' ];
+  var arr = commandLineCommands(validCommands);
+  var command = arr.command;
+  var argv = arr.argv;
+  configuration.getAll().then(function (config) {
+    switch (command) {
+    case 'login':
+      login(config);
+      break;
+    case 'signup':
+      signup(config);
+      break;
+    case 'init':
+      init(config, argv);
+      break;
+    case 'base':
+      // Should only be used by staff, which is why it's not documented
+      base(config, argv);
+      break;
+    case 'version':
+      version(config);
+      break;
+    default:
+      help(config);
+    }
+  });
 }
 
 try {
