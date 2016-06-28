@@ -4,8 +4,6 @@
 // TODO:
 // - ensure directory doesn't exist yet before creating template
 // - non-interactive mode
-// - allow setting a foldername from the command line
-// - allow choosing a template from the command line
 // - command line to list the available templates
 // - specific runtime instructions from the template, directly on prompt?
 
@@ -19,6 +17,8 @@ var ui = require('../lib/ui');
 var templates = require('../lib/templates');
 
 var DEFAULT_BASE = 'https://prismic.io';
+
+// === Help
 
 function help(config) {
   console.log(getUsage([
@@ -54,19 +54,33 @@ function help(config) {
   ]));
 }
 
+// === Commands
+
 function version() {
   console.log(pjson.version);
 }
 
 function init(config, args) {
+  var base = config.base || DEFAULT_BASE;
   var domain = args['--domain'];
-  var cookiesPromise = config.cookies
-        ? Promise.resolve(config.cookies)
-        : ui.signupOrLogin(config.base || DEFAULT_BASE).then(function() {
-          return configuration.get('cookies');
-        });
+  var email = args['--email'];
+  var password = args['--password'];
+  var cookiesPromise;
+  if (email && password) {
+    // The user included login/password, we need to log him with those
+    cookiesPromise = ui.login(base, email, password).then(function() {
+      return configuration.get('cookies');
+    });
+  } else if (config.cookies) {
+    // The user has cookies saved in his home directory, use this
+    cookiesPromise = Promise.resolve(config.cookies);
+  } else {
+    // No login/pass, no cookie => need to signin or signup the user before we proceed
+    cookiesPromise = ui.signupOrLogin(base, args['--email'], args['--password']).then(function() {
+      return configuration.get('cookies');
+    });
+  }
   cookiesPromise.then(function (cookies) {
-    var base = config.base || DEFAULT_BASE;
     console.log('Create a project on ' + base);
     return ui.createRepository(cookies, base, domain).then(function (domain) {
       if (domain) {
@@ -83,8 +97,8 @@ function init(config, args) {
   });
 }
 
-function signup(config) {
-  ui.signup(config.base || DEFAULT_BASE).then(function(success) {
+function signup(config, args) {
+  ui.signup(config.base || DEFAULT_BASE, args['--email'], args['--password']).then(function(success) {
     if (success) {
       console.log('Successfully created your account! You can now create repositories.');
     } else {
@@ -97,7 +111,7 @@ function signup(config) {
 
 function login(config, args) {
   var base = config.base || DEFAULT_BASE;
-  return ui.login(base, args).then(function(success) {
+  return ui.login(base, args['--email'], args['--password']).then(function(success) {
     if (success) {
       console.log('Successfully logged in! You can now create repositories.');
     } else {
@@ -128,6 +142,8 @@ function base(config, argv) {
     console.log('Error: ' , err);
   });
 }
+
+// === Main function
 
 function parseArguments(args) {
   return _(args).chunk(2).reduce(function(result, value) {
