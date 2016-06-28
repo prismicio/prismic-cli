@@ -2,18 +2,17 @@
 'use strict';
 
 // TODO:
-// - check repo existence before creation (or better error message when creation fails)
 // - ensure directory doesn't exist yet before creating template
 // - non-interactive mode
 // - allow setting a foldername from the command line
 // - allow choosing a template from the command line
 // - command line to list the available templates
+// - specific runtime instructions from the template, directly on prompt?
 
 var pjson = require('../package.json');
 var commandLineCommands = require('command-line-commands');
 var configuration = require('../lib/config');
 var ui = require('../lib/ui');
-var templates = require('../lib/templates');
 
 var DEFAULT_BASE = 'https://prismic.io';
 
@@ -33,11 +32,6 @@ function version() {
   console.log('prismic.io version ' + pjson.version);
 }
 
-function subdomain(base, domain) {
-  var arr = /^(https?:\/\/)(.*)/.exec(base);
-  return arr[1] + domain + '.' + arr[2];
-}
-
 function init(config, argv) {
   var domain = argv[0];
   var cookiesPromise = config.cookies
@@ -50,7 +44,6 @@ function init(config, argv) {
     console.log('Create a project on ' + base);
     return ui.createRepository(cookies, base, domain).then(function (domain) {
       if (domain) {
-        console.log('Repository successfully created: ' + subdomain(base, domain));
         return ui.initTemplate(domain);
       } else {
         console.log('Error creating repository.');
