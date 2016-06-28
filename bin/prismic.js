@@ -9,23 +9,33 @@
 // - command line to list the available templates
 // - specific runtime instructions from the template, directly on prompt?
 
-var pjson = require('../package.json');
 var commandLineCommands = require('command-line-commands');
+var getUsage = require('command-line-usage');
+
+var pjson = require('../package.json');
 var configuration = require('../lib/config');
 var ui = require('../lib/ui');
+var templates = require('../lib/templates');
 
 var DEFAULT_BASE = 'https://prismic.io';
 
 function help(config) {
-  console.log(config.base || DEFAULT_BASE);
-  console.log('Usage: prismic <command>');
-  console.log();
-  console.log('Valid commands:');
-  console.log();
-  console.log('   init       Create a project, creating the repository if needed');
-  console.log('   login      Login to an existing prismic.io account');
-  console.log('   signup     Create a new prismic.io account');
-  console.log('   version    Print the current cli version number');
+  console.log(getUsage([
+    {
+      header: 'prismic.io command line tool',
+      content: 'Bootstrap a JS project with prismic.io'
+    },
+    {
+      header: 'Command List',
+      content: [
+        { name: 'init', summary: 'Create a project, creating the repository if needed' },
+        { name: 'login', summary: 'Login to an existing prismic.io account' },
+        { name: 'signup', summary: 'Create a new prismic.io account' },
+        { name: 'list', summary: 'List the available code templates' },
+        { name: 'version', summary: 'Print the version.' }
+      ]
+    }
+  ]));
 }
 
 function version() {
@@ -82,6 +92,13 @@ function login(config) {
   });
 }
 
+function list() {
+  console.log('Available templates:');
+  templates.TEMPLATES.forEach(function(template) {
+    console.log(' * ' + template.name);
+  });
+}
+
 function base(config, argv) {
   ui.base(argv[0]).then(function(answers) {
     return config.set({
@@ -96,7 +113,7 @@ function base(config, argv) {
 }
 
 function main() {
-  var validCommands = [ null, 'init', 'login', 'signup', 'base', 'version' ];
+  var validCommands = [ null, 'init', 'login', 'signup', 'base', 'version', 'list' ];
   var arr = commandLineCommands(validCommands);
   var command = arr.command;
   var argv = arr.argv;
@@ -110,6 +127,9 @@ function main() {
       break;
     case 'init':
       init(config, argv);
+      break;
+    case 'list':
+      list();
       break;
     case 'base':
       // Should only be used by staff, which is why it's not documented
