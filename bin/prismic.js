@@ -1,6 +1,14 @@
 #!/usr/bin/env node
 'use strict';
 
+// TODO:
+// - check repo existence before creation (or better error message when creation fails)
+// - ensure directory doesn't exist yet before creating template
+// - non-interactive mode
+// - allow setting a foldername from the command line
+// - allow choosing a template from the command line
+// - command line to list the available templates
+
 var pjson = require('../package.json');
 var commandLineCommands = require('command-line-commands');
 var configuration = require('../lib/config');
@@ -43,10 +51,14 @@ function init(config, argv) {
     return ui.createRepository(cookies, base, domain).then(function (domain) {
       if (domain) {
         console.log('Repository successfully created: ' + subdomain(base, domain));
+        return ui.initTemplate(domain);
       } else {
         console.log('Error creating repository.');
+        return null;
       }
     });
+  }).then(function(answers) {
+    console.log('Your project in ready! Go to the ' + answers.folder + ' folder and follow the instructions in the README.');
   }).catch(function(err) {
     console.log('Error: ' , err);
   });
@@ -91,7 +103,7 @@ function base(config, argv) {
 }
 
 function main() {
-  var validCommands = [ null, 'init', 'login', 'signup', 'base', 'version', 'temp'];
+  var validCommands = [ null, 'init', 'login', 'signup', 'base', 'version' ];
   var arr = commandLineCommands(validCommands);
   var command = arr.command;
   var argv = arr.argv;
@@ -112,9 +124,6 @@ function main() {
       break;
     case 'version':
       version(config);
-      break;
-    case 'temp':
-      templates.unzip(templates.TEMPLATES[0], './tata');
       break;
     default:
       help(config);
