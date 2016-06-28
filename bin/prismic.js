@@ -2,7 +2,6 @@
 'use strict';
 
 // TODO:
-// - non-interactive mode
 // - specific runtime instructions from the template, directly on prompt?
 
 var _ = require('lodash');
@@ -46,7 +45,7 @@ function help(config) {
         { name: 'domain', description: 'The domain of the repository to use or create.' },
         { name: 'folder', description: 'The folder to create the new project.' },
         { name: 'template', description: 'Project template to use (see the list command for available templates).' },
-        { name: 'noconfirm', description: 'TODO Always use the default answer, making the script non-interactive. Fails if information is missing.'}
+        { name: 'noconfirm', description: 'Set to "true" to always use the default answer without asking. Fails if information is missing.'}
       ]
     }
   ]));
@@ -63,6 +62,7 @@ function init(config, args) {
   var domain = args['--domain'];
   var email = args['--email'];
   var password = args['--password'];
+  var noconfirm = (args['--noconfirm'] === 'true');
   var cookiesPromise;
   if (email && password) {
     // The user included login/password, we need to log him with those
@@ -72,6 +72,11 @@ function init(config, args) {
   } else if (config.cookies) {
     // The user has cookies saved in his home directory, use this
     cookiesPromise = Promise.resolve(config.cookies);
+  } else if (noconfirm) {
+    // Can't proceed non-interactively if we can't login!
+    var error = 'Error: to use noconfirm, login first or pass the email/password as options.';
+    console.log(error);
+    throw new Error(error);
   } else {
     // No login/pass, no cookie => need to signin or signup the user before we proceed
     cookiesPromise = ui.signupOrLogin(base, args['--email'], args['--password']).then(function() {
@@ -80,9 +85,9 @@ function init(config, args) {
   }
   cookiesPromise.then(function (cookies) {
     console.log('Create a project on ' + base);
-    return ui.createRepository(cookies, base, domain).then(function (domain) {
+    return ui.createRepository(cookies, base, domain, noconfirm).then(function (domain) {
       if (domain) {
-        return ui.initTemplate(domain, args['--folder'], args['--template']);
+        return ui.initTemplate(domain, args['--folder'], args['--template'], noconfirm);
       } else {
         console.log('Error creating repository.');
         return null;
