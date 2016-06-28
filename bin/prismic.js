@@ -5,6 +5,7 @@ var pjson = require('../package.json');
 var commandLineCommands = require('command-line-commands');
 var configuration = require('../lib/config');
 var ui = require('../lib/ui');
+var templates = require('../lib/templates');
 
 var DEFAULT_BASE = 'https://prismic.io';
 
@@ -90,7 +91,7 @@ function base(config, argv) {
 }
 
 function main() {
-  var validCommands = [ null, 'init', 'login', 'signup', 'base', 'version' ];
+  var validCommands = [ null, 'init', 'login', 'signup', 'base', 'version', 'temp'];
   var arr = commandLineCommands(validCommands);
   var command = arr.command;
   var argv = arr.argv;
@@ -111,6 +112,9 @@ function main() {
       break;
     case 'version':
       version(config);
+      break;
+    case 'temp':
+      templates.unzip(templates.TEMPLATES[0], './tata');
       break;
     default:
       help(config);

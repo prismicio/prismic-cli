@@ -10,10 +10,12 @@
   "main": "./lib/index.js",
   "preferGlobal": "true",
   "dependencies": {
+    "adm-zip": "^0.4.7",
     "command-line-commands": "^1.0.3",
     "inquirer": "^1.0.3",
     "lodash": "^4.13.1",
-    "request": "^2.72.0"
+    "request": "^2.72.0",
+    "tmp": "0.0.28"
   },
   "devDependencies": {
     "eslint": "^2.13.1"
