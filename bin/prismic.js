@@ -2,9 +2,7 @@
 'use strict';
 
 // TODO:
-// - ensure directory doesn't exist yet before creating template
 // - non-interactive mode
-// - command line to list the available templates
 // - specific runtime instructions from the template, directly on prompt?
 
 var _ = require('lodash');
