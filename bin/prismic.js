@@ -9,6 +9,7 @@
 // - command line to list the available templates
 // - specific runtime instructions from the template, directly on prompt?
 
+var _ = require('lodash');
 var commandLineCommands = require('command-line-commands');
 var getUsage = require('command-line-usage');
 
@@ -23,27 +24,42 @@ function help(config) {
   console.log(getUsage([
     {
       header: 'prismic.io command line tool',
-      content: 'Bootstrap a JS project with prismic.io'
+      content: 'Bootstrap a JS project with prismic.io.'
+    },
+    {
+      header: 'Synopsis',
+      content: '$ prismic <command> <options>'
     },
     {
       header: 'Command List',
       content: [
-        { name: 'init', summary: 'Create a project, creating the repository if needed' },
-        { name: 'login', summary: 'Login to an existing prismic.io account' },
-        { name: 'signup', summary: 'Create a new prismic.io account' },
-        { name: 'list', summary: 'List the available code templates' },
+        { name: 'init', summary: 'Create a project: create the repository if needed then initialize the code from a template.' },
+        { name: 'login', summary: 'Login to an existing prismic.io account.' },
+        { name: 'signup', summary: 'Create a new prismic.io account.' },
+        { name: 'list', summary: 'List the available code templates.' },
         { name: 'version', summary: 'Print the version.' }
+      ]
+    },
+    {
+      header: 'Options',
+      optionList: [
+        { name: 'email', description: 'The email of the account to use.' },
+        { name: 'password', description: 'The password of the account to use.' },
+        { name: 'domain', description: 'The domain of the repository to use or create.' },
+        { name: 'folder', description: 'The folder to create the new project.' },
+        { name: 'template', description: 'Project template to use (see the list command for available templates).' },
+        { name: 'noconfirm', description: 'TODO Always use the default answer, making the script non-interactive. Fails if information is missing.'}
       ]
     }
   ]));
 }
 
 function version() {
-  console.log('prismic.io version ' + pjson.version);
+  console.log(pjson.version);
 }
 
-function init(config, argv) {
-  var domain = argv[0];
+function init(config, args) {
+  var domain = args['--domain'];
   var cookiesPromise = config.cookies
         ? Promise.resolve(config.cookies)
         : ui.signupOrLogin(config.base || DEFAULT_BASE).then(function() {
@@ -54,7 +70,7 @@ function init(config, argv) {
     console.log('Create a project on ' + base);
     return ui.createRepository(cookies, base, domain).then(function (domain) {
       if (domain) {
-        return ui.initTemplate(domain);
+        return ui.initTemplate(domain, args['--folder'], args['--template']);
       } else {
         console.log('Error creating repository.');
         return null;
@@ -79,9 +95,9 @@ function signup(config) {
   });
 }
 
-function login(config) {
+function login(config, args) {
   var base = config.base || DEFAULT_BASE;
-  return ui.login(base).then(function(success) {
+  return ui.login(base, args).then(function(success) {
     if (success) {
       console.log('Successfully logged in! You can now create repositories.');
     } else {
@@ -99,8 +115,9 @@ function list() {
   });
 }
 
+// Should only be used by staff, which is why it's not documented
 function base(config, argv) {
-  ui.base(argv[0]).then(function(answers) {
+  ui.base(argv['--base']).then(function(answers) {
     return config.set({
       base: answers.base,
       cookies: '' // clear the cookie because it won't be valid with the new base
@@ -112,28 +129,34 @@ function base(config, argv) {
   });
 }
 
+function parseArguments(args) {
+  return _(args).chunk(2).reduce(function(result, value) {
+    result[value[0]] = value[1];
+    return result;
+  }, {});
+}
+
 function main() {
   var validCommands = [ null, 'init', 'login', 'signup', 'base', 'version', 'list' ];
   var arr = commandLineCommands(validCommands);
   var command = arr.command;
-  var argv = arr.argv;
+  var args = parseArguments(arr.argv);
   configuration.getAll().then(function (config) {
     switch (command) {
     case 'login':
-      login(config);
+      login(config, args);
       break;
     case 'signup':
-      signup(config);
+      signup(config, args);
       break;
     case 'init':
-      init(config, argv);
+      init(config, args);
       break;
     case 'list':
       list();
       break;
     case 'base':
-      // Should only be used by staff, which is why it's not documented
-      base(config, argv);
+      base(config, args);
       break;
     case 'version':
       version(config);
