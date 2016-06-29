@@ -5,6 +5,7 @@
 // - specific runtime instructions from the template, directly on prompt?
 
 var _ = require('lodash');
+var shell = require('shelljs');
 var commandLineCommands = require('command-line-commands');
 var getUsage = require('command-line-usage');
 
@@ -72,6 +73,8 @@ function init(config, domain, args) {
     }
   }).then(function(answers) {
     if (answers && answers.folder) {
+      shell.cd(answers.folder);
+      shell.exec('npm install');
       console.log('Your project in ready! Go to the ' + answers.folder + ' folder and follow the instructions in the README.');
     }
   }).catch(function(err) {
