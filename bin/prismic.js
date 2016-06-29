@@ -59,42 +59,19 @@ function version() {
 
 function init(config, args) {
   var base = config.base || DEFAULT_BASE;
-  var domain = args['--domain'];
-  var email = args['--email'];
-  var password = args['--password'];
   var noconfirm = (args['--noconfirm'] === 'true');
-  var cookiesPromise;
-  if (email && password) {
-    // The user included login/password, we need to log him with those
-    cookiesPromise = ui.login(base, email, password).then(function() {
-      return configuration.get('cookies');
-    });
-  } else if (config.cookies) {
-    // The user has cookies saved in his home directory, use this
-    cookiesPromise = Promise.resolve(config.cookies);
-  } else if (noconfirm) {
-    // Can't proceed non-interactively if we can't login!
-    var error = 'Error: to use noconfirm, login first or pass the email/password as options.';
-    console.log(error);
-    throw new Error(error);
-  } else {
-    // No login/pass, no cookie => need to signin or signup the user before we proceed
-    cookiesPromise = ui.signupOrLogin(base, args['--email'], args['--password']).then(function() {
-      return configuration.get('cookies');
-    });
-  }
-  cookiesPromise.then(function (cookies) {
-    console.log('Create a project on ' + base);
-    return ui.createRepository(cookies, base, domain, noconfirm).then(function (domain) {
-      if (domain) {
-        return ui.initTemplate(domain, args['--folder'], args['--template'], noconfirm);
-      } else {
-        console.log('Error creating repository.');
-        return null;
-      }
-    });
+  console.log('Create a project on ' + base);
+  return ui.createRepository(base, args).then(function (domain) {
+    if (domain) {
+      return ui.initTemplate(domain, args['--folder'], args['--template'], noconfirm);
+    } else {
+      console.log('Init aborded.');
+      return null;
+    }
   }).then(function(answers) {
-    console.log('Your project in ready! Go to the ' + answers.folder + ' folder and follow the instructions in the README.');
+    if (answers && answers.folder) {
+      console.log('Your project in ready! Go to the ' + answers.folder + ' folder and follow the instructions in the README.');
+    }
   }).catch(function(err) {
     console.log('Error: ' , err);
   });
