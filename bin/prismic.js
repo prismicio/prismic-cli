@@ -20,12 +20,15 @@ var DEFAULT_BASE = 'https://prismic.io';
 function help(config) {
   console.log(getUsage([
     {
-      header: 'prismic.io command line tool',
-      content: 'Bootstrap a JS project with prismic.io.'
+      header: 'Synopsis',
+      content: '$ prismic <command> <domain> <options>'
     },
     {
-      header: 'Synopsis',
-      content: '$ prismic <command> <options>'
+      header: 'Examples',
+      content: [
+        { name: '$ prismic init foobar', summary: 'Create a project for the foobar repository' },
+        { name: '$ prismic init foobar --template NodeJS --noconfirm', summary: 'Create a NodeJS project, non-interactive' }
+      ]
     },
     {
       header: 'Command List',
@@ -42,7 +45,6 @@ function help(config) {
       optionList: [
         { name: 'email', description: 'The email of the account to use.' },
         { name: 'password', description: 'The password of the account to use.' },
-        { name: 'domain', description: 'The domain of the repository to use or create.' },
         { name: 'folder', description: 'The folder to create the new project.' },
         { name: 'template', description: 'Project template to use (see the list command for available templates).' },
         { name: 'noconfirm', description: 'Set to "true" to always use the default answer without asking. Fails if information is missing.'}
@@ -57,11 +59,11 @@ function version() {
   console.log(pjson.version);
 }
 
-function init(config, args) {
+function init(config, domain, args) {
   var base = config.base || DEFAULT_BASE;
   var noconfirm = (args['--noconfirm'] === 'true');
   console.log('Create a project on ' + base);
-  return ui.createRepository(base, args).then(function (domain) {
+  return ui.createRepository(base, domain, args).then(function (domain) {
     if (domain) {
       return ui.initTemplate(domain, args['--folder'], args['--template'], noconfirm);
     } else {
@@ -136,6 +138,10 @@ function main() {
   var validCommands = [ null, 'init', 'login', 'signup', 'base', 'version', 'list' ];
   var arr = commandLineCommands(validCommands);
   var command = arr.command;
+  var domain = null;
+  if (arr.argv.length > 0 && arr.argv[0].indexOf('--') != 0) {
+    domain = arr.argv.shift();
+  }
   var args = parseArguments(arr.argv);
   configuration.getAll().then(function (config) {
     switch (command) {
@@ -146,7 +152,7 @@ function main() {
       signup(config, args);
       break;
     case 'init':
-      init(config, args);
+      init(config, domain, args);
       break;
     case 'list':
       list();
