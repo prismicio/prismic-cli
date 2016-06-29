@@ -7,7 +7,6 @@
   "bin": {
     "prismic": "bin/prismic.js"
   },
-  "main": "./lib/index.js",
   "preferGlobal": "true",
   "dependencies": {
     "adm-zip": "^0.4.7",
