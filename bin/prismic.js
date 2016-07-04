@@ -3,7 +3,6 @@
 
 // TODO:
 // - specific runtime instructions from the template, directly on prompt?
-// - fix error handling on wrong password, and provide multiple tries
 
 var _ = require('lodash');
 var shell = require('shelljs');
