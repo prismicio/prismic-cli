@@ -20,10 +20,13 @@ Just type `prismic` without any argument to read the manual.
 
 Some examples:
 
+Create a new project on the 'foobar' repository:
 ```
-// Create a new project on the 'foobar' repository
 prismic init foobar
-// Create a new NodeJS project on the 'foobar' repository, in the 'foobar' folder (non-interactive)
+```
+
+Create a new NodeJS project on the 'foobar' repository, in the 'foobar' folder (non-interactive)
+```
 prismic init foobar --folder foobar --template NodeJS
 ```
 
