@@ -63,7 +63,7 @@ function version() {
 function init(config, domain, args) {
   var base = config.base || DEFAULT_BASE;
   var noconfirm = (args['--noconfirm'] === 'true');
-  console.log('Create a project on ' + base);
+  console.log('Initialize project for ' + base);
   return ui.createRepository(base, domain, args).then(function (domain) {
     if (domain) {
       return ui.initTemplate(domain, args['--folder'], args['--template'], noconfirm);
