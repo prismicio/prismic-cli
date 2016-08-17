@@ -14,11 +14,11 @@ It is meant to install globally:
 npm install -g prismic-cli
 ```
 
-# Usage
+## Usage
 
 Just type `prismic` without any argument to read the manual.
 
-Some examples:
+### Examples
 
 Create a new project on the 'foobar' repository:
 ```
@@ -30,7 +30,7 @@ Create a new NodeJS project on the 'foobar' repository, in the 'foobar' folder (
 prismic init foobar --folder foobar --template NodeJS
 ```
 
-# More information
+## More information
 
 Once your project is bootstrapped, you can find more information about developing with prismic.io in the [documentation](http://prismic.io/docs).
 
