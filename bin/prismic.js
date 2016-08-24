@@ -16,6 +16,8 @@ var templates = require('../lib/templates');
 
 var DEFAULT_BASE = 'https://prismic.io';
 
+var isWin = /^win/.test(process.platform);
+
 // === Help
 
 function help(config) {
@@ -73,8 +75,9 @@ function init(config, domain, args) {
     }
   }).then(function(answers) {
     if (answers && answers.folder) {
+      var devnull = isWin ? 'NUL' : '/dev/null';
       shell.cd(answers.folder);
-      shell.exec('npm install');
+      shell.exec('npm install > ' + devnull);
       console.log('Your project in ready! Go to the ' + answers.folder + ' folder and follow the instructions in the README.');
     }
   }).catch(function(err) {
