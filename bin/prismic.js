@@ -30,13 +30,15 @@ function help(config) {
       header: 'Examples',
       content: [
         { name: '$ prismic init foobar', summary: 'Create a project for the foobar repository' },
+        { name: '$ prismic new foobar', summary: 'Create the foobar repository then initialize the project (fails if already exists).' },
         { name: '$ prismic init foobar --template NodeJS --noconfirm', summary: 'Create a NodeJS project, non-interactive' }
       ]
     },
     {
       header: 'Command List',
       content: [
-        { name: 'init', summary: 'Create a project: create the repository if needed then initialize the code from a template.' },
+        { name: 'init', summary: 'Create a project: initialize the code from a template for an existing repository.' },
+        { name: 'new', summary: 'Create the repository initialize the code from a template.' },
         { name: 'login', summary: 'Login to an existing prismic.io account.' },
         { name: 'signup', summary: 'Create a new prismic.io account.' },
         { name: 'list', summary: 'List the available code templates.' },
@@ -63,6 +65,30 @@ function version() {
 }
 
 function init(config, domain, args) {
+  var base = config.base || DEFAULT_BASE;
+  var noconfirm = (args['--noconfirm'] === 'true');
+  console.log('Initialize project for ' + base);
+  return ui.checkExists(base, domain, args).then(function (domain) {
+    if (domain) {
+      return ui.initTemplate(domain, args['--folder'], args['--template'], noconfirm);
+    } else {
+      console.log('Init aborded.');
+      return null;
+    }
+  }).then(function(answers) {
+    if (answers && answers.folder) {
+      console.log("Running npm install...")
+      var devnull = isWin ? 'NUL' : '/dev/null';
+      shell.cd(answers.folder);
+      shell.exec('npm install > ' + devnull);
+      console.log('Your project in ready! Go to the ' + answers.folder + ' folder and follow the instructions in the README.');
+    }
+  }).catch(function(err) {
+    console.log('Error: ' , err);
+  });
+}
+
+function create(config, domain, args) {
   var base = config.base || DEFAULT_BASE;
   var noconfirm = (args['--noconfirm'] === 'true');
   console.log('Initialize project for ' + base);
@@ -141,7 +167,7 @@ function parseArguments(args) {
 }
 
 function main() {
-  var validCommands = [ null, 'init', 'login', 'signup', 'base', 'version', 'list' ];
+  var validCommands = [ null, 'init', 'new', 'login', 'signup', 'base', 'version', 'list' ];
   var arr = commandLineCommands(validCommands);
   var command = arr.command;
   var domain = null;
@@ -159,6 +185,9 @@ function main() {
       break;
     case 'init':
       init(config, domain, args);
+      break;
+    case 'new':
+      create(config, domain, args);
       break;
     case 'list':
       list();
