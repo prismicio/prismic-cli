@@ -88,6 +88,21 @@ function init(config, domain, args) {
   });
 }
 
+// For testing only
+function heroku(config, args) {
+  console.log("Initialize heroku project");
+  var folder = '.';
+  ui.heroku(args['--template']).then(function(answers) {
+    console.log("Running npm install...")
+    var devnull = isWin ? 'NUL' : '/dev/null';
+    shell.cd(answers.folder);
+    shell.exec('npm install > ' + devnull);
+    console.log('Your project in ready! Go to the ' + answers.folder + ' folder and follow the instructions in the README.');
+  }).catch(function(err) {
+    console.log('Error: ' , err);
+  })
+}
+
 function create(config, domain, args) {
   var base = config.base || DEFAULT_BASE;
   var noconfirm = (args['--noconfirm'] === 'true');
@@ -167,7 +182,7 @@ function parseArguments(args) {
 }
 
 function main() {
-  var validCommands = [ null, 'init', 'new', 'login', 'signup', 'base', 'version', 'list' ];
+  var validCommands = [ null, 'init', 'heroku', 'new', 'login', 'signup', 'base', 'version', 'list' ];
   var arr = commandLineCommands(validCommands);
   var command = arr.command;
   var domain = null;
@@ -185,6 +200,9 @@ function main() {
       break;
     case 'init':
       init(config, domain, args);
+      break;
+    case 'heroku':
+      heroku(config, args);
       break;
     case 'new':
       create(config, domain, args);
