@@ -96,7 +96,10 @@ function heroku(config, args) {
     console.log("Running npm install...")
     var devnull = isWin ? 'NUL' : '/dev/null';
     shell.exec('npm install > ' + devnull);
-    console.log('Your project in ready! Type "heroku local" to run the project.');
+    console.log('Your project in ready! Next steps:');
+    console.log(" => Open your writing room: 'heroku addons:docs prismic'")
+    console.log(" => Create the custom types as described in the docs: 'heroku addons:docs prismic'")
+    console.log(" => Run the project: 'heroku local'")
   }).catch(function(err) {
     console.log('Error: ' , err);
   })
