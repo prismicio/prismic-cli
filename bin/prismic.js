@@ -95,9 +95,8 @@ function heroku(config, args) {
   ui.heroku(args['--template']).then(function(answers) {
     console.log("Running npm install...")
     var devnull = isWin ? 'NUL' : '/dev/null';
-    shell.cd(answers.folder);
     shell.exec('npm install > ' + devnull);
-    console.log('Your project in ready! Go to the ' + answers.folder + ' folder and follow the instructions in the README.');
+    console.log('Your project in ready! Type "heroku local" to run the project.');
   }).catch(function(err) {
     console.log('Error: ' , err);
   })
