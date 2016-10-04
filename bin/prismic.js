@@ -11,10 +11,15 @@ var getUsage = require('command-line-usage');
 
 var pjson = require('../package.json');
 var configuration = require('../lib/config');
+var api = require('../lib/api');
 var ui = require('../lib/ui');
 var templates = require('../lib/templates');
 
 var DEFAULT_BASE = 'https://prismic.io';
+var DEFAULT_BASE_WITH_DOMAIN = function(domain) {
+  var matches = DEFAULT_BASE.match(new RegExp("((https?://)([^/]*))"));
+  return window.matches[2] + domain + '.' + window.matches[3]
+}
 
 var isWin = /^win/.test(process.platform);
 
@@ -77,6 +82,7 @@ function init(config, domain, args) {
     }
   }).then(function(answers) {
     if (answers && answers.folder) {
+      api.onboardingValidateCLI(DEFAULT_BASE_WITH_DOMAIN(domain), domain)
       console.log("Running npm install...")
       var devnull = isWin ? 'NUL' : '/dev/null';
       shell.cd(answers.folder);
