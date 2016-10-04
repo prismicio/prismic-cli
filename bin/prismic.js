@@ -5,6 +5,7 @@
 // - specific runtime instructions from the template, directly on prompt?
 
 var _ = require('lodash');
+var path = require('path');
 var shell = require('shelljs');
 var commandLineCommands = require('command-line-commands');
 var getUsage = require('command-line-usage');
@@ -129,10 +130,15 @@ function create(config, domain, args) {
       return null;
     }
   }).then(function(answers) {
+    var customTypes = {};
     if (answers && answers.folder) {
       folder = answers.folder;
+      var customTypesPath = path.join(folder, 'customtypes.json');
+      if (shell.test('-e', customTypesPath)) {
+        customTypes = JSON.stringify(JSON.parse(shell.cat(customTypesPath)));
+      }
     }
-    return ui.createRepository(base, domain, args);
+    return ui.createRepository(base, domain, customTypes, args);
   }).then(function() {
     if (folder) {
       var devnull = isWin ? 'NUL' : '/dev/null';
