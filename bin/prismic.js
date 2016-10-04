@@ -161,9 +161,10 @@ function list() {
 }
 
 // Should only be used by staff, which is why it's not documented
-function base(config, argv) {
-  ui.base(argv['--base']).then(function(answers) {
-    return config.set({
+// prismic base http://wroom.dev
+function base(base) {
+  ui.base(base).then(function(answers) {
+    return configuration.set({
       base: answers.base,
       cookies: '' // clear the cookie because it won't be valid with the new base
     }).then(function() {
@@ -187,9 +188,9 @@ function main() {
   var validCommands = [ null, 'init', 'heroku', 'new', 'login', 'signup', 'base', 'version', 'list' ];
   var arr = commandLineCommands(validCommands);
   var command = arr.command;
-  var domain = null;
+  var firstArg = null;
   if (arr.argv.length > 0 && arr.argv[0].indexOf('--') != 0) {
-    domain = arr.argv.shift();
+    firstArg = arr.argv.shift();
   }
   var args = parseArguments(arr.argv);
   configuration.getAll().then(function (config) {
@@ -201,19 +202,19 @@ function main() {
       signup(config, args);
       break;
     case 'init':
-      init(config, domain, args);
+      init(config, firstArg, args);
       break;
     case 'heroku':
       heroku(config, args);
       break;
     case 'new':
-      create(config, domain, args);
+      create(config, firstArg, args);
       break;
     case 'list':
       list();
       break;
     case 'base':
-      base(config, args);
+      base(firstArg);
       break;
     case 'version':
       version(config);
