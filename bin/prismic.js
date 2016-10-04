@@ -116,8 +116,12 @@ function heroku(config, args) {
 function create(config, domain, args) {
   var base = config.base || DEFAULT_BASE;
   var noconfirm = (args['--noconfirm'] === 'true');
+  var folder, domain;
   console.log('Initialize project for ' + base);
-  return ui.createRepository(base, domain, args).then(function (domain) {
+  return ui.checkNotExists(base, domain, args).then(function (domain) {
+    var domain = domain;
+    return ui.connect(base, domain, args);
+  }).then(function(cookies) {
     if (domain) {
       return ui.initTemplate(domain, args['--folder'], args['--template'], noconfirm);
     } else {
@@ -126,10 +130,15 @@ function create(config, domain, args) {
     }
   }).then(function(answers) {
     if (answers && answers.folder) {
+      folder = answers.folder;
+    }
+    return ui.createRepository(base, domain, args);
+  }).then(function() {
+    if (folder) {
       var devnull = isWin ? 'NUL' : '/dev/null';
-      shell.cd(answers.folder);
+      shell.cd(folder);
       shell.exec('npm install > ' + devnull);
-      console.log('Your project in ready! Go to the ' + answers.folder + ' folder and follow the instructions in the README.');
+      console.log('Your project in ready! Go to the ' + folder + ' folder and follow the instructions in the README.');
     }
   }).catch(function(err) {
     console.log('Error: ' , err);
