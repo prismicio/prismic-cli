@@ -18,7 +18,7 @@ var templates = require('../lib/templates');
 var DEFAULT_BASE = 'https://prismic.io';
 var DEFAULT_BASE_WITH_DOMAIN = function(domain) {
   var matches = DEFAULT_BASE.match(new RegExp("((https?://)([^/]*))"));
-  return window.matches[2] + domain + '.' + window.matches[3]
+  return matches[2] + domain + '.' + matches[3]
 }
 
 var isWin = /^win/.test(process.platform);
@@ -87,7 +87,10 @@ function init(config, domain, args) {
       var devnull = isWin ? 'NUL' : '/dev/null';
       shell.cd(answers.folder);
       shell.exec('npm install > ' + devnull);
-      console.log('Your project in ready! Go to the ' + answers.folder + ' folder and follow the instructions in the README.');
+      console.log('Go to the project folder : cd ' + answers.folder)
+      console.log('Install nodemon to have hot reload : npm install -g nodemon')
+      console.log('Start your project with nodemon: nodemon app.js')
+      console.log('Run your project : http://localhost:3000')
     }
   }).catch(function(err) {
     console.log('Error: ' , err);
