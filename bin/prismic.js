@@ -88,9 +88,9 @@ function init(config, domain, args) {
       shell.cd(answers.folder);
       shell.exec('npm install > ' + devnull);
       console.log('Go to the project folder : cd ' + answers.folder)
-      console.log('Install nodemon to have hot reload : npm install -g nodemon')
-      console.log('Start your project with nodemon: nodemon app.js')
-      console.log('Run your project : http://localhost:3000')
+      if(answers.template.instructions) {
+        answers.template.instructions()
+      }
     }
   }).catch(function(err) {
     console.log('Error: ' , err);
