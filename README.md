@@ -1,6 +1,7 @@
 # Prismic Command Line for Javascript
 
 [![npm version](https://badge.fury.io/js/prismic-cli.svg)](http://badge.fury.io/js/prismic-cli)
+[![Build Status](https://api.travis-ci.org/prismicio/prismic-cli.png)](https://travis-ci.org/prismicio/prismic-cli)
 
 This is a command line tool to bootstrap Javascript project using [prismic.io](https://prismic.io). Currently it can be used to bootstrap projects based on:
 
@@ -25,7 +26,7 @@ Create a new project on the 'foobar' repository:
 prismic init foobar
 ```
 
-Create a new NodeJS project on the 'foobar' repository, in the 'foobar' folder (non-interactive)
+Create a new NodeJS project on the 'foobar' repository, in the 'foobar' folder (non-interactive) 
 ```
 prismic init foobar --folder foobar --template NodeJS
 ```
