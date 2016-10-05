@@ -77,7 +77,7 @@ function init(config, domain, args) {
     }
   }).then(function(answers) {
     if (answers && answers.folder) {
-      console.log("Running npm install...")
+      console.log("Running npm install...");
       var devnull = isWin ? 'NUL' : '/dev/null';
       shell.cd(answers.folder);
       shell.exec('npm install > ' + devnull);
@@ -91,18 +91,17 @@ function init(config, domain, args) {
 // For testing only
 function heroku(config, args) {
   console.log("Initialize heroku project");
-  var folder = '.';
   ui.heroku(args['--template']).then(function(answers) {
-    console.log("Running npm install...")
+    console.log("Running npm install...");
     var devnull = isWin ? 'NUL' : '/dev/null';
     shell.exec('npm install > ' + devnull);
     console.log('Your project in ready! Next steps:');
-    console.log(" => Open your writing room: 'heroku addons:docs prismic'")
-    console.log(" => Create the custom types as described in the docs: 'heroku addons:docs prismic'")
-    console.log(" => Run the project: 'heroku local'")
+    console.log(" => Open your writing room: 'heroku addons:docs prismic'");
+    console.log(" => Create the custom types as described in the docs: 'heroku addons:docs prismic'");
+    console.log(" => Run the project: 'heroku local'");
   }).catch(function(err) {
     console.log('Error: ' , err);
-  })
+  });
 }
 
 function create(config, domain, args) {
