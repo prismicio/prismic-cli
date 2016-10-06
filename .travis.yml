@@ -1,7 +1,11 @@
 language: node_js
 sudo: false
-
 node_js:
 - '4'
 - '5'
 - '6'
+deploy:
+  api_key:
+    secure: h4Xg3IvJTVjw4Dqr2Mg2E63GR5ZylOS8CDAUaesaTSnIvLg9bfdLemYaV8YipSYYE+n7yEMTrLXZNvHyi97/22SKrtsNfvaD8TevckEU9QXKr4HZvdFouOgDIKVsZjOmI2nK1R9SKkGcdwW8CdUI4BvqYbQorNwr+xuZqO3fzakHTUgejYQlF/smp/Rok1ENH99gKw6gWMoGrVkHdAUlUt9fBj1Fhj756CcQ/C681KPyGCmLEhp6Sy297gxULSEBugaq6Xa/E4xKl8olCNYaqP4h7ESBB7dk0JGnb/QWAu9ZNO7SF+NPoe5VdPSV96RAE5WTRLvJyrCSj2bHpRESywS0v00dM4+AnbtdiuH2AH0hckMxkZPkTwpXOOuj0OUIKD7RBQsgv1tI5gegA9o0HJs/SxbRdUnGBIJveu0BbJT6KGDAUkW5AJ64amBnYQdT21/SuQjFk43v0/3oMCxJL0DTdZvZyddqDxx9hlEuJX4v9LIHTfUr3/wEPkMlZcNoZuO5JPlsxzJow7t/hDkX/x6rLy/taFofN5WnqTU7acrgraJV2l5JGH4Pgxe1PMhYo7naBdrOb6kmJV+yQWaXG6/kdLMenoP6vJRyLQoMbMofFPAnZe+/rtZqUDq+SIQgR8nZlaA8E2XT/M27oK+I7ZjS7viHSzrQ57yfP8c9YoU=
+  email: arnaud.lewis@gmail.com
+  provider: npm
