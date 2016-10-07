@@ -3,21 +3,21 @@
 var request = require('request');
 var config = require('./config');
 
-exports.login = function(base, email, password) {
-  return new Promise(function(resolve, reject) {
+exports.login = function (base, email, password) {
+  return new Promise(function (resolve, reject) {
     request.post(base + '/login', {
       form: {
         email: email,
         password: password,
         next: 'reload'
       }
-    }, function(err, xhr, body) {
+    }, function (err, xhr, body) {
       if (err) {
         reject(err);
         return;
       }
       if (xhr.statusCode == 200) {
-        config.set({cookies: xhr.headers['set-cookie'][0]}).then(function(){
+        config.set({ cookies: xhr.headers['set-cookie'][0] }).then(function () {
           resolve(true);
         });
         return;
@@ -27,8 +27,8 @@ exports.login = function(base, email, password) {
   });
 };
 
-exports.signup = function(base, email, password) {
-  return new Promise(function(resolve, reject) {
+exports.signup = function (base, email, password) {
+  return new Promise(function (resolve, reject) {
     request.post(base + '/signup', {
       followRedirect: false,
       form: {
@@ -38,7 +38,7 @@ exports.signup = function(base, email, password) {
         password: password,
         accept: 'true'
       }
-    }, function(err, xhr, body) {
+    }, function (err, xhr, body) {
       if (err) {
         reject(err);
         return;
@@ -46,7 +46,7 @@ exports.signup = function(base, email, password) {
       if (Math.floor(xhr.statusCode / 100) == 3) {
         config.set({
           cookies: xhr.headers['set-cookie'][0]
-        }).then(function() {
+        }).then(function () {
           resolve(true);
         });
         return;
@@ -57,9 +57,9 @@ exports.signup = function(base, email, password) {
   });
 };
 
-exports.exists = function(base, domain) {
-  return new Promise(function(resolve, reject) {
-    request(base + '/app/dashboard/repositories/' + domain + '/exists', function(err, xhr, body) {
+exports.exists = function (base, domain) {
+  return new Promise(function (resolve, reject) {
+    request(base + '/app/dashboard/repositories/' + domain + '/exists', function (err, xhr, body) {
       if (err) {
         reject(err);
       } else {
@@ -70,8 +70,8 @@ exports.exists = function(base, domain) {
   });
 };
 
-exports.createRepository = function(cookies, base, domain) {
-  return new Promise(function(resolve, reject) {
+exports.createRepository = function (cookies, base, domain) {
+  return new Promise(function (resolve, reject) {
     request.post(base + '/authentication/newrepository', {
       form: {
         domain: domain,
@@ -95,8 +95,8 @@ exports.createRepository = function(cookies, base, domain) {
   });
 };
 
-exports.onboardingValidateCLI = function(base, domain) {
-  return new Promise(function(resolve, reject) {
+exports.onboardingValidateCLI = function (base, domain) {
+  return new Promise(function (resolve, reject) {
     request.get(base + '/app/settings/onboarding/cli', function (err, xhr, body) {
       if (err) {
         reject(err);
