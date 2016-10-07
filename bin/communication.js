@@ -35,16 +35,19 @@ exports.default = {
     return new Promise(function (resolve, reject) {
       _request2.default.post(url, options, function (err, xhr, body) {
         if (err) {
-          reject(err);
+          reject();
+          console.log("An error occured during your account creation. Please try again.");
           return;
         }
         if (xhr.statusCode == 200) {
-          _config2.default.set({ cookies: xhr.headers['set-cookie'][0] }).then(function () {
-            resolve();
-          });
+          if (!cookies) {
+            _config2.default.set({ cookies: xhr.headers['set-cookie'][0] }).then(function () {
+              resolve();
+            });
+          } else resolve();
           return;
         }
-        reject();
+        reject(body);
       });
     });
   },

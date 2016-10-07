@@ -21,12 +21,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function exec(base, email, password) {
   return new Promise(function (resolve) {
     function run() {
-      var answersP = email && password ? Promise.resolve({ email: email, password: password }) : prompt(email);
-      answersP.then(function (answers) {
+      prompt().then(function (answers) {
         query(base, answers.email, answers.password).then(function () {
           return resolve();
-        }).catch(function () {
-          _helpers2.default.UI.display('Login error, check your credentials. If you forgot your password, visit ' + base + ' to reset it.');
+        }).catch(function (err) {
+          if (err) {
+            var errors = JSON.parse(err).errors;
+            _helpers2.default.UI.displayErrors(errors);
+          } else {
+            _helpers2.default.UI.display('Unable to create your account.');
+          }
           run();
         });
       });
@@ -35,28 +39,29 @@ function exec(base, email, password) {
   });
 }
 
-function prompt(email) {
+function prompt() {
   return _inquirer2.default.prompt([{
     type: 'input',
     name: 'email',
     message: 'Email: ',
-    default: email,
     validate: function validate(email) {
       return email && email.length > 0;
     }
   }, {
-    type: 'password',
-    name: 'password',
-    message: 'Password: '
+    'type': 'password',
+    'name': 'password',
+    'message': 'Password: '
   }]);
 }
 
 function query(base, email, password) {
-  var url = base + '/login';
+  var url = base + '/signup';
   var data = {
+    firstname: email.split('@')[0],
+    lastname: email.split('@')[0],
     email: email,
     password: password,
-    next: 'reload'
+    accept: 'true'
   };
   return _communication2.default.post(url, data);
 }

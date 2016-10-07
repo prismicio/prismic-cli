@@ -8,6 +8,10 @@ var _login = require('./login');
 
 var _login2 = _interopRequireDefault(_login);
 
+var _signup = require('./signup');
+
+var _signup2 = _interopRequireDefault(_signup);
+
 var _communication = require('./communication');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -126,14 +130,9 @@ function create(config, domain, args) {
 }
 
 function signup(config, args) {
-  ui.signup(config.base || DEFAULT_BASE, args['--email'], args['--password']).then(function (success) {
-    if (success) {
-      console.log('Successfully created your account! You can now create repositories.');
-    } else {
-      console.log('Error');
-    }
-  }).catch(function (err) {
-    console.log('Error: ', err);
+  var base = config.base || _communication.Domain.Default;
+  (0, _signup2.default)(base, args['--email'], args['--password']).then(function () {
+    return Helpers.UI.display('Successfully created your account! You can now create repositories.');
   });
 }
 
@@ -141,8 +140,6 @@ function login(config, args) {
   var base = config.base || _communication.Domain.Default;
   (0, _login2.default)(base, args['--email'], args['--password']).then(function () {
     return Helpers.UI.display('Successfully logged in! You can now create repositories.');
-  }).catch(function () {
-    return Helpers.UI.display('Login error, check your credentials. If you forgot your password, visit ' + base + ' to reset it.');
   });
 }
 
