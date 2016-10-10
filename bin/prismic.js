@@ -5,6 +5,7 @@
 // - specific runtime instructions from the template, directly on prompt?
 
 var _ = require('lodash');
+var path = require('path');
 var shell = require('shelljs');
 var commandLineCommands = require('command-line-commands');
 var getUsage = require('command-line-usage');
@@ -116,20 +117,34 @@ function heroku(config, args) {
 function create(config, domain, args) {
   var base = config.base || DEFAULT_BASE;
   var noconfirm = (args['--noconfirm'] === 'true');
+  var folder, finalDomain;
   console.log('Initialize project for ' + base);
-  return ui.createRepository(base, domain, args).then(function (domain) {
-    if (domain) {
-      return ui.initTemplate(domain, args['--folder'], args['--template'], noconfirm);
+  return ui.checkNotExists(base, domain, args).then(function (domain) {
+    var finalDomain = domain;
+    return ui.connect(base, finalDomain, args);
+  }).then(function(cookies) {
+    if (finalDomain) {
+      return ui.initTemplate(finalDomain, args['--folder'], args['--template'], noconfirm);
     } else {
       console.log('Init aborded.');
       return null;
     }
   }).then(function(answers) {
+    var customTypes = {};
     if (answers && answers.folder) {
+      folder = answers.folder;
+      var customTypesPath = path.join(folder, 'customtypes.json');
+      if (shell.test('-e', customTypesPath)) {
+        customTypes = JSON.stringify(JSON.parse(shell.cat(customTypesPath)));
+      }
+    }
+    return ui.createRepository(base, finalDomain, customTypes, args);
+  }).then(function() {
+    if (folder) {
       var devnull = isWin ? 'NUL' : '/dev/null';
-      shell.cd(answers.folder);
+      shell.cd(folder);
       shell.exec('npm install > ' + devnull);
-      console.log('Your project in ready! Go to the ' + answers.folder + ' folder and follow the instructions in the README.');
+      console.log('Your project in ready! Go to the ' + folder + ' folder and follow the instructions in the README.');
     }
   }).catch(function(err) {
     console.log('Error: ' , err);
