@@ -22,6 +22,10 @@ var _base = require('./base');
 
 var _base2 = _interopRequireDefault(_base);
 
+var _templates = require('./templates');
+
+var _templates2 = _interopRequireDefault(_templates);
+
 var _communication = require('./communication');
 
 var _lodash = require('lodash');
@@ -152,7 +156,7 @@ function parseArguments(args) {
 }
 
 function main() {
-  var validCommands = [null, 'init', 'heroku', 'login', 'logout', 'signup', 'base', 'version', 'list'];
+  var validCommands = [null, 'init', 'quickstart', 'heroku', 'login', 'logout', 'signup', 'base', 'version', 'list'];
   var arr = (0, _commandLineCommands2.default)(validCommands);
   var command = arr.command;
   var firstArg = null;
@@ -172,7 +176,12 @@ function main() {
         signup(config, args);
         break;
       case 'init':
+        console.log(args);
         init(config, firstArg, args);
+      case 'quickstart':
+        var quickstartArgs = args;
+        quickstartArgs['--template'] = 'NodeJS';
+        init(config, null, quickstartArgs);
         break;
       case 'heroku':
         heroku(config, args);

@@ -182,10 +182,7 @@ function templateQuestion(templateName) {
 }
 
 function promptFolder(folderName) {
-  return _inquirer2.default.prompt([folderQuestion(folderName)]).then(function (answers) {
-    answers.template = template;
-    return answers;
-  });
+  return _inquirer2.default.prompt([folderQuestion(folderName)]);
 }
 
 function promptTemplate(templateName) {
@@ -221,7 +218,7 @@ function initTemplate(domain, foldername, templateName, noconfirm) {
 function requireFolderAndTemplate(domain, foldername, templateName, noconfirm) {
   if (noconfirm || foldername && templateName) {
     var folder = foldername || domain;
-    template = _templates2.default.getOrDefault(templateName);
+    var template = _templates2.default.getOrDefault(templateName);
     if (_shelljs2.default.test('-e', folder)) {
       throw new Error('Error: folder ' + folder + ' already exists.');
     }
