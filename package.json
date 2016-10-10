@@ -7,7 +7,7 @@
   "scripts": {
     "build": "babel ./lib/ -d ./bin/",
     "watch": "nodemon --watch ./lib --exec \"npm run build\"",
-    "lint": "eslint bin/*.js lib/**/*.js",
+    "lint": "eslint lib/**/*.js",
     "test": "npm run lint"
   },
   "bin": {
