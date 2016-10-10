@@ -117,14 +117,14 @@ function heroku(config, args) {
 function create(config, domain, args) {
   var base = config.base || DEFAULT_BASE;
   var noconfirm = (args['--noconfirm'] === 'true');
-  var folder, domain;
+  var folder, finalDomain;
   console.log('Initialize project for ' + base);
   return ui.checkNotExists(base, domain, args).then(function (domain) {
-    var domain = domain;
-    return ui.connect(base, domain, args);
+    var finalDomain = domain;
+    return ui.connect(base, finalDomain, args);
   }).then(function(cookies) {
-    if (domain) {
-      return ui.initTemplate(domain, args['--folder'], args['--template'], noconfirm);
+    if (finalDomain) {
+      return ui.initTemplate(finalDomain, args['--folder'], args['--template'], noconfirm);
     } else {
       console.log('Init aborded.');
       return null;
@@ -138,7 +138,7 @@ function create(config, domain, args) {
         customTypes = JSON.stringify(JSON.parse(shell.cat(customTypesPath)));
       }
     }
-    return ui.createRepository(base, domain, customTypes, args);
+    return ui.createRepository(base, finalDomain, customTypes, args);
   }).then(function() {
     if (folder) {
       var devnull = isWin ? 'NUL' : '/dev/null';
