@@ -42,6 +42,13 @@ exports.get = function (name) {
   return template;
 };
 
+exports.getOrDefault = function (name) {
+  var t = exports.TEMPLATES.find(function (tmpl) {
+    return tmpl.name === name;
+  });
+  return t || exports.TEMPLATES[0];
+};
+
 exports.unzip = function (template, destination) {
   return new Promise(function (resolve, reject) {
     tmp.file(function _tempFileCreated(err, path, fd, cleanupCallback) {

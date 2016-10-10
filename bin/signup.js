@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _communication = require('./communication.js');
+var _communication = require('./communication');
 
 var _communication2 = _interopRequireDefault(_communication);
 
@@ -12,7 +12,7 @@ var _inquirer = require('inquirer');
 
 var _inquirer2 = _interopRequireDefault(_inquirer);
 
-var _helpers = require('./helpers.js');
+var _helpers = require('./helpers');
 
 var _helpers2 = _interopRequireDefault(_helpers);
 
@@ -21,21 +21,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function exec(base, email, password) {
   return new Promise(function (resolve) {
     function run() {
-      prompt().then(function (answers) {
+      return prompt().then(function (answers) {
         query(base, answers.email, answers.password).then(function () {
           return resolve();
         }).catch(function (err) {
           if (err) {
             var errors = JSON.parse(err).errors;
             _helpers2.default.UI.displayErrors(errors);
-          } else {
-            _helpers2.default.UI.display('Unable to create your account.');
           }
           run();
         });
       });
     }
-    run();
+    return run();
   });
 }
 

@@ -17,11 +17,13 @@ exports.default = {
       if (Types.String === (typeof messages === 'undefined' ? 'undefined' : _typeof(messages))) console.log(messages);else console.log(messages.join('\n'));
     },
     displayErrors: function displayErrors(errors) {
-      var errorsMsg = Object.keys(errors).reduce(function (acc, field) {
-        var fieldErrors = errors[field];
-        return acc.concat(fieldErrors);
-      }, []);
-      this.display(errorsMsg);
+      if (Types.String === (typeof errors === 'undefined' ? 'undefined' : _typeof(errors))) console.log(errors);else {
+        var errorsMsg = Object.keys(errors).reduce(function (acc, field) {
+          var fieldErrors = errors[field];
+          return acc.concat(fieldErrors);
+        }, []);
+        this.display(errorsMsg);
+      }
     }
   }
 };
