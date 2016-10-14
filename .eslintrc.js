@@ -23,5 +23,8 @@ module.exports = {
       "error",
       "always"
     ]
+  },
+  "parserOptions": {
+    "sourceType": "module"
   }
 };
