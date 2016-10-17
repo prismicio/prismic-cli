@@ -18,18 +18,20 @@
   "preferGlobal": "true",
   "dependencies": {
     "adm-zip": "^0.4.7",
+    "babel-polyfill": "^6.16.0",
     "command-line-commands": "^1.0.3",
     "command-line-usage": "^3.0.2",
     "inquirer": "^1.0.3",
     "lodash": "^4.13.1",
     "request": "^2.72.0",
     "shelljs": "^0.7.0",
-    "tmp": "0.0.28"
+    "tmp": "0.0.29"
   },
   "devDependencies": {
     "@ljharb/eslint-config": "^8.0.0",
     "babel-cli": "^6.16.0",
     "babel-core": "^6.17.0",
+    "babel-eslint": "^7.0.0",
     "babel-preset-es2015": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "babel-watch": "^2.0.3",
