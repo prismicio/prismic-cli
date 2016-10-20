@@ -22,6 +22,7 @@
     "command-line-usage": "^3.0.2",
     "inquirer": "^1.0.3",
     "lodash": "^4.13.1",
+    "prismic.io": "^3.2.0",
     "request": "^2.72.0",
     "shelljs": "^0.7.0",
     "tmp": "0.0.28"
