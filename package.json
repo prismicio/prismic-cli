@@ -17,14 +17,14 @@
   },
   "preferGlobal": "true",
   "dependencies": {
-    "adm-zip": "^0.4.7",
-    "command-line-commands": "^1.0.3",
-    "command-line-usage": "^3.0.2",
-    "inquirer": "^1.0.3",
-    "lodash": "^4.13.1",
+    "adm-zip": "0.4.7",
+    "command-line-commands": "1.0.3",
+    "command-line-usage": "3.0.2",
+    "inquirer": "1.0.3",
+    "lodash": "4.13.1",
     "prismic.io": "^3.2.0",
-    "request": "^2.72.0",
-    "shelljs": "^0.7.0",
+    "request": "2.72.0",
+    "shelljs": "0.7.0",
     "tmp": "0.0.28"
   },
   "devDependencies": {
