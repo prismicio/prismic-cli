@@ -18,31 +18,30 @@
   "preferGlobal": "true",
   "dependencies": {
     "adm-zip": "0.4.7",
-    "babel-runtime": "^6.18.0",
-    "command-line-commands": "1.0.3",
-    "command-line-usage": "3.0.2",
-    "inquirer": "1.2.3",
-    "lodash": "4.13.1",
-    "path": "^0.12.7",
-    "prismic.io": "^3.2.0",
-    "regenerator": "^0.8.46",
-    "request": "2.72.0",
-    "shelljs": "0.7.0",
-    "tmp": "0.0.28"
+    "babel-runtime": "6.23.0",
+    "command-line-commands": "2.0.0",
+    "command-line-usage": "4.0.0",
+    "inquirer": "3.0.6",
+    "lodash": "4.17.4",
+    "prismic.io": "3.5.*",
+    "request": "2.81.0",
+    "shelljs": "0.7.7",
+    "tmp": "0.0.31"
   },
   "devDependencies": {
-    "@ljharb/eslint-config": "^8.0.0",
-    "babel-cli": "^6.16.0",
-    "babel-core": "^6.17.0",
-    "babel-eslint": "^7.1.0",
-    "babel-plugin-syntax-async-functions": "^6.13.0",
-    "babel-plugin-transform-regenerator": "^6.16.1",
-    "babel-plugin-transform-runtime": "^6.15.0",
-    "babel-polyfill": "^6.16.0",
-    "babel-preset-es2015": "^6.16.0",
-    "babel-preset-stage-0": "^6.16.0",
-    "babel-watch": "^2.0.3",
-    "eslint": "^3.7.1",
-    "install": "^0.8.2"
+    "eslint": "3.18.0",
+    "eslint-config-airbnb-base": "11.1.0",
+    "eslint-plugin-import": "2.2.0",
+    "babel-cli": "6.24.0",
+    "babel-eslint": "7.2.1",
+    "babel-preset-es2015": "6.24.0",
+    "babel-plugin-transform-regenerator": "6.22.0",
+    "babel-plugin-syntax-async-functions": "6.13.0",
+    "babel-polyfill": "6.13.0",
+    "babel-watch": "2.0.6"
+  },
+  "engines" : {
+    "node" : ">=4.8.1",
+    "npm" : ">=2.15.11"
   }
 }
