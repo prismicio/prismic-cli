@@ -5,11 +5,12 @@
   "author": "prismic.io developers",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "babel ./lib/ -d ./bin/",
+    "build": "babel ./lib/ -d ./bin/; cp -r ./lib/nuxt-slices/custom_types ./bin/nuxt-slices",
     "watch": "npm run prebuild; nodemon --watch ./lib --exec \"npm run lint; npm run build\"",
     "prebuild": "mkdir -p ./bin",
     "prepublish": "npm run prebuild; npm run build;",
     "lint": "eslint lib/**/*.js",
+    "lint:fix": "eslint lib/**/*.js --fix",
     "test": "tape test/run.js"
   },
   "bin": {
@@ -17,7 +18,7 @@
   },
   "preferGlobal": true,
   "dependencies": {
-    "adm-zip": "~0.4.7",
+    "adm-zip": "^0.4.13",
     "babel-runtime": "~6.26.0",
     "command-line-commands": "~2.0.1",
     "command-line-usage": "~5.0.4",
@@ -33,6 +34,7 @@
     "babel-core": "~6.26.0",
     "babel-eslint": "~8.2.2",
     "babel-plugin-syntax-async-functions": "~6.13.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-regenerator": "~6.26.0",
     "babel-plugin-transform-runtime": "~6.23.0",
     "babel-polyfill": "~6.26.0",
