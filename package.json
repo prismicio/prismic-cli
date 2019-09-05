@@ -5,7 +5,7 @@
   "author": "prismic.io developers",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "babel ./lib/ -d ./bin/; cp -r ./lib/nuxt-slices/custom_types ./bin/nuxt-slices",
+    "build": "babel ./lib/ -d ./bin/",
     "watch": "npm run prebuild; nodemon --watch ./lib --exec \"npm run lint; npm run build\"",
     "prebuild": "mkdir -p ./bin",
     "prepublish": "npm run prebuild; npm run build;",
