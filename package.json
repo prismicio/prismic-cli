@@ -23,7 +23,7 @@
     "command-line-commands": "~2.0.1",
     "command-line-usage": "~5.0.4",
     "inquirer": "~5.2.0",
-    "lodash": "~4.17.5",
+    "lodash": "^4.17.15",
     "prismic.io": "~3.6.1",
     "request": "~2.85.0",
     "shelljs": "~0.8.1",
