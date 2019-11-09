@@ -4,17 +4,13 @@ import CreateBaseCommand from '../base-commands/create.base.command'
 import Template from '../utils/template'
 
 export default class InitCommand extends CreateBaseCommand {
-  static description = 'Initialize the code from a template for an existing prismic repository.'
+  static description = 'Initialize the code from a template for an existing prismic repository'
 
   static examples = [
     '$ prismic-cli init',
     '$ prismic-cli init foobar',
     '$ prismic-cli init foobar --directory foobar --template nodejs',
   ]
-
-  static flags = {
-    ...CreateBaseCommand.flags
-  }
 
   static aliases = ['initialize']
 
