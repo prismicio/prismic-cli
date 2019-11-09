@@ -1,14 +1,11 @@
 language: node_js
 node_js:
-- '6'
-- '7'
-- '8'
-os:
-  - linux
-  - osx
-before_script:
-  - npm install -g tape
+  - node
+
+cache: yarn
+
 script:
-  - npm run lint
-  - npm run build
-  - npm run test
+  - ./bin/run --version
+  - ./bin/run --help
+  - yarn run test
+
