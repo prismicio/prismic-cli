@@ -1,38 +1,18 @@
-# Prismic Command Line for Javascript
+# prismic-cli
 
-[![npm version](https://badge.fury.io/js/prismic-cli.svg)](http://badge.fury.io/js/prismic-cli)
-[![Build Status](https://api.travis-ci.org/prismicio/prismic-cli.png)](https://travis-ci.org/prismicio/prismic-cli)
+Command line to bootstrap prismic projects.
 
-This is a command line tool to bootstrap Javascript project using [prismic.io](https://prismic.io). Currently it can be used to bootstrap projects based on:
+[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+[![Version](https://img.shields.io/npm/v/prismic-cli.svg)](https://npmjs.org/package/prismic-cli)
+[![Downloads/week](https://img.shields.io/npm/dw/prismic-cli.svg)](https://npmjs.org/package/prismic-cli)
+[![License](https://img.shields.io/npm/l/prismic-cli.svg)](https://github.com/prismicio/prismic-cli/blob/master/package.json)
 
-* [NodeJS](https://nodejs.org/) ([ExpressJS](https://expressjs.com/))
-* [ReactJS](https://facebook.github.io/react/)
-* [Angular 2.0](https://angular.io/)
+<!-- toc -->
 
-It is meant to install globally:
+# Usage
 
-```
-npm install -g prismic-cli
-```
+<!-- usage -->
 
-## Usage
+# Commands
 
-Just type `prismic` without any argument to read the manual.
-
-### Examples
-
-Create a new project on the 'foobar' repository:
-```
-prismic init foobar
-```
-
-Create a new NodeJS project on the 'foobar' repository, in the 'foobar' folder (non-interactive) 
-```
-prismic init foobar --folder foobar --template NodeJS
-```
-
-## More information
-
-Once your project is bootstrapped, you can find more information about developing with prismic.io in the [documentation](http://prismic.io/docs).
-
-All templates rely on the same [Javascript kit](https://github.com/prismicio/javascript-kit).
+<!-- commands -->

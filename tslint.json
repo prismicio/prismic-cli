@@ -1,0 +1,23 @@
+{
+  "extends": "@oclif/tslint",
+  "rules": {
+    "object-curly-spacing": [
+      true,
+      "always"
+    ],
+    "no-unused": [
+      true,
+      {
+        "ignore-pattern": "^_$"
+      }
+    ],
+    "ter-indent": [
+      true,
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "align": false
+  }
+}

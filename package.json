@@ -3,54 +3,81 @@
   "description": "Command line to bootstrap prismic projects.",
   "version": "3.6.2",
   "author": "prismic.io developers",
-  "license": "Apache-2.0",
-  "scripts": {
-    "build": "babel ./lib/ -d ./bin/ --copy-files",
-    "watch": "npm run prebuild; nodemon --watch ./lib --exec \"npm run lint; npm run build\"",
-    "prebuild": "mkdir -p ./bin",
-    "prepublish": "npm run prebuild; npm run build;",
-    "lint": "eslint lib/**/*.js",
-    "lint:fix": "eslint lib/**/*.js --fix",
-    "test": "tape test/run.js"
-  },
   "bin": {
-    "prismic": "bin/prismic.js"
+    "prismic": "bin/prismic.js",
+    "prismic-cli": "./bin/run"
   },
-  "preferGlobal": true,
+  "bugs": "https://github.com/prismicio/prismic-cli/issues",
   "dependencies": {
+    "@oclif/command": "^1",
+    "@oclif/config": "^1",
+    "@oclif/plugin-help": "^2",
     "adm-zip": "^0.4.13",
+    "axios": "^0.19.0",
     "babel-runtime": "~6.26.0",
-    "command-line-commands": "~2.0.1",
-    "command-line-usage": "~5.0.4",
+    "command-line-commands": "~3.0.1",
+    "command-line-usage": "~6.1.0",
+    "debug": "^4.1.1",
     "deep-equal": "^1.1.0",
-    "inquirer": "~5.2.0",
+    "gittar": "^0.1.1",
+    "inquirer": "~7.0.0",
     "lodash": "^4.17.15",
     "open": "^7.0.0",
     "prismic.io": "~3.6.1",
-    "request": "~2.85.0",
-    "shelljs": "~0.8.1",
-    "tmp": "~0.0.33",
-    "vue-docgen-api": "^3.25.0"
+    "request": "~2.88.0",
+    "shelljs": "~0.8.3",
+    "tmp": "~0.1.0",
+    "tslib": "^1",
+    "vue-docgen-api": "^3.26.0"
   },
   "devDependencies": {
-    "babel-cli": "~6.26.0",
-    "babel-core": "~6.26.0",
-    "babel-eslint": "~8.2.2",
-    "babel-plugin-syntax-async-functions": "~6.13.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-regenerator": "~6.26.0",
-    "babel-plugin-transform-runtime": "~6.23.0",
-    "babel-polyfill": "~6.26.0",
-    "babel-preset-es2015": "~6.24.1",
-    "babel-watch": "~2.0.7",
-    "eslint": "~4.19.1",
-    "eslint-config-airbnb-base": "~12.1.0",
-    "eslint-plugin-import": "~2.10.0",
-    "tape": "~4.9.0",
-    "tape-spawn": "~1.4.2"
+    "@oclif/dev-cli": "^1",
+    "@oclif/tslint": "^3",
+    "@types/debug": "^4.1.5",
+    "@types/inquirer": "^6.5.0",
+    "@types/jest": "^24.0.22",
+    "@types/node": "^12",
+    "@types/request": "^2.48.3",
+    "@types/shelljs": "^0.8.6",
+    "globby": "^10",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
+    "ts-node": "^8",
+    "tslint": "^5",
+    "typescript": "^3.7"
   },
   "engines": {
     "node": ">= 8.0.0",
     "npm": ">= 3.0.0"
-  }
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "homepage": "https://github.com/prismicio/prismic-cli",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "Apache-2.0",
+  "main": "lib/index.js",
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "prismic-cli",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  },
+  "preferGlobal": true,
+  "repository": "https://github.com/prismicio/prismic-cli",
+  "scripts": {
+    "postpack": "rm -f oclif.manifest.json",
+    "posttest": "tslint -p . -t stylish",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "jest",
+    "version": "oclif-dev readme && git add README.md",
+    "lint": "tslint -p . -t stylish --fix"
+  },
+  "types": "lib/index.d.ts"
 }
