@@ -2,7 +2,7 @@ import { Command } from '@oclif/command'
 
 import Template from '../utils/template'
 
-export default class Hello extends Command {
+export default class ListCommand extends Command {
   static description = 'List the available code templates'
 
   static examples = [
