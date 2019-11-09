@@ -1,32 +1,26 @@
-import * as fs from 'fs'
+import { promises as fs } from 'fs'
 import { join } from 'path'
-import { promisify } from 'util'
 
-const stat = promisify(fs.stat)
-const readFile = promisify(fs.readFile)
-const writeFile = promisify(fs.writeFile)
+const stat = fs.stat
+const readFile = fs.readFile
+const writeFile = fs.writeFile
 
-export const PRISMIC_CLI_CONFIG_PATH = join(
-  (process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE) as string,
-  '.prismic'
-)
-
-export const PRISMIC_CLI_DEFAULT_BASE_URL = 'https://www.prismic.io'
+export const PRISMIC_CLI_DEFAULT_BASE_URL = 'https://prismic.io'
 export const PRISMIC_CLI_DEFAULT_CONFIG_FILE = join(__dirname, '..', 'prismic.config.js')
 
-async function read() {
+export async function read() {
   try {
-    const file = await stat(PRISMIC_CLI_CONFIG_PATH)
+    const file = await stat(Config.defaults.configFilePath())
     if (file) {
-      return await readFile(PRISMIC_CLI_CONFIG_PATH, 'utf8') as string
+      return await readFile(Config.defaults.configFilePath(), 'utf8') as string
     }
   } catch (_) { }
 
   return '{}'
 }
 
-async function write(data: any) {
-  await writeFile(PRISMIC_CLI_DEFAULT_CONFIG_FILE, data, 'utf8')
+export async function write(data: any) {
+  return writeFile(Config.defaults.configFilePath(), data)
 }
 
 const Config = {
@@ -35,7 +29,10 @@ const Config = {
       return PRISMIC_CLI_DEFAULT_BASE_URL
     },
     configFilePath() {
-      return PRISMIC_CLI_DEFAULT_CONFIG_FILE
+      return join(
+        (process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE) as string,
+        '.prismic'
+      )
     }
   },
   async all() {
