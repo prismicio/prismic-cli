@@ -1,10 +1,11 @@
-import Command, { flags } from '@oclif/command'
+import Command from '@oclif/command'
 import inquirer = require('inquirer')
 
 import Communication from '../utils/communication'
 import Config from '../utils/config'
-import { UI } from '../utils/helper'
 import MagicLink from '../utils/magic-link'
+
+type Credential = { email: string, password: string }
 
 export default abstract class AuthBaseCommand extends Command {
   static description = 'describe the command here'
@@ -23,47 +24,40 @@ export default abstract class AuthBaseCommand extends Command {
       validate(password: string) {
         return password && password.length > 0
       }
-    }])
+    }]) as unknown as Credential
   }
 
-  async signup(email: string, password: string, baseURL: string = Config.defaults.baseURL()) {
-    const url = `${baseURL}/authentication/signup?ml=true`
-    const credentials = { email, password }
-    try {
-      const response = await Communication.post(url, credentials)
+  async signup(credential: Credential, magicLink = false, baseURL: string = Config.defaults.baseURL()) {
+    const url = `${baseURL}/authentication/signup${magicLink ? '?ml=true' : ''}`
+    const response = await Communication.post(url, credential)
+    if (magicLink) {
       const token = await MagicLink.parse(response)
       if (token) {
         await Config.set({ magicLink: token })
       }
-
-    } catch (error) {
-      const { errors } = JSON.parse(error)
-      UI.displayErrors(errors)
-      throw new Error()
     }
   }
 
-  async signin(email: string, password: string, baseURL: string = Config.defaults.baseURL()) {
-    const url = `${baseURL}/authentication/signin?ml=true`
-    const credentials = { email, password }
+  async signin(credential: Credential, magicLink = false, baseURL: string = Config.defaults.baseURL()) {
+    const url = `${baseURL}/authentication/signin${magicLink ? '?ml=true' : ''}`
     this.log(url)
     try {
-      const response = await Communication.post(url, credentials)
-      const token = await MagicLink.parse(response)
-      if (token) {
-        await Config.set({ magicLink: token })
+      const response = await Communication.post(url, credential)
+      if (magicLink) {
+        const token = await MagicLink.parse(response)
+        if (token) {
+          await Config.set({ magicLink: token })
+        }
       }
 
     } catch (error) {
-      console.log(error)
-
-      this.error(`Login error, check your credentials. If you forgot your password, visit ${baseURL} to reset it.`)
+      this.log(`Login error, check your credentials. If you forgot your password, visit ${baseURL} to reset it.`)
     }
   }
 
   async signout() {
     try {
-      await Config.set({ cookies: '' })
+      await Config.set({ cookie: '' })
       this.log('Successfully logged out!')
     } catch (error) {
       this.error(error)
