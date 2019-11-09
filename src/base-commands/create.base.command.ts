@@ -91,7 +91,7 @@ export default abstract class CreateBaseCommand extends Command {
 
   private async isAuthenticated(): Promise<boolean> {
     try {
-      const cookies = await Config.get('cookies')
+      const cookies = await Config.get('cookie')
       return !!cookies
     } catch (_) {
       return false
