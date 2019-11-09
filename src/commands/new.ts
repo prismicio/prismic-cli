@@ -26,6 +26,10 @@ export default class NewCommand extends CreateBaseCommand {
 
   async run() {
     const { args, flags } = this.parse(NewCommand)
+
+    // Make sure the user is authenticated
+    await this.authenticate()
+
     // Get the repository name
     let repository: string = args.repository
     // Get the directory to create the project folder
@@ -35,7 +39,6 @@ export default class NewCommand extends CreateBaseCommand {
     // Determine whether prompt should be skipped
     const skipPrompt = flags['skip-prompt']
 
-    await this.authenticate()
 
     if (!repository) {
       repository = await this.promptRepositoryName(repository)
