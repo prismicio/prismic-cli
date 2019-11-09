@@ -39,6 +39,7 @@
     "@types/node": "^12",
     "@types/request": "^2.48.3",
     "@types/shelljs": "^0.8.6",
+    "dotenv": "^8.2.0",
     "globby": "^10",
     "jest": "^24.9.0",
     "ts-jest": "^24.1.0",
