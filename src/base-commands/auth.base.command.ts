@@ -1,4 +1,4 @@
-import Command from '@oclif/command'
+import Command, { flags } from '@oclif/command'
 import inquirer = require('inquirer')
 
 import Auth from '../utils/auth'
@@ -6,6 +6,9 @@ import Config from '../utils/config'
 
 export default abstract class AuthBaseCommand extends Command {
   static description = 'describe the command here'
+  static flags = {
+    status: flags.boolean({ char: 's' })
+  }
 
   static async promptAuthenticationMethod() {
     return inquirer.prompt({
@@ -59,5 +62,11 @@ export default abstract class AuthBaseCommand extends Command {
     } catch (error) {
       this.error(error)
     }
+  }
+
+  async status() {
+    if (Auth.isAuthenticated()) {
+      this.log('Signed in')
+    } else this.log('Signed out')
   }
 }
