@@ -27,6 +27,12 @@ const Template = {
    */
   async available() {
     return (await this.fetch()).filter(t => !t.isQuickstart).map(t => t.name)
+  },
+  async find(template: string) {
+    return (await this.fetch()).map(t => {
+      let { url, ...rest } = t
+      return { url: url.replace('/archive/master.zip', ''), ...rest } as ITemplate
+    }).find(t => t.name.toLowerCase() === template.toLowerCase())
   }
 }
 
