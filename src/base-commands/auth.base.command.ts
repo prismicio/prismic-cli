@@ -1,15 +1,32 @@
 import Command from '@oclif/command'
 import inquirer = require('inquirer')
 
-import Communication from '../utils/communication'
+import Auth from '../utils/auth'
 import Config from '../utils/config'
-import MagicLink from '../utils/magic-link'
-
-type Credential = { email: string, password: string }
 
 export default abstract class AuthBaseCommand extends Command {
   static description = 'describe the command here'
-  async promptSignup() {
+
+  static async promptAuthenticationMethod() {
+    return inquirer.prompt({
+      name: 'choice',
+      message: 'You must be signed in to continue',
+      type: 'list',
+      choices: ['Sign In', 'Sign Out', 'Cancel']
+    })
+  }
+
+  static async authenticate(action: (response: { choice: string | undefined }) => Promise<boolean>): Promise<void> {
+    if (!(await Auth.isAuthenticated())) {
+      while (!(await Auth.isAuthenticated())) {
+        if (await action(await AuthBaseCommand.promptAuthenticationMethod())) {
+          process.exit(0)
+        }
+      }
+    }
+  }
+
+  static async promptCredential() {
     return inquirer.prompt([{
       type: 'input',
       name: 'email',
@@ -28,36 +45,16 @@ export default abstract class AuthBaseCommand extends Command {
   }
 
   async signup(credential: Credential, magicLink = false, baseURL: string = Config.defaults.baseURL()) {
-    const url = `${baseURL}/authentication/signup${magicLink ? '?ml=true' : ''}`
-    const response = await Communication.post(url, credential)
-    if (magicLink) {
-      const token = await MagicLink.parse(response)
-      if (token) {
-        await Config.set({ magicLink: token })
-      }
-    }
+    await Auth.singup(credential, magicLink, baseURL)
   }
 
   async signin(credential: Credential, magicLink = false, baseURL: string = Config.defaults.baseURL()) {
-    const url = `${baseURL}/authentication/signin${magicLink ? '?ml=true' : ''}`
-    this.log(url)
-    try {
-      const response = await Communication.post(url, credential)
-      if (magicLink) {
-        const token = await MagicLink.parse(response)
-        if (token) {
-          await Config.set({ magicLink: token })
-        }
-      }
-
-    } catch (error) {
-      this.log(`Login error, check your credentials. If you forgot your password, visit ${baseURL} to reset it.`)
-    }
+    await Auth.singin(credential, magicLink, baseURL)
   }
 
   async signout() {
     try {
-      await Config.set({ cookie: '' })
+      await Auth.signout()
       this.log('Successfully logged out!')
     } catch (error) {
       this.error(error)
