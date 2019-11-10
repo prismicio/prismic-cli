@@ -14,6 +14,7 @@ export default abstract class CreateBaseCommand extends Command {
   static flags = {
     directory: flags.string({ char: 'd' }),
     template: flags.string({ char: 't' }),
+    token: flags.string({ char: 'a' }),
     'skip-prompt': flags.boolean({ char: 'P', default: false })
   }
 
