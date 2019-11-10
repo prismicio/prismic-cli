@@ -11,7 +11,7 @@ export default class SignInCommand extends AuthBaseCommand {
     let valid = false
     while (!valid) {
       try {
-        await this.signin(await this.promptSignup())
+        await this.signin(await SignInCommand.promptCredential())
         valid = true
       } catch (_) { }
     }
