@@ -1,24 +1,25 @@
 import { flags } from '@oclif/command'
-import gittar = require('gittar')
+import { extract, fetch } from 'gitly'
 import { join } from 'path'
 
 import CreateBaseCommand from '../base-commands/create.base.command'
 import Template from '../utils/template'
 
 export default class NewCommand extends CreateBaseCommand {
-  static description = 'Create a project: initialize the code for a new prismic repository'
+  static description = 'Create a new project and a prismic repository'
 
   static examples = [
     '$ prismic-cli new foobar',
     '$ prismic-cli new foobar --theme prismicio/nuxtjs-website',
-    '$ prismic-cli new foobar --theme https://github.com/prismicio/nuxtjs-websie.git'
+    '$ prismic-cli new foobar --theme https://github.com/prismicio/nuxtjs-website',
+    '$ prismic-cli new foobar --template nodejs'
   ]
 
   static flags = {
     ...CreateBaseCommand.flags,
     config: flags.string({ char: 'c', default: 'prismic.config.js' }),
     // TODO: Skip configuration file logic
-    'skip-config': flags.string({ char: 'C' }),
+    'skip-config': flags.boolean({ char: 'C' }),
     theme: flags.string({ char: 't' })
   }
 
@@ -33,31 +34,59 @@ export default class NewCommand extends CreateBaseCommand {
 
     if (!name) {
       name = await this.promptRepositoryName(name)
-    // Get the directory to create the project folder
-    let directory = flags.directory
-    // Get the template name/type
-    let template = (flags.template || '')
-    // Determine whether prompt should be skipped
-    const skipPrompt = flags['skip-prompt']
-
-
-    if (!repository) {
-      repository = await this.promptRepositoryName(repository)
     }
 
-    if (!skipPrompt) {
+    if (!flags['skip-prompt']) {
       directory = await this.promptDirectoryName(name, directory)
-      template = await this.promptTemplateList(await Template.fetch(), template)
+      if (!theme) {
+        template = await this.promptTemplateList(await Template.fetch(), template)
+      }
     } else {
-      directory = join(process.cwd(), directory || repository)
+      directory = join(process.cwd(), directory || name)
     }
 
-    if (args.theme) {
-      try {
+    try {
       await create({ name, directory, template, theme, flags })
-      } catch (error) {
-        this.log(error.message)
-      }
+    } catch (error) {
+      this.error(error.message ? error.message : error)
     }
+  }
+}
+
+interface ICreationContext {
+  name: string
+  directory: string
+  template?: string
+  theme?: string
+  flags: {
+    ['skip-prompt']: boolean
+    ['skip-config']: boolean
+  }
+}
+
+type ICreationFactory = (context: ICreationContext) => Promise<void>
+
+const create: ICreationFactory = async ({ name, directory, template, theme }) => {
+  console.log('name', name, 'directory', directory, 'template', template, 'theme', theme)
+  const url: string = (((await Template.find(template || '')) || {}).url) || theme || ''
+  console.log(url)
+
+  /**
+   * Scenarios:
+   *
+   * --New--
+   * 1. No local project and no prismic repository
+   *   - 1. Create project from scratch template
+   *   - 2. Create project from theme
+   *
+   * --Init--
+   * 1. Local project and no prismic repository
+   *  - 1. Create a remote prismic repository
+   */
+
+  // Download the template
+  if (url) {
+    const tempDir = await fetch(url)
+    await extract(tempDir, directory)
   }
 }
