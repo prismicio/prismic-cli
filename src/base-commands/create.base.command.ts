@@ -4,9 +4,11 @@ import { existsSync } from 'fs'
 import inquirer = require('inquirer')
 import { join } from 'path'
 
-import Config from '../utils/config'
+import Auth from '../utils/auth'
 import Prismic from '../utils/prismic'
 import Template, { ITemplate } from '../utils/template'
+
+import AuthBaseCommand from './auth.base.command'
 
 export default abstract class CreateBaseCommand extends Command {
   static flags = {
@@ -15,27 +17,27 @@ export default abstract class CreateBaseCommand extends Command {
     'skip-prompt': flags.boolean({ char: 'P', default: false })
   }
 
-  async promptRepositoryName(repository: string, fresh = false): Promise<string> {
+  async promptRepositoryName(name: string, fresh = false): Promise<string> {
     // Base case: The name is provided via flags and is available
-    if (repository && await Prismic.isRepositoryAvailable(repository)) {
-      return repository
+    if (name && await Prismic.isRepositoryAvailable(name)) {
+      return name
     }
 
     // We can deduce that the name is provided but unavailable
-    if (repository) {
-      this.log(`Seems like "${repository}" is unavailable.`)
+    if (name) {
+      this.log(`Seems like "${name}" is unavailable.`)
     }
 
     // Otherwise, keep prompting for the repository name
     const response = await inquirer.prompt({
-      name: 'repository',
+      name: 'name',
       message: !fresh ? 'The name of your prismic repository' : 'The name of the prismic repository',
       validate(value) {
         return new RegExp('^[\\-\\w]+$').test(value) ? true : 'Your repository name can only contains alphanumeric characters, underscores or dashes'
       }
     })
 
-    return this.promptRepositoryName(response.repository || '', fresh)
+    return this.promptRepositoryName(response.name || '', fresh)
   }
 
   async promptDirectoryName(primary: string, directory?: string): Promise<string> {
@@ -83,19 +85,19 @@ export default abstract class CreateBaseCommand extends Command {
     return this.promptTemplateList(templates, response.template)
   }
 
-  async authenticate(): Promise<void> {
-    if (!(await this.isAuthenticated())) {
-      this.error('You must be signed in to continue')
-    }
+  async authenticate() {
+    await AuthBaseCommand.authenticate(async response => {
+      switch ((response.choice || '').toLowerCase()) {
+        case 'sign in':
+          this.log('Sign in')
+          await Auth.singin(await AuthBaseCommand.promptCredential())
+          return false
+        case 'sign up':
+          this.log('Sign up')
+          await Auth.singup(await AuthBaseCommand.promptCredential())
+          return false
+        default: return true
+      }
+    })
   }
-
-  private async isAuthenticated(): Promise<boolean> {
-    try {
-      const cookies = await Config.get('cookie')
-      return !!cookies
-    } catch (_) {
-      return false
-    }
-  }
-
 }

@@ -14,7 +14,7 @@ export default class InitCommand extends CreateBaseCommand {
 
   static aliases = ['initialize']
 
-  static args = [{ name: 'repository', description: 'The name of the existing prismic repository' }]
+  static args = [{ name: 'name', description: 'The name of the existing prismic repository' }]
 
   async run() {
     const { args, flags } = this.parse(InitCommand)
@@ -23,7 +23,7 @@ export default class InitCommand extends CreateBaseCommand {
     await this.authenticate()
 
     // Get the repository name
-    let repository: string = args.repository
+    let name: string = args.name
     // Get the directory to create the project folder
     let directory = flags.directory
     // Get the template name/type
@@ -31,15 +31,15 @@ export default class InitCommand extends CreateBaseCommand {
     // Determine whether it's forced
     const skipPrompt = flags['skip-prompt']
 
-    if (!repository) {
-      repository = await this.promptRepositoryName(repository)
+    if (!name) {
+      name = await this.promptRepositoryName(name)
     }
 
     if (!skipPrompt) {
-      directory = await this.promptDirectoryName(repository, directory)
+      directory = await this.promptDirectoryName(name, directory)
       template = await this.promptTemplateList(await Template.fetch(), template)
     } else {
-      directory = join(process.cwd(), directory || repository)
+      directory = join(process.cwd(), directory || name)
     }
 
     // Read the entire configuration file
@@ -48,12 +48,6 @@ export default class InitCommand extends CreateBaseCommand {
     // Initialize the repository
     // await init(repository, { directory, template, force }, config)
   }
-}
-
-export interface IInitCommandFlags {
-  directory: string
-  template: string
-  force: boolean
 }
 
 // async function init(repository: string, flags: InitCommandFlags, config: any = {}) {

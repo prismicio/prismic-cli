@@ -22,16 +22,17 @@ export default class NewCommand extends CreateBaseCommand {
     theme: flags.string({ char: 't' })
   }
 
-  static args = [{ name: 'repository' }]
+  static args = [{ name: 'name' }]
 
   async run() {
-    const { args, flags } = this.parse(NewCommand)
-
+    const result = this.parse(NewCommand)
+    let { name } = result.args
+    let { directory, template, theme, ...flags } = result.flags
     // Make sure the user is authenticated
     await this.authenticate()
 
-    // Get the repository name
-    let repository: string = args.repository
+    if (!name) {
+      name = await this.promptRepositoryName(name)
     // Get the directory to create the project folder
     let directory = flags.directory
     // Get the template name/type
@@ -45,7 +46,7 @@ export default class NewCommand extends CreateBaseCommand {
     }
 
     if (!skipPrompt) {
-      directory = await this.promptDirectoryName(repository, directory)
+      directory = await this.promptDirectoryName(name, directory)
       template = await this.promptTemplateList(await Template.fetch(), template)
     } else {
       directory = join(process.cwd(), directory || repository)
@@ -53,7 +54,7 @@ export default class NewCommand extends CreateBaseCommand {
 
     if (args.theme) {
       try {
-        await gittar.fetch(args.theme)
+      await create({ name, directory, template, theme, flags })
       } catch (error) {
         this.log(error.message)
       }
