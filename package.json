@@ -78,7 +78,8 @@
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "test": "jest",
     "version": "oclif-dev readme && git add README.md",
-    "lint": "tslint -p . -t stylish --fix"
+    "lint": "tslint -p . -t stylish",
+    "lint:fix": "tslint -p . -t stylish --fix"
   },
   "types": "lib/index.d.ts"
 }
