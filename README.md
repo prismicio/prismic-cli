@@ -32,6 +32,7 @@ USAGE
 # Commands
 
 <!-- commands -->
+* [`prismic-cli autocomplete [SHELL]`](#prismic-cli-autocomplete-shell)
 * [`prismic-cli help [COMMAND]`](#prismic-cli-help-command)
 * [`prismic-cli init [NAME]`](#prismic-cli-init-name)
 * [`prismic-cli list`](#prismic-cli-list)
@@ -39,6 +40,29 @@ USAGE
 * [`prismic-cli signin`](#prismic-cli-signin)
 * [`prismic-cli signout`](#prismic-cli-signout)
 * [`prismic-cli signup`](#prismic-cli-signup)
+
+## `prismic-cli autocomplete [SHELL]`
+
+display autocomplete installation instructions
+
+```
+USAGE
+  $ prismic-cli autocomplete [SHELL]
+
+ARGUMENTS
+  SHELL  shell type
+
+OPTIONS
+  -r, --refresh-cache  Refresh cache (ignores displaying instructions)
+
+EXAMPLES
+  $ prismic-cli autocomplete
+  $ prismic-cli autocomplete bash
+  $ prismic-cli autocomplete zsh
+  $ prismic-cli autocomplete --refresh-cache
+```
+
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.1.4/src/commands/autocomplete/index.ts)_
 
 ## `prismic-cli help [COMMAND]`
 
