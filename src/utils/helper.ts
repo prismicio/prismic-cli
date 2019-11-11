@@ -34,3 +34,40 @@ export const CustomType = {
     }
   }
 }
+
+export const Document = {
+  parseName(filename: string) {
+    const matches = filename.match(/(.+)\.json/)
+    if (matches) {
+      return matches[1]
+    }
+    return ''
+  },
+  async read(directory: string) {
+    const dir = join(directory, 'documents')
+    const path = join(dir, 'index.json')
+    if (existsSync(path)) {
+      const { signature } = JSON.parse(await readFile(path, 'utf-8'))
+
+      if (!signature) {
+        throw new Error('Missing signature in your prismic documents dump')
+      }
+
+      const langIds = (await readdir(dir)).filter(p => !p.match('index.js'))
+
+      const docs = langIds.reduce((langAccount, langId) => {
+        const langPath = join(dir, langId)
+        const filenames = (fs.readdirSync(langPath))
+        const language = filenames.reduce((account, filename) => {
+          const key = this.parseName(filename)
+          const value = JSON.parse(join(langPath, filename))
+          return { ...account, ...{ [key]: value } }
+        }, {})
+
+        return { ...langAccount, ...language }
+      }, {})
+
+      return { signature, docs }
+    }
+  }
+}
