@@ -4,18 +4,24 @@ import { existsSync } from 'fs'
 import inquirer = require('inquirer')
 import { join } from 'path'
 
+import { Template as PrismicTemplate } from '../interfaces/template'
 import Auth from '../utils/auth'
 import Prismic from '../utils/prismic'
-import Template, { ITemplate } from '../utils/template'
+import Template from '../utils/template'
 
 import AuthBaseCommand from './auth.base.command'
 
 export default abstract class CreateBaseCommand extends Command {
   static flags = {
-    directory: flags.string({ char: 'd' }),
-    template: flags.string({ char: 't' }),
-    token: flags.string({ char: 'a' }),
-    'skip-prompt': flags.boolean({ char: 'P', default: false })
+    cache: flags.boolean({ char: 'C', default: false, description: 'Use a cached version of the project' }),
+    config: flags.string({ char: 'c', default: 'prismic.config.js', description: 'Set the configuration path' }),
+    directory: flags.string({ char: 'd', description: 'Set the project directory to create' }),
+    // TODO: Add options to template. I think this is possible with a top level await
+    // https://github.com/microsoft/TypeScript/issues/25988#issue-345023845
+    // General idea: await Template.available().map(t => t.name)
+    template: flags.string({ char: 't', description: 'Set the template name to use', }),
+    token: flags.string({ char: 'a', description: 'Set the access token' }),
+    'skip-prompt': flags.boolean({ char: 'P', default: false, description: 'Skip the prompt' })
   }
 
   async promptRepositoryName(name: string, fresh = false): Promise<string> {
@@ -63,7 +69,7 @@ export default abstract class CreateBaseCommand extends Command {
     return this.promptDirectoryName(primary, response.directory)
   }
 
-  async promptTemplateList(templates: ITemplate[], template?: string): Promise<string> {
+  async promptTemplateList(templates: PrismicTemplate[], template?: string): Promise<string> {
     const choices = await Template.available()
     // Base case: The template name is provided
     if (template) {
