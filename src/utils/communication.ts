@@ -7,7 +7,7 @@ import {
 } from './error'
 
 axios.defaults.maxRedirects = 0
-axios.defaults.validateStatus = status => status < 500
+axios.defaults.validateStatus = status => status < 400
 
 const Communication = {
   async post(url: string, data: any, cookie?: string): Promise<any> {
