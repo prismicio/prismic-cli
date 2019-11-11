@@ -139,14 +139,14 @@ USAGE
 
 OPTIONS
   -C, --cache                Use a cached version of the project
-  -C, --skip-config          Skip the configuration file
   -P, --skip-prompt          Skip the prompt
+  -X, --skip-config          Skip the configuration file
   -a, --token=token          Set the access token
   -c, --config=config        [default: prismic.config.js] Set the configuration path
   -d, --directory=directory  Set the project directory to create
+  -e, --theme=theme          Set the theme's url
   -q, --quickstart           Set up a Node.js project with a new prismic repository
   -t, --template=template    Set the template name to use
-  -t, --theme=theme          Set the theme's url
   -u, --users=users          Set the users
 
 EXAMPLES
