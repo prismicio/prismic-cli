@@ -11,7 +11,7 @@ export const PrismicError = class extends AbstractPrismicError {
 }
 
 export const BadRequestError = class extends AbstractPrismicError {
-  static prefix = '[Unauthorized Error]:'
+  static prefix = '[Bad Request Error]:'
   readonly status: number = 400
 }
 
