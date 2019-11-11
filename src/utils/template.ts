@@ -33,6 +33,42 @@ const Template = {
       let { url, ...rest } = t
       return { url: url.replace('/archive/master.zip', ''), ...rest } as ITemplate
     }).find(t => t.name.toLowerCase() === template.toLowerCase())
+  /**
+   * Replace patterns found in the configuration file
+   * @param directory The path to the project
+   * @param configuration The configuration file
+   * @param rules The pattern to replace in the file
+   */
+  replace(directory: string, configuration: string, rules: { pattern: RegExp, value: string }[]) {
+    const path = join(directory, configuration)
+    if (existsSync(path)) {
+      rules.forEach(rule => sed('-i', rule.pattern, rule.value, path))
+    }
+  },
+  /**
+   * Installs the necessary dependencies
+   * @param directory The path to the project
+   * @param template The template to install
+   */
+  async install(directory: string, template: string) {
+    const devnull = /^win/i.test(platform()) ? 'NUL' : '/dev/null 2>&1'
+    const { instructions } = await this.find(template)
+    const cwd = process.cwd()
+    cd(directory)
+    echo('Installing project dependencies...')
+    exec(`npm install > ${devnull}`)
+    echo('Your project is ready, to proceed:')
+    echo()
+    echo(`Run 'cd ${basename(directory)}'`)
+    echo()
+    if (instructions) {
+      if (typeof instructions === 'string') {
+        echo(instructions)
+      } else {
+        echo(instructions.join('\n'))
+      }
+    }
+    cd(cwd)
   }
 }
 
