@@ -16,10 +16,9 @@ const Communication = {
     if (cookie) options.headers = { Cookie: cookie }
 
     const response = await axios.post(url, data, options)
-    const { status, statusText, data: _data } = response
+    const { status, statusText } = response
     if (status === 200 || ((Math.floor(status / 100)) === 3)) {
       await setCookie(response)
-      return _data
     } else switch (status) {
       case 400: throw (new BadRequestError(statusText))
       case 401: throw (new UnauthorizedError(statusText))
