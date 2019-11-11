@@ -1,10 +1,10 @@
 import { existsSync } from 'fs'
-import { platform } from 'os'
-import { basename, join } from 'path'
-import { cd, echo, exec, sed } from 'shelljs'
+import { join } from 'path'
+import { cd, echo, sed } from 'shelljs'
 
 import { Template as PrismicTemplate } from '../interfaces/template'
 
+import Package from './package'
 import Prismic from './prismic'
 
 const Template = {
@@ -55,16 +55,9 @@ const Template = {
    * @param template The template to install
    */
   async install(directory: string, template: string) {
-    const devnull = /^win/i.test(platform()) ? 'NUL' : '/dev/null 2>&1'
     const { instructions } = await this.find(template)
     const cwd = process.cwd()
-    cd(directory)
-    echo('Installing project dependencies...')
-    exec(`npm install > ${devnull}`)
-    echo('Your project is ready, to proceed:')
-    echo()
-    echo(`Run 'cd ${basename(directory)}'`)
-    echo()
+    Package.install(directory)
     if (instructions) {
       if (typeof instructions === 'string') {
         echo(instructions)

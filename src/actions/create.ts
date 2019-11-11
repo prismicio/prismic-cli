@@ -3,6 +3,7 @@ import { extract, fetch } from 'gitly'
 import { CreateFactory } from '../interfaces/create'
 import Config from '../utils/config'
 import { CustomType, Document } from '../utils/helper'
+import Package from '../utils/package'
 import Repository from '../utils/repository'
 import Template from '../utils/template'
 
@@ -19,7 +20,7 @@ export default (async (name, directory, method, {
   const temp = await fetch(url, { cache })
   const path = await extract(temp, directory)
 
-  if (template && !flags['skip-config']) {
+  if ((template || theme) && !flags['skip-config']) {
     Template.replace(directory, flags.config, [
       {
         pattern: /your-repo-name/,
@@ -27,7 +28,8 @@ export default (async (name, directory, method, {
       }
     ])
 
-    await Template.install(directory, template)
+    if (template) await Template.install(directory, template)
+    else Package.install(directory)
   }
 
   if (method === 'new') {
