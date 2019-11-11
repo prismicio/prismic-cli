@@ -1,3 +1,8 @@
+import { existsSync } from 'fs'
+import { platform } from 'os'
+import { basename, join } from 'path'
+import { cd, echo, exec, sed } from 'shelljs'
+
 import { Template as PrismicTemplate } from '../interfaces/template'
 
 import Prismic from './prismic'
