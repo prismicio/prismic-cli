@@ -20,3 +20,17 @@ export const Domain = {
     return `${this.repository(base, domain)}/api`
   },
 }
+
+export const CustomType = {
+  async read(directory: string): Promise<any[] | undefined> {
+    const dir = join(directory, 'custom_types')
+    const path = join(dir, 'index.json')
+    if (existsSync(path)) {
+      const types = JSON.parse(await readFile(path, 'utf-8')) as any[]
+      return types.map(t => {
+        const valuePath = join(dir, t.value)
+        return { ...t, value: JSON.parse(fs.readFileSync(valuePath, 'utf-8')) }
+      })
+    }
+  }
+}
