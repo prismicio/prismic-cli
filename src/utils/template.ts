@@ -1,17 +1,10 @@
-import Prismic from './prismic'
+import { Template as PrismicTemplate } from '../interfaces/template'
 
-export interface ITemplate {
-  name: string
-  url: string
-  configuration: string
-  directory: string
-  instructions: string
-  isQuickstart: boolean
-}
+import Prismic from './prismic'
 
 const Template = {
   /**
-   * Returns a list of available templates
+   * Return a list of available templates
    */
   async fetch() {
     try {
@@ -23,16 +16,22 @@ const Template = {
     }
   },
   /**
-   * Returns a list of available templates names
+   * Return a list of available templates names
    */
   async available() {
     return (await this.fetch()).filter(t => !t.isQuickstart).map(t => t.name)
   },
-  async find(template: string) {
+  /**
+   * Find a template
+   * @param template The name of the template
+   */
+  async find(template: string | undefined): Promise<PrismicTemplate> {
+    if (!template) return ({} as any)
     return (await this.fetch()).map(t => {
       let { url, ...rest } = t
-      return { url: url.replace('/archive/master.zip', ''), ...rest } as ITemplate
-    }).find(t => t.name.toLowerCase() === template.toLowerCase())
+      return { url: url.replace('/archive/master.zip', ''), ...rest } as PrismicTemplate
+    }).find(t => t.name.toLowerCase() === template.toLowerCase()) || ({} as any)
+  },
   /**
    * Replace patterns found in the configuration file
    * @param directory The path to the project
@@ -76,7 +75,7 @@ const Template = {
  * Converts an object from a prismic repository into a template
  * @param doc The response returned from a prismic repository
  */
-function convertDocToTemplates(doc: any = {}): ITemplate[] {
+function convertDocToTemplates(doc: any = {}): PrismicTemplate[] {
   return doc.getSliceZone('cli.templates').slices.reduce((acc: any, slice: any) => {
     if (slice.sliceType === 'template') {
       const template = slice.value.toArray()[0]
