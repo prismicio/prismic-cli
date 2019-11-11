@@ -1,5 +1,4 @@
 import AuthBaseCommand from '../base-commands/auth.base.command'
-import Config from '../utils/config'
 
 export default class SignOutCommand extends AuthBaseCommand {
   static description = 'Sign out from an existing prismic.io account'
@@ -11,9 +10,16 @@ export default class SignOutCommand extends AuthBaseCommand {
 
   static aliases = ['logout']
 
+  static flags = {
+    ...AuthBaseCommand.flags
+  }
+
   async run() {
+    const { flags } = this.parse(SignOutCommand)
+    if (flags.status) {
+      return this.status()
+    }
+
     await this.signout()
-    // Reset debug
-    await Config.set({ debug: false })
   }
 }

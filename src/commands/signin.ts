@@ -7,7 +7,17 @@ export default class SignInCommand extends AuthBaseCommand {
 
   static aliases = ['login']
 
+  static flags = {
+    ...AuthBaseCommand.flags
+  }
+
   async run() {
+    const { flags } = this.parse(SignInCommand)
+
+    if (flags.status) {
+      return this.status()
+    }
+
     let valid = false
     while (!valid) {
       try {

@@ -7,7 +7,16 @@ export default class SignupCommand extends AuthBaseCommand {
     '$ prismic-cli signup',
   ]
 
+  static flags = {
+    ...AuthBaseCommand.flags
+  }
+
   async run() {
+    const { flags } = this.parse(SignupCommand)
+    if (flags.status) {
+      return this.status()
+    }
+
     let valid = false
     while (!valid) {
       try {
