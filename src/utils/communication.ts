@@ -1,13 +1,16 @@
 import axios, { AxiosResponse } from 'axios'
 
 import Config from './config'
-import { ForbiddenError, InternalServerError, UnauthorizedError, UnknownError } from './error'
+import {
+  BadRequestError, ForbiddenError, InternalServerError,
+  UnauthorizedError, UnknownError
+} from './error'
 
 axios.defaults.maxRedirects = 0
 axios.defaults.validateStatus = status => status < 500
 
 const Communication = {
-  async post(url: string, data: any, cookie?: string[]): Promise<any> {
+  async post(url: string, data: any, cookie?: string): Promise<void> {
     let options: any = {}
 
     if (cookie) options.headers = { Cookie: cookie }
@@ -18,11 +21,11 @@ const Communication = {
       await setCookie(response)
       return _data
     } else switch (status) {
-      case 400: throw _data.errors
+      case 400: throw (new BadRequestError(statusText))
       case 401: throw (new UnauthorizedError(statusText))
       case 403: throw (new ForbiddenError(statusText))
       case 500: throw (new InternalServerError(statusText))
-      default: throw new UnknownError(statusText)
+      default: throw (new UnknownError(statusText))
     }
   },
 

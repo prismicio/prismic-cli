@@ -1,37 +1,35 @@
-export const UnauthorizedError = class extends Error {
-  readonly statusCode: number = 401
-  constructor(message: string) {
-    super(`[Unauthorized Error]: ${message}`)
+export abstract class AbstractPrismicError extends Error {
+  static prefix: string
+  constructor(readonly message: string, readonly status: number = -1) {
+    super(`${AbstractPrismicError.prefix ? `[${AbstractPrismicError.prefix}]:` : ''}${message}`)
     Object.setPrototypeOf(this, new.target.prototype)
   }
 }
 
-export const ForbiddenError = class extends Error {
-  readonly statusCode: number = 403
-  constructor(message: string) {
-    super(`[Forbidden Error]: ${message}`)
-    Object.setPrototypeOf(this, new.target.prototype)
-  }
+export const PrismicError = class extends AbstractPrismicError {
+  static prefix = '[Prismic Error]:'
 }
 
-export const InternalServerError = class extends Error {
-  readonly statusCode: number
-  constructor(message: string, statusCode = 500) {
-    super(`[Internal Server Error]: ${message}`)
-
-    this.statusCode = statusCode
-
-    Object.setPrototypeOf(this, new.target.prototype)
-  }
+export const BadRequestError = class extends AbstractPrismicError {
+  static prefix = '[Unauthorized Error]:'
+  readonly status: number = 400
 }
 
-export const UnknownError = class extends Error {
-  readonly statusCode: number
-  constructor(message: string, statusCode = -1) {
-    super(`[Unknown Error]: ${message}`)
+export const UnauthorizedError = class extends AbstractPrismicError {
+  static prefix = '[Unauthorized Error]:'
+  readonly status: number = 401
+}
 
-    this.statusCode = statusCode
+export const ForbiddenError = class extends AbstractPrismicError {
+  static prefix = '[Forbidden Error]'
+  readonly status: number = 403
+}
 
-    Object.setPrototypeOf(this, new.target.prototype)
-  }
+export const InternalServerError = class extends AbstractPrismicError {
+  static prefix = '[Internal Server Error]'
+  readonly status: number = 500
+}
+
+export const UnknownError = class extends AbstractPrismicError {
+  static prefix = '[Unknown Error]'
 }
