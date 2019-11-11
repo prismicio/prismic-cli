@@ -1,29 +1,12 @@
-import Config from './config'
+import * as fs from 'fs'
+import { join } from 'path'
+import { promisify } from 'util'
 
-// UI
-export const UI = {
-  display(message: string | string[]) {
-    if (typeof message === 'string') {
-      process.stdout.write(`${message}\n`)
-    } else if (Array.isArray(message)) {
-      process.stdout.write(`${message.join('\n')}\n`)
-    }
-  },
-  debug(message: string) {
-    process.stdout.write(`${message}\n`)
-  },
-  displayErrors(errors: any) {
-    if (typeof errors === 'string') {
-      process.stdout.write(`${errors}\n`)
-    } else {
-      const errorsMsg = Object.keys(errors).reduce((acc, field) => {
-        const fieldErrors = errors[field]
-        return acc.concat(fieldErrors)
-      }, [])
-      this.display(errorsMsg)
-    }
-  },
-}
+import Config from './config'
+const existsSync = fs.existsSync
+// TODO: Change this to promises.readFile for node >= 12
+const readFile = promisify(fs.readFile)
+const readdir = promisify(fs.readdir)
 
 // Domain
 export const Domain = {
