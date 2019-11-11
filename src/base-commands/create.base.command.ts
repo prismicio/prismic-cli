@@ -97,11 +97,11 @@ export default abstract class CreateBaseCommand extends Command {
       switch ((response.choice || '').toLowerCase()) {
         case 'sign in':
           this.log('Sign in')
-          await Auth.singin(await AuthBaseCommand.promptCredential())
+          await Auth.signin(await AuthBaseCommand.promptCredential())
           return false
         case 'sign up':
           this.log('Sign up')
-          await Auth.singup(await AuthBaseCommand.promptCredential())
+          await Auth.signup(await AuthBaseCommand.promptCredential())
           return false
         default: return true
       }
