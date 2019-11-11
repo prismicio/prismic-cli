@@ -18,10 +18,10 @@ export default class NewCommand extends CreateBaseCommand {
 
   static flags = {
     ...CreateBaseCommand.flags,
-    theme: flags.string({ char: 't', description: 'Set the theme\'s url' }),
+    theme: flags.string({ char: 'e', description: 'Set the theme\'s url' }),
     users: flags.string({ char: 'u', description: 'Set the users' }),
     quickstart: flags.boolean({ char: 'q', description: 'Set up a Node.js project with a new prismic repository' }),
-    'skip-config': flags.boolean({ char: 'C', description: 'Skip the configuration file' })
+    'skip-config': flags.boolean({ char: 'X', description: 'Skip the configuration file' })
   }
 
   static args = [{ name: 'name' }]
