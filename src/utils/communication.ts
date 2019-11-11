@@ -10,7 +10,7 @@ axios.defaults.maxRedirects = 0
 axios.defaults.validateStatus = status => status < 500
 
 const Communication = {
-  async post(url: string, data: any, cookie?: string): Promise<void> {
+  async post(url: string, data: any, cookie?: string): Promise<any> {
     let options: any = {}
 
     if (cookie) options.headers = { Cookie: cookie }
@@ -19,6 +19,7 @@ const Communication = {
     const { status, statusText } = response
     if (status === 200 || ((Math.floor(status / 100)) === 3)) {
       await setCookie(response)
+      return response.data
     } else switch (status) {
       case 400: throw (new BadRequestError(statusText))
       case 401: throw (new UnauthorizedError(statusText))
