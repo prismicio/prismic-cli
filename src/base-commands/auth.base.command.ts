@@ -7,7 +7,7 @@ import Config from '../utils/config'
 export default abstract class AuthBaseCommand extends Command {
   static description = 'describe the command here'
   static flags = {
-    status: flags.boolean({ char: 's' })
+    status: flags.boolean({ char: 's', description: 'Check the authentication status' })
   }
 
   static async promptAuthenticationMethod() {
