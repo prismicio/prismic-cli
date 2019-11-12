@@ -2,32 +2,32 @@ import Communication from './communication'
 import Config from './config'
 import MagicLink from './magic-link'
 
-async function sign(action: 'signup' | 'signin', credential: Credential, magicLink = false, baseURL: string) {
-  const url = `${baseURL}/authentication/${action}${magicLink ? '?ml=true' : ''}`
+async function sign(action: 'signup' | 'signin', credential: Credential, magic = true, baseURL: string) {
+  const url = `${baseURL}/authentication/${action}${magic ? '?ml=true' : ''}`
   const response = await Communication.post(url, credential)
-  if (magicLink) {
+  if (magic) {
     // TODO: Test magic link parsing
     const token = await MagicLink.parse(response)
     if (token) {
-      await Config.set({ magicLink: token })
+      await Config.set({ magic: token })
     }
   }
 }
 
 const Auth = {
-  async singin(credential: Credential, magicLink = false, baseURL: string = Config.defaults.baseURL()) {
-    await sign('signin', credential, magicLink, baseURL)
+  async signin(credential: Credential, magic = false, baseURL: string = Config.defaults.baseURL()) {
+    await sign('signin', credential, magic, baseURL)
   },
-  async singup(credential: Credential, magicLink = false, baseURL: string = Config.defaults.baseURL()) {
-    await sign('signup', credential, magicLink, baseURL)
+  async signup(credential: Credential, magic = false, baseURL: string = Config.defaults.baseURL()) {
+    await sign('signup', credential, magic, baseURL)
   },
   async signout() {
     await Config.set({ cookie: '' })
+    await Config.set({ magic: '' })
   },
-  async isAuthenticated(method: 'cookie' | 'magic' = 'cookie'): Promise<boolean> {
+  async isAuthenticated(): Promise<boolean> {
     try {
-      const cookies = method === 'cookie' ? (await Config.get('cookie')) : (await Config.get('magicLink'))
-      return !!cookies
+      return await Config.get('magic') || await Config.get('cookie')
     } catch (_) {
       return false
     }
