@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios'
+import got, { Options as GotOptions, Response } from 'got'
 
 import Config from './config'
 import {
@@ -6,42 +6,43 @@ import {
   UnauthorizedError, UnknownError
 } from './error'
 
-axios.defaults.maxRedirects = 0
-axios.defaults.validateStatus = status => status < 400
-
 const Communication = {
   async post(url: string, data: any, cookie?: string): Promise<any> {
-    let options: any = {}
+    let options: GotOptions & { stream?: false | undefined } = {}
 
-    if (cookie) options.headers = { Cookie: cookie }
-
-    const response = await axios.post(url, data, options)
-    const { status, statusText } = response
+    if (cookie) options.headers = { cookie }
+    options.form = data
+    options.followRedirect = false
+    const response = (await got.post(url, options))
+    const { statusCode: status, statusMessage: message } = response
     if (status === 200 || ((Math.floor(status / 100)) === 3)) {
       await setCookie(response)
-      return response.data
+      return response.body
     } else switch (status) {
-      case 400: throw (new BadRequestError(statusText))
-      case 401: throw (new UnauthorizedError(statusText))
-      case 403: throw (new ForbiddenError(statusText))
-      case 500: throw (new InternalServerError(statusText))
-      default: throw (new UnknownError(statusText))
+      case 400: throw (new BadRequestError(message!))
+      case 401: throw (new UnauthorizedError(message!))
+      case 403: throw (new ForbiddenError(message!))
+      case 500: throw (new InternalServerError(message!))
+      default: throw (new UnknownError(message!))
     }
   },
 
   async get(url: string, cookie?: string): Promise<boolean> {
     const options: any = {}
 
-    if (cookie) options.headers = { Cookie: cookie }
+    if (cookie) options.headers = { cookie }
 
-    const response = await axios.get(url, options)
-    const { status, data } = response
-    if (status === 200) await setCookie(response)
-    return data
+    const response = (await got.get(url, options))
+    const { statusCode: status, body } = response
+    if (status === 200) {
+      await setCookie(response)
+      return body === 'true'
+    }
+    return false
   },
 }
 
-async function setCookie(response: AxiosResponse) {
+async function setCookie(response: Response) {
   const cookie = response.headers['set-cookie']
   if (cookie) await Config.set({ cookie: cookie[0] })
 }
