@@ -13,8 +13,6 @@
     "@oclif/config": "^1",
     "@oclif/plugin-autocomplete": "^0.1.4",
     "@oclif/plugin-help": "^2",
-    "@types/form-data": "^2.5.0",
-    "@types/got": "^9.6.9",
     "babel-runtime": "~6.26.0",
     "debug": "^4.1.1",
     "gitly": "^1.0.2",
