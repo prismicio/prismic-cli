@@ -4,8 +4,7 @@
   "version": "3.6.2",
   "author": "prismic.io developers",
   "bin": {
-    "prismic": "bin/prismic.js",
-    "prismic-cli": "./bin/run"
+    "prismic": "./bin/run"
   },
   "bugs": "https://github.com/prismicio/prismic-cli/issues",
   "dependencies": {
