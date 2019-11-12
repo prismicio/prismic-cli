@@ -9,8 +9,15 @@ import {
 
 const Communication = {
   async post(url: string, data: any, cookie?: string): Promise<any> {
-    let options: GotOptions & { stream?: false | undefined } = {
-      form: data, followRedirect: false, throwHttpErrors: false, headers: cookie ? { cookie } : {}
+    let options: GotOptions & { stream?: false | undefined } = { followRedirect: false, throwHttpErrors: false }
+    if (cookie) {
+      // If cookie is specified, then we are most likely
+      // sending data in JSON. e.g. Documents and Custom Types
+      options.headers = { cookie }
+      options.json = data
+    } else {
+      // Otherwise, it's a form for signing in or signing up
+      options.form = data
     }
 
     const { statusCode: status, statusMessage: message, body, headers } = (await got.post(url, options))
