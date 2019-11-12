@@ -48,11 +48,11 @@ export default abstract class AuthBaseCommand extends Command {
   }
 
   async signup(credential: Credential, magicLink = false, baseURL: string = Config.defaults.baseURL()) {
-    await Auth.singup(credential, magicLink, baseURL)
+    await Auth.signup(credential, magicLink, baseURL)
   }
 
   async signin(credential: Credential, magicLink = false, baseURL: string = Config.defaults.baseURL()) {
-    await Auth.singin(credential, magicLink, baseURL)
+    await Auth.signin(credential, magicLink, baseURL)
   }
 
   async signout() {
@@ -65,7 +65,7 @@ export default abstract class AuthBaseCommand extends Command {
   }
 
   async status() {
-    if (Auth.isAuthenticated()) {
+    if (await Auth.isAuthenticated()) {
       this.log('Signed in')
     } else this.log('Signed out')
   }
