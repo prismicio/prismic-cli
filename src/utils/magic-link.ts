@@ -6,13 +6,11 @@ const MagicLink = {
    * Returns a token from a response object
    * @param response The response object
    */
-  parse(response: any) {
+  parse(response: any): string {
     try {
-      const { token } = JSON.parse(response)
-      return token
-    } catch (e) {
-      return null
-    }
+      return JSON.parse(response).token
+    } catch (_) { }
+    return ''
   },
   /**
    * Returns the redirect url
