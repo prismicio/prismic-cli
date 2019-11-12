@@ -2,7 +2,7 @@ import Communication from './communication'
 import Config from './config'
 import MagicLink from './magic-link'
 
-async function sign(action: 'signup' | 'signin', credential: Credential, magic = true, baseURL: string) {
+async function sign(action: 'signup' | 'signin', credential: Credential, magic = false, baseURL: string) {
   const url = `${baseURL}/authentication/${action}${magic ? '?ml=true' : ''}`
   const response = await Communication.post(url, credential)
   if (magic) {
