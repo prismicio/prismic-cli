@@ -49,7 +49,7 @@ const Communication = {
 
 async function setCookie(headers: IncomingHttpHeaders) {
   const cookie = headers['set-cookie']
-  if (cookie) await Config.set({ cookie: cookie[0] })
+  if (cookie) await Config.set({ cookie: cookie.join(';') })
 }
 
 export default Communication
