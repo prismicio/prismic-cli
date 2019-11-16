@@ -18,13 +18,13 @@ Command line to bootstrap prismic projects.
 <!-- usage -->
 ```sh-session
 $ npm install -g prismic-cli
-$ prismic-cli COMMAND
+$ prismic COMMAND
 running command...
-$ prismic-cli (-v|--version|version)
+$ prismic (-v|--version|version)
 prismic-cli/3.6.2 darwin-x64 node-v13.0.1
-$ prismic-cli --help [COMMAND]
+$ prismic --help [COMMAND]
 USAGE
-  $ prismic-cli COMMAND
+  $ prismic COMMAND
 ...
 ```
 <!-- usagestop -->
@@ -32,22 +32,22 @@ USAGE
 # Commands
 
 <!-- commands -->
-* [`prismic-cli autocomplete [SHELL]`](#prismic-cli-autocomplete-shell)
-* [`prismic-cli help [COMMAND]`](#prismic-cli-help-command)
-* [`prismic-cli init [NAME]`](#prismic-cli-init-name)
-* [`prismic-cli list`](#prismic-cli-list)
-* [`prismic-cli new [NAME]`](#prismic-cli-new-name)
-* [`prismic-cli signin`](#prismic-cli-signin)
-* [`prismic-cli signout`](#prismic-cli-signout)
-* [`prismic-cli signup`](#prismic-cli-signup)
+* [`prismic autocomplete [SHELL]`](#prismic-autocomplete-shell)
+* [`prismic help [COMMAND]`](#prismic-help-command)
+* [`prismic init [NAME]`](#prismic-init-name)
+* [`prismic list`](#prismic-list)
+* [`prismic new [NAME]`](#prismic-new-name)
+* [`prismic signin`](#prismic-signin)
+* [`prismic signout`](#prismic-signout)
+* [`prismic signup`](#prismic-signup)
 
-## `prismic-cli autocomplete [SHELL]`
+## `prismic autocomplete [SHELL]`
 
 display autocomplete installation instructions
 
 ```
 USAGE
-  $ prismic-cli autocomplete [SHELL]
+  $ prismic autocomplete [SHELL]
 
 ARGUMENTS
   SHELL  shell type
@@ -56,21 +56,21 @@ OPTIONS
   -r, --refresh-cache  Refresh cache (ignores displaying instructions)
 
 EXAMPLES
-  $ prismic-cli autocomplete
-  $ prismic-cli autocomplete bash
-  $ prismic-cli autocomplete zsh
-  $ prismic-cli autocomplete --refresh-cache
+  $ prismic autocomplete
+  $ prismic autocomplete bash
+  $ prismic autocomplete zsh
+  $ prismic autocomplete --refresh-cache
 ```
 
 _See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.1.4/src/commands/autocomplete/index.ts)_
 
-## `prismic-cli help [COMMAND]`
+## `prismic help [COMMAND]`
 
-display help for prismic-cli
+display help for prismic
 
 ```
 USAGE
-  $ prismic-cli help [COMMAND]
+  $ prismic help [COMMAND]
 
 ARGUMENTS
   COMMAND  command to show help for
@@ -81,13 +81,13 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.1/src/commands/help.ts)_
 
-## `prismic-cli init [NAME]`
+## `prismic init [NAME]`
 
 Initialize the code from a template for an existing prismic repository
 
 ```
 USAGE
-  $ prismic-cli init [NAME]
+  $ prismic init [NAME]
 
 ARGUMENTS
   NAME  The name of the existing prismic repository
@@ -101,7 +101,7 @@ OPTIONS
   -t, --template=template    Set the template name to use
 
 ALIASES
-  $ prismic-cli initialize
+  $ prismic initialize
 
 EXAMPLES
   $ prismic-cli init
@@ -111,16 +111,16 @@ EXAMPLES
 
 _See code: [src/commands/init.ts](https://github.com/prismicio/prismic-cli/blob/v3.6.2/src/commands/init.ts)_
 
-## `prismic-cli list`
+## `prismic list`
 
 List the available code templates
 
 ```
 USAGE
-  $ prismic-cli list
+  $ prismic list
 
 ALIASES
-  $ prismic-cli ls
+  $ prismic ls
 
 EXAMPLES
   $ prismic-cli list
@@ -129,13 +129,13 @@ EXAMPLES
 
 _See code: [src/commands/list.ts](https://github.com/prismicio/prismic-cli/blob/v3.6.2/src/commands/list.ts)_
 
-## `prismic-cli new [NAME]`
+## `prismic new [NAME]`
 
 Create a new project and a prismic repository
 
 ```
 USAGE
-  $ prismic-cli new [NAME]
+  $ prismic new [NAME]
 
 OPTIONS
   -C, --cache                Use a cached version of the project
@@ -159,19 +159,19 @@ EXAMPLES
 
 _See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v3.6.2/src/commands/new.ts)_
 
-## `prismic-cli signin`
+## `prismic signin`
 
 Sign into an existing prismic.io account
 
 ```
 USAGE
-  $ prismic-cli signin
+  $ prismic signin
 
 OPTIONS
   -s, --status  Check the authentication status
 
 ALIASES
-  $ prismic-cli login
+  $ prismic login
 
 EXAMPLE
   $ prismic-cli signup
@@ -179,19 +179,19 @@ EXAMPLE
 
 _See code: [src/commands/signin.ts](https://github.com/prismicio/prismic-cli/blob/v3.6.2/src/commands/signin.ts)_
 
-## `prismic-cli signout`
+## `prismic signout`
 
 Sign out from an existing prismic.io account
 
 ```
 USAGE
-  $ prismic-cli signout
+  $ prismic signout
 
 OPTIONS
   -s, --status  Check the authentication status
 
 ALIASES
-  $ prismic-cli logout
+  $ prismic logout
 
 EXAMPLES
   $ prismic-cli signout
@@ -200,13 +200,13 @@ EXAMPLES
 
 _See code: [src/commands/signout.ts](https://github.com/prismicio/prismic-cli/blob/v3.6.2/src/commands/signout.ts)_
 
-## `prismic-cli signup`
+## `prismic signup`
 
 Create a new prismic.io account
 
 ```
 USAGE
-  $ prismic-cli signup
+  $ prismic signup
 
 OPTIONS
   -s, --status  Check the authentication status
