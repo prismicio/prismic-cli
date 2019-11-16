@@ -1,8 +1,17 @@
 export abstract class AbstractPrismicError extends Error {
   static prefix: string
   constructor(readonly message: string, readonly status: number = -1) {
-    super(`${AbstractPrismicError.prefix ? `[${AbstractPrismicError.prefix}]:` : ''}${message}`)
+    super(message)
+    const prefix = this.init.prefix
+    if (prefix) {
+      this.message = `${prefix} ${this.message}`
+    }
+
     Object.setPrototypeOf(this, new.target.prototype)
+  }
+
+  get init(): typeof AbstractPrismicError {
+    return this.constructor as typeof AbstractPrismicError
   }
 }
 
@@ -21,15 +30,15 @@ export const UnauthorizedError = class extends AbstractPrismicError {
 }
 
 export const ForbiddenError = class extends AbstractPrismicError {
-  static prefix = '[Forbidden Error]'
+  static prefix = '[Forbidden Error]:'
   readonly status: number = 403
 }
 
 export const InternalServerError = class extends AbstractPrismicError {
-  static prefix = '[Internal Server Error]'
+  static prefix = '[Internal Server Error]:'
   readonly status: number = 500
 }
 
 export const UnknownError = class extends AbstractPrismicError {
-  static prefix = '[Unknown Error]'
+  static prefix = '[Unknown Error]:'
 }
