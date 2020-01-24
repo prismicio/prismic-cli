@@ -23,6 +23,7 @@
     "babel-runtime": "~6.26.0",
     "command-line-commands": "~2.0.1",
     "command-line-usage": "~5.0.4",
+    "consola": "^2.11.3",
     "deep-equal": "^1.1.0",
     "inquirer": "~5.2.0",
     "mustache": "^3.1.0",
