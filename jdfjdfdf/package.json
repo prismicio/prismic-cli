@@ -1,0 +1,23 @@
+{
+  "name": "jdfjdfdf",
+  "version": "1.0.0",
+  "description": "My primo Nuxt.js project",
+  "author": "Hugo Villain",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/prismic": "^1.1.0",
+    "nuxt": "^2.0.0",
+    "prismic-javascript": "^2.1.5",
+    "prismic-vue": "^2.0.0"
+  },
+  "devDependencies": {
+    "node-sass": "^4.13.1",
+    "sass-loader": "^8.0.2"
+  }
+}
