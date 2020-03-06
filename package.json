@@ -27,6 +27,7 @@
     "deep-equal": "^1.1.0",
     "inquirer": "~5.2.0",
     "mustache": "^3.1.0",
+    "node-fetch": "^2.6.0",
     "open": "^7.0.0",
     "ora": "^4.0.3",
     "prismic.io": "~3.6.1",
