@@ -7,7 +7,7 @@
   "scripts": {
     "build": "babel ./lib/ -d ./bin/ --copy-files",
     "watch": "npm run prebuild; nodemon --watch ./lib --exec \"npm run lint:fix; npm run build\"",
-    "prebuild": "mkdir -p ./bin",
+    "prebuild": "mkdir bin",
     "prepublish": "npm run prebuild; npm run build;",
     "lint": "eslint lib/**/*.js",
     "lint:fix": "eslint lib/**/*.js --fix",
