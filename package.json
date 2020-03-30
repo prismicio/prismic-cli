@@ -6,9 +6,9 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "babel ./lib/ -d ./bin/ --copy-files",
+    "prebuild": "rimraf bin && mkdirp bin",
     "watch": "npm run prebuild & nodemon --watch ./lib --exec \"npm run lint:fix & npm run build\"",
-    "prebuild": "mkdir -p bin",
-    // "prepublish": "npm run prebuild & npm run build",
+    "prepublish": "npm run prebuild && npm run build",
     "lint": "eslint lib/**/*.js",
     "lint:fix": "eslint lib/**/*.js --fix",
     "test": "tape test/run.js"
@@ -53,6 +53,8 @@
     "eslint": "~4.19.1",
     "eslint-config-airbnb-base": "~12.1.0",
     "eslint-plugin-import": "~2.10.0",
+    "mkdirp": "^1.0.3",
+    "rimraf": "^3.0.2",
     "tape": "~4.9.0",
     "tape-spawn": "~1.4.2"
   },
