@@ -18,10 +18,11 @@
   },
   "preferGlobal": true,
   "dependencies": {
+    "@prismicio/babel-transform-config": "0.0.5",
     "@sentry/node": "^5.11.1",
     "adm-zip": "^0.4.13",
     "babel-runtime": "~6.26.0",
-    "babel-transform-config": "0.0.6",
+    "cli-clear": "^1.0.4",
     "command-line-commands": "~2.0.1",
     "command-line-usage": "~5.0.4",
     "consola": "^2.11.3",
