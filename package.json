@@ -18,7 +18,7 @@
   },
   "preferGlobal": true,
   "dependencies": {
-    "@prismicio/babel-transform-config": "0.0.5",
+    "@prismicio/babel-transform-config": "0.0.6-alpha.ea631c8",
     "@sentry/node": "^5.11.1",
     "adm-zip": "^0.4.13",
     "babel-runtime": "~6.26.0",
