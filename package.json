@@ -1,7 +1,7 @@
 {
   "name": "prismic-cli",
   "description": "Command line to bootstrap prismic projects.",
-  "version": "3.7.4-3",
+  "version": "3.7.4",
   "author": "prismic.io developers",
   "license": "Apache-2.0",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "preferGlobal": true,
   "dependencies": {
-    "@prismicio/babel-transform-config": "0.0.5",
+    "@prismicio/babel-transform-config": "0.0.6-alpha.aead22d",
     "@sentry/node": "^5.11.1",
     "adm-zip": "^0.4.13",
     "babel-runtime": "~6.26.0",
