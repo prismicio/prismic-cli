@@ -1,0 +1,17 @@
+{
+	"type": "Slice",
+	"fieldset": "Template",
+	"description": "Template of a newly created component",
+	"icon": "thumb_up",
+	"display": "list",
+	"non-repeat": {
+		"title": {
+			"type": "StructuredText",
+			"config": {
+				"single": "paragraph",
+				"label": "Title",
+				"placeholder": "This is where it all begins..."
+			}
+		}
+	}
+}
