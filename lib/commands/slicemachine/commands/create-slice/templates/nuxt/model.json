@@ -1,7 +1,7 @@
 {
 	"type": "Slice",
-	"fieldset": "Template",
-	"description": "Template of a newly created component",
+	"fieldset": "{{componentName}} Template",
+	"description": "Template model for {{componentName}}",
 	"icon": "thumb_up",
 	"display": "list",
 	"non-repeat": {
