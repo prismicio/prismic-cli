@@ -8,7 +8,7 @@
 		"title": {
 			"type": "StructuredText",
 			"config": {
-				"single": "paragraph",
+				"single": "heading1",
 				"label": "Title",
 				"placeholder": "This is where it all begins..."
 			}
