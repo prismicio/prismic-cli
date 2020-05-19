@@ -8,7 +8,7 @@
       Feel free to make me yours by updating my code ✌️
     </p>
     <p v-if="endpoint">
-      Or pass me props at <a target="_blank" :href="endpoint">{{ endpoint }}</a>
+      Or pass me props <a target="_blank" :href="endpoint">in your writing room</a>
     </p>
   </section>
 </template>
@@ -31,6 +31,9 @@ export default {
   color: #111;
   padding: 4em;
   text-align: center;
+}
+a {
+  color: #111;
 }
 </style>
 
