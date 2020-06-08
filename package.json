@@ -1,15 +1,16 @@
 {
   "name": "prismic-cli",
   "description": "Command line to bootstrap prismic projects.",
-  "version": "3.7.0",
+  "version": "3.7.11",
   "author": "prismic.io developers",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "babel ./lib/ -d ./bin/",
-    "watch": "npm run prebuild; nodemon --watch ./lib --exec \"npm run lint; npm run build\"",
-    "prebuild": "mkdir -p ./bin",
-    "prepublish": "npm run prebuild; npm run build;",
+    "build": "babel ./lib/ -d ./bin/ --copy-files",
+    "prebuild": "rimraf bin && mkdirp bin",
+    "watch": "npm run prebuild & nodemon --watch ./lib --exec \"npm run lint:fix & npm run build\"",
+    "prepublish": "npm run prebuild && npm run build",
     "lint": "eslint lib/**/*.js",
+    "lint:fix": "eslint lib/**/*.js --fix",
     "test": "tape test/run.js"
   },
   "bin": {
@@ -17,22 +18,40 @@
   },
   "preferGlobal": true,
   "dependencies": {
-    "adm-zip": "~0.4.7",
+    "@prismicio/babel-transform-config": "0.0.6-alpha.aead22d",
+    "@sentry/node": "^5.11.1",
+    "adm-zip": "^0.4.13",
     "babel-runtime": "~6.26.0",
+    "cli-clear": "^1.0.4",
     "command-line-commands": "~2.0.1",
     "command-line-usage": "~5.0.4",
+    "consola": "^2.11.3",
+    "copy-template-dir": "^1.4.0",
+    "deep-equal": "^1.1.0",
+    "deepmerge": "^4.2.2",
+    "globby": "^11.0.0",
     "inquirer": "~5.2.0",
-    "lodash": "~4.17.5",
+    "is-valid-path": "^0.1.1",
+    "mustache": "^3.1.0",
+    "node-fetch": "^2.6.0",
+    "open": "^7.0.0",
+    "ora": "^4.0.3",
     "prismic.io": "~3.6.1",
+    "ramda": "^0.26.1",
     "request": "~2.85.0",
     "shelljs": "~0.8.1",
-    "tmp": "~0.0.33"
+    "slash": "^3.0.0",
+    "sm-commons": "0.0.16",
+    "tmp": "~0.0.33",
+    "url-join": "^4.0.1",
+    "vue-docgen-api": "^3.25.0"
   },
   "devDependencies": {
     "babel-cli": "~6.26.0",
     "babel-core": "~6.26.0",
     "babel-eslint": "~8.2.2",
     "babel-plugin-syntax-async-functions": "~6.13.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-regenerator": "~6.26.0",
     "babel-plugin-transform-runtime": "~6.23.0",
     "babel-polyfill": "~6.26.0",
@@ -41,11 +60,13 @@
     "eslint": "~4.19.1",
     "eslint-config-airbnb-base": "~12.1.0",
     "eslint-plugin-import": "~2.10.0",
+    "mkdirp": "^1.0.3",
+    "rimraf": "^3.0.2",
     "tape": "~4.9.0",
     "tape-spawn": "~1.4.2"
   },
   "engines": {
-    "node": ">= 6.0.0",
+    "node": ">= 10.0.0",
     "npm": ">= 3.0.0"
   }
 }
