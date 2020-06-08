@@ -41,7 +41,7 @@
     "request": "~2.85.0",
     "shelljs": "~0.8.1",
     "slash": "^3.0.0",
-    "sm-commons": "0.0.16",
+    "sm-commons": "0.0.21",
     "tmp": "~0.0.33",
     "url-join": "^4.0.1",
     "vue-docgen-api": "^3.25.0"
