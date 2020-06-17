@@ -5,7 +5,7 @@
   "author": "prismic.io developers",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "babel ./lib/ -d ./bin/ --copy-files",
+    "build": "babel ./lib/ -d ./bin/ --copy-files --ignore lib/commands/slicemachine/templates/*",
     "prebuild": "rimraf bin && mkdirp bin",
     "watch": "npm run prebuild & nodemon --watch ./lib --exec \"npm run lint:fix & npm run build\"",
     "prepublish": "npm run prebuild && npm run build",
