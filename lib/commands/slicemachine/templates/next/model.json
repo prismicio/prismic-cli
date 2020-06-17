@@ -1,0 +1,17 @@
+{
+  "type": "Slice",
+  "fieldset": "{{componentName}} Template",
+  "description": "Template model for {{componentName}}",
+  "icon": "thumb_up",
+  "display": "list",
+  "non-repeat": {
+    "title": {
+      "type": "StructuredText",
+      "config": {
+        "single": "heading1",
+        "label": "Title",
+        "placeholder": "This is where it all begins..."
+      }
+    }
+  }
+}
