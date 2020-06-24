@@ -1,7 +1,7 @@
 {
   "name": "prismic-cli",
   "description": "Command line to bootstrap prismic projects.",
-  "version": "3.8.0-alpha.c726581",
+  "version": "3.8.0-beta.0",
   "author": "prismic.io developers",
   "license": "Apache-2.0",
   "scripts": {
