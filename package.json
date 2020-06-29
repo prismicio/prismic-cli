@@ -16,6 +16,14 @@
   "bin": {
     "prismic": "bin/prismic.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prismicio/prismic-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prismicio/prismic-cli/issues"
+  },
+  "homepage": "https://github.com/prismicio/prismic-cli#readme",
   "preferGlobal": true,
   "dependencies": {
     "@prismicio/babel-transform-config": "0.0.6-alpha.aead22d",
