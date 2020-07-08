@@ -8,6 +8,7 @@ This is a command line tool to bootstrap Javascript project using [prismic.io](h
 * [NodeJS](https://nodejs.org/) ([ExpressJS](https://expressjs.com/))
 * [ReactJS](https://facebook.github.io/react/)
 * [Angular 2.0](https://angular.io/)
+* [NuxtJS](https://nuxtjs.org/)
 
 It is meant to install globally:
 
