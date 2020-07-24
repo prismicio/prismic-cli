@@ -10,7 +10,7 @@
     "watch": "npm run prebuild & nodemon --watch ./lib --exec \"npm run lint:fix & npm run build\"",
     "prepublish": "npm run prebuild && npm run build",
     "lint": "eslint lib/**/*.js",
-    "lint:fix": "eslint lib/**/*.js --fix",
+    "lint:fix": "eslint lib/**/*.js --ignore-pattern lib/commands/slicemachine/templates/* --ignore-pattern lib/commands/slicemachine/storybook-templates/* --fix",
     "test": "tape test/run.js"
   },
   "bin": {
