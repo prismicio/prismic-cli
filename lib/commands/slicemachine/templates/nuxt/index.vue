@@ -14,7 +14,15 @@
 </template>
 <script>
 export default {
-  props: ['slice'],
+  props: {
+    slice: {
+      type: Object,
+      required: true,
+      default() {
+        return {}
+      }
+    }
+  },
   computed: {
     endpoint() {
       return this.$prismic && this.$prismic.apiEndpoint
