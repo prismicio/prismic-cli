@@ -11,7 +11,7 @@
     "prepublish": "npm run prebuild && npm run build",
     "lint": "eslint lib/**/*.js",
     "lint:fix": "eslint lib/**/*.js --fix",
-    "test": "tape test/run.js"
+    "test": "jest"
   },
   "bin": {
     "prismic": "bin/prismic.js"
@@ -57,12 +57,14 @@
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "babel-eslint": "^9.0.0",
+    "babel-jest": "^26.3.0",
     "babel-plugin-syntax-async-functions": "~6.13.0",
     "babel-watch": "~2.0.7",
     "eslint": "~4.19.1",
     "eslint-config-airbnb-base": "~12.1.0",
     "eslint-plugin-import": "~2.10.0",
     "husky": "^4.3.0",
+    "jest": "^26.4.2",
     "mkdirp": "^1.0.3",
     "rimraf": "^3.0.2",
     "tape": "~4.9.0",
