@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`slice machine commands ls should list libaries from... 1`] = `
+Array [
+  Array [
+    "@/slices",
+    Array [
+      "CallToAction",
+    ],
+  ],
+  Array [
+    "vue-essential-slices",
+    Array [
+      "CallToAction",
+    ],
+  ],
+]
+`;
