@@ -53,7 +53,7 @@ describe('slice machine commands', () => {
       console.log = jest.fn();
 
       jest.mock('consola');
-      consola.info = jest.fn()
+      consola.info = jest.fn();
       
       const libs = await slicemachine(context);
 
@@ -74,70 +74,56 @@ describe('slice machine commands', () => {
 });
 
 
-  /* it('steup/init', () => {
-    Framworks get checks package.json for next or nuxt.
+/** 'steup/init'
+ * Frameworks get checks package.json for next or nuxt.
+ * 
+ * >downloads zip http://sm-api-p1g4hvtof.vercel.app/api/bootstrap?framework=nuxt
+ * 
+ * unzips and checks path to zip
+ * 
+ * exicutes the commands in either boot.json of bootstrap.json
+ * 
+ * boot.json should be the file to call
+ * 
+ * create a prismic repository with the custom types returned by the api.
+ * 
+ * an info object is returned by an internal function
+ * 
+ * installs dependancies
+ * 
+ * creates sm.json (a file that contains api endpoint, and an array of libraries that are used)
+ * {
+ *  "libraries": ["@/slices", "vue-essential-slices"],
+ *  "apiEndpoint": "http://shared.wroom.test/api/v2",
+ *  "dbId": "prismicio-94fce09d-e85f-4dc2-bf68-eacd2f5c2ad3_5"
+ * }
+ *
+ * writes out the files from mainifest?
+ * 
+ ** handleRecap
+ * > generates config
+ * > transform config
+ * > generates a display stating what needs to be done next
+ * */
 
-    downloads zip
-    http://sm-api-p1g4hvtof.vercel.app/api/bootstrap?framework=nuxt
+/** create-slice
+  * creates a slice in the project.
+  * 
+  * > gets the framework
+  * > reads sm.json looking for local libaries/directories or creates one for the slice.
+  * > asks for slice name
+  * > creates a remote slice
+  * > creates a local slice
+*/ 
 
+/** Pull
+  * gets custom-types
+  * get the slice zones for custom types
+  * gets all the model locally
+  *
+  * Diffs localfiles and remote files.
+  * creates missing slices
+  * prompts user about conflicting slices.
+* */
 
-
-    unzips and
-    
-    checks path to zip
-
-    exicutes the commands in either boot.json of bootstrap.json
-    boot.json shoule be the file to call
-
-    create a prismic repository with the custom types retured by the api.
-
-    an info oobject is returned by an internal function
-
-    installs dependancies
-
-    creates sm.json (a file that contains apiendpoint, and an array of libaries that are used)
-
-    {
-  "libraries": ["@/slices", "vue-essential-slices"],
-  "apiEndpoint": "http://shared.wroom.test/api/v2",
-  "dbId": "prismicio-94fce09d-e85f-4dc2-bf68-eacd2f5c2ad3_5"
-}
-
-  writes out the files from mainifest?
-
-  handleRecap, 
-   > generates config
-      > transform config
-   > genates a display stating what needs to be done next
-  })
-  */
-
-  // it('create-slice', () => {
-    /**
-     * creates a slice in the project.
-     * 
-     * > gets the framework
-     * > reads sm.json looking for local libaries/directories or creates one for the slice.
-     * > asks for slice name
-     * > creates a remote slice
-     * > creates a local slice
-    */
-
-  // }) 
-
-  /** Pull
-   * gets custom-types
-   * get the slice zones for custom types
-   * gets all the model locally
-   *
-   * Diffs localfiles and remote files.
-   * creates missing slices
-   * prompts user about conflicting slices.
-   * */
-
-   /** Ls
-    * Reads sm file
-    * read modles from libary, displays them to the user.
-    * 
-   */
 
