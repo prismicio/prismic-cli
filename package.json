@@ -19,7 +19,7 @@
   "preferGlobal": true,
   "dependencies": {
     "@babel/runtime-corejs2": "^7.0.0",
-    "@prismicio/babel-transform-config": "0.0.6-alpha.aead22d",
+    "@prismicio/babel-transform-config": "0.0.6",
     "@sentry/node": "^5.11.1",
     "adm-zip": "^0.4.13",
     "cli-clear": "^1.0.4",
