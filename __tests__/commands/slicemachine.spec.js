@@ -52,9 +52,8 @@ describe('slice machine commands', () => {
       console.error = jest.fn();
       console.log = jest.fn();
 
-      jest.mock('consola');
-      consola.info = jest.fn();
-      
+      consola.mockTypes(typeName => (typeName === 'info' && jest.fn()));
+
       const libs = await slicemachine(context);
 
       expect(fs.existsSync).toHaveBeenCalled();
