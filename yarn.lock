@@ -34,7 +34,7 @@
     invariant "^2.2.4"
     semver "^5.5.0"
 
-"@babel/core@^7.0.0", "@babel/core@^7.8.7":
+"@babel/core@^7.0.0", "@babel/core@^7.11.6":
   version "7.11.6"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.11.6.tgz#3a9455dc7387ff1bac45770650bc13ba04a15651"
   integrity sha512-Wpcv03AGnmkgm6uS6k8iwhIwTrcP0m17TL1n1sy7qD0qelDu4XNeW0dN0mHfa+Gei211yDaLoEe/VlbXQzM4Bg==
@@ -419,7 +419,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.8.0"
 
-"@babel/plugin-syntax-jsx@^7.8.3":
+"@babel/plugin-syntax-jsx@^7.10.4":
   version "7.10.4"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-jsx/-/plugin-syntax-jsx-7.10.4.tgz#39abaae3cbf710c4373d8429484e6ba21340166c"
   integrity sha512-KCg9mio9jwiARCB7WAcQ7Y1q+qicILjoK8LP/VkPkEKaf5dkaZZK1EcTe91a3JJlZ3qy6L5s9X52boEYi8DM9g==
@@ -475,7 +475,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.10.4"
 
-"@babel/plugin-transform-arrow-functions@^7.10.4", "@babel/plugin-transform-arrow-functions@^7.8.3":
+"@babel/plugin-transform-arrow-functions@^7.10.4":
   version "7.10.4"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-arrow-functions/-/plugin-transform-arrow-functions-7.10.4.tgz#e22960d77e697c74f41c501d44d73dbf8a6a64cd"
   integrity sha512-9J/oD1jV0ZCBcgnoFWFq1vJd4msoKb/TCpGNFyyLt0zABdcvgK3aYikZ8HjzB14c26bc7E3Q1yugpwGy2aTPNA==
@@ -673,7 +673,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.10.4"
 
-"@babel/plugin-transform-runtime@^7.0.0", "@babel/plugin-transform-runtime@^7.8.3":
+"@babel/plugin-transform-runtime@^7.0.0", "@babel/plugin-transform-runtime@^7.11.5":
   version "7.11.5"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-runtime/-/plugin-transform-runtime-7.11.5.tgz#f108bc8e0cf33c37da031c097d1df470b3a293fc"
   integrity sha512-9aIoee+EhjySZ6vY5hnLjigHzunBlscx9ANKutkeWTJTx6m5Rbq6Ic01tLvO54lSusR+BxV7u4UDdCmXv5aagg==
@@ -744,7 +744,7 @@
     core-js "^2.6.5"
     regenerator-runtime "^0.13.4"
 
-"@babel/preset-env@^7.0.0", "@babel/preset-env@^7.8.7":
+"@babel/preset-env@^7.0.0", "@babel/preset-env@^7.11.5":
   version "7.11.5"
   resolved "https://registry.yarnpkg.com/@babel/preset-env/-/preset-env-7.11.5.tgz#18cb4b9379e3e92ffea92c07471a99a2914e4272"
   integrity sha512-kXqmW1jVcnB2cdueV+fyBM8estd5mlNfaQi6lwLgRwCby4edpavgbFhiBNjmWA3JpB/yZGSISa7Srf+TwxDQoA==
@@ -844,12 +844,12 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/standalone@^7.8.8":
+"@babel/standalone@^7.11.6":
   version "7.11.6"
   resolved "https://registry.yarnpkg.com/@babel/standalone/-/standalone-7.11.6.tgz#2ea3c9463c8b1d04ee2dacc5ac4b81674cec2967"
   integrity sha512-Ye1pj3fN76OWlJyi+Ocy1kTr1BNs5vFWHsq2oKPp3lB4Q0r2WrHi+n/Y2w3sZK+1QSKAkDXTp12tCuBprBHZ1w==
 
-"@babel/template@^7.10.4", "@babel/template@^7.8.6":
+"@babel/template@^7.10.4":
   version "7.10.4"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.10.4.tgz#3251996c4200ebc71d1a8fc405fba940f36ba278"
   integrity sha512-ZCjD27cGJFUB6nmCB1Enki3r+L5kJveX9pq1SvAUKoICy6CZ9yD8xO086YXdYhvNjBdnekm4ZnaP5yC8Cs/1tA==
@@ -858,7 +858,7 @@
     "@babel/parser" "^7.10.4"
     "@babel/types" "^7.10.4"
 
-"@babel/traverse@^7.0.0", "@babel/traverse@^7.10.4", "@babel/traverse@^7.11.5", "@babel/traverse@^7.8.6":
+"@babel/traverse@^7.0.0", "@babel/traverse@^7.10.4", "@babel/traverse@^7.11.5":
   version "7.11.5"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.11.5.tgz#be777b93b518eb6d76ee2e1ea1d143daa11e61c3"
   integrity sha512-EjiPXt+r7LiCZXEfRpSJd+jUMnBd4/9OUv7Nx3+0u9+eimMwJmG0Q98lw4/289JCoxSE8OolDMNZaaF/JZ69WQ==
@@ -903,20 +903,20 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
-"@prismicio/babel-transform-config@0.0.6-alpha.aead22d":
-  version "0.0.6-alpha.aead22d"
-  resolved "https://registry.yarnpkg.com/@prismicio/babel-transform-config/-/babel-transform-config-0.0.6-alpha.aead22d.tgz#1c9cc03fb8deafd1d5bac0aef26a4c6e5cef8821"
-  integrity sha512-eRgErvEpbUzY9xP8S/0zSPrz63feTDJr/cFfkAo7XVKmy3EBXBm4XCfjb3CfKgH/ojj4t7DA90n0V6B9VIKoZw==
+"@prismicio/babel-transform-config@0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@prismicio/babel-transform-config/-/babel-transform-config-0.0.6.tgz#031282aac6bd3bd22ce4bbbda72edf3b3a44cd9e"
+  integrity sha512-8qWs3yPGNICs1o0poZaMhIQNOW9uczjlRum56WTky0UbQpQ73nXVV1pzAmx13tZfPcEE+DhWZPMARG/q87NtJw==
   dependencies:
-    "@babel/core" "^7.8.7"
-    "@babel/plugin-syntax-jsx" "^7.8.3"
-    "@babel/plugin-transform-arrow-functions" "^7.8.3"
-    "@babel/plugin-transform-runtime" "^7.8.3"
-    "@babel/preset-env" "^7.8.7"
-    "@babel/standalone" "^7.8.8"
-    "@babel/template" "^7.8.6"
-    "@babel/traverse" "^7.8.6"
-    consola "^2.11.3"
+    "@babel/core" "^7.11.6"
+    "@babel/plugin-syntax-jsx" "^7.10.4"
+    "@babel/plugin-transform-arrow-functions" "^7.10.4"
+    "@babel/plugin-transform-runtime" "^7.11.5"
+    "@babel/preset-env" "^7.11.5"
+    "@babel/standalone" "^7.11.6"
+    "@babel/template" "^7.10.4"
+    "@babel/traverse" "^7.11.5"
+    consola "^2.15.0"
 
 "@sentry/core@5.24.2":
   version "5.24.2"
@@ -1713,7 +1713,7 @@ concat-stream@^1.6.0:
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
-consola@^2.11.3:
+consola@^2.11.3, consola@^2.15.0:
   version "2.15.0"
   resolved "https://registry.yarnpkg.com/consola/-/consola-2.15.0.tgz#40fc4eefa4d2f8ef2e2806147f056ea207fcc0e9"
   integrity sha512-vlcSGgdYS26mPf7qNi+dCisbhiyDnrN1zaRbw3CSuc2wGOMEGGPsp46PdRG5gqXwgtJfjxDkxRNAgRPr1B77vQ==
