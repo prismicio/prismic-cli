@@ -16,6 +16,14 @@
   "bin": {
     "prismic": "bin/prismic.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prismicio/prismic-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prismicio/prismic-cli/issues"
+  },
+  "homepage": "https://github.com/prismicio/prismic-cli#readme",
   "preferGlobal": true,
   "dependencies": {
     "@babel/runtime-corejs2": "^7.0.0",
