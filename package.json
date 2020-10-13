@@ -11,7 +11,7 @@
     "prepublish": "npm run prebuild && npm run build",
     "lint": "eslint lib/**/*.js",
     "lint:fix": "eslint lib/**/*.js --ignore-pattern lib/commands/slicemachine/templates/* --ignore-pattern lib/commands/slicemachine/storybook-templates/* --fix",
-    "test": "tape test/run.js"
+    "test": "jest"
   },
   "bin": {
     "prismic": "bin/prismic.js"
@@ -43,6 +43,7 @@
     "lodash.get": "^4.4.2",
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2",
+    "jest-fetch-mock": "^3.0.3",
     "mustache": "^3.1.0",
     "node-fetch": "^2.6.0",
     "open": "^7.0.0",
@@ -50,6 +51,7 @@
     "prismic.io": "~3.6.1",
     "ramda": "^0.26.1",
     "request": "~2.85.0",
+    "semver": "^7.3.2",
     "shelljs": "~0.8.1",
     "slash": "^3.0.0",
     "sm-commons": "0.0.21",
@@ -65,12 +67,19 @@
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
     "babel-eslint": "^9.0.0",
+    "babel-jest": "^26.3.0",
     "babel-plugin-syntax-async-functions": "~6.13.0",
     "babel-watch": "~2.0.7",
     "eslint": "~4.19.1",
     "eslint-config-airbnb-base": "~12.1.0",
     "eslint-plugin-import": "~2.10.0",
+    "eslint-plugin-jest": "^24.0.2",
+    "husky": "^4.3.0",
+    "jest": "^26.4.2",
+    "jest-mock-console": "^1.0.1",
     "mkdirp": "^1.0.3",
     "rimraf": "^3.0.2",
     "tape": "~4.9.0",
@@ -79,5 +88,15 @@
   "engines": {
     "node": ">= 10.0.0",
     "npm": ">= 3.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }

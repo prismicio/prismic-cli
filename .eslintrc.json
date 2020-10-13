@@ -1,6 +1,9 @@
 {
   "parser": "babel-eslint",
-  "extends": ["airbnb-base"],
+  "extends": [
+    "airbnb-base",
+    "plugin:jest/recommended"
+  ],
   "env": {
     "node": true
   },
@@ -8,5 +11,6 @@
     "no-underscore-dangle": 0,
     "max-len": 0,
     "no-console": 0
-  }
+  },
+  "plugins": ["jest"]
 }
