@@ -23,7 +23,7 @@
         "config": {
           "single": "paragraph",
           "label": "Description",
-          "placeholder": "Start by editing my model in SliceMachine builder"
+          "placeholder": "A nice description of your product"
         }
       }
     }
