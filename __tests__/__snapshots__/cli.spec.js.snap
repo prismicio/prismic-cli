@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`prismic --help it should write usage instructions to stdout 1`] = `
+"
+Synopsis
+
+  $ prismic <command> <domain> <options> 
+
+Examples
+
+  $ prismic init                          Create a project from an existing     
+                                          prismic repository.                   
+  $ prismic new                           Create a project with a new prismic   
+                                          repository.                           
+  $ prismic init foobar                   Create a project for the foobar       
+                                          repository.                           
+  $ prismic init foobar --folder          Create a NodeJS project, non-         
+  ~/Desktop/myProject --template NodeJS   interactive.                          
+  --noconfirm                                                                   
+  $ prismic theme                         Create a project from a zip file with 
+  https://github.com/prismicio/nodejs-    a new prismic repository.             
+  sdk                                                                           
+  $ prismic sm --setup                    Setup a nuxt.js project with          
+                                          SliceMachine.                         
+
+Command List
+
+  quickstart          Create a project: initialize a node.js quickstart project 
+                      with a new prismic repository.                            
+  init                Initialize a project: initialize the code from a template 
+                      for an existing prismic repository.                       
+  new                 Create a project: initialize the code for a new prismic   
+                      repository.                                               
+  theme               Create a project: initialize project from a theme with a  
+                      new prismic repository.                                   
+  login               Login to an existing prismic.io account.                  
+  logout              Logout from an existing prismic.io account.               
+  signup              Create a new prismic.io account.                          
+  list                List the available code templates.                        
+  slicemachine | sm   Run slicemachine                                          
+
+Options
+
+  --email        The email of the account to use.                               
+  --password     The password of the account to use.                            
+  --new                                                                         
+  --users                                                                       
+  --folder       The folder to create the new project.                          
+  --template     Project template to use (see the list command for available    
+                 templates).                                                    
+  --theme-url                                                                   
+  --conf         Specify path to prismic configuration file. Used with \`theme\`  
+                 command.                                                       
+  --version                                                                     
+
+"
+`;
+
+exports[`prismic init should initialise a project from a template 1`] = `
+"Let's get to it!
+"
+`;
+
+exports[`prismic new should initialise a project from a template 1`] = `
+"Let's get to it!
+Initialize local project
+Running npm install...
+Your project is ready, to proceed:
+
+Go to the project folder : cd /Users/marc/Projects/prismic/prismic-cli/__tmp__/test-new
+To have hot reload: npm install -g nodemon
+Start your project: nodemon app.js
+Point your browser to: http://localhost:3000
+"
+`;
