@@ -41,7 +41,8 @@ const { spawnSync } = require('child_process');
 const TMP_DIR = path.resolve('__tmp__');
 const PRISMIC_BIN = require.resolve('../bin/prismic');
 
-/* const util = require('util');
+/*
+const util = require('util');
 const exec = util.promisify(spawn); */
 
 beforeAll(() => {
@@ -68,15 +69,35 @@ describe('prismic --help', () => {
   });
 });
 
-describe.skip('prismic --version', () => {});
+describe('prismic --version', () => {
+  it('should print out the current version on the cli', () => {
+    const args = ['--version'];
+    const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8' });
+    // eslint-disable-next-line global-require
+    const { version } = require('../package.json');
+    const str = res.stdout.replace(/\r|\n/g, '');
+    expect(str).toBe(version);
+    expect(res.stderr).toBeFalsy();
+  });
+});
+
+describe('prismic list', () => {
+  it('should list the avaible templates', () => {
+    const { stdout } = spawnSync(PRISMIC_BIN, ['list'], { encoding: 'utf8' });
+    expect(stdout.includes('NodeJS')).toBe(true);
+    expect(stdout.includes('React')).toBe(true);
+    expect(stdout.includes('Angular2')).toBe(true);
+    expect(stdout.includes('Vue.js')).toBe(true);
+  });
+});
 
 
 describe.skip('prismic login [ --email | --password | --oauthaccesstoken ]', () => {});
 
 /* requires login */
-describe('prismic new', () => {
+describe.skip('prismic new', () => {
   const dir = path.join(TMP_DIR, 'test-new');
-  const repoName = `qwerty- + ${Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)}`;
+  const repoName = `qwerty-${Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)}`;
   const args = ['new', '--domain', repoName, '--folder', dir, '--template', 'NodeJS'];
 
   it('should initialise a project from a template', () => {
@@ -87,7 +108,7 @@ describe('prismic new', () => {
 });
 
 /* requires login */
-describe('prismic init', () => {
+describe.skip('prismic init', () => {
   const dir = path.join(TMP_DIR, 'init-test');
   const repoName = 'qwerty2223445566';
   const args = ['init', '--domain', repoName, '--folder', dir, '--template', 'NodeJS', '--noconfirm'];
@@ -99,13 +120,39 @@ describe('prismic init', () => {
   });
 });
 
-describe.skip('prismic quickstart [--folder | --template | --new]', () => {});
+/* requires login */
+describe.skip('prismic quickstart [--folder | --template | --new]', () => {
+  const dir = path.join(TMP_DIR, 'quickstart');
+  const randomString = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
+  const repoName = `quickstart-test-${randomString}`;
+  const args = ['quickstart', '--folder', dir, '--domain', repoName, '--template', 'NodeJS'];
 
+  it('should initialize a project and repository', () => {
+    const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8' });
+    expect(res.status).toBeFalsy();
+    expect(res.stdout).toBeTruthy();
+  });
+});
 
-describe.skip('prismic theme [ --theme-url | --folder | --conf | --template ]', () => {});
-describe.skip('prismic logout', () => {});
-describe.skip('prismic signup', () => {});
-describe.skip('prismic list', () => {});
+/* requires login */
+describe.skip('prismic theme [ --theme-url | --folder | --conf | --template ]', () => {
+  it('should reate a rpoject using a theme', () => {
+    const dir = path.join(TMP_DIR, 'theme-nuxt');
+    const randomString = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
+    const repoName = `theme-test-${randomString}`;
+    const args = [
+      'theme',
+      '--theme-url', 'https://github.com/prismicio/nuxtjs-blog.git',
+      '--conf', 'nuxt.config.js',
+      '--domain', repoName,
+      '--folder', dir,
+    ];
+
+    const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8' });
+    expect(res.stdout).toBeTruthy();
+    expect(fs.existsSync(dir)).toBe(true);
+  })
+});
 
 describe.skip('prismic slicemachine', () => {
   it('prismic sm --help', () => {});
@@ -116,3 +163,6 @@ describe.skip('prismic slicemachine', () => {
   it('prismic sm --add-storybook [ --framework ]', () => {})
   it('prismic sm --pull', () => {});
 });
+
+describe.skip('prismic logout', () => {});
+describe.skip('prismic signup', () => {});
