@@ -369,6 +369,7 @@ describe('prismic slicemachine', () => {
   it.todo('prismic sm --create-slice [ --template-path | --framework ]');
   it.todo('prismic sm --add-storybook [ --framework ]')
   it.todo('prismic sm --pull');
+  it.todo('prismic sm --develop')
 });
 
 describe.skip('prismic signup', () => {});
