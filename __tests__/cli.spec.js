@@ -182,12 +182,12 @@ async function deleteRepo(repoName) {
   });
 };
 
-let initRepoName = ""
+let initRepoName = "";
+let initRepoDir = "";
 describe('prismic new', () => {
   jest.setTimeout(30000);
 
-  const repoName = genRepoName('cli-new-test');
-  initRepoName = repoName;
+  const repoName = initRepoName = genRepoName('cli-new-test');
 
   beforeAll(async () => {
     login()
@@ -219,7 +219,7 @@ describe('prismic init', () => {
   beforeAll(() => {
     return login();
   });
-  const dir = path.join(TMP_DIR, 'init-test');
+  const dir = initRepoDir = path.join(TMP_DIR, 'init-test');
 
   const args = [
     'init',
@@ -265,6 +265,8 @@ describe('prismic quickstart [--folder | --template | --new]', () => {
   });
 });
 
+let themeDir = '';
+
 describe('prismic theme [ --theme-url | --folder | --conf | --template ]', () => {
   jest.setTimeout(30000);
 
@@ -275,7 +277,7 @@ describe('prismic theme [ --theme-url | --folder | --conf | --template ]', () =>
     await deleteRepo(repoName);
   });
 
-  const dir = path.join(TMP_DIR, 'theme-nuxt');
+  const dir = themeDir = path.join(TMP_DIR, 'theme-nuxt');
 
   it('should reate a rpoject using a theme', () => {
     
@@ -295,14 +297,78 @@ describe('prismic theme [ --theme-url | --folder | --conf | --template ]', () =>
   })
 });
 
-describe.skip('prismic slicemachine', () => {
-  it('prismic sm --help', () => {});
-  it('prismic sm --ls', () => {});
-  it('prismic sm --setup [ --no-prismic | --library | --lib | --local-path ]', () => {});
-  it('prismic sm --bootstrap', () => {});
-  it('prismic sm --create-slice [ --template-path | --framework ]', () => {});
-  it('prismic sm --add-storybook [ --framework ]', () => {})
-  it('prismic sm --pull', () => {});
+describe('prismic sm --help', () => {
+  const args = ['sm', '--help'];
+  const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8' });
+  expect(res.stdout).toBeTruthy();
+  expect(res.stderr).toBeFalsy();
+  // expect(res.stdout).toMatchSnapshot();
+});
+
+describe('prismic sm --setup [ --no-prismic | --library | --lib | --local-path ]', () => {
+  jest.setTimeout(30000);
+
+  const repoName = genRepoName('cli-sm-setup-test');
+
+  beforeAll(async () => {
+    login()
+    await deleteRepo(repoName);
+  });
+
+  it('should setup an existing project for slicemachine', () => {
+    const args = ['sm', '--setup', '--domain', repoName ]
+    const cmd = `pushd ${themeDir} && ${PRISMIC_BIN}`;
+    const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
+    expect(res.status).toBe(0);
+    expect(res.stdout).toBeTruthy();
+    const smfile = path.resolve(themeDir, 'sm.json');
+    expect(fs.existsSync(smfile)).toBe(true);
+    // expect(res.stderr).toBeFalsy();
+  })
+
+});
+
+describe('prismic sm --bootstrap', () => {
+  jest.setTimeout(30000);
+
+  const repoName = genRepoName('cli-sm-setup-test');
+
+  beforeAll(async () => {
+    login()
+    await deleteRepo(repoName);
+  });
+
+  it('should setup an existing project for slicemachine', () => {
+    const args = ['sm', '--bootstrap', '--domain', repoName ]
+    const cmd = `pushd ${initRepoDir} && ${PRISMIC_BIN}`;
+    const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
+    // expect(res.status).toBe(0);
+    expect(res.stdout).toBeTruthy();
+    // expect(res.stderr).toBeFalsy();
+    const smfile = path.resolve(initRepoDir, 'sm.json');
+    expect(fs.existsSync(smfile)).toBe(true);
+
+  })
+});
+
+describe('prismic sm --ls', () => {
+  it('should list slices', () => {
+    const args = ['sm', '--ls' ];
+    const cmd = `pushd ${themeDir} && ${PRISMIC_BIN}`;
+  
+    const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
+    // expect(res.status).toBe(0);
+    expect(res.stdout).toBeTruthy();
+    //expect(res.stderr).toBeFalsy();
+  })
+});
+
+
+describe('prismic slicemachine', () => {
+  
+  it.todo('prismic sm --create-slice [ --template-path | --framework ]');
+  it.todo('prismic sm --add-storybook [ --framework ]')
+  it.todo('prismic sm --pull');
 });
 
 describe.skip('prismic signup', () => {});

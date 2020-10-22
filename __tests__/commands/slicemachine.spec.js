@@ -70,10 +70,61 @@ describe('slice machine commands', () => {
       jest.unmock('console');
     });
   });
+
+  describe.skip('create slice', () => {
+    it('should work', () => {
+      jest.mock('../../common/frameworks');
+      const Frameworks =  require('../../common/frameworks');
+      Frameworks.get = jest.fn().mockReturnValue('nuxt');
+
+      jest.mock('../../common/libraries');
+      const Libraries = require('../../common/libraries');
+      Libraries.selectLocal = jest.fn().mockResolvedValue('nuxt');
+      Libraries.infos = jest.fn().mockReturnValue({
+        config: '',
+        isLocal: true,
+        pathToLib: '',
+        pathToSlices: '',
+        relativePathToLib: '',
+      });
+
+      /* jest.mock('inquirer');
+      const inquirer = require('inquirer');
+      inquirer.prompt = jest.fn().mockResolvedValue('FooBar'); */
+
+      jest.mock('fs');
+      const fs = require('fs');
+      fs.existsSync = jest.fn().mockReturnValue(true);
+      fs.writeFileSync = jest.fn()
+
+      jest.mock('console');
+      console.error = jest.fn();
+      console.log = jest.fn();
+      
+    });
+  });
 });
+
+describe('bootstrap', () => {
+  // boot-strap query string should have ?app=slicemachine 
+  // it.skip('should work', () => {})
+
+  it('should added app=slicemachine to the query string', () => {
+    /*jest.mock('request');
+    const request = require('request');
+    request.post = jest.fn((url, options, callback) => (callback({}))*/
+    // lib/services/communication/index.js
+    jest.mock('../../lib/services/communication')
+    const communication = require('../../lib/services/communication')
+    communication.post = jest.fn().mockResolvedValue({ domain: 'foobar' });
+  })
+})
 
 
 /** 'steup/init'
+ * 
+ * boot-strap query string should have ?app=slicemachine 
+ * 
  * Frameworks get checks package.json for next or nuxt.
  * 
  * >downloads zip http://sm-api-p1g4hvtof.vercel.app/api/bootstrap?framework=nuxt
@@ -125,4 +176,6 @@ describe('slice machine commands', () => {
   * prompts user about conflicting slices.
 * */
 
-
+/**
+ * bootstrap boot-strap query string should have ?app=slicemachine 
+*/
