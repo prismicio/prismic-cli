@@ -58,6 +58,24 @@ Options
 
 exports[`prismic init should initialise a project from a template 1`] = `
 "Let's get to it!
+Initialize local project
+Running npm install...
+Your project is ready, to proceed:
+
+Go to the project folder : cd /Users/marc/Projects/prismic/prismic-cli/__tmp__/init-test
+To have hot reload: npm install -g nodemon
+Start your project: nodemon app.js
+Point your browser to: http://localhost:3000
+"
+`;
+
+exports[`prismic login [ --email | --password | --oauthaccesstoken ] should log a user in 1`] = `
+"Successfully logged in! You can now create repositories.
+"
+`;
+
+exports[`prismic logout should log the user out 1`] = `
+"Successfully logged out !
 "
 `;
 
@@ -68,6 +86,19 @@ Running npm install...
 Your project is ready, to proceed:
 
 Go to the project folder : cd /Users/marc/Projects/prismic/prismic-cli/__tmp__/test-new
+To have hot reload: npm install -g nodemon
+Start your project: nodemon app.js
+Point your browser to: http://localhost:3000
+"
+`;
+
+exports[`prismic quickstart [--folder | --template | --new] should initialize a project and repository 1`] = `
+"Let's get to it!
+Initialize local project
+Running npm install...
+Your project is ready, to proceed:
+
+Go to the project folder : cd /Users/marc/Projects/prismic/prismic-cli/__tmp__/quickstart
 To have hot reload: npm install -g nodemon
 Start your project: nodemon app.js
 Point your browser to: http://localhost:3000

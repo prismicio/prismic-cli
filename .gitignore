@@ -45,3 +45,6 @@ bin
 
 # temp folder for tests
 __tmp__
+
+# env
+.env
