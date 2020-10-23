@@ -2,11 +2,11 @@
 
 exports[`prismic --help it should write usage instructions to stdout 1`] = `
 "
-Synopsis
+[4m[1mSynopsis[22m[24m
 
   $ prismic <command> <domain> <options> 
 
-Examples
+[4m[1mExamples[22m[24m
 
   $ prismic init                          Create a project from an existing     
                                           prismic repository.                   
@@ -23,7 +23,7 @@ Examples
   $ prismic sm --setup                    Setup a nuxt.js project with          
                                           SliceMachine.                         
 
-Command List
+[4m[1mCommand List[22m[24m
 
   quickstart          Create a project: initialize a node.js quickstart project 
                       with a new prismic repository.                            
@@ -39,19 +39,19 @@ Command List
   list                List the available code templates.                        
   slicemachine | sm   Run slicemachine                                          
 
-Options
+[4m[1mOptions[22m[24m
 
-  --email        The email of the account to use.                               
-  --password     The password of the account to use.                            
-  --new                                                                         
-  --users                                                                       
-  --folder       The folder to create the new project.                          
-  --template     Project template to use (see the list command for available    
+  [1m--email[22m        The email of the account to use.                               
+  [1m--password[22m     The password of the account to use.                            
+  [1m--new[22m                                                                         
+  [1m--users[22m                                                                       
+  [1m--folder[22m       The folder to create the new project.                          
+  [1m--template[22m     Project template to use (see the list command for available    
                  templates).                                                    
-  --theme-url                                                                   
-  --conf         Specify path to prismic configuration file. Used with \`theme\`  
+  [1m--theme-url[22m                                                                   
+  [1m--conf[22m         Specify path to prismic configuration file. Used with \`theme\`  
                  command.                                                       
-  --version                                                                     
+  [1m--version[22m                                                                     
 
 "
 `;
@@ -123,7 +123,7 @@ exports[`prismic sm --bootstrap should setup an existing project for slicemachin
 
 exports[`prismic sm --create-slice [ --local-library | --slice-name ] should create a new loccal slice 1`] = `
 "~/Projects/prismic/prismic-cli/__tmp__/theme-nuxt ~/Projects/prismic/prismic-cli
-[info] Nuxt telemetry is disabled Because running in test environment
+[info] Nuxt telemetry is [33mdisabled[39m Because running in test environment
 [info] You can enable telemetry with \`npx nuxt telemetry enable .\`
 
 ✅ nuxt slice created at /Users/marc/Projects/prismic/prismic-cli/__tmp__/theme-nuxt/slices!
