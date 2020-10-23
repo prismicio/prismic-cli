@@ -56,6 +56,11 @@ Options
 "
 `;
 
+exports[`prismic base should set the base address for prismic 1`] = `
+"Successfully changed base https://wroom.io !
+"
+`;
+
 exports[`prismic init should initialise a project from a template 1`] = `
 "Let's get to it!
 Initialize local project
@@ -80,7 +85,9 @@ exports[`prismic logout should log the user out 1`] = `
 `;
 
 exports[`prismic new should initialise a project from a template 1`] = `
-"Let's get to it!
+"CAREFUL, your current base is: https://wroom.io
+
+Let's get to it!
 Initialize local project
 Running npm install...
 Your project is ready, to proceed:
@@ -93,7 +100,9 @@ Point your browser to: http://localhost:3000
 `;
 
 exports[`prismic quickstart [--folder | --template | --new] should initialize a project and repository 1`] = `
-"Let's get to it!
+"CAREFUL, your current base is: https://wroom.io
+
+Let's get to it!
 Initialize local project
 Running npm install...
 Your project is ready, to proceed:
@@ -102,5 +111,61 @@ Go to the project folder : cd /Users/marc/Projects/prismic/prismic-cli/__tmp__/q
 To have hot reload: npm install -g nodemon
 Start your project: nodemon app.js
 Point your browser to: http://localhost:3000
+"
+`;
+
+exports[`prismic sm --bootstrap should setup an existing project for slicemachine 1`] = `
+"~/Projects/prismic/prismic-cli/__tmp__/init-test ~/Projects/prismic/prismic-cli
+"
+`;
+
+exports[`prismic sm --bootstrap should setup an existing project for slicemachine 2`] = `""`;
+
+exports[`prismic sm --create-slice [ --local-library | --slice-name ] should create a new loccal slice 1`] = `
+"~/Projects/prismic/prismic-cli/__tmp__/theme-nuxt ~/Projects/prismic/prismic-cli
+[info] Nuxt telemetry is disabled Because running in test environment
+[info] You can enable telemetry with \`npx nuxt telemetry enable .\`
+
+✅ nuxt slice created at /Users/marc/Projects/prismic/prismic-cli/__tmp__/theme-nuxt/slices!
+Use it right away 👉 https://cli-sm-setup-test-marcmcintosh.wroom.io/documents
+"
+`;
+
+exports[`prismic sm --create-slice [ --local-library | --slice-name ] should create a new loccal slice 2`] = `""`;
+
+exports[`prismic sm --ls should list slices 1`] = `
+"~/Projects/prismic/prismic-cli/__tmp__/theme-nuxt ~/Projects/prismic/prismic-cli
+[info] Found 10 slices across 2 libraries:
+
+🥒 at vue-essential-slices:
+  * AlternateGrid
+  * CallToAction
+  * CardsCarousel
+  * CustomerLogos
+  * FaqSection
+  * FeatureTestimonials
+  * ImagesSlider
+  * PricingTable
+  * TestimonialsSlider
+  * VideoHighlights
+
+[info] Something's missing?
+Check paths in your configuration file!
+
+"
+`;
+
+exports[`prismic sm --ls should list slices 2`] = `""`;
+
+exports[`prismic theme [ --theme-url | --folder | --conf | --template ] should reate a rpoject using a theme 1`] = `
+"We are checking the theme integrity
+CAREFUL, your current base is: https://wroom.io
+
+Let's get to it!
+Initialize local project
+Running npm install...
+Your project is ready, to proceed:
+
+Go to the project folder : cd /Users/marc/Projects/prismic/prismic-cli/__tmp__/theme-nuxt
 "
 `;
