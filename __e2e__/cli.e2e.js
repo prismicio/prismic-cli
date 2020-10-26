@@ -444,7 +444,7 @@ describe('prismic sm --add-storybook [ --framework ]', () => {
   it('should add storybook to a project', () => {
     const addDevDeps = 'npm install --save-dev core-js@3 @babel/runtime-corejs3'
     const cmd = `pushd ${themeDir} && ${addDevDeps} && ${PRISMIC_BIN}`;
-    const args = ['sm', '--add-storybook'];
+    const args = ['sm', '--add-storybook', '--no-start'];
 
     const res = spawnSync(cmd, args, { encoding: 'utf-8', shell: true });
 
