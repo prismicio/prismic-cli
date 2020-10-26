@@ -1,7 +1,7 @@
 {
   "name": "prismic-cli",
   "description": "Command line to bootstrap prismic projects.",
-  "version": "3.8.0",
+  "version": "3.8.1",
   "author": "prismic.io developers",
   "license": "Apache-2.0",
   "scripts": {
@@ -96,7 +96,8 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-push": "npm run release"
     }
   },
   "commitlint": {
