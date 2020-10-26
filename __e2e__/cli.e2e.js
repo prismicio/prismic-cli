@@ -458,7 +458,6 @@ describe('prismic sm --add-storybook [ --framework ]', () => {
 })
 
 describe('prismic slicemachine', () => {
-  it.todo('prismic sm --pull');
   it.todo('prismic sm --develop')
 });
 
