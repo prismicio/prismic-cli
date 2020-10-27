@@ -57,11 +57,24 @@ Options
 `;
 
 exports[`prismic base should set the base address for prismic 1`] = `
-"Successfully changed base https://wroom.io !
+"Successfully changed base https://prismic.io !
 "
 `;
 
-exports[`prismic init should initialise a project from a template 1`] = `
+exports[`prismic init should initialise a project from a template and create a new repo 1`] = `
+"Let's get to it!
+Initialize local project
+Running npm install...
+Your project is ready, to proceed:
+
+Go to the project folder : cd /Users/marc/Projects/prismic/prismic-cli/__tmp__/init-test
+To have hot reload: npm install -g nodemon
+Start your project: nodemon app.js
+Point your browser to: http://localhost:3000
+"
+`;
+
+exports[`prismic init should initialise a project from a template with an existing repo 1`] = `
 "Let's get to it!
 Initialize local project
 Running npm install...
@@ -84,10 +97,8 @@ exports[`prismic logout should log the user out 1`] = `
 "
 `;
 
-exports[`prismic new should initialise a project from a template 1`] = `
-"CAREFUL, your current base is: https://wroom.io
-
-Let's get to it!
+exports[`prismic new should create a new project from a template 1`] = `
+"Let's get to it!
 Initialize local project
 Running npm install...
 Your project is ready, to proceed:
@@ -100,9 +111,7 @@ Point your browser to: http://localhost:3000
 `;
 
 exports[`prismic quickstart [--folder | --template | --new] should initialize a project and repository 1`] = `
-"CAREFUL, your current base is: https://wroom.io
-
-Let's get to it!
+"Let's get to it!
 Initialize local project
 Running npm install...
 Your project is ready, to proceed:
@@ -127,7 +136,7 @@ exports[`prismic sm --create-slice [ --local-library | --slice-name ] should cre
 [info] You can enable telemetry with \`npx nuxt telemetry enable .\`
 
 ✅ nuxt slice created at /Users/marc/Projects/prismic/prismic-cli/__tmp__/theme-nuxt/slices!
-Use it right away 👉 https://cli-sm-setup-test-marcmcintosh.wroom.io/documents
+Use it right away 👉 https://cli-sm-setup-test-marcmcintosh.prismic.io/documents
 "
 `;
 
@@ -157,10 +166,8 @@ Check paths in your configuration file!
 
 exports[`prismic sm --ls should list slices 2`] = `""`;
 
-exports[`prismic theme [ --theme-url | --folder | --conf | --template ] should reate a rpoject using a theme 1`] = `
+exports[`prismic theme [ --theme-url | --folder | --conf | --template ] should create a project using a theme 1`] = `
 "We are checking the theme integrity
-CAREFUL, your current base is: https://wroom.io
-
 Let's get to it!
 Initialize local project
 Running npm install...

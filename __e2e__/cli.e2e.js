@@ -45,8 +45,14 @@ const PRISMIC_BIN = require.resolve('../bin/prismic');
 
 const readFile = promisify(fs.readFile);
 
+const themeDir = path.join(TMP_DIR, 'theme-nuxt');
+
+const initRepoName = genRepoName('cli-init-test');
+const initRepoDir = path.join(TMP_DIR, 'init-test');
+
+const rmdir = promisify(fs.rmdir);
+
 beforeAll(() => {  
-  const rmdir = promisify(fs.rmdir);
   const mkdir = promisify(fs.mkdir);
   const chmod = promisify(fs.chmod);
   const load = promisify(npm.load);
@@ -158,9 +164,8 @@ function isLogedin() {
 function login(email = process.env.PRISMIC_EMAIL, password = process.env.PRISMIC_PASSWORD) {
   if(isLogedin()) return; 
   const args = [ '--email', email, '--password', password]
-  console.log("LOGIN CALLED");
-  console.log({ email, password });
-  return spawnSync(PRISMIC_BIN, args, {encoding: 'utf-8'})
+  const res = spawnSync(PRISMIC_BIN, args, {encoding: 'utf-8'})
+  if(res.status !== 0 || res.stderr) { throw new Error('Failed to login'); }
 }
 
 function genRepoName(repoName) {
@@ -201,12 +206,11 @@ async function deleteRepo(repoName) {
   });
 };
 
-let initRepoName = "";
-let initRepoDir = "";
+
 describe('prismic new', () => {
   jest.setTimeout(300000);
 
-  const repoName = initRepoName = genRepoName('cli-new-test');
+  const repoName = genRepoName('cli-new-test');
 
   beforeAll(async () => {
     login()
@@ -223,38 +227,11 @@ describe('prismic new', () => {
     'NodeJS'
   ];
 
-  it('should initialise a project from a template', () => {
+  it('should create a new project from a template', () => {
     const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8', shell: true });
     expect(res.stdout).toMatchSnapshot();
     expect(fs.existsSync(dir)).toBeTruthy();
     expect(res.status).toBeFalsy();
-  });
-});
-
-describe('prismic init', () => {
-  jest.setTimeout(300000);
-
-  const repoName = initRepoName || genRepoName('cli-init-test');
-
-  beforeAll(() => {
-    return login();
-  });
-  const dir = initRepoDir = path.join(TMP_DIR, 'init-test');
-
-  const args = [
-    'init',
-    '--domain', repoName,
-    '--folder', dir,
-    '--template', 'NodeJS',
-    '--noconfirm'
-  ];
-
-  it('should initialise a project from a template', () => {
-    const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8', shell: true });
-    expect(res.stdout).toMatchSnapshot();
-    expect(fs.existsSync(dir)).toBeTruthy();
-    expect(res.status).toBeFalsy();
-
   });
 });
 
@@ -287,7 +264,40 @@ describe('prismic quickstart [--folder | --template | --new]', () => {
   });
 });
 
-let themeDir = '';
+describe('prismic init', () => {
+  jest.setTimeout(300000);
+
+  const repoName = initRepoName; 
+  const dir = initRepoDir;
+  const args = [
+    '--folder', dir,
+    '--domain', repoName,
+    '--template', 'NodeJS',
+    '--noconfirm',
+  ];
+
+  beforeAll(async () => {
+    login();
+    await deleteRepo(repoName)
+  });
+
+  it('should initialise a project from a template and create a new repo', () => {
+    const res = spawnSync(PRISMIC_BIN, ['init', ...args, '--new' ], { encoding: 'utf8', shell: true });
+    expect(fs.existsSync(dir)).toBeTruthy();
+    expect(res.stdout).toMatchSnapshot();
+    expect(res.status).toBeFalsy();
+  });
+
+  it('should initialise a project from a template with an existing repo', async () => {
+    await rmdir(dir, { recursive: true });
+    
+    const res = spawnSync(PRISMIC_BIN, ['init', ...args ], { encoding: 'utf8', shell: true });
+    expect(fs.existsSync(dir)).toBeTruthy();
+    expect(res.stdout).toMatchSnapshot();
+    expect(res.status).toBeFalsy();
+  });
+});
+
 
 describe('prismic theme [ --theme-url | --folder | --conf | --template ]', () => {
   jest.setTimeout(300000);
@@ -299,11 +309,10 @@ describe('prismic theme [ --theme-url | --folder | --conf | --template ]', () =>
     return deleteRepo(repoName);
   });
 
-  const dir = themeDir = path.join(TMP_DIR, 'theme-nuxt');
 
-  it('should reate a rpoject using a theme', () => {
-    
+  it('should create a project using a theme', () => {
 
+    const dir = themeDir;
     const args = [
       'theme',
       '--theme-url', 'https://github.com/prismicio/nuxtjs-blog.git',
@@ -400,7 +409,6 @@ describe('prismic sm --ls', () => {
   })
 });
 
-let sliceDir = "";
 describe('prismic sm --create-slice [ --local-library | --slice-name ]', () => {
   jest.setTimeout(300000);
   beforeAll(() => {
@@ -408,12 +416,12 @@ describe('prismic sm --create-slice [ --local-library | --slice-name ]', () => {
   });
 
   it('should create a new loccal slice', () => {
-    const dir = sliceDir = 'slices';
+    const sliceDir = 'slices';
     const sliceName = 'MySlice';
     const args = [
       'sm',
       '--create-slice',
-      '--local-library', dir,
+      '--local-library', sliceDir,
       '--slice-name', sliceName,
     ]
 
@@ -426,7 +434,7 @@ describe('prismic sm --create-slice [ --local-library | --slice-name ]', () => {
     expect(res.stderr).toBeFalsy();
     expect(res.stdout).toBeTruthy();
 
-    const outDir = path.resolve(themeDir, dir, sliceName);
+    const outDir = path.resolve(themeDir, sliceDir, sliceName);
     expect(fs.existsSync(outDir)).toBe(true);
 
     expect(res.stdout).toMatchSnapshot();
@@ -457,8 +465,45 @@ describe('prismic sm --add-storybook [ --framework ]', () => {
   })
 })
 
-describe('prismic slicemachine', () => {
-  it.todo('prismic sm --develop')
+describe.skip('prismic sm --develop', () => {
+  beforeAll(() => {
+    return login();
+  })
+  it('should login authorize with custom-types api', () => {
+    const args = ['sm', '--develop', '--no-start'];
+    const cmd = `pushd ${themeDir} && ${PRISMIC_BIN}`;
+    const res = spawnSync(cmd, args, { encoding: 'utf-8', shell: true });
+    expect(res.status).toBeFalsy();
+    expect(res.error).toBeFalsy();
+
+  });
 });
+
+describe('create next app', () => {
+  const repoName = genRepoName("cli-next-app-setup");
+
+  beforeAll(() => {
+    login();
+    return deleteRepo(repoName)
+  });
+
+
+  it('should work with create-next-app', () => {
+    const dir = path.resolve(TMP_DIR, 'next-app-test');
+
+    const cmd = `npx create-next-app ${dir} && pushd ${dir} && ${PRISMIC_BIN}`;
+    const args = ['sm', '--setup', '--domain', repoName];
+
+    const smJsonPath = path.resolve(dir, 'sm.json');
+    const smResolverPath = path.resolve(dir, 'sm-resolver.js')
+
+    const res = spawnSync(cmd, args, { encoding: 'utf-8', shell: true });
+
+    expect(res.status).toBeFalsy();
+    expect(fs.existsSync(smJsonPath)).toBe(true);
+    expect(fs.existsSync(smResolverPath)).toBe(true);
+
+  })
+})
 
 describe.skip('prismic signup', () => {});
