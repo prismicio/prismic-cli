@@ -29,7 +29,8 @@ describe('prismic init', () => {
   beforeAll(async () => {
     changeBase();
     login();
-    return deleteRepo(repoName).finally(() => mkdir(TMP_DIR));
+    await deleteRepo(repoName);
+    await mkdir(TMP_DIR, { recursive: true });
   });
 
   beforeEach(async () => rmdir(dir, { recursive: true }));
@@ -37,7 +38,6 @@ describe('prismic init', () => {
   it('should initialise a project from a template and create a new repo', () => {
     const res = spawnSync(PRISMIC_BIN, ['init', ...args, '--new'], { encoding: 'utf8', shell: true });
     expect(fs.existsSync(dir)).toBeTruthy();
-    expect(res.stdout).toMatchSnapshot();
     expect(res.status).toBeFalsy();
     expect(fs.existsSync(config)).toBe(true);
   });
@@ -45,9 +45,7 @@ describe('prismic init', () => {
   it('should initialise a project from a template with an existing repo', () => {   
     const res = spawnSync(PRISMIC_BIN, ['init', ...args], { encoding: 'utf8', shell: true });
     expect(fs.existsSync(dir)).toBeTruthy();
-    expect(res.stdout).toMatchSnapshot();
     expect(res.status).toBeFalsy();
     expect(fs.existsSync(config)).toBe(true);
-
   });
 });
