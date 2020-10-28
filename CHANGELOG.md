@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.8.3](https://github.com/prismicio/prismic-cli/compare/v3.8.3-alpha.0...v3.8.3) (2020-10-28)
+
+
+### Bug Fixes
+
+* allow develop to take --no-start argument ([2d18cf1](https://github.com/prismicio/prismic-cli/commit/2d18cf110d5724287e2cbf4ed7eca2b388bd6ab6))
+* remove documentation on sm pull ([98e15d3](https://github.com/prismicio/prismic-cli/commit/98e15d3ba902394f9fa8f101b63bf861b81dbafa))
+* remove documentation on sm-pull ([08aec5c](https://github.com/prismicio/prismic-cli/commit/08aec5cea9fb8183b5a077f8f20190a59837bb49))
+* test help commands snapshots fail due to test underlines ([b3fb694](https://github.com/prismicio/prismic-cli/commit/b3fb694e3c4dd705d34ea4f65c41be1ed58e1740))
+* **sm:** add next/babel to .babelrc on add-storybook ([d9ca34d](https://github.com/prismicio/prismic-cli/commit/d9ca34df636a03f602221a66b469c423c151850e))
+
 ### [3.8.2](https://github.com/prismicio/prismic-cli/compare/v3.8.1...v3.8.2) (2020-10-26)
 
 
