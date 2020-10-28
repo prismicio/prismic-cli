@@ -13,6 +13,8 @@ const {
 } = require('./utils');
 
 describe('create next app', () => {
+  jest.setTimeout(300000);
+
   const repoName = genRepoName('cli-next-app-setup');
   const dir = path.resolve(TMP_DIR, 'next-app-test');
 
