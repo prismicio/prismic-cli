@@ -30,10 +30,11 @@ describe('prismic sm --bootstrap', () => {
   it('should setup an existing project for slicemachine', () => {
 
     const initArgs = [
-      'new',
-      '--domain', initRepoNamme,
+      'theme',
+      '--theme-url', 'https://github.com/prismicio/nuxtjs-blog.git',
+      '--conf', 'nuxt.config.js',
+      '--domain', repoName,
       '--folder', dir,
-      '--template', 'NodeJS',
     ];
 
     spawnSync(PRISMIC_BIN, initArgs, { encoding: 'utf-8', shell: true });
@@ -41,7 +42,7 @@ describe('prismic sm --bootstrap', () => {
     expect(fs.existsSync(dir)).toBe(true);
 
 
-    const args = ['sm', '--bootstrap', '--domain', repoName]
+    const args = ['sm', '--bootstrap', '--domain', repoName];
     const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
     const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
     expect(res.stdout).toBeTruthy();
