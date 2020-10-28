@@ -69,8 +69,6 @@ describe('prismic sm --create-slice [ --local-library | --slice-name ]', () => {
 
     const outDir = path.resolve(dir, sliceDir, sliceName);
     expect(fs.existsSync(outDir)).toBe(true);
-    expect(res.stdout).toMatchSnapshot();
-    expect(res.stderr).toMatchSnapshot();
     expect(res.status).toBeFalsy();
   });
 });
