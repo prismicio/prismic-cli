@@ -25,7 +25,7 @@ function isLogedin() {
 
   const conf = fs.readFileSync(CONFIG_PATH, 'utf-8');
   const { cookies } = JSON.parse(conf);
-  return cookies || false;
+  return cookies && /X_XSRF=/.test(cookies) && /prismic-auth=/.test(cookies) 
 }
 
 function genRepoName(repoName) {
@@ -42,7 +42,7 @@ async function deleteRepo(repoName) {
   const { base, cookies } = JSON.parse(conf);
   const { x_xsfr } = cookies.match(/(?:X_XSRF=)(?<x_xsfr>(\w|-)*)/).groups;
 
-  const addr = new URL(base);
+  const addr = new URL(base || process.env.PRISMIC_BASE);
 
   const formData = new FormData();
   formData.append('confirm', repoName);
@@ -56,9 +56,10 @@ async function deleteRepo(repoName) {
       headers: {
         cookie: cookies,
       },
-    }, (err) => {
+    }, (err, res) => {
+      const { statusCode, statusMessage } = res;
       if (err) return reject(err);
-      return resolve();
+      return resolve({ statusCode, statusMessage });
     });
   });
 }
@@ -68,7 +69,6 @@ function changeBase() {
   const args = ['base', '--base-url', address];
   return spawnSync(PRISMIC_BIN, args, { encoding: 'utf-8' });
 }
-  
 
 function login(email = process.env.PRISMIC_EMAIL, password = process.env.PRISMIC_PASSWORD) {
   if (isLogedin()) {
