@@ -32,9 +32,7 @@ describe('create next app', () => {
     const smJsonPath = path.resolve(dir, 'sm.json');
     const smResolverPath = path.resolve(dir, 'sm-resolver.js')
 
-    const res = spawnSync(cmd, args, { encoding: 'utf-8', shell: true });
-
-    expect(res.status).toBeFalsy();
+    spawnSync(cmd, args, { encoding: 'utf-8', shell: true });
     expect(fs.existsSync(smJsonPath)).toBe(true);
     expect(fs.existsSync(smResolverPath)).toBe(true);
 
