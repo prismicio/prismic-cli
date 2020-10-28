@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`prismic sm --help should write instuctions to stdout 1`] = `
+"
+Synopsis
+
+  $ prismic sm <command> <options> 
+
+Examples
+
+  $ prismic sm --setup --lib vue-         Setup an existing Nuxt.js project     
+  essential-slices --local-path           with slicemachine.                    
+  ./slices                                                                      
+  $ prismic sm --ls                       List all the slices.                  
+  $ prismic sm --create-slice             Setup a slice                         
+  $ prismic sm --pull                     Pull slices from Prismic              
+
+Command List
+
+  --ls              List all the slices from libraries and the local files.     
+  --setup           Install dependencies and update your project configuration  
+                    to setup SliceMachine.                                      
+  --bootstrap       Bootstrap a project with slicemachine from an existing      
+                    configuration.                                              
+  --create-slice    Create a new component template in the filesystem and in    
+                    your Prismic custom types.                                  
+  --develop         Launch Slices builder localy                                
+  --add-storybook   Create a Storybook at the root of your project and          
+                    configure it to display your local slices.                  
+  --pull            Pull your slices definitions from Prismic and interactively 
+                    synchronize them with your project                          
+
+Options
+
+  --no-prismic         Skip the creation of a Prismic repository during the     
+                       setup.                                                   
+  --local-path         Specify a local folder that contains slices during the   
+                       setup.                                                   
+  --template-path      Specify the template folder to be used when running      
+                       create-slice                                             
+  --framework          Specify for which framework you want to create-slice or  
+                       add-storybook                                            
+  --library | --lib    Specify an external library during the setup. Will take  
+                       vue-essential-slices by default.                         
+
+"
+`;

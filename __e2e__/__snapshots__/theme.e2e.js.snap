@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`prismic theme [ --theme-url | --folder | --conf | --template ] should create a project using a theme 1`] = `
+"We are checking the theme integrity
+CAREFUL, your current base is: https://wroom.io
+
+Let's get to it!
+An unexpected error occured
+Error: Repository creation failed. Status: 500
+Initialize local project
+Running npm install...
+Your project is ready, to proceed:
+
+Go to the project folder : cd /Users/marc/Projects/prismic/prismic-cli/__tmp__/theme-test
+"
+`;

@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`prismic init should initialise a project from a template and create a new repo 1`] = `
+"CAREFUL, your current base is: https://wroom.io
+
+Let's get to it!
+Initialize local project
+Running npm install...
+Your project is ready, to proceed:
+
+Go to the project folder : cd /Users/marc/Projects/prismic/prismic-cli/__tmp__/init-test
+To have hot reload: npm install -g nodemon
+Start your project: nodemon app.js
+Point your browser to: http://localhost:3000
+"
+`;
+
+exports[`prismic init should initialise a project from a template with an existing repo 1`] = `
+"Let's get to it!
+Initialize local project
+Running npm install...
+Your project is ready, to proceed:
+
+Go to the project folder : cd /Users/marc/Projects/prismic/prismic-cli/__tmp__/init-test
+To have hot reload: npm install -g nodemon
+Start your project: nodemon app.js
+Point your browser to: http://localhost:3000
+"
+`;

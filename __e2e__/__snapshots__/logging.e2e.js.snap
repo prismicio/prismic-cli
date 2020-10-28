@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`prismic login [ --email | --password | --oauthaccesstoken ] should log a user in 1`] = `
+"Successfully logged in! You can now create repositories.
+"
+`;
+
+exports[`prismic logout should log the user out 1`] = `
+"Successfully logged out !
+"
+`;

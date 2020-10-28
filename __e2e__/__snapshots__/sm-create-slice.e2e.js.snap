@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`prismic sm --create-slice [ --local-library | --slice-name ] should create a new loccal slice 1`] = `
+"~/Projects/prismic/prismic-cli/__tmp__/sm-create-slice ~/Projects/prismic/prismic-cli
+[info] Nuxt telemetry is disabled Because running in test environment
+[info] You can enable telemetry with \`npx nuxt telemetry enable .\`
+
+✅ nuxt slice created at /Users/marc/Projects/prismic/prismic-cli/__tmp__/sm-create-slice/slices!
+Use it right away 👉 https://cli-sm-create-slice-test-marcmcintosh.wroom.io/documents
+"
+`;
+
+exports[`prismic sm --create-slice [ --local-library | --slice-name ] should create a new loccal slice 2`] = `""`;

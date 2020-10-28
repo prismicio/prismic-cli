@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`prismic new should create a new project from a template 1`] = `
+"CAREFUL, your current base is: https://wroom.io
+
+Let's get to it!
+Initialize local project
+Running npm install...
+Your project is ready, to proceed:
+
+Go to the project folder : cd /Users/marc/Projects/prismic/prismic-cli/__tmp__/test-new
+To have hot reload: npm install -g nodemon
+Start your project: nodemon app.js
+Point your browser to: http://localhost:3000
+"
+`;
