@@ -13,7 +13,8 @@
     "lint": "eslint lib/**/*.js",
     "lint:fix": "eslint lib/**/*.js --ignore-pattern lib/commands/slicemachine/templates --ignore-pattern lib/commands/slicemachine/storybook-templates --fix",
     "test": "jest",
-    "test:e2e": "npm run build && chmod +x ./bin/prismic.js && jest --testRegex \"/__e2e__/.*.e2e.[jt]sx?$\""
+    "test:e2e": "npm run build && chmod +x ./bin/prismic.js && jest --testRegex \"/__e2e__/.*.e2e.[jt]sx?$\"",
+    "test:e2e:slow": "npm run build && chmod +x ./bin/prismic.js && jest --runInBand --testRegex \"/__e2e__/.*.e2e.[jt]sx?$\""
   },
   "bin": {
     "prismic": "bin/prismic.js"
