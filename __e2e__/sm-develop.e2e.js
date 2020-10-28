@@ -50,10 +50,8 @@ describe('prismic sm --develop', () => {
 
     expect(fs.existsSync(path.resolve(dir, '.storybook'))).toBe(true);
 
-    const args = ['sm', '--develop', '--no-start'];
-    const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
-    const res = spawnSync(cmd, args, { encoding: 'utf-8', shell: true });
-    expect(res.status).toBeFalsy();
-    expect(res.error).toBeFalsy();
+    const res = spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--develop', '--no-start'], { encoding: 'utf-8', shell: true });
+    expect(res.stdout).toBeTruthy();
+    expect(res.stderr).toBeFalsy();
   });
 });
