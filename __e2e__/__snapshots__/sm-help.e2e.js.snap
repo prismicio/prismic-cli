@@ -27,8 +27,6 @@ Command List
   --develop         Launch Slices builder localy                                
   --add-storybook   Create a Storybook at the root of your project and          
                     configure it to display your local slices.                  
-  --pull            Pull your slices definitions from Prismic and interactively 
-                    synchronize them with your project                          
 
 Options
 
