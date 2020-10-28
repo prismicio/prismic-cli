@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`prismic sm --setup [ --no-prismic | --library | --lib | --local-path ] should setup an existing project for slicemachine from a theme 1`] = `
+exports[`prismic sm --ls should list the slices available in a project 1`] = `
 "~/Projects/prismic/prismic-cli/__tmp__/sm-ls ~/Projects/prismic/prismic-cli
 [info] Found 10 slices across 2 libraries:
 
@@ -22,4 +22,4 @@ Check paths in your configuration file!
 "
 `;
 
-exports[`prismic sm --setup [ --no-prismic | --library | --lib | --local-path ] should setup an existing project for slicemachine from a theme 2`] = `""`;
+exports[`prismic sm --ls should list the slices available in a project 2`] = `""`;
