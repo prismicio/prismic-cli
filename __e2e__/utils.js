@@ -24,8 +24,12 @@ function isLogedin() {
   if (fs.existsSync(CONFIG_PATH) === false) return false;
 
   const conf = fs.readFileSync(CONFIG_PATH, 'utf-8');
-  const { cookies } = JSON.parse(conf);
-  return cookies && /X_XSRF=/.test(cookies) && /prismic-auth=/.test(cookies) 
+  try {
+    const { cookies } = JSON.parse(conf);
+    return cookies && /X_XSRF=/.test(cookies) && /prismic-auth=/.test(cookies) 
+  } catch {
+    return false;
+  }
 }
 
 function genRepoName(repoName) {
