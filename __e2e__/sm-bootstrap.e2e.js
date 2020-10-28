@@ -17,13 +17,14 @@ describe('prismic sm --bootstrap', () => {
   jest.setTimeout(300000);
 
   const repoName = genRepoName('cli-sm-bootstrap-test');
-  const initRepoNamme = genRepoName('cli-sm-bootstrap-new');
+  const initRepoNamme = genRepoName('cli-sm-bootstrap-theme');
   const dir = path.resolve(TMP_DIR, 'sm-bootstrap');
 
   beforeAll(async () => {
     changeBase();
     login();
     await deleteRepo(repoName);
+    await deleteRepo(initRepoNamme);
     return rmdir(dir, { recursive: true }).finally(() => mkdir(TMP_DIR, { recursive: true }));
   });
 
@@ -33,14 +34,13 @@ describe('prismic sm --bootstrap', () => {
       'theme',
       '--theme-url', 'https://github.com/prismicio/nuxtjs-blog.git',
       '--conf', 'nuxt.config.js',
-      '--domain', repoName,
+      '--domain', initRepoNamme,
       '--folder', dir,
     ];
 
     spawnSync(PRISMIC_BIN, initArgs, { encoding: 'utf-8', shell: true });
 
     expect(fs.existsSync(dir)).toBe(true);
-
 
     const args = ['sm', '--bootstrap', '--domain', repoName];
     const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
