@@ -5,10 +5,8 @@ node_js:
 os:
   - linux
   - osx
-before_script:
-  - npm install -g tape
 script:
   - npm run lint
   - npm run build
   - npm test
-  - tape
+  - npm test:e2e:slow
