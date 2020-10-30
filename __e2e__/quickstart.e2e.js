@@ -33,6 +33,7 @@ describe('prismic quickstart [--folder | --template | --new]', () => {
     '--domain', repoName,
     '--template', 'NodeJS',
     '--noconfirm',
+    '--skip-install',
   ];
 
   it('should initialize a project and repository', () => {

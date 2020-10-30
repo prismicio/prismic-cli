@@ -35,6 +35,7 @@ describe('prismic sm --ls', () => {
       '--conf', 'nuxt.config.js',
       '--domain', repoName,
       '--folder', dir,
+      '--skip-install',
     ];
 
     spawnSync(PRISMIC_BIN, themeArgs, { encoding: 'utf8' });

@@ -33,6 +33,7 @@ describe('prismic theme [ --theme-url | --folder | --conf | --template ]', () =>
       '--conf', 'nuxt.config.js',
       '--domain', repoName,
       '--folder', dir,
+      '--skip-install',
     ];
 
     const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8' });
@@ -40,6 +41,6 @@ describe('prismic theme [ --theme-url | --folder | --conf | --template ]', () =>
     // expect(res.stdout).toMatchSnapshot();
 
     expect(fs.existsSync(dir)).toBe(true);
-    // expect(res.status).toBeFalsy();
+    expect(res.status).toBeFalsy();
   });
 });

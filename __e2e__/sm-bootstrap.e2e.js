@@ -36,9 +36,11 @@ describe('prismic sm --bootstrap', () => {
       '--conf', 'nuxt.config.js',
       '--domain', initRepoNamme,
       '--folder', dir,
+      '--skip-install'
     ];
 
     spawnSync(PRISMIC_BIN, initArgs, { encoding: 'utf-8', shell: true });
+
 
     expect(fs.existsSync(dir)).toBe(true);
 

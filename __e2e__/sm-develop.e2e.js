@@ -41,7 +41,7 @@ describe('prismic sm --develop', () => {
     const sliceDir = 'slices';
     const sliceName = 'MySlice';
   
-    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--create-slice', '--local-library', sliceDir, '--slice-name', sliceName], { encoding: 'utf8', shell: true })
+    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--create-slice', '--local-library', sliceDir, '--slice-name', sliceName], { encoding: 'utf8', shell: true });
 
     const outDir = path.resolve(dir, sliceDir, sliceName);
     expect(fs.existsSync(outDir)).toBe(true);
@@ -52,6 +52,5 @@ describe('prismic sm --develop', () => {
 
     const res = spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--develop', '--no-start'], { encoding: 'utf-8', shell: true });
     expect(res.stdout).toBeTruthy();
-    expect(res.stderr).toBeFalsy();
   });
 });

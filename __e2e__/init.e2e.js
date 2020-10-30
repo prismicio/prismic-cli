@@ -24,6 +24,7 @@ describe('prismic init', () => {
     '--domain', repoName,
     '--template', 'NodeJS',
     '--noconfirm',
+    '--skip-install',
   ];
 
   beforeAll(async () => {

@@ -35,6 +35,7 @@ describe('prismic new', () => {
       '--folder', dir,
       '--template',
       'NodeJS',
+      '--skip-install',
     ];
     const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8', shell: true });
     const config = path.resolve(dir, 'prismic-configuration.js');

@@ -34,19 +34,18 @@ describe('prismic sm --setup [ --no-prismic | --library | --lib | --local-path ]
       '--conf', 'nuxt.config.js',
       '--domain', repoName,
       '--folder', dir,
+      '--no-install',
     ];
 
     spawnSync(PRISMIC_BIN, themeArgs, { encoding: 'utf8' });
     expect(fs.existsSync(dir)).toBe(true);
 
-    const args = ['sm', '--setup', '--domain', repoName ]
+    const args = ['sm', '--setup', '--domain', repoName];
     const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
     const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
     const smfile = path.resolve(dir, 'sm.json');
 
     expect(fs.existsSync(smfile)).toBe(true);
-
     expect(res.stdout).toBeTruthy();
-    // expect(res.status).toBeFalsy();
   });
 });
