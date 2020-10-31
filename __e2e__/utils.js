@@ -36,9 +36,15 @@ function genRepoName(repoName) {
   const email = process.env.PRISMIC_EMAIL || '';
   const name = email.slice(0, email.indexOf('@'));
   const sufix = name.replace(/\W/g,'');
-  return `${repoName}-${sufix}`;
+  const base = process.env.PRISMIC_BASE ? getDomainName(process.env.PRISMIC_BASE) : 'test'; 
+  return `${repoName}-${sufix}-${base}`;;
 }
 
+function getDomainName(str) {
+  const url = new URL(str);
+  const [ domain ] = url.hostname.split('.'); 
+  return domain;
+}
 async function deleteRepo(repoName) {
   const confPath = path.resolve(os.homedir(), '.prismic');
 
