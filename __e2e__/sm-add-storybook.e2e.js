@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const { spawnSync } = require('child_process');
+
 const {
   login,
   changeBase,
@@ -26,30 +27,26 @@ describe('prismic sm --add-storybook', () => {
   beforeAll(async () => {
     changeBase();
     login();
-    await deleteRepo(repoName);
-    return rmdir(dir, { recursive: true }).finally(() => mkdir(TMP_DIR, { recursive: true }));
+    
+    return rmdir(dir, { recursive: true })
+      .then(() => mkdir(TMP_DIR, { recursive: true }))
+      .then(() => deleteRepo(repoName));
   });
 
-  it('it should add storybook to a nuxt project', () => {
-    const nuxtAnswers = {
-      name: dirName,
-      language: 'JavaScript',
-      pm: 'Npm',
-      ui: 'None',
-      features: [],
-      linter: [],
-      test: 'none',
-      mode: 'universal',
-      target: 'server',
-      devTools: [],
-      ci: 'none',
-      vcs: 'none',
-    };
+  it('should add storybook to a nuxt project', async () => {
 
-    spawnSync(`pushd ${TMP_DIR} && npx create-nuxt-app`, [dirName, '--answers', `'${JSON.stringify(nuxtAnswers)}'`], { encoding: 'utf8', shell: true });
+    const themeArgs = [
+      'theme',
+      '--theme-url', 'https://github.com/prismicio/nuxtjs-blog.git',
+      '--conf', 'nuxt.config.js',
+      '--domain', repoName,
+      '--folder', dir,
+    ];
+   
+    spawnSync(PRISMIC_BIN, themeArgs, { encoding: 'utf8', shell: true });
     expect(fs.existsSync(dir)).toBe(true);
 
-    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--setup', '--domain', repoName], { encoding: 'utf-8', shell: true });
+    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--setup', '--domain', repoName, '--framework', 'nuxt', '--yes'], { encoding: 'utf-8', shell: true });
     const smfile = path.resolve(dir, 'sm.json');
     expect(fs.existsSync(smfile)).toBe(true);
 
@@ -60,11 +57,14 @@ describe('prismic sm --add-storybook', () => {
       '--create-slice',
       '--local-library', sliceDir,
       '--slice-name', sliceName,
+      '--framework', 'nuxt',
     ];
 
-    spawnSync(`pushd ${dir} && npx nuxt telemetry disable && ${PRISMIC_BIN}`, sliceArgs, { encoding: 'utf8', shell: true });
+    spawnSync(`pushd ${dir} && NUXT_TELEMETRY_DISABLED=1 ${PRISMIC_BIN}`, sliceArgs, { encoding: 'utf8', shell: true });
     const outDir = path.resolve(dir, sliceDir, sliceName);
     expect(fs.existsSync(outDir)).toBe(true);
+
+    spawnSync(`pushd ${dir} && npm install --save-dev core-js@3 @babel/runtime-corejs3`, { encoding: 'utf8', shell: true });
 
     const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
     const args = ['sm', '--add-storybook', '--no-start'];
