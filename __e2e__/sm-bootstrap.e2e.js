@@ -14,6 +14,7 @@ const {
 
 
 describe('prismic sm --bootstrap', () => {
+  jest.retryTimes(3);
   jest.setTimeout(300000);
 
   const repoName = genRepoName('cli-sm-bootstrap-test');
@@ -36,21 +37,20 @@ describe('prismic sm --bootstrap', () => {
       '--conf', 'nuxt.config.js',
       '--domain', initRepoNamme,
       '--folder', dir,
-      '--skip-install'
+      '--skip-install',
     ];
 
-    spawnSync(PRISMIC_BIN, initArgs, { encoding: 'utf-8', shell: true });
-
-
+    const theme = spawnSync(PRISMIC_BIN, initArgs, { encoding: 'utf-8', shell: true });
+    expect(theme.stderr).toBeFalsy();
     expect(fs.existsSync(dir)).toBe(true);
 
     const args = ['sm', '--bootstrap', '--domain', repoName];
     const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
-    const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
-    expect(res.stdout).toBeTruthy();
+    const bootstrap = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
+    expect(bootstrap.stdout).toBeTruthy();
     const smfile = path.resolve(dir, 'sm.json');
     
     expect(fs.existsSync(smfile)).toBe(true);
-    // expect(res.status).toBeFalsy();
-  })
+    expect(bootstrap.stderr).toBeFalsy();
+  });
 });

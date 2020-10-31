@@ -8,6 +8,7 @@ const { PRISMIC_BIN, login, changeBase } = require('./utils');
 const PRSIMIC_CONF = path.resolve(os.homedir(), '.prismic');
 
 describe('prismic logout', () => {
+  jest.retryTimes(3);
   beforeAll(() => {
     changeBase();
   });

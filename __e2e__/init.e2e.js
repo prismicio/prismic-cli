@@ -13,6 +13,7 @@ const {
 } = require('./utils');
 
 describe('prismic init', () => {
+  jest.retryTimes(3);
   jest.setTimeout(300000);
 
   const repoName = genRepoName('cli-init-test');
@@ -30,23 +31,22 @@ describe('prismic init', () => {
   beforeAll(async () => {
     changeBase();
     login();
-    await deleteRepo(repoName);
-    await mkdir(TMP_DIR, { recursive: true });
+    await rmdir(dir, { recursive: true }).then(() => mkdir(TMP_DIR, { recursive: true }));
+    return deleteRepo(repoName);
   });
 
-  beforeEach(async () => rmdir(dir, { recursive: true }));
-
-  it('should initialise a project from a template and create a new repo', () => {
+  it('should initialise a project from a template and create a new repo', async () => {
     const res = spawnSync(PRISMIC_BIN, ['init', ...args, '--new'], { encoding: 'utf8', shell: true });
     expect(fs.existsSync(dir)).toBeTruthy();
     expect(res.status).toBeFalsy();
     expect(fs.existsSync(config)).toBe(true);
-  });
 
-  it('should initialise a project from a template with an existing repo', () => {   
-    const res = spawnSync(PRISMIC_BIN, ['init', ...args], { encoding: 'utf8', shell: true });
+    await rmdir(dir, { recursive: true });
+
+    const reuse = spawnSync(PRISMIC_BIN, ['init', ...args], { encoding: 'utf8', shell: true });
     expect(fs.existsSync(dir)).toBeTruthy();
-    expect(res.status).toBeFalsy();
+    expect(reuse.status).toBeFalsy();
     expect(fs.existsSync(config)).toBe(true);
+
   });
 });

@@ -14,6 +14,7 @@ const {
 
 
 describe('prismic sm --add-storybook', () => {
+  jest.retryTimes(3); 
 
   jest.setTimeout(300000);
 

@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const { spawnSync } = require('child_process');
+const { lookpath } = require('lookpath');
 const {
   login,
   changeBase,
@@ -13,6 +14,7 @@ const {
 } = require('./utils');
 
 describe('create next app', () => {
+  jest.retryTimes(3);
   jest.setTimeout(300000);
 
   const repoName = genRepoName('cli-next-app-setup');
@@ -25,8 +27,10 @@ describe('create next app', () => {
     return rmdir(dir, { recursive: true }).finally(() => mkdir(TMP_DIR, { recursive: true }));
   });
 
-  it('should work with create-next-app', () => {
-    const cmd = `npx create-next-app ${dir} && pushd ${dir} && ${PRISMIC_BIN}`;
+  it('should work with create-next-app', async () => {
+    const yarn = await lookpath('yarn');
+
+    const cmd = `${yarn ? 'yarn create next-app' : 'npx create-next-app'} ${dir} && pushd ${dir} && ${PRISMIC_BIN}`;
     const args = ['sm', '--setup', '--domain', repoName];
 
     const smJsonPath = path.resolve(dir, 'sm.json');

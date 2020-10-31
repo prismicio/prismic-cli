@@ -14,7 +14,7 @@ const {
 
 
 describe('prismic sm --ls', () => {
-  // this ccan take 763.515 seconds, theme is a little slow.
+  jest.retryTimes(3);
   jest.setTimeout(300000);
 
   const repoName = genRepoName('cli-sm-ls-test');
@@ -41,10 +41,9 @@ describe('prismic sm --ls', () => {
     spawnSync(PRISMIC_BIN, themeArgs, { encoding: 'utf8' });
     expect(fs.existsSync(dir)).toBe(true);
 
-    const setupArgs = ['sm', '--setup', '--domain', repoName];
-    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, setupArgs, { encoding: 'utf8', shell: true });
+    const setupArgs = ['sm', '--setup', '--domain', repoName, '--yes'];
+    const setup = spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, setupArgs, { encoding: 'utf8', shell: true });
     const smfile = path.resolve(dir, 'sm.json');
-
     expect(fs.existsSync(smfile)).toBe(true);
 
     const args = ['sm', '--ls'];
@@ -52,8 +51,7 @@ describe('prismic sm --ls', () => {
 
     const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
     expect(res.stdout).toBeTruthy();
-    expect(res.stdout).toMatchSnapshot();
-    expect(res.stderr).toMatchSnapshot();
+    expect(res.stderr).toBeFalsy();
     expect(res.status).toBeFalsy();
   });
 });

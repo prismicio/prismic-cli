@@ -13,6 +13,7 @@ const {
 } = require('./utils');
 
 describe('prismic theme [ --theme-url | --folder | --conf | --template ]', () => {
+  jest.retryTimes(3);
   jest.setTimeout(300000);
 
   const repoName = genRepoName('cli-theme-test-two');

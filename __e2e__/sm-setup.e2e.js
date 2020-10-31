@@ -14,6 +14,7 @@ const {
 
 
 describe('prismic sm --setup [ --no-prismic | --library | --lib | --local-path ]', () => {
+  jest.retryTimes(3);
   jest.setTimeout(300000);
 
   const repoName = genRepoName('cli-sm-setup-test');

@@ -14,6 +14,7 @@ const {
 
 
 describe('prismic quickstart [--folder | --template | --new]', () => {
+  jest.retryTimes(3);
   jest.setTimeout(300000);
 
   const repoName = genRepoName('cli-quickstart-test');

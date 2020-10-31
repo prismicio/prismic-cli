@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const { spawnSync } = require('child_process');
+const { lookpath } = require('lookpath');
 const {
   login,
   changeBase,
@@ -13,6 +14,7 @@ const {
 } = require('./utils');
 
 describe('prismic sm --develop', () => {
+  jest.retryTimes(3);
   jest.setTimeout(300000);
 
   const dir = path.resolve(TMP_DIR, 'sm-develop');
@@ -27,8 +29,9 @@ describe('prismic sm --develop', () => {
     });
   });
 
-  it('whole process', () => {
-    const newProjoectCmd = `npx create-next-app ${dir} && pushd ${dir} && ${PRISMIC_BIN}`;
+  it('whole process', async () => {
+    const yarn = await lookpath('yarn');
+    const newProjoectCmd = `${yarn ? 'yarn create next-app' : 'npx create-next-app'} ${dir} && pushd ${dir} && ${PRISMIC_BIN}`;
     const smJsonPath = path.resolve(dir, 'sm.json');
     const smResolverPath = path.resolve(dir, 'sm-resolver.js');
 
@@ -41,7 +44,9 @@ describe('prismic sm --develop', () => {
     const sliceDir = 'slices';
     const sliceName = 'MySlice';
   
-    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--create-slice', '--local-library', sliceDir, '--slice-name', sliceName], { encoding: 'utf8', shell: true });
+    const slices = spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--create-slice', '--local-library', sliceDir, '--slice-name', sliceName], { encoding: 'utf8', shell: true });
+    
+    expect(slices.stderr).toBeFalsy();
 
     const outDir = path.resolve(dir, sliceDir, sliceName);
     expect(fs.existsSync(outDir)).toBe(true);

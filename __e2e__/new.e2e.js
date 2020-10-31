@@ -13,6 +13,7 @@ const {
 } = require('./utils');
 
 describe('prismic new', () => {
+  jest.retryTimes(3);
   jest.setTimeout(300000);
 
   const dir = path.join(TMP_DIR, 'test-new');
@@ -33,9 +34,8 @@ describe('prismic new', () => {
       'new',
       '--domain', repoName,
       '--folder', dir,
-      '--template',
-      'NodeJS',
-      '--skip-install',
+      '--template', 'NodeJS',
+      '--skip-install'
     ];
     const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8', shell: true });
     const config = path.resolve(dir, 'prismic-configuration.js');
