@@ -7,16 +7,12 @@ const { promisify } = require('util');
 const { spawnSync } = require('child_process');
 const { setBase, getBase } = require('../../lib/context');
 
-const npm = require('npm');
+
 const FormData = require('form-data');
 
 const { rmdir, readFile, unlink, mkdir, chmod } = fs.promises;
 
 const { PRISMIC_BIN, CONFIG_PATH, TMP_DIR, RETRY_TIMES } = require('./constants');
-
-const load = promisify(npm.load);
-const run = promisify(npm.run);
-
 
 function isLogedin() {
   if (fs.existsSync(CONFIG_PATH) === false) return false;
@@ -103,8 +99,6 @@ module.exports = {
   rmdir,
   mkdir,
   chmod,
-  load,
-  run,
   login,
   PRISMIC_BIN,
   TMP_DIR,
