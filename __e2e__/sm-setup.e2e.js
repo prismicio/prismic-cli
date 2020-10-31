@@ -10,11 +10,12 @@ const {
   rmdir,
   mkdir,
   genRepoName,
+  RETRY_TIMES,
 } = require('./utils');
 
 
 describe('prismic sm --setup [ --no-prismic | --library | --lib | --local-path ]', () => {
-  jest.retryTimes(3);
+  jest.retryTimes(RETRY_TIMES);
   jest.setTimeout(300000);
 
   const repoName = genRepoName('cli-sm-setup-test');
@@ -29,19 +30,18 @@ describe('prismic sm --setup [ --no-prismic | --library | --lib | --local-path ]
 
   it('should setup an existing project for slicemachine from a theme', () => {
 
-    const themeArgs = [
-      'theme',
-      '--theme-url', 'https://github.com/prismicio/nuxtjs-blog.git',
-      '--conf', 'nuxt.config.js',
+    const initArgs = [
+      'init',
       '--domain', repoName,
       '--folder', dir,
-      '--no-install',
+      '--template', 'NodeJS',
+      '--skip-install',
+      '--new',
     ];
-
-    spawnSync(PRISMIC_BIN, themeArgs, { encoding: 'utf8' });
+    spawnSync(PRISMIC_BIN, initArgs, { encoding: 'utf8' });
     expect(fs.existsSync(dir)).toBe(true);
 
-    const args = ['sm', '--setup', '--domain', repoName];
+    const args = ['sm', '--setup', '--domain', repoName, '--yes', '--framework', 'nuxt'];
     const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
     const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
     const smfile = path.resolve(dir, 'sm.json');

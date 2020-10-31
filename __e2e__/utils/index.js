@@ -5,20 +5,18 @@ const os = require('os');
 const path = require('path');
 const { promisify } = require('util');
 const { spawnSync } = require('child_process');
+const { setBase, getBase } = require('../../lib/context');
 
 const npm = require('npm');
 const FormData = require('form-data');
 
 const { rmdir, readFile, unlink, mkdir, chmod } = fs.promises;
 
+const { PRISMIC_BIN, CONFIG_PATH, TMP_DIR, RETRY_TIMES } = require('./constants');
+
 const load = promisify(npm.load);
 const run = promisify(npm.run);
 
-const PRISMIC_BIN = require.resolve('../bin/prismic');
-
-const CONFIG_PATH = path.resolve(os.homedir(), '.prismic');
-
-const TMP_DIR = path.resolve('__tmp__');
 
 function isLogedin() {
   if (fs.existsSync(CONFIG_PATH) === false) return false;
@@ -48,9 +46,12 @@ function getDomainName(str) {
 async function deleteRepo(repoName) {
   const confPath = path.resolve(os.homedir(), '.prismic');
 
+  if(fs.existsSync(confPath) === false) { login();  }
+
   const conf = fs.readFileSync(confPath, 'utf-8');
   const { base, cookies } = JSON.parse(conf);
-  const { x_xsfr } = cookies.match(/(?:X_XSRF=)(?<x_xsfr>(\w|-)*)/).groups;
+  if(!cookies) { login(); }
+  const { x_xsfr } = JSON.parse(conf).cookies.match(/(?:X_XSRF=)(?<x_xsfr>(\w|-)*)/).groups;
 
   const addr = new URL(base || process.env.PRISMIC_BASE);
 
@@ -76,21 +77,21 @@ async function deleteRepo(repoName) {
 
 function changeBase() {
   const address = process.env.PRISMIC_BASE || 'https://prismic.io'
-  const args = ['base', '--base-url', address];
-  return spawnSync(PRISMIC_BIN, args, { encoding: 'utf-8' });
+  const current = getBase();
+  if (address !== current) { setBase(address); }
 }
 
 function login(email = process.env.PRISMIC_EMAIL, password = process.env.PRISMIC_PASSWORD) {
   if (isLogedin()) {
     return { status: 0, stdout: 'Successfully logged in! You can now create repositories.\n', stderr: '' };
   }
-
   const args = ['login', '--email', email, '--password', password ];
   return spawnSync(PRISMIC_BIN, args, { encoding: 'utf-8' });
 }
 
-function setup() {
-  /* use to set base and login */
+
+
+async function setup() {
   changeBase();
   return login();
 }
@@ -107,6 +108,7 @@ module.exports = {
   login,
   PRISMIC_BIN,
   TMP_DIR,
+  RETRY_TIMES,
   readFile,
   rm: unlink,
   changeBase,

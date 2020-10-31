@@ -11,10 +11,11 @@ const {
   rmdir,
   mkdir,
   genRepoName,
+  RETRY_TIMES,
 } = require('./utils');
 
 describe('prismic sm --develop', () => {
-  jest.retryTimes(3);
+  jest.retryTimes(RETRY_TIMES);
   jest.setTimeout(300000);
 
   const dir = path.resolve(TMP_DIR, 'sm-develop');

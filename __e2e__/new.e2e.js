@@ -10,10 +10,11 @@ const {
   rmdir,
   mkdir,
   genRepoName,
+  RETRY_TIMES,
 } = require('./utils');
 
 describe('prismic new', () => {
-  jest.retryTimes(3);
+  jest.retryTimes(RETRY_TIMES);
   jest.setTimeout(300000);
 
   const dir = path.join(TMP_DIR, 'test-new');
@@ -35,10 +36,12 @@ describe('prismic new', () => {
       '--domain', repoName,
       '--folder', dir,
       '--template', 'NodeJS',
-      '--skip-install'
+      '--skip-install',
     ];
     const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8', shell: true });
     const config = path.resolve(dir, 'prismic-configuration.js');
+    expect(res.stderr).toBeFalsy();
+    expect(fs.existsSync(dir)).toBeTruthy();
     expect(fs.existsSync(config)).toBeTruthy();
     // expect(res.stdout).toMatchSnapshot();
     expect(res.status).toBeFalsy();

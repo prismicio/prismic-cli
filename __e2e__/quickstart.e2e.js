@@ -10,11 +10,12 @@ const {
   rmdir,
   mkdir,
   genRepoName,
+  RETRY_TIMES,
 } = require('./utils');
 
 
 describe('prismic quickstart [--folder | --template | --new]', () => {
-  jest.retryTimes(3);
+  jest.retryTimes(RETRY_TIMES);
   jest.setTimeout(300000);
 
   const repoName = genRepoName('cli-quickstart-test');

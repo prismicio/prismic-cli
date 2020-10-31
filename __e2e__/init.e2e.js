@@ -26,6 +26,7 @@ describe('prismic init', () => {
     '--template', 'NodeJS',
     '--noconfirm',
     '--skip-install',
+    '--yes',
   ];
 
   beforeAll(async () => {
@@ -36,9 +37,9 @@ describe('prismic init', () => {
   });
 
   it('should initialise a project from a template and create a new repo', async () => {
-    const res = spawnSync(PRISMIC_BIN, ['init', ...args, '--new'], { encoding: 'utf8', shell: true });
+    const newRepo = spawnSync(PRISMIC_BIN, ['new', ...args], { encoding: 'utf8', shell: true });
     expect(fs.existsSync(dir)).toBeTruthy();
-    expect(res.status).toBeFalsy();
+    expect(newRepo.status).toBeFalsy();
     expect(fs.existsSync(config)).toBe(true);
 
     await rmdir(dir, { recursive: true });

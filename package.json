@@ -13,7 +13,7 @@
     "lint": "eslint lib/**/*.js",
     "lint:fix": "eslint lib/**/*.js --ignore-pattern lib/commands/slicemachine/templates --ignore-pattern lib/commands/slicemachine/storybook-templates --fix",
     "test": "jest",
-    "test:e2e": "npm run build && chmod +x ./bin/prismic.js && jest --testRegex \"/__e2e__/.*.e2e.[jt]sx?$\"",
+    "test:e2e": "npm run build && chmod +x ./bin/prismic.js && jest --testRegex \"/__e2e__/.*.e2e.[jt]sx?$\" --testSequencer='./__e2e__/utils/testSequencer.js'",
     "test:e2e:slow": "npm run build && chmod +x ./bin/prismic.js && jest --runInBand --testRegex \"/__e2e__/.*.e2e.[jt]sx?$\""
   },
   "bin": {
@@ -72,6 +72,7 @@
     "@babel/preset-env": "^7.0.0",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
+    "@jest/test-sequencer": "^26.6.1",
     "babel-eslint": "^9.0.0",
     "babel-jest": "^26.3.0",
     "babel-plugin-syntax-async-functions": "~6.13.0",

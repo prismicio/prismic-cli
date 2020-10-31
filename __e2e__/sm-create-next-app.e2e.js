@@ -11,10 +11,11 @@ const {
   rmdir,
   mkdir,
   genRepoName,
+  RETRY_TIMES,
 } = require('./utils');
 
 describe('create next app', () => {
-  jest.retryTimes(3);
+  jest.retryTimes(RETRY_TIMES);
   jest.setTimeout(300000);
 
   const repoName = genRepoName('cli-next-app-setup');

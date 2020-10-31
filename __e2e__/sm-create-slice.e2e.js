@@ -11,11 +11,12 @@ const {
   rmdir,
   mkdir,
   genRepoName,
+  RETRY_TIMES,
 } = require('./utils');
 
 
 describe('prismic sm --create-slice [ --local-library | --slice-name ]', () => {
-  jest.retryTimes(3);
+  jest.retryTimes(RETRY_TIMES);
   jest.setTimeout(300000);
 
   const repoName = genRepoName('cli-sm-create-slice-test');

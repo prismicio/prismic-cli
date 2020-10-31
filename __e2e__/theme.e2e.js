@@ -10,10 +10,11 @@ const {
   rmdir,
   genRepoName,
   mkdir,
+  RETRY_TIMES,
 } = require('./utils');
 
 describe('prismic theme [ --theme-url | --folder | --conf | --template ]', () => {
-  jest.retryTimes(3);
+  jest.retryTimes(RETRY_TIMES);
   jest.setTimeout(300000);
 
   const repoName = genRepoName('cli-theme-test-two');
