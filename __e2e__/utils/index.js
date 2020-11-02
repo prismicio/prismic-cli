@@ -3,12 +3,11 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { setBase, getBase } = require('../../lib/context');
-const signinWithCredentials = require('../../lib/commands/login').default;
+const { spawnSync } = require('child_process')
 
 const FormData = require('form-data');
 
-const { rmdir, readFile, unlink, mkdir, chmod } = fs.promises;
+const { rmdir, readFile, unlink, mkdir, chmod, writeFile } = fs.promises;
 
 const { PRISMIC_BIN, CONFIG_PATH, TMP_DIR, RETRY_TIMES } = require('./constants');
 
@@ -28,8 +27,9 @@ function genRepoName(repoName) {
   const email = process.env.PRISMIC_EMAIL || '';
   const name = email.slice(0, email.indexOf('@'));
   const sufix = name.replace(/\W/g,'');
+  const randomString = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
   const base = process.env.PRISMIC_BASE ? getDomainName(process.env.PRISMIC_BASE) : 'test'; 
-  return `${repoName}-${sufix}-${base}`;;
+  return `${repoName}-${sufix}-${base}-${randomString}`;;
 }
 
 function getDomainName(str) {
@@ -38,20 +38,16 @@ function getDomainName(str) {
   return domain;
 }
 async function deleteRepo(repoName, retries = 3) {
-  if(fs.existsSync(CONFIG_PATH) === false) {
-    await changeBase().then(() => login());
-  }
 
-  const conf = fs.readFileSync(CONFIG_PATH, 'utf-8');
+  const conf = fs.readFileSync(path.resolve(CONFIG_PATH), 'utf-8');
   const { base, cookies } = JSON.parse(conf);
-  if(!cookies) { login(); }
   const { x_xsfr } = JSON.parse(conf).cookies.match(/(?:X_XSRF=)(?<x_xsfr>(\w|-)*)/).groups;
 
   const addr = new URL(base || process.env.PRISMIC_BASE);
 
   const formData = new FormData();
-  formData.append('confirm', repoName);
-  formData.append('password', process.env.PRISMIC_PASSWORD);
+  formData.append('confirm', repoName.trim());
+  formData.append('password', process.env.PRISMIC_PASSWORD.trim());
 
   return new Promise((resolve, reject) => {
     formData.submit({
@@ -66,9 +62,10 @@ async function deleteRepo(repoName, retries = 3) {
       if (err) return reject(err);
       if(statusCode < 300 || statusCode === 404) return resolve({ statusCode, statusMessage });
       else if(statusCode === 401 && retries) {
-        logout();
-        login();
-        return deleteRepo(repoName, retries - 1);
+        return logout()
+          .then(() => changeBase())
+          .then(() => login())
+          .then(() => deleteRepo(repoName, retries - 1));
       } else if(retries === 0) reject({ statusCode, statusMessage });
     });
   });
@@ -76,28 +73,30 @@ async function deleteRepo(repoName, retries = 3) {
 
 function changeBase() {
   const address = process.env.PRISMIC_BASE || 'https://prismic.io'
-  const current = getBase();
-  if (address !== current) { setBase(address); }
+  const res = spawnSync(PRISMIC_BIN, ['base', '--base-url', address.trim()]);
+  return Promise.resolve(res);
 }
 
 function login(email = process.env.PRISMIC_EMAIL, password = process.env.PRISMIC_PASSWORD, base = process.env.PRISMIC_BASE) {
   if (isLogedin()) {
     return Promise.resolve({ status: 0, stdout: 'Successfully logged in! You can now create repositories.\n', stderr: '' });
   }
-  // const args = ['login', '--email', email, '--password', password ];
-  // return spawnSync(PRISMIC_BIN, args, { encoding: 'utf-8' });
-  return signinWithCredentials(base, email, password);
+  const args = ['login', '--email', email, '--password', password ];
+  const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf-8' });
+  return Promise.resolve(res);
 }
 
 async function logout() {
-  if(fs.existsSync(CONFIG_PATH) === false) return Promise.resolve();
-  return unlink(CONFIG_PATH);
+  return writeFile(CONFIG_PATH, JSON.stringify({
+    base: "",
+    cookies: "",
+  }));
 }
 
 async function setup(repoName) {
   return logout()
-    .then(() => Promise.resolve(changeBase()))
-    .then(() => Promise.resolve(login()))
+    .then(() => changeBase())
+    .then(() => login())
     .then(() => deleteRepo(repoName));
 }
 
