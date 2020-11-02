@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import fs from 'fs';
 import mockConsole from 'jest-mock-console';
 import path from 'path';
@@ -5,18 +6,22 @@ import globby from 'globby';
 import consola from 'consola';
 import slicemachine from '../../lib/commands/slicemachine';
 
+
 describe('slice machine commands', () => {
   describe('help', () => {
     it('should be called by default', () => {
       const restoreConsole = mockConsole();
 
-      const context = { SliceMachine: {} };
+      jest.mock('../../lib/context');
+      const context = require('../../lib/context');
+      Object.assign(context, { SliceMachine: {} });
 
       slicemachine(context);
 
       expect(console.log).toHaveBeenCalled();
 
       restoreConsole();
+      jest.unmock('../../lib/context');
     });
   });
 
