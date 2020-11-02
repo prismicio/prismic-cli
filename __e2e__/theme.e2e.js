@@ -36,8 +36,6 @@ describe('prismic theme [ --theme-url | --folder | --conf | --template ]', () =>
     ];
 
     const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8' });
-    console.log(args.join(' '));
-    console.log(res);
     expect(res.stderr).toBeFalsy();
     expect(res.stdout).toBeTruthy();
     expect(fs.existsSync(dir)).toBe(true);
