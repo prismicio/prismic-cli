@@ -3,10 +3,8 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { promisify } = require('util');
-const { spawnSync } = require('child_process');
 const { setBase, getBase } = require('../../lib/context');
-
+const signinWithCredentials = require('../../lib/commands/login').default;
 
 const FormData = require('form-data');
 
@@ -80,12 +78,13 @@ function changeBase() {
   if (address !== current) { setBase(address); }
 }
 
-function login(email = process.env.PRISMIC_EMAIL, password = process.env.PRISMIC_PASSWORD) {
+function login(email = process.env.PRISMIC_EMAIL, password = process.env.PRISMIC_PASSWORD, base = process.env.PRISMIC_BASE) {
   if (isLogedin()) {
     return { status: 0, stdout: 'Successfully logged in! You can now create repositories.\n', stderr: '' };
   }
-  const args = ['login', '--email', email, '--password', password ];
-  return spawnSync(PRISMIC_BIN, args, { encoding: 'utf-8' });
+  // const args = ['login', '--email', email, '--password', password ];
+  // return spawnSync(PRISMIC_BIN, args, { encoding: 'utf-8' });
+  return signinWithCredentials(base, email, password);
 }
 
 async function logout() {
