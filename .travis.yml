@@ -1,11 +1,14 @@
 language: node_js
 node_js:
-- 12
-- 14
+# - 12
+# - 14
 - node
-os:
-  - linux
-  - osx
+# os:
+#  - linux
+#  - osx
+cache:
+  npm: false
+  
 script:
   - npm run lint
   - npm run build
