@@ -2,7 +2,7 @@ const os = require('os');
 const path = require('path');
 const { existsSync, readFileSync } = require('fs');
 const { spawnSync } = require('child_process');
-const { PRISMIC_BIN, login, changeBase } = require('./utils');
+const { PRISMIC_BIN, changeBase } = require('./utils');
 
 
 const PRSIMIC_CONF = path.resolve(os.homedir(), '.prismic');
@@ -28,10 +28,12 @@ describe('prismic logout', () => {
 describe('prismic login [ --email | --password | --oauthaccesstoken ]', () => {
 
   it('should log a user in', () => {
+    const { PRISMIC_EMAIL, PRISMIC_PASSWORD } = process.env;
     expect(process.env.PRISMIC_EMAIL).toBeDefined();
     expect(process.env.PRISMIC_PASSWORD).toBeDefined();
 
-    const res = login();
+    const args = ['login', '--email', PRISMIC_EMAIL, '--password', PRISMIC_PASSWORD ];
+    const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf-8' });
     expect(res.stdout).toBeTruthy();
     expect(res.stdout).toMatchSnapshot();
     expect(res.stderr).toBeFalsy();
