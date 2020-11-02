@@ -38,7 +38,9 @@ function getDomainName(str) {
   return domain;
 }
 async function deleteRepo(repoName, retries = 3) {
-  if(fs.existsSync(CONFIG_PATH) === false) { login();  }
+  if(fs.existsSync(CONFIG_PATH) === false) {
+    await changeBase().then(() => login());
+  }
 
   const conf = fs.readFileSync(CONFIG_PATH, 'utf-8');
   const { base, cookies } = JSON.parse(conf);
@@ -80,7 +82,7 @@ function changeBase() {
 
 function login(email = process.env.PRISMIC_EMAIL, password = process.env.PRISMIC_PASSWORD, base = process.env.PRISMIC_BASE) {
   if (isLogedin()) {
-    return { status: 0, stdout: 'Successfully logged in! You can now create repositories.\n', stderr: '' };
+    return Promise.resolve({ status: 0, stdout: 'Successfully logged in! You can now create repositories.\n', stderr: '' });
   }
   // const args = ['login', '--email', email, '--password', password ];
   // return spawnSync(PRISMIC_BIN, args, { encoding: 'utf-8' });
