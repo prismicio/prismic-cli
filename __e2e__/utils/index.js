@@ -4,11 +4,9 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { spawnSync } = require('child_process')
-
+const fetch = require('node-fetch').default;
 const FormData = require('form-data');
-
 const { rmdir, readFile, unlink, mkdir, chmod, writeFile } = fs.promises;
-
 const { PRISMIC_BIN, CONFIG_PATH, TMP_DIR, RETRY_TIMES } = require('./constants');
 
 function isLogedin() {
@@ -43,31 +41,30 @@ async function deleteRepo(repoName, retries = 3) {
   const { base, cookies } = JSON.parse(conf);
   const { x_xsfr } = JSON.parse(conf).cookies.match(/(?:X_XSRF=)(?<x_xsfr>(\w|-)*)/).groups;
 
-  const addr = new URL(base || process.env.PRISMIC_BASE);
+  const addr = new URL('/app/settings/delete', base || process.env.PRISMIC_BASE);
+  addr.hostname = `${repoName}.${addr.hostname}`;
+  addr.searchParams.append('_', x_xsfr);
 
   const formData = new FormData();
   formData.append('confirm', repoName.trim());
   formData.append('password', process.env.PRISMIC_PASSWORD.trim());
 
-  return new Promise((resolve, reject) => {
-    formData.submit({
-      hostname: `${repoName}.${addr.host}`,
-      path: `/app/settings/delete?_=${x_xsfr}`,
-      protocol: addr.protocol,
-      headers: {
-        cookie: cookies,
-      },
-    }, (err, res) => {
-      const { statusCode, statusMessage } = res;
-      if (err) return reject(err);
-      if(statusCode < 300 || statusCode === 404) return resolve({ statusCode, statusMessage });
-      else if(statusCode === 401 && retries) {
-        return logout()
-          .then(() => changeBase())
-          .then(() => login())
-          .then(() => deleteRepo(repoName, retries - 1));
-      } else if(retries === 0) reject({ statusCode, statusMessage });
-    });
+  // console.log(`removing ${repoName}`);
+  // console.log(addr.toString());
+  console.log(formData.toString());
+
+
+  return fetch(addr.toString(), {
+    method: 'POST',
+    body: formData,
+    headers: {
+      cookie: cookies,
+      userAgent: 'prismic/cli',
+    },
+  }).then((res) => {
+    // if(res.status === 401 && retries) return login().then(() => deleteRepo(repoName, retries - 1));
+    // fie (res.status < 400 || res.status === 404) return res; 
+    return res;
   });
 }
 
