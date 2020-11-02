@@ -49,11 +49,6 @@ async function deleteRepo(repoName, retries = 3) {
   formData.append('confirm', repoName.trim());
   formData.append('password', process.env.PRISMIC_PASSWORD.trim());
 
-  // console.log(`removing ${repoName}`);
-  // console.log(addr.toString());
-  console.log(formData.toString());
-
-
   return fetch(addr.toString(), {
     method: 'POST',
     body: formData,
