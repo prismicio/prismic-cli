@@ -39,12 +39,10 @@ function getDomainName(str) {
   const [ domain ] = url.hostname.split('.'); 
   return domain;
 }
-async function deleteRepo(repoName) {
-  const confPath = path.resolve(os.homedir(), '.prismic');
+async function deleteRepo(repoName, retries = 3) {
+  if(fs.existsSync(CONFIG_PATH) === false) { login();  }
 
-  if(fs.existsSync(confPath) === false) { login();  }
-
-  const conf = fs.readFileSync(confPath, 'utf-8');
+  const conf = fs.readFileSync(CONFIG_PATH, 'utf-8');
   const { base, cookies } = JSON.parse(conf);
   if(!cookies) { login(); }
   const { x_xsfr } = JSON.parse(conf).cookies.match(/(?:X_XSRF=)(?<x_xsfr>(\w|-)*)/).groups;
@@ -66,7 +64,12 @@ async function deleteRepo(repoName) {
     }, (err, res) => {
       const { statusCode, statusMessage } = res;
       if (err) return reject(err);
-      return resolve({ statusCode, statusMessage });
+      if(statusCode < 300 || statusCode === 404) return resolve({ statusCode, statusMessage });
+      else if(statusCode === 401 && retries) {
+        logout();
+        login();
+        return deleteRepo(repoName, retries - 1);
+      } else if(retries === 0) reject({ statusCode, statusMessage });
     });
   });
 }
@@ -85,11 +88,16 @@ function login(email = process.env.PRISMIC_EMAIL, password = process.env.PRISMIC
   return spawnSync(PRISMIC_BIN, args, { encoding: 'utf-8' });
 }
 
+async function logout() {
+  if(fs.existsSync(CONFIG_PATH) === false) return Promise.resolve();
+  return unlink(CONFIG_PATH);
+}
 
-
-async function setup() {
-  changeBase();
-  return login();
+async function setup(repoName) {
+  return logout()
+    .then(() => Promise.resolve(changeBase()))
+    .then(() => Promise.resolve(login()))
+    .then(() => deleteRepo(repoName));
 }
 
 module.exports = {

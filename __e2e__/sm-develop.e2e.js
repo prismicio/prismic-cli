@@ -3,9 +3,7 @@ const fs = require('fs');
 const { spawnSync } = require('child_process');
 const { lookpath } = require('lookpath');
 const {
-  login,
-  changeBase,
-  deleteRepo,
+  setup,
   TMP_DIR,
   PRISMIC_BIN,
   rmdir,
@@ -22,12 +20,9 @@ describe('prismic sm --develop', () => {
   const repoName = genRepoName('cli-sm-develop');
   
   beforeAll(async () => {
-    changeBase();
-    login();
-    await deleteRepo(repoName);
-    return rmdir(dir, { recursive: true }).finally(() => {
-      mkdir(dir, { recursive: true });
-    });
+    return rmdir(dir, { recursive: true })
+    .then(() => mkdir(TMP_DIR, { recursive: true }))
+    .then(() => setup(repoName));
   });
 
   it('whole process', async () => {

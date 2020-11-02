@@ -3,9 +3,7 @@ const fs = require('fs');
 const { spawnSync } = require('child_process');
 
 const {
-  login,
-  changeBase,
-  deleteRepo,
+  setup,
   TMP_DIR,
   PRISMIC_BIN,
   rmdir,
@@ -25,12 +23,7 @@ describe('prismic sm --add-storybook', () => {
   const dir = path.resolve(TMP_DIR, dirName);
 
   beforeAll(async () => {
-    changeBase();
-    login();
-    
-    return rmdir(dir, { recursive: true })
-      .then(() => mkdir(TMP_DIR, { recursive: true }))
-      .then(() => deleteRepo(repoName));
+    return rmdir(dir, { recursive: true }).then(() => mkdir(TMP_DIR, { recursive: true })).then(() => setup(repoName));
   });
 
   it('should add storybook to a nuxt project', async () => {
@@ -43,10 +36,11 @@ describe('prismic sm --add-storybook', () => {
       '--folder', dir,
     ];
    
-    spawnSync(PRISMIC_BIN, themeArgs, { encoding: 'utf8', shell: true });
+    const theme = spawnSync(PRISMIC_BIN, themeArgs, { encoding: 'utf8', shell: true });
     expect(fs.existsSync(dir)).toBe(true);
 
     spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--setup', '--domain', repoName, '--framework', 'nuxt', '--yes'], { encoding: 'utf-8', shell: true });
+    
     const smfile = path.resolve(dir, 'sm.json');
     expect(fs.existsSync(smfile)).toBe(true);
 

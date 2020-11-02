@@ -2,9 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const { spawnSync } = require('child_process');
 const {
-  login,
-  changeBase,
-  deleteRepo,
+  setup,
   TMP_DIR,
   PRISMIC_BIN,
   rmdir,
@@ -17,14 +15,13 @@ describe('prismic theme [ --theme-url | --folder | --conf | --template ]', () =>
   jest.retryTimes(RETRY_TIMES);
   jest.setTimeout(300000);
 
-  const repoName = genRepoName('cli-theme-test-two');
+  const repoName = genRepoName('cli-theme-test');
   const dir = path.resolve(TMP_DIR, 'theme-test');
 
   beforeAll(async () => {
-    changeBase();
-    login();
-    await deleteRepo(repoName);
-    return rmdir(dir, { recursive: true }).finally(() => mkdir(TMP_DIR, { recursive: true }));
+    return rmdir(dir, { recursive: true })
+    .then(() => mkdir(TMP_DIR, { recursive: true }))
+    .then(() => setup(repoName));
   });
 
 
@@ -39,10 +36,10 @@ describe('prismic theme [ --theme-url | --folder | --conf | --template ]', () =>
     ];
 
     const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8' });
+    console.log(args.join(' '));
+    console.log(res);
+    expect(res.stderr).toBeFalsy();
     expect(res.stdout).toBeTruthy();
-    // expect(res.stdout).toMatchSnapshot();
-
     expect(fs.existsSync(dir)).toBe(true);
-    expect(res.status).toBeFalsy();
   });
 });

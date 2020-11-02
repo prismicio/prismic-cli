@@ -2,9 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const { spawnSync } = require('child_process');
 const {
-  login,
-  changeBase,
-  deleteRepo,
+  setup,
   TMP_DIR,
   PRISMIC_BIN,
   rmdir,
@@ -30,10 +28,9 @@ describe('prismic init', () => {
   ];
 
   beforeAll(async () => {
-    changeBase();
-    login();
-    await rmdir(dir, { recursive: true }).then(() => mkdir(TMP_DIR, { recursive: true }));
-    return deleteRepo(repoName);
+    return rmdir(dir, { recursive: true })
+    .then(() => mkdir(TMP_DIR, { recursive: true }))
+    .then(() => setup(repoName));
   });
 
   it('should initialise a project from a template and create a new repo', async () => {

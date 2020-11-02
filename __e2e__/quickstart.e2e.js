@@ -2,9 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const { spawnSync } = require('child_process');
 const {
-  login,
-  changeBase,
-  deleteRepo,
+  setup,
   TMP_DIR,
   PRISMIC_BIN,
   rmdir,
@@ -22,10 +20,9 @@ describe('prismic quickstart [--folder | --template | --new]', () => {
   const dir = path.join(TMP_DIR, 'quickstart');
 
   beforeAll(async () => {
-    changeBase();
-    login();
-    await deleteRepo(repoName);
-    return rmdir(dir, { recursive: true }).finally(() => mkdir(TMP_DIR, { recursive: true }));
+    return rmdir(dir, { recursive: true })
+    .then(() => mkdir(TMP_DIR, { recursive: true }))
+    .then(() => setup(repoName));
   });
 
 
