@@ -40,7 +40,6 @@ describe('prismic sm --add-storybook', () => {
     expect(fs.existsSync(dir)).toBe(true);
 
     spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--setup', '--domain', repoName, '--framework', 'nuxt', '--yes'], { encoding: 'utf-8', shell: true });
-    
     const smfile = path.resolve(dir, 'sm.json');
     expect(fs.existsSync(smfile)).toBe(true);
 
@@ -61,7 +60,7 @@ describe('prismic sm --add-storybook', () => {
     spawnSync(`pushd ${dir} && npm install --save-dev core-js@3 @babel/runtime-corejs3`, { encoding: 'utf8', shell: true });
 
     const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
-    const args = ['sm', '--add-storybook', '--no-start'];
+    const args = ['sm', '--add-storybook', '--no-start', '--framework', 'nuxt'];
 
     const res = spawnSync(cmd, args, { encoding: 'utf-8', shell: true });
 
