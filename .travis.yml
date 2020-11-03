@@ -3,12 +3,9 @@ node_js:
 # - 12
 # - 14
 - node
-# os:
-#  - linux
-#  - osx
-cache:
-  npm: false
-  
+os:
+  - linux
+  - osx
 script:
   - npm run lint
   - npm run build
