@@ -6,6 +6,10 @@ node_js:
 os:
   - linux
   - osx
+addons:
+  apt:
+    - build-essential
+    - python2.7
 script:
   - npm run lint
   - npm run build
