@@ -16,6 +16,7 @@ describe('prismic sm --ls', () => {
   jest.retryTimes(RETRY_TIMES);
   jest.setTimeout(300000);
 
+  const initRepoName = genRepoName('cli-sm-ls-theme')
   const repoName = genRepoName('cli-sm-ls-test');
   const dir = path.resolve(TMP_DIR, 'sm-ls');
 
@@ -28,18 +29,17 @@ describe('prismic sm --ls', () => {
   it('should list the slices available in a project', () => {
 
     const themeArgs = [
-      'theme',
-      '--theme-url', 'https://github.com/prismicio/nuxtjs-blog.git',
-      '--conf', 'nuxt.config.js',
-      '--domain', repoName,
+      'init',
+      '--domain', initRepoName,
       '--folder', dir,
-      '--skip-install',
+      '--template', 'NodeJS',
+      '--new',
     ];
 
     spawnSync(PRISMIC_BIN, themeArgs, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     expect(fs.existsSync(dir)).toBe(true);
 
-    const setupArgs = ['sm', '--setup', '--domain', repoName, '--yes'];
+    const setupArgs = ['sm', '--setup', '--domain', repoName, '--framework', 'next', '--yes'];
     spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, setupArgs, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     const smfile = path.resolve(dir, 'sm.json');
     expect(fs.existsSync(smfile)).toBe(true);
@@ -47,7 +47,7 @@ describe('prismic sm --ls', () => {
     const args = ['sm', '--ls'];
     const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
 
-    const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true, stdio: 'inherit' });
+    const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
     expect(res.stdout).toBeTruthy();
     expect(res.stderr).toBeFalsy();
     expect(res.status).toBeFalsy();
