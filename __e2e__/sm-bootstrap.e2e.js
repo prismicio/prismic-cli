@@ -38,13 +38,13 @@ describe('prismic sm --bootstrap', () => {
       '--skip-install',
     ];
 
-    const theme = spawnSync(PRISMIC_BIN, initArgs, { encoding: 'utf-8', shell: true });
+    const theme = spawnSync(PRISMIC_BIN, initArgs, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     expect(theme.stderr).toBeFalsy();
     expect(fs.existsSync(dir)).toBe(true);
 
     const args = ['sm', '--bootstrap', '--domain', repoName];
     const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
-    const bootstrap = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
+    const bootstrap = spawnSync(cmd, args, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     expect(bootstrap.stdout).toBeTruthy();
     const smfile = path.resolve(dir, 'sm.json');
     

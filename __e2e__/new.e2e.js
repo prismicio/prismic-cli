@@ -33,7 +33,7 @@ describe('prismic new', () => {
       '--template', 'NodeJS',
       '--skip-install',
     ];
-    const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8', shell: true });
+    const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     const config = path.resolve(dir, 'prismic-configuration.js');
     expect(res.stderr).toBeFalsy();
     expect(fs.existsSync(dir)).toBeTruthy();

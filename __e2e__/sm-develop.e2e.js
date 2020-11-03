@@ -31,7 +31,7 @@ describe('prismic sm --develop', () => {
     const smJsonPath = path.resolve(dir, 'sm.json');
     const smResolverPath = path.resolve(dir, 'sm-resolver.js');
 
-    spawnSync(newProjoectCmd, ['sm', '--setup', '--domain', repoName], { encoding: 'utf-8', shell: true });
+    spawnSync(newProjoectCmd, ['sm', '--setup', '--domain', repoName], { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
     expect(fs.existsSync(dir)).toBe(true);
     expect(fs.existsSync(smJsonPath)).toBe(true);
@@ -40,18 +40,18 @@ describe('prismic sm --develop', () => {
     const sliceDir = 'slices';
     const sliceName = 'MySlice';
   
-    const slices = spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--create-slice', '--local-library', sliceDir, '--slice-name', sliceName], { encoding: 'utf8', shell: true });
+    const slices = spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--create-slice', '--local-library', sliceDir, '--slice-name', sliceName], { encoding: 'utf8', shell: true, stdio: 'inherit' });
     
     expect(slices.stderr).toBeFalsy();
 
     const outDir = path.resolve(dir, sliceDir, sliceName);
     expect(fs.existsSync(outDir)).toBe(true);
 
-    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--add-storybook', '--no-start'], { encoding: 'utf8', shell: true });
+    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--add-storybook', '--no-start'], { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
     expect(fs.existsSync(path.resolve(dir, '.storybook'))).toBe(true);
 
-    const res = spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--develop', '--no-start'], { encoding: 'utf-8', shell: true });
+    const res = spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--develop', '--no-start'], { encoding: 'utf8', shell: true, stdio: 'inherit' });
     expect(res.stdout).toBeTruthy();
   });
 });

@@ -48,13 +48,13 @@ describe('prismic sm --create-slice [ --local-library | --slice-name ]', () => {
     
     const initCmd = `pushd ${TMP_DIR} && ${yarn ? 'yarn create next-app' : 'npx create-next-app'}`;
     
-    spawnSync(initCmd, [dirName, '--answers', `'${JSON.stringify(nuxtAnswers)}'`], { encoding: 'utf8', shell: true });
+    spawnSync(initCmd, [dirName, '--answers', `'${JSON.stringify(nuxtAnswers)}'`], { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
     expect(fs.existsSync(dir)).toBe(true);
 
     const setupCmd = `pushd ${dir} && ${PRISMIC_BIN}`;
     
-    spawnSync(setupCmd, ['sm', '--setup', '--domain', repoName, '--yes'], { encoding: 'utf-8', shell: true });
+    spawnSync(setupCmd, ['sm', '--setup', '--domain', repoName, '--yes'], { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
     const smfile = path.resolve(dir, 'sm.json');
 
@@ -70,7 +70,7 @@ describe('prismic sm --create-slice [ --local-library | --slice-name ]', () => {
     ];
 
     const cmd = `pushd ${dir} && NUXT_TELEMETRY_DISABLED=1 ${PRISMIC_BIN}`;
-    const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
+    const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
     expect(res.stdout).toBeTruthy();
     expect(res.stderr).toBeFalsy();

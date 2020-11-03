@@ -35,12 +35,12 @@ describe('prismic sm --setup [ --no-prismic | --library | --lib | --local-path ]
       '--skip-install',
       '--new',
     ];
-    spawnSync(PRISMIC_BIN, initArgs, { encoding: 'utf8' });
+    spawnSync(PRISMIC_BIN, initArgs, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     expect(fs.existsSync(dir)).toBe(true);
 
     const args = ['sm', '--setup', '--domain', repoName, '--yes', '--framework', 'nuxt'];
     const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
-    const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
+    const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     const smfile = path.resolve(dir, 'sm.json');
 
     expect(fs.existsSync(smfile)).toBe(true);

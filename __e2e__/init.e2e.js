@@ -34,14 +34,14 @@ describe('prismic init', () => {
   });
 
   it('should initialise a project from a template and create a new repo', async () => {
-    const newRepo = spawnSync(PRISMIC_BIN, ['new', ...args], { encoding: 'utf8', shell: true });
+    const newRepo = spawnSync(PRISMIC_BIN, ['new', ...args], { encoding: 'utf8', shell: true, stdio: 'inherit' });
     expect(fs.existsSync(dir)).toBeTruthy();
     expect(newRepo.status).toBeFalsy();
     expect(fs.existsSync(config)).toBe(true);
 
     await rmdir(dir, { recursive: true });
 
-    const reuse = spawnSync(PRISMIC_BIN, ['init', ...args], { encoding: 'utf8', shell: true });
+    const reuse = spawnSync(PRISMIC_BIN, ['init', ...args], { encoding: 'utf8', shell: true, stdio: 'inherit' });
     expect(fs.existsSync(dir)).toBeTruthy();
     expect(reuse.status).toBeFalsy();
     expect(fs.existsSync(config)).toBe(true);

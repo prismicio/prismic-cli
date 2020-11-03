@@ -35,7 +35,7 @@ describe('prismic theme [ --theme-url | --folder | --conf | --template ]', () =>
       '--skip-install',
     ];
 
-    const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8' });
+    const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     expect(res.stderr).toBeFalsy();
     expect(res.stdout).toBeTruthy();
     expect(fs.existsSync(dir)).toBe(true);

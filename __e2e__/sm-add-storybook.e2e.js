@@ -36,10 +36,10 @@ describe('prismic sm --add-storybook', () => {
       '--folder', dir,
     ];
    
-    const theme = spawnSync(PRISMIC_BIN, themeArgs, { encoding: 'utf8', shell: true });
+    const theme = spawnSync(PRISMIC_BIN, themeArgs, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     expect(fs.existsSync(dir)).toBe(true);
 
-    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--setup', '--domain', repoName, '--framework', 'nuxt', '--yes'], { encoding: 'utf-8', shell: true });
+    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--setup', '--domain', repoName, '--framework', 'nuxt', '--yes'], { encoding: 'utf8', shell: true, stdio: 'inherit' });
     const smfile = path.resolve(dir, 'sm.json');
     expect(fs.existsSync(smfile)).toBe(true);
 
@@ -53,7 +53,7 @@ describe('prismic sm --add-storybook', () => {
       '--framework', 'nuxt',
     ];
 
-    spawnSync(`pushd ${dir} && NUXT_TELEMETRY_DISABLED=1 ${PRISMIC_BIN}`, sliceArgs, { encoding: 'utf8', shell: true });
+    spawnSync(`pushd ${dir} && NUXT_TELEMETRY_DISABLED=1 ${PRISMIC_BIN}`, sliceArgs,  { encoding: 'utf8', shell: true, stdio: 'inherit' });
     const outDir = path.resolve(dir, sliceDir, sliceName);
     expect(fs.existsSync(outDir)).toBe(true);
 
@@ -62,7 +62,7 @@ describe('prismic sm --add-storybook', () => {
     const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
     const args = ['sm', '--add-storybook', '--no-start', '--framework', 'nuxt'];
 
-    const res = spawnSync(cmd, args, { encoding: 'utf-8', shell: true });
+    const res = spawnSync(cmd, args,  { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
     expect(res.stdout).toBeTruthy();
     expect(res.status).toBeFalsy();

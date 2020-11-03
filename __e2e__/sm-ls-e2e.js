@@ -36,18 +36,18 @@ describe('prismic sm --ls', () => {
       '--skip-install',
     ];
 
-    spawnSync(PRISMIC_BIN, themeArgs, { encoding: 'utf8' });
+    spawnSync(PRISMIC_BIN, themeArgs, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     expect(fs.existsSync(dir)).toBe(true);
 
     const setupArgs = ['sm', '--setup', '--domain', repoName, '--yes'];
-    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, setupArgs, { encoding: 'utf8', shell: true });
+    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, setupArgs, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     const smfile = path.resolve(dir, 'sm.json');
     expect(fs.existsSync(smfile)).toBe(true);
 
     const args = ['sm', '--ls'];
     const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
 
-    const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
+    const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     expect(res.stdout).toBeTruthy();
     expect(res.stderr).toBeFalsy();
     expect(res.status).toBeFalsy();
