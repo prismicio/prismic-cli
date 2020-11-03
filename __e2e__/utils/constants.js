@@ -7,4 +7,4 @@ export const CONFIG_PATH = path.resolve(os.homedir(), '.prismic');
 
 export const TMP_DIR = path.resolve('__tmp__');
 
-export const RETRY_TIMES = 5;
+export const RETRY_TIMES = 0;
