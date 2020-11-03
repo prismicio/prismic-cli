@@ -18,7 +18,7 @@ describe('prismic sm --add-storybook', () => {
 
   jest.setTimeout(300000);
 
-  const repoName = genRepoName('cli-sm-storybood-test');
+  const repoName = genRepoName('cli-sm-storybook-test');
   const dirName = 'sm-add-storybook'
   const dir = path.resolve(TMP_DIR, dirName);
 
