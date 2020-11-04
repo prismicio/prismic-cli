@@ -14,11 +14,10 @@ describe('prismic logout', () => {
   });
 
   it('should log the user out', () => {
-    const { stdout, status } = spawnSync(PRISMIC_BIN, ['logout'], { encoding: 'utf8'});
-    expect(stdout).toMatchSnapshot();
+    const { stdout, status } = spawnSync(PRISMIC_BIN, ['logout'], { encoding: 'utf8', shell: true});
     expect(status).toBeFalsy();
 
-    const configFile = readFileSync(PRSIMIC_CONF, { encoding: 'utf8', shell: true, stdio: 'inherit' })
+    const configFile = readFileSync(PRSIMIC_CONF, 'utf-8')
     const { cookies } = JSON.parse(configFile);
     expect(cookies).toBeDefined();
     expect(cookies).toBeFalsy();
@@ -33,15 +32,14 @@ describe('prismic login [ --email | --password | --oauthaccesstoken ]', () => {
     expect(process.env.PRISMIC_PASSWORD).toBeDefined();
 
     const args = ['login', '--email', PRISMIC_EMAIL, '--password', PRISMIC_PASSWORD ];
-    const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8', shell: true, stdio: 'inherit' });
+    const res = spawnSync(PRISMIC_BIN, args, { encoding: 'utf8', shell: true });
     expect(res.stdout).toBeTruthy();
-    expect(res.stdout).toMatchSnapshot();
     expect(res.stderr).toBeFalsy();
     expect(res.status).toBeFalsy();
     expect(existsSync(PRSIMIC_CONF)).toBe(true);
 
 
-    const configFile = readFileSync(PRSIMIC_CONF, { encoding: 'utf8', shell: true, stdio: 'inherit' });
+    const configFile = readFileSync(PRSIMIC_CONF, 'utf-8');
     const { cookies } = JSON.parse(configFile);
     expect(cookies).toBeTruthy();
   });
