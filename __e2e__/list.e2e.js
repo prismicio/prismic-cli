@@ -3,7 +3,7 @@ const { PRISMIC_BIN } = require('./utils');
 
 describe('prismic list', () => {
   it('should list the available templates', () => {
-    const { stdout, stderr } = spawnSync(PRISMIC_BIN, ['list'], { encoding: 'utf8', shell: true, stdio: 'inherit' });
+    const { stdout, stderr } = spawnSync(PRISMIC_BIN, ['list'], { encoding: 'utf8', shell: true });
     expect(stdout.includes('NodeJS')).toBe(true);
     expect(stdout.includes('React')).toBe(true);
     expect(stdout.includes('Angular2')).toBe(true);
