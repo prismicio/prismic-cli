@@ -15,8 +15,5 @@ describe('prismic base', () => {
     const { base } = JSON.parse(configFile);
 
     expect(base).toBe(address);
-    expect(res.stderr).toBeFalsy();
-    expect(res.stdout).toBeTruthy();
-    expect(res.status).toBe(0);
   });
 });
