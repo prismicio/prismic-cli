@@ -70,10 +70,7 @@ describe('prismic sm --create-slice [ --local-library | --slice-name ]', () => {
     ];
 
     const cmd = `pushd ${dir} && NUXT_TELEMETRY_DISABLED=1 ${PRISMIC_BIN}`;
-    const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true, stdio: 'inherit' });
-
-    expect(res.stdout).toBeTruthy();
-    expect(res.stderr).toBeFalsy();
+    spawnSync(cmd, args, { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
     const outDir = path.resolve(dir, sliceDir, sliceName);
     expect(fs.existsSync(outDir)).toBe(true);
