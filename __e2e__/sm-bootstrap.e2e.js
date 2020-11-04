@@ -48,7 +48,6 @@ describe('prismic sm --bootstrap', () => {
     expect(bootstrap.stdout).toBeTruthy();
     const smfile = path.resolve(dir, 'sm.json');
     
-    expect(fs.existsSync(smfile)).toBe(true);
-    expect(bootstrap.stderr).toBeFalsy();
+    expect(fs.existsSync(smfile)).toBe(true)
   });
 });
