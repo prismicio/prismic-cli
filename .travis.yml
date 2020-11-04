@@ -10,6 +10,8 @@ addons:
   apt:
     - build-essential
     - python2.7
+before_install:
+  - SHELL = /bin/bash
 script:
   - npm run lint
   - npm run build
