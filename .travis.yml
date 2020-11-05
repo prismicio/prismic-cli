@@ -4,7 +4,7 @@ node_js:
 # - 14
 - node
 os:
- # - linux
+  - linux
   - osx
 addons:
   apt:
