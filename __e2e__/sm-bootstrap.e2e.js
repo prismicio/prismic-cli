@@ -43,7 +43,7 @@ describe('prismic sm --bootstrap', () => {
     expect(fs.existsSync(dir)).toBe(true);
 
     const args = ['sm', '--bootstrap', '--domain', repoName];
-    const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
+    const cmd = `cd ${dir} && ${PRISMIC_BIN}`;
     const bootstrap = spawnSync(cmd, args, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     const smfile = path.resolve(dir, 'sm.json');
     

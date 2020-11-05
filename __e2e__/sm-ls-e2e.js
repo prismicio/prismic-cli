@@ -40,12 +40,12 @@ describe('prismic sm --ls', () => {
     expect(fs.existsSync(dir)).toBe(true);
 
     const setupArgs = ['sm', '--setup', '--domain', repoName, '--framework', 'next', '--yes'];
-    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, setupArgs, { encoding: 'utf8', shell: true, stdio: 'inherit' });
+    spawnSync(`cd ${dir} && ${PRISMIC_BIN}`, setupArgs, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     const smfile = path.resolve(dir, 'sm.json');
     expect(fs.existsSync(smfile)).toBe(true);
 
     const args = ['sm', '--ls'];
-    const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
+    const cmd = `cd ${dir} && ${PRISMIC_BIN}`;
 
     const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
     expect(res.stdout).toBeTruthy();

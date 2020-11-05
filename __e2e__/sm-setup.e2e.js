@@ -40,7 +40,7 @@ describe('prismic sm --setup [ --no-prismic | --library | --lib | --local-path ]
     expect(fs.existsSync(dir)).toBe(true);
 
     const args = ['sm', '--setup', '--domain', repoName, '--yes', '--framework', 'nuxt'];
-    const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
+    const cmd = `cd ${dir} && ${PRISMIC_BIN}`;
     const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     const smfile = path.resolve(dir, 'sm.json');
 

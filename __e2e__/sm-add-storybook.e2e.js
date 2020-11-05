@@ -45,13 +45,13 @@ describe('prismic sm --add-storybook', () => {
       vcs: 'none',
     };
     
-    const initCmd = `pushd ${TMP_DIR} && ${yarn ? 'yarn create next-app' : 'npx create-next-app'}`;
+    const initCmd = `cd ${TMP_DIR} && ${yarn ? 'yarn create next-app' : 'npx create-next-app'}`;
     
     spawnSync(initCmd, [dirName, '--answers', `'${JSON.stringify(nextAnswers)}'`], { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
     expect(fs.existsSync(dir)).toBe(true);
 
-    const setupCmd = `pushd ${dir} && ${PRISMIC_BIN}`;
+    const setupCmd = `cd ${dir} && ${PRISMIC_BIN}`;
     
     spawnSync(setupCmd, ['sm', '--setup', '--domain', repoName, '--yes'], { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
@@ -68,15 +68,15 @@ describe('prismic sm --add-storybook', () => {
       '--slice-name', sliceName,
     ];
 
-    const sliceCmd = `pushd ${dir} && ${PRISMIC_BIN}`;
+    const sliceCmd = `cd ${dir} && ${PRISMIC_BIN}`;
     spawnSync(sliceCmd, sliceArgs, { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
     const outDir = path.resolve(dir, sliceDir, sliceName);
     expect(fs.existsSync(outDir)).toBe(true);
 
-    spawnSync(`pushd ${dir} && npm install --save-dev core-js@3 @babel/runtime-corejs3`, { encoding: 'utf8', shell: true,  stdio: 'inherit' });
+    spawnSync(`cd ${dir} && npm install --save-dev core-js@3 @babel/runtime-corejs3`, { encoding: 'utf8', shell: true,  stdio: 'inherit' });
 
-    const cmd = `pushd ${dir} && ${PRISMIC_BIN}`;
+    const cmd = `cd ${dir} && ${PRISMIC_BIN}`;
     const args = ['sm', '--add-storybook', '--no-start', '--framework', 'next'];
 
     spawnSync(cmd, args,  { encoding: 'utf8', shell: true, stdio: 'inherit' });

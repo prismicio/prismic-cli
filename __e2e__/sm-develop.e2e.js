@@ -45,7 +45,7 @@ describe('prismic sm --develop', () => {
       vcs: 'none',
     };
     
-    const initCmd = `pushd ${TMP_DIR} && ${yarn ? 'yarn create next-app' : 'npx create-next-app'}`;
+    const initCmd = `cd ${TMP_DIR} && ${yarn ? 'yarn create next-app' : 'npx create-next-app'}`;
     
     spawnSync(initCmd, [dirName, '--answers', `'${JSON.stringify(nextAnswers)}'`], { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
@@ -54,7 +54,7 @@ describe('prismic sm --develop', () => {
     const smJsonPath = path.resolve(dir, 'sm.json');
     const smResolverPath = path.resolve(dir, 'sm-resolver.js');
 
-    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--setup', '--domain', repoName], { encoding: 'utf8', shell: true, stdio: 'inherit' });
+    spawnSync(`cd ${dir} && ${PRISMIC_BIN}`, ['sm', '--setup', '--domain', repoName], { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
     expect(fs.existsSync(smJsonPath)).toBe(true);
     expect(fs.existsSync(smResolverPath)).toBe(true);
@@ -68,16 +68,16 @@ describe('prismic sm --develop', () => {
       '--slice-name', sliceName,
     ];
   
-    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, sliceArgs, { encoding: 'utf8', shell: true, stdio: 'inherit' });
+    spawnSync(`cd ${dir} && ${PRISMIC_BIN}`, sliceArgs, { encoding: 'utf8', shell: true, stdio: 'inherit' });
     
     const outDir = path.resolve(dir, sliceDir, sliceName);
     expect(fs.existsSync(outDir)).toBe(true);
 
-    spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--add-storybook', '--no-start'], { encoding: 'utf8', shell: true, stdio: 'inherit' });
+    spawnSync(`cd ${dir} && ${PRISMIC_BIN}`, ['sm', '--add-storybook', '--no-start'], { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
     expect(fs.existsSync(path.resolve(dir, '.storybook'))).toBe(true);
 
-    const res = spawnSync(`pushd ${dir} && ${PRISMIC_BIN}`, ['sm', '--develop', '--no-start'], { encoding: 'utf8', shell: true });
+    const res = spawnSync(`cd ${dir} && ${PRISMIC_BIN}`, ['sm', '--develop', '--no-start'], { encoding: 'utf8', shell: true });
     expect(res.stdout).toBeTruthy();
   });
 });

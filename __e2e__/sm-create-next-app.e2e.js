@@ -28,7 +28,7 @@ describe('create next app', () => {
   it('should work with create-next-app', async () => {
     const yarn = await lookpath('yarn');
 
-    const cmd = `${yarn ? 'yarn create next-app' : 'npx create-next-app'} ${dir} && pushd ${dir} && ${PRISMIC_BIN}`;
+    const cmd = `${yarn ? 'yarn create next-app' : 'npx create-next-app'} ${dir} && cd ${dir} && ${PRISMIC_BIN}`;
     const args = ['sm', '--setup', '--domain', repoName, '--framework', 'next', '--yes'];
 
     const smJsonPath = path.resolve(dir, 'sm.json');

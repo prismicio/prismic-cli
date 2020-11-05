@@ -46,13 +46,13 @@ describe('prismic sm --create-slice [ --local-library | --slice-name ]', () => {
       vcs: 'none',
     };
     
-    const initCmd = `pushd ${TMP_DIR} && ${yarn ? 'yarn create next-app' : 'npx create-next-app'}`;
+    const initCmd = `cd ${TMP_DIR} && ${yarn ? 'yarn create next-app' : 'npx create-next-app'}`;
     
     spawnSync(initCmd, [dirName, '--answers', `'${JSON.stringify(nuxtAnswers)}'`], { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
     expect(fs.existsSync(dir)).toBe(true);
 
-    const setupCmd = `pushd ${dir} && ${PRISMIC_BIN}`;
+    const setupCmd = `cd ${dir} && ${PRISMIC_BIN}`;
     
     spawnSync(setupCmd, ['sm', '--setup', '--domain', repoName, '--yes'], { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
@@ -69,7 +69,7 @@ describe('prismic sm --create-slice [ --local-library | --slice-name ]', () => {
       '--slice-name', sliceName,
     ];
 
-    const cmd = `pushd ${dir} && NUXT_TELEMETRY_DISABLED=1 ${PRISMIC_BIN}`;
+    const cmd = `cd ${dir} && NUXT_TELEMETRY_DISABLED=1 ${PRISMIC_BIN}`;
     spawnSync(cmd, args, { encoding: 'utf8', shell: true, stdio: 'inherit' });
 
     const outDir = path.resolve(dir, sliceDir, sliceName);
