@@ -11,7 +11,6 @@ const {
   genRepoName,
   RETRY_TIMES,
 } = require('./utils');
-const { dirname } = require('path');
 
 describe('prismic sm --develop', () => {
   jest.retryTimes(RETRY_TIMES);
@@ -21,11 +20,9 @@ describe('prismic sm --develop', () => {
   const dir = path.resolve(TMP_DIR, dirName);
   const repoName = genRepoName('cli-sm-develop');
   
-  beforeAll(async () => {
-    return rmdir(dir, { recursive: true })
+  beforeAll(async () => rmdir(dir, { recursive: true })
     .then(() => mkdir(TMP_DIR, { recursive: true }))
-    .then(() => setup(repoName));
-  });
+    .then(() => setup(repoName)));
 
   it('whole process', async () => {
     const yarn = await lookpath('yarn');
