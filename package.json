@@ -1,109 +1,66 @@
 {
   "name": "prismic-cli",
-  "description": "Command line to bootstrap prismic projects.",
+  "description": "Command line tool to bootstrap prismic projects.",
   "version": "3.8.3",
   "author": "prismic.io developers",
-  "license": "Apache-2.0",
-  "scripts": {
-    "build": "babel ./lib/ -d ./bin/ --copy-files --ignore lib/commands/slicemachine/templates,lib/commands/slicemachine/storybook-templates",
-    "prebuild": "rimraf bin && mkdirp bin",
-    "release": "standard-version",
-    "watch": "npm run prebuild & nodemon --watch ./lib --exec \"npm run lint:fix & npm run build\"",
-    "prepublish": "npm run prebuild && npm run build",
-    "lint": "eslint \"lib/**/*.js\"",
-    "lint:fix": "npm run lint -- --ignore-pattern lib/commands/slicemachine/templates --ignore-pattern lib/commands/slicemachine/storybook-templates --fix",
-    "test": "jest",
-    "test:e2e": "npm run build && chmod +x ./bin/prismic.js && jest --testRegex \"/__e2e__/.*.e2e.[jt]sx?$\"",
-    "test:e2e:slow": "npm run build && chmod +x ./bin/prismic.js && jest --runInBand --testRegex \"/__e2e__/.*.e2e.[jt]sx?$\""
-  },
   "bin": {
-    "prismic": "bin/prismic.js"
+    "prismic": "./bin/run"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/prismicio/prismic-cli.git"
-  },
-  "bugs": {
-    "url": "https://github.com/prismicio/prismic-cli/issues"
-  },
-  "homepage": "https://github.com/prismicio/prismic-cli#readme",
-  "preferGlobal": true,
+  "contributors": [
+    "Marc McIntosh <marcmcintosh1987@gmail.com>"
+  ],
+  "bugs": "https://github.com/prismicio/prismic-cli/issues",
   "dependencies": {
-    "@babel/runtime-corejs2": "^7.0.0",
-    "@prismicio/babel-transform-config": "0.0.6",
-    "@sentry/node": "^5.11.1",
-    "adm-zip": "^0.4.13",
-    "cli-clear": "^1.0.4",
-    "command-line-commands": "~2.0.1",
-    "command-line-usage": "~5.0.4",
-    "consola": "^2.11.3",
-    "copy-template-dir": "^1.4.0",
-    "deep-equal": "^1.1.0",
-    "deepmerge": "^4.2.2",
-    "globby": "^11.0.0",
-    "inquirer": "~5.2.0",
-    "is-valid-path": "^0.1.1",
-    "jest-fetch-mock": "^3.0.3",
-    "lodash.get": "^4.4.2",
-    "lodash.merge": "^4.6.2",
-    "lodash.set": "^4.3.2",
-    "mustache": "^3.1.0",
-    "node-fetch": "^2.6.1",
-    "open": "^7.0.0",
-    "ora": "^4.0.3",
-    "prismic.io": "~3.6.1",
-    "ramda": "^0.26.1",
-    "request": "~2.85.0",
-    "semver": "^7.3.2",
-    "shelljs": "^0.8.4",
-    "slash": "^3.0.0",
-    "sm-commons": "0.0.21",
-    "tmp": "~0.0.33",
-    "url-join": "^4.0.1",
-    "vue-docgen-api": "^3.25.0"
+    "@oclif/command": "^1",
+    "@oclif/config": "^1",
+    "@oclif/plugin-help": "^3",
+    "tslib": "^1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-    "@babel/plugin-transform-regenerator": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.0.0",
-    "@babel/polyfill": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "@commitlint/cli": "^11.0.0",
-    "@commitlint/config-conventional": "^11.0.0",
-    "@jest/test-sequencer": "^26.6.1",
-    "babel-eslint": "^9.0.0",
-    "babel-jest": "^26.3.0",
-    "babel-plugin-syntax-async-functions": "~6.13.0",
-    "babel-watch": "~2.0.7",
-    "dotenv": "^8.2.0",
-    "eslint": "^7.12.1",
-    "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jest": "^24.0.2",
-    "form-data": "^3.0.0",
-    "husky": "^4.3.0",
-    "jest": "^26.4.2",
-    "jest-circus": "^26.6.1",
-    "jest-mock-console": "^1.0.1",
-    "lookpath": "^1.1.0",
-    "mkdirp": "^1.0.3",
-    "rimraf": "^3.0.2",
-    "standard-version": "^9.0.0"
+    "@oclif/dev-cli": "^1",
+    "@oclif/test": "^1",
+    "@types/chai": "^4",
+    "@types/mocha": "^5",
+    "@types/node": "^10",
+    "chai": "^4",
+    "eslint": "^5.13",
+    "eslint-config-oclif": "^3.1",
+    "eslint-config-oclif-typescript": "^0.1",
+    "globby": "^10",
+    "mocha": "^5",
+    "nyc": "^14",
+    "ts-node": "^8",
+    "typescript": "^3.3"
   },
   "engines": {
-    "node": ">= 10.0.0",
-    "npm": ">= 3.0.0"
+    "node": ">=8.0.0"
   },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "homepage": "https://github.com/prismicio/prismic-cli",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "Apache-2.0",
+  "main": "lib/index.js",
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "prismic",
+    "plugins": [
+      "@oclif/plugin-help"
     ]
-  }
+  },
+  "repository": "prismicio/prismic-cli",
+  "scripts": {
+    "postpack": "rm -f oclif.manifest.json",
+    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "types": "lib/index.d.ts"
 }

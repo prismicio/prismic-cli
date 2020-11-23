@@ -1,17 +1,11 @@
 language: node_js
 node_js:
-# - 12
-# - 14
-- node
-os:
-  - linux
-  - osx
-addons:
-  apt:
-    - build-essential
-    - python2.7
+  - node
+
+cache: yarn
+
 script:
-  - npm run lint
-  - npm run build
-#  - npm test ## some error in travis?
-  - npm run test:e2e:slow
+  - ./bin/run --version
+  - ./bin/run --help
+  - yarn run test
+

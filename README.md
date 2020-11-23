@@ -1,39 +1,66 @@
-# Prismic Command Line for Javascript
+prismic-cli
+===========
 
-[![npm version](https://badge.fury.io/js/prismic-cli.svg)](http://badge.fury.io/js/prismic-cli)
-[![Build Status](https://api.travis-ci.org/prismicio/prismic-cli.png)](https://travis-ci.org/prismicio/prismic-cli)
+Command line tool to bootstrap prismic projects.
 
-This is a command line tool to bootstrap Javascript project using [prismic.io](https://prismic.io). Currently it can be used to bootstrap projects based on:
+[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+[![Version](https://img.shields.io/npm/v/prismic-cli.svg)](https://npmjs.org/package/prismic-cli)
+[![Downloads/week](https://img.shields.io/npm/dw/prismic-cli.svg)](https://npmjs.org/package/prismic-cli)
+[![License](https://img.shields.io/npm/l/prismic-cli.svg)](https://github.com/prismicio/prismic-cli/blob/master/package.json)
 
-* [NodeJS](https://nodejs.org/) ([ExpressJS](https://expressjs.com/))
-* [ReactJS](https://facebook.github.io/react/)
-* [Angular 2.0](https://angular.io/)
-* [NuxtJS](https://nuxtjs.org/)
+<!-- toc -->
+* [Usage](#usage)
+* [Commands](#commands)
+<!-- tocstop -->
+# Usage
+<!-- usage -->
+```sh-session
+$ npm install -g prismic-cli
+$ prismic COMMAND
+running command...
+$ prismic (-v|--version|version)
+prismic-cli/3.8.3 darwin-x64 node-v15.0.1
+$ prismic --help [COMMAND]
+USAGE
+  $ prismic COMMAND
+...
+```
+<!-- usagestop -->
+# Commands
+<!-- commands -->
+* [`prismic hello [FILE]`](#prismic-hello-file)
+* [`prismic help [COMMAND]`](#prismic-help-command)
 
-It is meant to install globally:
+## `prismic hello [FILE]`
 
 ```
-npm install -g prismic-cli
+USAGE
+  $ prismic hello [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+
+EXAMPLE
+  $ prismic hello
+  hello world from ./src/hello.ts!
 ```
 
-## Usage
+_See code: [src/commands/hello.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/hello.ts)_
 
-Just type `prismic` without any argument to read the manual.
+## `prismic help [COMMAND]`
 
-### Examples
-
-Create a new project on the 'foobar' repository:
 ```
-prismic init foobar
+USAGE
+  $ prismic help [COMMAND]
+
+ARGUMENTS
+  COMMAND  command to show help for
+
+OPTIONS
+  --all  see all commands in CLI
 ```
 
-Create a new NodeJS project on the 'foobar' repository, in the 'foobar' folder (non-interactive) 
-```
-prismic init foobar --folder foobar --template NodeJS
-```
-
-## More information
-
-Once your project is bootstrapped, you can find more information about developing with prismic.io in the [documentation](http://prismic.io/docs).
-
-All templates rely on the same [Javascript kit](https://github.com/prismicio/javascript-kit).
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+<!-- commandsstop -->
