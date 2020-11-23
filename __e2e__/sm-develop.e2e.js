@@ -75,6 +75,6 @@ describe('prismic sm --develop', () => {
     expect(fs.existsSync(path.resolve(dir, '.storybook'))).toBe(true);
 
     const res = spawnSync(`cd ${dir} && ${PRISMIC_BIN}`, ['sm', '--develop', '--no-start'], { encoding: 'utf8', shell: true });
-    expect(res.stdout).toBeTruthy();
+    expect(res.stderr).toBeFalsy();
   });
 });
