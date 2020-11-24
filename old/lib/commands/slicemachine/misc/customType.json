@@ -1,0 +1,151 @@
+[
+  {
+    "id": "home",
+    "label": "home",
+    "repeatable": false,
+    "value": {
+      "Main": {
+        "title": {
+          "type": "StructuredText",
+          "config": {
+            "single": "heading1, heading2, heading3, heading4, heading5, heading6",
+            "label": "title"
+          }
+        },
+        "body": {
+          "type": "Slices",
+          "fieldset": "Slice zone",
+          "config": {
+            "choices": {
+              "quote": {
+                "type": "Slice",
+                "fieldset": "Quote",
+                "description": "A short quote with author's portrait",
+                "icon": "add_alert",
+                "non-repeat": {
+                  "quote": {
+                    "type": "StructuredText",
+                    "config": {
+                      "single": "em",
+                      "label": "Quote",
+                      "placeholder": "Your quote"
+                    }
+                  },
+                  "name_of_the_author": {
+                    "type": "StructuredText",
+                    "config": {
+                      "multi": "paragraph",
+                      "label": "Name of the author",
+                      "placeholder": "John Doe"
+                    }
+                  },
+                  "portrait_author": {
+                    "type": "Image",
+                    "config": {
+                      "constraint": {
+                        "width": 700,
+                        "height": 700
+                      },
+                      "thumbnails": [
+                        {
+                          "name": "mobile",
+                          "width": 350,
+                          "height": 350
+                        }
+                      ],
+                      "label": "Portrait Author"
+                    }
+                  }
+                },
+                "repeat": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "posts",
+    "label": "posts",
+    "repeatable": true,
+    "value": {
+      "Main": {
+        "title": {
+          "type": "StructuredText",
+          "config": {
+            "single": "heading1, heading2, heading3, heading4, heading5, heading6",
+            "label": "title"
+          }
+        },
+        "richt": {
+          "type": "StructuredText",
+          "config": {
+            "multi": "paragraph, preformatted, heading1, heading2, heading3, heading4, heading5, heading6, strong, em, hyperlink, image, embed, list-item, o-list-item, o-list-item",
+            "label": "richt"
+          }
+        },
+        "body": {
+          "type": "Slices",
+          "fieldset": "Slice zone",
+          "config": {
+            "choices": {
+              "banner_with_caption": {
+                "type": "Slice",
+                "fieldset": "Banner with caption",
+                "description": "Banner with caption and button",
+                "icon": "chrome_reader_mode",
+                "non-repeat": {
+                  "image_banner": {
+                    "type": "Image",
+                    "config": {
+                      "constraint": {
+                        "width": null,
+                        "height": null
+                      },
+                      "thumbnails": [],
+                      "label": "Image Banner"
+                    }
+                  },
+                  "title_of_banner": {
+                    "type": "StructuredText",
+                    "config": {
+                      "multi": "heading2",
+                      "label": "Title Of banner",
+                      "placeholder": "My title of banner"
+                    }
+                  },
+                  "description": {
+                    "type": "StructuredText",
+                    "config": {
+                      "multi": "paragraph",
+                      "label": "Description",
+                      "placeholder": "My description"
+                    }
+                  },
+                  "button_label": {
+                    "type": "StructuredText",
+                    "config": {
+                      "multi": "paragraph, preformatted, heading1, heading2, heading3, heading4, heading5, heading6, strong, em, hyperlink, image, embed, list-item, o-list-item, o-list-item",
+                      "label": "Button label",
+                      "placeholder": "Click Here"
+                    }
+                  },
+                  "button_link": {
+                    "type": "Link",
+                    "config": {
+                      "label": "Button Link",
+                      "placeholder": "Select the link"
+                    }
+                  }
+                },
+                "repeat": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+]
+k
