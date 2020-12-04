@@ -28,8 +28,25 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`prismic base [FILE]`](#prismic-base-file)
 * [`prismic hello [FILE]`](#prismic-hello-file)
 * [`prismic help [COMMAND]`](#prismic-help-command)
+* [`prismic login [FILE]`](#prismic-login-file)
+* [`prismic logout [FILE]`](#prismic-logout-file)
+
+## `prismic base [FILE]`
+
+```
+USAGE
+  $ prismic base [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/base.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/base.ts)_
 
 ## `prismic hello [FILE]`
 
@@ -63,4 +80,32 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+
+## `prismic login [FILE]`
+
+```
+USAGE
+  $ prismic login [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/login.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/login.ts)_
+
+## `prismic logout [FILE]`
+
+```
+USAGE
+  $ prismic logout [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/logout.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/logout.ts)_
 <!-- commandsstop -->

@@ -4,36 +4,47 @@
   "version": "3.8.3",
   "author": "prismic.io developers",
   "bin": {
-    "prismic": "./bin/run"
+    "prismic": "bin/run"
   },
+  "bugs": "https://github.com/prismicio/prismic-cli/issues",
   "contributors": [
     "Marc McIntosh <marcmcintosh1987@gmail.com>"
   ],
-  "bugs": "https://github.com/prismicio/prismic-cli/issues",
   "dependencies": {
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^3",
+    "@types/node": "^14.14.10",
+    "@types/qs": "^6.9.5",
+    "axios": "^0.21.0",
+    "cli-ux": "^5.5.1",
+    "cookie": "^0.4.1",
+    "qs": "^6.9.4",
+    "sinon": "^9.2.1",
     "tslib": "^1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
     "@oclif/dev-cli": "^1",
     "@oclif/test": "^1",
     "@types/chai": "^4",
+    "@types/cookie": "^0.4.0",
     "@types/mocha": "^5",
-    "@types/node": "^10",
     "chai": "^4",
     "eslint": "^5.13",
     "eslint-config-oclif": "^3.1",
     "eslint-config-oclif-typescript": "^0.1",
     "globby": "^10",
+    "husky": "^4.3.0",
     "mocha": "^5",
+    "nock": "^13.0.5",
     "nyc": "^14",
     "ts-node": "^8",
     "typescript": "^3.3"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=15.0.0"
   },
   "files": [
     "/bin",
@@ -54,12 +65,22 @@
       "@oclif/plugin-help"
     ]
   },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "repository": "prismicio/prismic-cli",
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "eslint . --ext .ts --config .eslintrc",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "test": "nyc --extension .ts mocha \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md"
   },
   "types": "lib/index.d.ts"
