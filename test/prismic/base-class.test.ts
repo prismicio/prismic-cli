@@ -3,6 +3,7 @@ import {fs} from '../../src/utils'
 import * as sinon from 'sinon'
 import * as os from 'os'
 import * as path from 'path'
+import * as qs from 'qs'
 import {IConfig} from '@oclif/config'
 import Prismic, {
   createDefaultConfig,
@@ -146,5 +147,190 @@ describe('prismic/base-class', () => {
       expect(fakeWriteFile.getCall(0).args[0]).to.equal(prismic.configPath)
       expect(fakeWriteFile.getCall(0).args[1]).to.contain('tea').and.to.include('biscuits')
     })
+  })
+
+  describe('validateRepositoryName', () => {
+    const fakeBase = 'https://prismic.io'
+    const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits'
+    const repoName = 'example-repo'
+    const config = JSON.stringify({base: fakeBase, cookies: fakeCookies}, null, '\t')
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(config))
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const catchFn = sinon.fake()
+      const thenFn = sinon.fake()
+      await ctx.prismic.validateRepositoryName().then(thenFn).catch(catchFn)
+
+      expect(catchFn.getCall(0).firstArg.message).to.equal('subdomain name is required')
+      expect(thenFn.notCalled).to.be.true
+    })
+    .it('should fail if subdomain is not defined')
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(config))
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const catchFn = sinon.fake()
+      const thenFn = sinon.fake()
+      await ctx.prismic.validateRepositoryName('abc').then(thenFn).catch(catchFn)
+
+      expect(catchFn.getCall(0).firstArg.message).to.equal('subdomain must be four or more characters long')
+      expect(thenFn.notCalled).to.be.true
+    })
+    .it('should fail if name length is less than 4')
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(config))
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const catchFn = sinon.fake()
+      const thenFn = sinon.fake()
+      await ctx.prismic.validateRepositoryName('abc.').then(thenFn).catch(catchFn)
+
+      expect(catchFn.getCall(0).firstArg.message).to.equal('alphanumerical and hyphens only')
+      expect(thenFn.notCalled).to.be.true
+    })
+    .it('should fail if the name contains non alphanumeric characters')
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(config))
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const catchFn = sinon.fake()
+      const thenFn = sinon.fake()
+      await ctx.prismic.validateRepositoryName('-abc').then(thenFn).catch(catchFn)
+
+      expect(catchFn.getCall(0).firstArg.message).to.contain('hyphen')
+      expect(thenFn.notCalled).to.be.true
+    })
+    .it('should fail if the name starts with a hyphen')
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(config))
+    .nock(fakeBase, api => {
+      return api.get(`/app/dashboard/repositories/${repoName}/exists`)
+      .reply(200, () => false)
+    })
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const catchFn = sinon.fake()
+      const thenFn = sinon.fake()
+      await ctx.prismic.validateRepositoryName(repoName).then(thenFn).catch(catchFn)
+      expect(thenFn.notCalled).to.be.true
+      expect(catchFn.getCall(0).firstArg.message).to.contain('already in use')
+    })
+    .it('should fail if repo name is not available')
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(config))
+    .nock(fakeBase, api => {
+      return api.get(`/app/dashboard/repositories/${repoName}/exists`)
+      .reply(200, () => true)
+    })
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const result = await ctx.prismic.validateRepositoryName(repoName)
+      expect(result).to.equal(repoName)
+    })
+    .it('should pass if repo name is valid and available')
+  })
+
+  describe('createRepository', () => {
+    const fakeBase = 'https://prismic.io'
+    const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic_auth=xyz'
+    const repoName = 'example-repo'
+    const config = JSON.stringify({base: fakeBase, cookies: fakeCookies}, null, '\t')
+    const configWithOauth = JSON.stringify({base: fakeBase, oauthAccessToken: 'token'})
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(config))
+    .add('prismic', () => new Prismic())
+    .nock(fakeBase, api => {
+      const query = qs.stringify({domain: repoName, plan: 'personal', isAnnual: 'false'})
+      return api.post('/authentication/newrepository', query)
+      .reply(200, repoName)
+    })
+    .do(async ctx => {
+      const result = await ctx.prismic.createRepository({domain: repoName})
+      expect(result.data).to.equal(repoName)
+    })
+    .it('create a repo using the cookie for auth')
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(configWithOauth))
+    .nock('https://api.prismic.io', api => {
+      const query = qs.stringify({domain: repoName, plan: 'personal', isAnnual: 'false', access_token: 'token'})
+      return api.post('/management/repositories', query).reply(200, {
+        domain: repoName,
+      })
+    })
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const result = await ctx.prismic.createRepository({domain: repoName})
+      expect(result.data.domain).to.equal(repoName)
+    })
+    .it('should create a repo using an oauth access token')
+  })
+
+  describe('isAuthenticated', () => {
+    test
+    .stub(fs, 'readFileSync', sinon.fake.throws(fileNotFound))
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const result = await ctx.prismic.isAuthenticated()
+      expect(result).to.be.false
+    })
+    .it('should return false if no cookie or oauth token is found')
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({cookies: 'prismic_auth=b'})))
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const result = await ctx.prismic.isAuthenticated()
+      expect(result).to.be.false
+    })
+    .it('should fail in cookie does not contain SESSION')
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({cookies: 'SESSION=a'})))
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const result = await ctx.prismic.isAuthenticated()
+      expect(result).to.be.false
+    })
+    .it('should fail if a cookie does not contain prismic_auth')
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({cookies: 'SESSION=a; prismic_auth=b'})))
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const result = await ctx.prismic.isAuthenticated()
+      expect(result).to.be.true
+    })
+    .it('should return true if a cookie is found')
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({oauthAccessToken: 'xyz'})))
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const result = await ctx.prismic.isAuthenticated()
+      expect(result).to.be.true
+    })
+    .it('should return true if an oauth access token is found')
+  })
+
+  describe('prismic.axios', () => {
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({base: 'https://prismic.io', cookies: 'foo=bar'})))
+    .nock('https://example.com', api => api.get('/').reply(200, 'good'))
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const axios = ctx.prismic.axios({baseURL: 'https://example.com'})
+      const result = await axios.get('/')
+      expect(result.data).to.equal('good')
+    })
+    .it('axios instance can be configured')
   })
 })

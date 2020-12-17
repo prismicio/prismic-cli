@@ -109,4 +109,19 @@ describe('login', () => {
   .it('when login fails it should notify the user', ctx => {
     expect(ctx.stderr).to.exist
   })
+
+  test
+  .stdout()
+  .nock(fakeBase, api => {
+    return api
+    .post('/authentication/signin', `email=${encodeURIComponent(fakeEmail)}&password=${encodeURIComponent(fakePassword)}`)
+    .reply(200, {})
+  })
+  .stub(fs, 'readFileSync', fakeReadFileSync)
+  .stub(fs, 'writeFile', fakeWriteFile)
+  .command(['login', '--email', fakeEmail, '--password', fakePassword, '--base', fakeBase])
+  .it('login with no set-cookie response', ctx => {
+    expect(fakeWriteFile.getCall(0).args[1]).to.contain('tea').and.to.include('biscuits')
+    expect(ctx.stdout).to.contain(fakeBase)
+  })
 })

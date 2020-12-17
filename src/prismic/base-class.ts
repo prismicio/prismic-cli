@@ -19,6 +19,16 @@ export interface LoginData {
 export interface LocalDB {
   base: string;
   cookies: string;
+  oauthAccessToken?: string;
+}
+
+export type Apps = 'slicemachine' | '' | null | undefined
+
+export interface CreateRepositoryArgs {
+  domain: string;
+  app?: Apps;
+  customTypes?: any;
+  signedDocuments?: any;
 }
 
 export const DEFAULT_CONFIG: LocalDB = {base: 'https://prismic.io', cookies: ''}
@@ -51,12 +61,15 @@ export default class Prismic {
 
   public cookies: string;
 
+  public oauthAccessToken?: string;
+
   constructor(config?: IConfig) {
     const home = config && config.home ? config.home : os.homedir()
     this.configPath = path.join(home, '.prismic')
-    const {base, cookies} = getOrCreateConfig(this.configPath)
+    const {base, cookies, oauthAccessToken} = getOrCreateConfig(this.configPath)
     this.base = base
     this.cookies = cookies
+    this.oauthAccessToken = oauthAccessToken
   }
 
   private getConfig(): LocalDB {
@@ -72,6 +85,7 @@ export default class Prismic {
     const newConfig: LocalDB = {...oldConfig, ...data}
     this.base = newConfig.base // || 'https://prismic.io'
     this.cookies = newConfig.cookies
+    this.oauthAccessToken = newConfig.oauthAccessToken
 
     return fs.writeFile(this.configPath, JSON.stringify(newConfig, null, '\t'), 'utf-8')
   }
@@ -80,11 +94,7 @@ export default class Prismic {
     return this.removeConfig()
   }
 
-  private async setCookies(arr: Array<string> | undefined): Promise<void> {
-    if (!arr || arr.length === 0) {
-      return Promise.resolve()
-    }
-
+  private async setCookies(arr: Array<string> = []): Promise<void> {
     const oldCookies = cookie.parse(this.cookies || '')
 
     const newCookies = arr.map(str => cookie.parse(str)).reduce((acc, curr) => {
@@ -123,6 +133,65 @@ export default class Prismic {
     .then((res: AxiosResponse) => {
       this.setCookies(res.headers['set-cookie'])
       return res
+    })
+  }
+
+  public async isAuthenticated(): Promise<boolean> {
+    if (this.oauthAccessToken) return Promise.resolve(true) // TODO: check this some how
+    if (!this.cookies) return Promise.resolve(false)
+    const cookies = cookie.parse(this.cookies)
+    if (!cookies.SESSION) return Promise.resolve(false)
+    if (!cookies.prismic_auth) return Promise.resolve(false)
+    return Promise.resolve(true) // TODO: check this some how
+  }
+
+  public async validateRepositoryName(name?: string): Promise<string> {
+    if (!name) return Promise.reject(new Error('subdomain name is required'))
+    const domain = name.toLocaleLowerCase().trim()
+    const allowedChars = /^[a-zA-Z0-9][-a-zA-Z0-9]{2,}[a-zA-Z0-9]/
+
+    if (domain.length < 4) return Promise.reject(new Error('subdomain must be four or more characters long'))
+    if (domain[0] === '-') return Promise.reject(new Error('must not start with a hyphen'))
+    if (allowedChars.test(domain) === false) return Promise.reject(new Error('alphanumerical and hyphens only'))
+    // any other rules ?
+
+    const url = `/app/dashboard/repositories/${domain}/exists`
+    return this.axios().get<boolean>(url).then(res => {
+      if (!res.data) return Promise.reject(new Error(`${domain} is already in use`))
+      return domain
+    })
+  }
+
+  public async createRepository(args: CreateRepositoryArgs): Promise<AxiosResponse> {
+    await this.isAuthenticated()
+
+    if (this.oauthAccessToken) return this.createRepositoryWithToken(args)
+
+    return this.createRepositoryWithCookie(args)
+  }
+
+  private async createRepositoryWithCookie({
+    domain,
+    app,
+  }: CreateRepositoryArgs): Promise<AxiosResponse> {
+    const data = {domain, plan: 'personal', isAnnual: 'false', app}
+    return this.axios().post('/authentication/newrepository', qs.stringify(data), {
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    })
+  }
+
+  private async createRepositoryWithToken({
+    domain,
+    app,
+  }: CreateRepositoryArgs): Promise<AxiosResponse> {
+    const data = {domain, plan: 'personal', isAnnual: 'false', app, access_token: this.oauthAccessToken}
+    const url = new URL(this.base)
+    url.hostname = `api.${url.hostname}`
+    url.pathname = '/management/repositories'
+
+    const address = url.toString()
+    return this.axios().post(address, qs.stringify(data), {
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     })
   }
 }
