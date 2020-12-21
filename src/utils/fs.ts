@@ -16,3 +16,5 @@ export const readFileSync = fs.readFileSync
 export const writeFileSync = fs.writeFileSync
 
 export const existsSync = fs.existsSync
+
+export const createWriteStream = fs.createWriteStream
