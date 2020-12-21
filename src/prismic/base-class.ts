@@ -1,6 +1,6 @@
 import {fs} from '../utils'
 import * as path from 'path'
-import * as cookie from 'cookie'
+import * as cookie from '../utils/cookie'
 import Axios, {AxiosInstance, AxiosResponse, AxiosRequestConfig} from 'axios'
 import * as qs from 'qs'
 import * as os from 'os'
@@ -54,6 +54,10 @@ export function getOrCreateConfig(configPath: string): LocalDB {
   }
 }
 
+export interface AxiosInstanceOptions extends AxiosRequestConfig {
+  secure?: boolean;
+}
+
 export default class Prismic {
   public configPath: string;
 
@@ -101,23 +105,29 @@ export default class Prismic {
       return {...acc, ...curr}
     }, {})
 
+    console.log({ newCookies })
+
     const mergedCookie = Object.entries({...oldCookies, ...newCookies}).map(([key, value]) => {
       return cookie.serialize(key, value)
     }).join('; ')
+    /* console.log("setCookies")
+    console.log({arr, oldCookies, newCookies, mergedCookie, cookies: this.cookies}) */
 
     return this.updateConfig({base: this.base, cookies: mergedCookie})
   }
 
-  axios(options?: AxiosRequestConfig): AxiosInstance {
+  axios(options?: AxiosInstanceOptions): AxiosInstance {
     const headers = {Cookie: this.cookies, ...options?.headers}
-    return Axios.create({
+    const opts: AxiosRequestConfig = {
       baseURL: this.base,
-      withCredentials: true,
-      xsrfCookieName: 'X_XSRF',
+      // withCredentials: true,
+      // xsrfCookieName: 'X_XSRF',
       adapter: require('axios/lib/adapters/http'),
       ...options,
-      ...headers,
-    })
+      headers,
+    }
+    // TODO: optionaly add the x_xsrf (_) parmeter to the query ie: ?_=my_x_xsrf_token
+    return Axios.create(opts)
   }
 
   public async login(data: LoginData): Promise<AxiosResponse | void> {
@@ -132,6 +142,7 @@ export default class Prismic {
     })
     .then((res: AxiosResponse) => {
       this.setCookies(res.headers['set-cookie'])
+      console.log(res)
       return res
     })
   }
