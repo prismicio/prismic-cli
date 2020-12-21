@@ -105,13 +105,9 @@ export default class Prismic {
       return {...acc, ...curr}
     }, {})
 
-    console.log({ newCookies })
-
     const mergedCookie = Object.entries({...oldCookies, ...newCookies}).map(([key, value]) => {
       return cookie.serialize(key, value)
     }).join('; ')
-    /* console.log("setCookies")
-    console.log({arr, oldCookies, newCookies, mergedCookie, cookies: this.cookies}) */
 
     return this.updateConfig({base: this.base, cookies: mergedCookie})
   }
@@ -142,7 +138,6 @@ export default class Prismic {
     })
     .then((res: AxiosResponse) => {
       this.setCookies(res.headers['set-cookie'])
-      console.log(res)
       return res
     })
   }
