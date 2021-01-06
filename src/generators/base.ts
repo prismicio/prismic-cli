@@ -10,15 +10,11 @@ import * as path from 'path'
 import cli from 'cli-ux'
 import {fs} from '../utils'
 
-import Prismic from '../prismic/base-class'
-import {ReadStream} from 'fs'
+import Prismic, {CustomType, CustomTypeMetaData} from '../prismic/base-class'
 
-export interface CustomTypeMetaData {
-  id: string;
-  name: string;
-  repeatable: string;
-  value: string; // relative file path
-}
+import {ReadStream} from 'fs'
+import {AxiosResponse} from 'axios'
+
 
 export interface TemplateOptions extends Generator.GeneratorOptions {
   branch: string;
@@ -76,7 +72,7 @@ export default abstract class PrismicGenerator extends Generator {
       responseType: 'stream',
     })
     .then(res => {
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         const writeStream = fs.createWriteStream(tmpFile.path)
         const total = res.headers['content-length']
         let count = 0
@@ -107,28 +103,35 @@ export default abstract class PrismicGenerator extends Generator {
     }).then(() => {
       const location = path.join(tmpDir.path, this.innerFolder)
       this.fs.copy(location, this.path)
+      // return tmpDir.cleanup()
     })
     .then(() => {
       cli.action.start('Creating repository')
       // read custom types first
       const location = path.join(this.path, 'custom_types', 'index.json')
 
-      const customTypesMapAsString: string = this.fs.read(location)
+      const customTypesMapAsString: string = this.fs.read(location, {defaults: '[]'})
+      
       const customTypesMetaInfo: Array<CustomTypeMetaData> = JSON.parse(customTypesMapAsString)
-
+ 
       const customTypes = customTypesMetaInfo.map((ct: CustomTypeMetaData) => {
         const location = path.join(this.path, 'custom_types', ct.value)
-        return this.fs.readJSON(location)
+        const value = this.fs.readJSON(location)
+        return {...ct, value} as CustomType
       })
 
-      return JSON.stringify(customTypes)
-    }).then((customTypes: string) => {
+      // TODO: add documents
+
+      return customTypes
+    }).then((customTypes: Array<CustomType>) => {
       return this.prismic.createRepository({domain: this.domain, customTypes})
     }).then(() => {
+      // TODO: check the respose from creating a repostiory
       cli.action.stop()
       const location = path.join(this.path, this.prismicConfig)
       const oldConfig = this.fs.read(location)
-      const config = oldConfig.replace(/repo-name/g, 'repo-name')
+      // TODO: make this more reliable.
+      const config = oldConfig.replace(/your-repo-name/g, this.domain)
       return this.fs.write(location, config)
     })
   }

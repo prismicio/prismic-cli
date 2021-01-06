@@ -248,8 +248,8 @@ describe('prismic/base-class', () => {
     .stub(fs, 'readFileSync', sinon.fake.returns(config))
     .add('prismic', () => new Prismic())
     .nock(fakeBase, api => {
-      const query = qs.stringify({domain: repoName, plan: 'personal', isAnnual: 'false'})
-      return api.post('/authentication/newrepository', query)
+      // const query = qs.stringify({domain: repoName, plan: 'personal', isAnnual: 'false'})
+      return api.post('/authentication/newrepository', /* query */)
       .reply(200, repoName)
     })
     .do(async ctx => {

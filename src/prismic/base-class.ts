@@ -6,6 +6,8 @@ import * as qs from 'qs'
 import * as os from 'os'
 import {IConfig} from '@oclif/config'
 import {parseJsonSync} from '../utils'
+import {JSONSchema7Object} from 'json-schema'
+
 
 // Note to self it's easier to mock fs sync methods.
 
@@ -24,11 +26,25 @@ export interface LocalDB {
 
 export type Apps = 'slicemachine' | '' | null | undefined
 
+export interface CustomType {
+  id: string;
+  name: string;
+  repeatable: string;
+  value: JSONSchema7Object;
+}
+
 export interface CreateRepositoryArgs {
   domain: string;
   app?: Apps;
-  customTypes?: any;
+  customTypes?: Array<CustomType>;
   signedDocuments?: any;
+}
+
+export interface CustomTypeMetaData {
+  id: string;
+  name: string;
+  repeatable: string;
+  value: string;
 }
 
 export const DEFAULT_CONFIG: LocalDB = {base: 'https://prismic.io', cookies: ''}
@@ -169,7 +185,9 @@ export default class Prismic {
   }
 
   public async createRepository(args: CreateRepositoryArgs): Promise<AxiosResponse> {
+
     await this.isAuthenticated()
+
 
     if (this.oauthAccessToken) return this.createRepositoryWithToken(args)
 
@@ -178,17 +196,26 @@ export default class Prismic {
 
   private async createRepositoryWithCookie({
     domain,
-    app,
+    // app, TODO: add app
+    customTypes,
+    // TODO: add documents
   }: CreateRepositoryArgs): Promise<AxiosResponse> {
-    const data = {domain, plan: 'personal', isAnnual: 'false', app}
-    return this.axios().post('/authentication/newrepository', qs.stringify(data), {
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    })
+    const data = {
+      domain,
+      plan: 'personal',
+      isAnnual: 'false',
+      'custom-types': customTypes,
+    }
+
+    // const querystring = {app: 'slicemachine'}
+    return this.axios().post('/authentication/newrepository', data)
   }
 
   private async createRepositoryWithToken({
     domain,
     app,
+    // TODO: add custom-types,
+    // TODO: add documents,
   }: CreateRepositoryArgs): Promise<AxiosResponse> {
     const data = {domain, plan: 'personal', isAnnual: 'false', app, access_token: this.oauthAccessToken}
     const url = new URL(this.base)

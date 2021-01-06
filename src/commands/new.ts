@@ -6,7 +6,7 @@ import {fs} from '../utils'
 
 // evntually move this into the build runner
 import {createEnv} from 'yeoman-environment'
-
+ 
 export default class New extends Command {
   static description = 'describe the command here'
 
@@ -31,7 +31,7 @@ export default class New extends Command {
     }),
     // flag with no value (-f, --force)
     force: flags.boolean(),
-  }
+  } 
 
   static args = [{
     name: 'no-install',
@@ -62,6 +62,17 @@ export default class New extends Command {
       require.resolve('../generators/React'),
       'React',
     )
+
+    env.register(
+      require.resolve('../generators/Angular2'),
+      'Angular2',
+    )
+
+    env.register(
+      require.resolve('../generators/Vue'),
+      'VueJS',
+    )
+
     const generators = env.getGeneratorsMeta()
     // console.log({generators})
 

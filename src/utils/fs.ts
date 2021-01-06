@@ -11,6 +11,8 @@ export const writeFile = fs.promises.writeFile
 
 export const unlink = fs.promises.unlink
 
+export const rmdir = fs.promises.rmdir
+
 export const readFileSync = fs.readFileSync
 
 export const writeFileSync = fs.writeFileSync
@@ -18,3 +20,4 @@ export const writeFileSync = fs.writeFileSync
 export const existsSync = fs.existsSync
 
 export const createWriteStream = fs.createWriteStream
+
