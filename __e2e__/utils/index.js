@@ -35,6 +35,7 @@ function getDomainName(str) {
   const [ domain ] = url.hostname.split('.'); 
   return domain;
 }
+/*
 async function deleteRepo(repoName, retries = 3) {
 
   const conf = fs.readFileSync(path.resolve(CONFIG_PATH), 'utf-8');
@@ -61,7 +62,7 @@ async function deleteRepo(repoName, retries = 3) {
     // fie (res.status < 400 || res.status === 404) return res; 
     return res;
   });
-}
+} */
 
 function changeBase() {
   const address = process.env.PRISMIC_BASE || 'https://prismic.io'
@@ -85,17 +86,17 @@ async function logout() {
   }));
 }
 
-async function setup(repoName) {
+async function setup() {
   return logout()
     .then(() => changeBase())
-    .then(() => login())
-    .then(() => deleteRepo(repoName));
+    .then(() => login());
+  // .then(() => deleteRepo(repoName));
 }
 
 module.exports = {
   isLogedin,
   genRepoName,
-  deleteRepo,
+  // deleteRepo,
   rmdir,
   mkdir,
   chmod,
