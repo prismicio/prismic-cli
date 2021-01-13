@@ -149,7 +149,7 @@ describe('prismic/base-class', () => {
     })
   })
 
-  describe('validateRepositoryName', () => { 
+  describe('validateRepositoryName', () => {
     const fakeBase = 'https://prismic.io'
     const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits'
     const repoName = 'example-repo'

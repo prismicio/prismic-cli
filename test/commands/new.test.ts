@@ -3,8 +3,6 @@ import {fs} from '../../src/utils'
 import StubNodeJSZip from '../__stubs__/template'
 import * as path from 'path'
 import * as os from 'os'
-import * as Yeoman from 'yeoman-environment'
-import * as sinon from 'sinon'
 
 describe('new', () => {
   const fakeDomain = 'fake-domain'
@@ -42,33 +40,4 @@ describe('new', () => {
     const conf = require(configPath)
     expect(conf.apiEndpoint).to.include(fakeDomain)
   })
-/*
-  const fakeRun = sinon.fake()
-  const fakeRegister = sinon.fake()
-  const fakeEnv = sinon.fake.returns({
-    run: fakeRun,
-    env: () => null,
-    register: fakeRegister,
-    getGeneratorsMeta: () => ({
-      NodeJS: 'NodeJS',
-    }),
-  })
-  
-  test
-  .only()
-  // .stdout()
-  .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
-  .stub(Yeoman, 'createEnv', fakeEnv)
-  .nock(fakeBase, api => {
-    return api
-    .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true) // we should really rename this.
-    .post('/authentication/newrepository').reply(200, fakeDomain)
-  })
-  // .command(['new', '--domain', fakeDomain, '--folder', fakeFolder, '--template', 'NodeJS'])
-  .it('calls to yeoman-environment', () => {
-    expect(fakeEnv.called).to.be.true
-    expect(fakeRun.called).to.be.true
-    expect(fakeRegister.called).to.be.true
-  })
-  */
 })

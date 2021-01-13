@@ -211,12 +211,6 @@ export default class Prismic {
     return (
       this.oauthAccessToken ? this.createRepositoryWithToken(args) : this.createRepositoryWithCookie(args)
     )
-    /* .then(res => {
-      const url = new URL(this.base)
-      url.host = `${res.data}.${url.host}`
-      cli.log(`A new repsitory has been created at: ${url.toString()}`)
-      return res
-    }) */
   }
 
   private async createRepositoryWithCookie({
