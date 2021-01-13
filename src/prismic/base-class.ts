@@ -6,8 +6,6 @@ import * as qs from 'qs'
 import * as os from 'os'
 import {IConfig} from '@oclif/config'
 import {parseJsonSync} from '../utils'
-import {JSONSchema7Object} from 'json-schema'
-
 
 // Note to self it's easier to mock fs sync methods.
 
@@ -26,11 +24,18 @@ export interface LocalDB {
 
 export type Apps = 'slicemachine' | '' | null | undefined
 
+export interface CustomTypeMetaData {
+  id: string;
+  name: string;
+  repeatable: string;
+  value: string;
+}
+
 export interface CustomType {
   id: string;
   name: string;
   repeatable: string;
-  value: JSONSchema7Object;
+  value: any;
 }
 
 export interface CreateRepositoryArgs {
@@ -38,13 +43,6 @@ export interface CreateRepositoryArgs {
   app?: Apps;
   customTypes?: Array<CustomType>;
   signedDocuments?: any;
-}
-
-export interface CustomTypeMetaData {
-  id: string;
-  name: string;
-  repeatable: string;
-  value: string;
 }
 
 export const DEFAULT_CONFIG: LocalDB = {base: 'https://prismic.io', cookies: ''}
@@ -168,14 +166,35 @@ export default class Prismic {
   }
 
   public async validateRepositoryName(name?: string): Promise<string> {
-    if (!name) return Promise.reject(new Error('subdomain name is required'))
+    if (!name) return Promise.reject(new Error('repository name is required'))
     const domain = name.toLocaleLowerCase().trim()
-    const allowedChars = /^[a-zA-Z0-9][-a-zA-Z0-9]{2,}[a-zA-Z0-9]/
 
+    /* const allowedChars = /^[a-zA-Z0-9][-a-zA-Z0-9]{2,}[a-zA-Z0-9]$/
     if (domain.length < 4) return Promise.reject(new Error('subdomain must be four or more characters long'))
     if (domain[0] === '-') return Promise.reject(new Error('must not start with a hyphen'))
     if (allowedChars.test(domain) === false) return Promise.reject(new Error('alphanumerical and hyphens only'))
+    */
     // any other rules ?
+
+    const errors = []
+
+    const startsWithLetter = /^[a-z]/.test(domain)
+    if (!startsWithLetter) errors.push('Mst start with a letter.')
+
+    const acceptedChars = /^[a-z0-9-]+$/.test(domain)
+    if (!acceptedChars) errors.push('Most contain only letters, numbers and hyphens.')
+
+    const fourCharactersOrMore = domain.length >= 4
+    if (!fourCharactersOrMore) errors.push('Must have four or more alphanumeric characters and/or hyphens.')
+
+    const endsWithALetterOrNumber = /[a-z0-9]$/.test(domain)
+    if (!endsWithALetterOrNumber) errors.push('Must end in a letter or a number.')
+
+    if (errors.length > 0) {
+      const errorString = errors.map((d, i) => `(${i + 1}: ${d}`).join(' ')
+      const msg = `Validation errors: ${errorString}`
+      return Promise.reject(new Error(msg))
+    }
 
     const url = `/app/dashboard/repositories/${domain}/exists`
     return this.axios().get<boolean>(url).then(res => {
@@ -189,9 +208,15 @@ export default class Prismic {
     await this.isAuthenticated()
 
 
-    if (this.oauthAccessToken) return this.createRepositoryWithToken(args)
-
-    return this.createRepositoryWithCookie(args)
+    return (
+      this.oauthAccessToken ? this.createRepositoryWithToken(args) : this.createRepositoryWithCookie(args)
+    )
+    /* .then(res => {
+      const url = new URL(this.base)
+      url.host = `${res.data}.${url.host}`
+      cli.log(`A new repsitory has been created at: ${url.toString()}`)
+      return res
+    }) */
   }
 
   private async createRepositoryWithCookie({
@@ -204,7 +229,7 @@ export default class Prismic {
       domain,
       plan: 'personal',
       isAnnual: 'false',
-      'custom-types': customTypes,
+      'custom-types': JSON.stringify(customTypes),
     }
 
     // const querystring = {app: 'slicemachine'}

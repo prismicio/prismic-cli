@@ -1,19 +1,29 @@
-import {GeneratorOptions} from 'yeoman-generator'
-import PrismicGenerator, {TemplateOptions} from '../base'
+import PrismicGenerator from '../base'
+import * as path from 'path'
+import {AxiosResponse} from 'axios'
 
-export default class PrismicReact extends PrismicGenerator {
-  constructor(argv: string | string[], opts: GeneratorOptions) {
-    const options: TemplateOptions = {
-      ...opts,
-      source: 'https://github.com/prismicio/vuejs-starter/archive/master.zip',
-      innerFolder: 'vuejs-starter-master',
-      prismicConfig: 'public/index.html',
-      branch: 'master',
-    }
-    super(argv, options)
+export default class PrismicVue extends PrismicGenerator {
+  async initializing() {
+    return this.downloadAndExtractZipFrom('https://github.com/prismicio/vuejs-starter/archive/master.zip', 'vuejs-starter-master')
   }
 
-  writing() {
-    return super.writing()
+  async configuring() {
+    this.log('Creating repository')
+    const customTypes = this.readCustomTypesFrom('custom_types')
+    return this.prismic.createRepository({
+      domain: this.domain,
+      customTypes,
+    }).then(res => {
+      const url = new URL(this.prismic.base)
+      url.host = `${res.data}.${url.host}`
+      this.log(`A new repository has been created at: ${url.toString()}`)
+      return res
+    })
+    .then((res: AxiosResponse<any>) => {
+      const location = path.join(this.path, 'public/index.html')
+      const oldConfig = this.fs.read(location)
+      const newConfig = oldConfig.replace(/your-repo-name/g, res.data || this.domain)
+      this.fs.write(location, newConfig)
+    })
   }
 }

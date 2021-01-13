@@ -149,7 +149,7 @@ describe('prismic/base-class', () => {
     })
   })
 
-  describe('validateRepositoryName', () => {
+  describe('validateRepositoryName', () => { 
     const fakeBase = 'https://prismic.io'
     const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits'
     const repoName = 'example-repo'
@@ -163,7 +163,7 @@ describe('prismic/base-class', () => {
       const thenFn = sinon.fake()
       await ctx.prismic.validateRepositoryName().then(thenFn).catch(catchFn)
 
-      expect(catchFn.getCall(0).firstArg.message).to.equal('subdomain name is required')
+      expect(catchFn.getCall(0).firstArg.message).to.equal('repository name is required')
       expect(thenFn.notCalled).to.be.true
     })
     .it('should fail if subdomain is not defined')
@@ -176,7 +176,7 @@ describe('prismic/base-class', () => {
       const thenFn = sinon.fake()
       await ctx.prismic.validateRepositoryName('abc').then(thenFn).catch(catchFn)
 
-      expect(catchFn.getCall(0).firstArg.message).to.equal('subdomain must be four or more characters long')
+      expect(catchFn.getCall(0).firstArg.message).to.contain('Must have four or more alphanumeric characters and/or hyphens.')
       expect(thenFn.notCalled).to.be.true
     })
     .it('should fail if name length is less than 4')
@@ -189,7 +189,7 @@ describe('prismic/base-class', () => {
       const thenFn = sinon.fake()
       await ctx.prismic.validateRepositoryName('abc.').then(thenFn).catch(catchFn)
 
-      expect(catchFn.getCall(0).firstArg.message).to.equal('alphanumerical and hyphens only')
+      expect(catchFn.getCall(0).firstArg.message).to.contain('Most contain only letters, numbers and hyphens.')
       expect(thenFn.notCalled).to.be.true
     })
     .it('should fail if the name contains non alphanumeric characters')
@@ -202,10 +202,23 @@ describe('prismic/base-class', () => {
       const thenFn = sinon.fake()
       await ctx.prismic.validateRepositoryName('-abc').then(thenFn).catch(catchFn)
 
-      expect(catchFn.getCall(0).firstArg.message).to.contain('hyphen')
+      expect(catchFn.getCall(0).firstArg.message).to.contain('start with a letter')
       expect(thenFn.notCalled).to.be.true
     })
     .it('should fail if the name starts with a hyphen')
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(config))
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const catchFn = sinon.fake()
+      const thenFn = sinon.fake()
+      await ctx.prismic.validateRepositoryName('abc-').then(thenFn).catch(catchFn)
+
+      expect(catchFn.getCall(0).firstArg.message).to.contain('Must end in a letter or a number')
+      expect(thenFn.notCalled).to.be.true
+    })
+    .it('should fail if the name ends with a hyphen')
 
     test
     .stub(fs, 'readFileSync', sinon.fake.returns(config))

@@ -1,12 +1,8 @@
 import {flags} from '@oclif/command'
 import * as inquirer from 'inquirer'
 import {Command} from '../prismic'
-import cli from 'cli-ux'
-import {fs} from '../utils'
+import generator from '../prismic/generator'
 
-// evntually move this into the build runner
-import {createEnv} from 'yeoman-environment'
- 
 export default class New extends Command {
   static description = 'describe the command here'
 
@@ -31,7 +27,7 @@ export default class New extends Command {
     }),
     // flag with no value (-f, --force)
     force: flags.boolean(),
-  } 
+  }
 
   static args = [{
     name: 'no-install',
@@ -45,41 +41,12 @@ export default class New extends Command {
     const domain = await this.validateDomain(flags.domain)
     const folder = await this.validateFolder(flags.folder, domain, flags.force)
 
-    // move this to the runner.
-    const env = createEnv()
-    /* const generators = env.lookup({
-      packagePaths: [
-        require.resolve('../generators'),
-      ],
-    }) */
-    // generator-prismic-...
-
-    env.register(
-      require.resolve('../generators/NodeJS'), // make this dynamic?
-      'NodeJS', // make this dynamic?
-    )
-    env.register(
-      require.resolve('../generators/React'),
-      'React',
-    )
-
-    env.register(
-      require.resolve('../generators/Angular2'),
-      'Angular2',
-    )
-
-    env.register(
-      require.resolve('../generators/Vue'),
-      'VueJS',
-    )
-
-    const generators = env.getGeneratorsMeta()
-    // console.log({generators})
+    const generators = generator.getGeneratorsMeta()
 
     const template = await this.validateTemplate(flags.template, Object.keys(generators))
 
     return new Promise((resolve, reject) => {
-      env.run(template, { // make the env name an option/dynamic
+      generator.run(template, {
         domain,
         path: folder,
         prismic: this.prismic,
@@ -90,29 +57,8 @@ export default class New extends Command {
     })
   }
 
-  // TODO: move this to base-command
-  async validateDomain(name: string | undefined): Promise<string> {
-    return this.prismic.validateRepositoryName(name)
-    .catch(error => {
-      this.log(error.message)
-      return cli.prompt('prismic subdomain', {required: true}).then(this.validateDomain.bind(this))
-    })
-  }
-
-  // TODO: move this to base-command
-  async validateFolder(name: string | undefined, fallback: string, force: boolean): Promise<string> {
-    const folder: string = name || await cli.prompt('project folder', {default: fallback})
-
-    if (fs.existsSync(folder) && !force) {
-      this.warn(`Folder: ${folder} exists. use --force to overwrite`)
-      return this.exit()
-    }
-    return Promise.resolve(folder)
-  }
-
-  // TODO: make more options
   async validateTemplate(template: string | undefined, options: Array<string>): Promise<string> {
-    if (template) return Promise.resolve(template)
+    if (template && options.includes(template)) return Promise.resolve(template)
     return inquirer.prompt({
       type: 'list',
       name: 'template',
