@@ -229,7 +229,7 @@ export default class Prismic {
       domain,
       plan: 'personal',
       isAnnual: 'false',
-      'custom-types': JSON.stringify(customTypes),
+      ...(customTypes?.length ? {'custom-types': JSON.stringify(customTypes)} : {}),
     }
 
     // const querystring = {app: 'slicemachine'}

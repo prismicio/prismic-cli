@@ -24,5 +24,4 @@ export default class PrismicAngular extends PrismicGenerator {
       this.fs.write(location, newConfig)
     })
   }
-
 }
