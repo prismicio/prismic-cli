@@ -1,13 +1,13 @@
 import {expect, test} from '@oclif/test'
 import {fs} from '../../src/utils'
-import StubNodeJSZip from '../__stubs__/template'
+import {NodeJS as StubNodeJSZip} from '../__stubs__/template'
 import * as path from 'path'
 import * as os from 'os'
 
 describe('new', () => {
   const fakeDomain = 'fake-domain'
   const fakeBase = 'https://wroom.test'
-  const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic_auth=xyz'
+  const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=xyz'
   const tmpDir = os.tmpdir()
 
   let fakeFolder = path.join(tmpDir, 'test-new-nodejs-sdk')

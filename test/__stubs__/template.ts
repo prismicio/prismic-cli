@@ -6,4 +6,13 @@ const NodeJS = new AdmZip()
 
 NodeJS.addLocalFolder(nodejsPath, 'nodejs-sdk-master')
 
-export default NodeJS
+const Theme = new AdmZip()
+const themePath = path.resolve(__dirname, 'fake-theme-master')
+
+Theme.addLocalFolder(themePath, 'fake-theme-master')
+
+export {
+  Theme,
+  NodeJS,
+}
+
