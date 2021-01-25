@@ -2,9 +2,10 @@ import {flags} from '@oclif/command'
 import * as inquirer from 'inquirer'
 import {Command} from '../prismic'
 import generator from '../prismic/generator'
+import login from './login'
 
 export default class New extends Command {
-  static description = 'describe the command here'
+  static description = 'Create a project with a new prismic repository.'
 
   static flags = {
     help: flags.help({char: 'h'}),
@@ -12,7 +13,6 @@ export default class New extends Command {
     domain: flags.string({
       char: 'd',
       description: 'name of the prismic repository ie: example, becomes https://example.prismic.io',
-      // required: true,
       parse: input => input.toLowerCase().trim(),
     }),
 
@@ -25,17 +25,20 @@ export default class New extends Command {
       char: 't',
       description: 'Prismic template for the project',
     }),
-    // flag with no value (-f, --force)
-    force: flags.boolean(),
+
+    force: flags.boolean({
+      description: 'over write local files',
+    }),
   }
 
-  static args = [{
-    name: 'no-install',
-    default: false,
-    description: 'skip running npm install',
-  }]
+  static args = []
 
   async run() {
+    const isAuthenticated = await this.prismic.isAuthenticated()
+    if (!isAuthenticated) {
+      await login.run([])
+    }
+
     const {flags} = this.parse(New)
 
     const domain = await this.validateDomain(flags.domain)

@@ -30,7 +30,7 @@ export default class PrismicNodeJS extends PrismicGenerator {
       customTypes,
     }).then(res => {
       const url = new URL(this.prismic.base)
-      url.host = `${res.data}.${url.host}`
+      url.host = `${res.data || this.domain}.${url.host}`
       this.log(`A new repsitory has been created at: ${url.toString()}`)
       return res
     })

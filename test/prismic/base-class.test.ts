@@ -3,7 +3,6 @@ import {fs} from '../../src/utils'
 import * as sinon from 'sinon'
 import * as os from 'os'
 import * as path from 'path'
-import * as qs from 'qs'
 import {IConfig} from '@oclif/config'
 import Prismic, {
   createDefaultConfig,
@@ -252,7 +251,7 @@ describe('prismic/base-class', () => {
 
   describe('createRepository', () => {
     const fakeBase = 'https://prismic.io'
-    const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic_auth=xyz'
+    const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=xyz'
     const repoName = 'example-repo'
     const config = JSON.stringify({base: fakeBase, cookies: fakeCookies}, null, '\t')
     const configWithOauth = JSON.stringify({base: fakeBase, oauthAccessToken: 'token'})
@@ -274,8 +273,8 @@ describe('prismic/base-class', () => {
     test
     .stub(fs, 'readFileSync', sinon.fake.returns(configWithOauth))
     .nock('https://api.prismic.io', api => {
-      const query = qs.stringify({domain: repoName, plan: 'personal', isAnnual: 'false', access_token: 'token'})
-      return api.post('/management/repositories', query).reply(200, {
+      // const query = qs.stringify({domain: repoName, plan: 'personal', isAnnual: 'false', access_token: 'token'})
+      return api.post('/management/repositories', /* query */).reply(200, {
         domain: repoName,
       })
     })
@@ -298,7 +297,7 @@ describe('prismic/base-class', () => {
     .it('should return false if no cookie or oauth token is found')
 
     test
-    .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({cookies: 'prismic_auth=b'})))
+    .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({cookies: 'prismic-auth=b'})))
     .add('prismic', () => new Prismic())
     .do(async ctx => {
       const result = await ctx.prismic.isAuthenticated()
@@ -316,7 +315,7 @@ describe('prismic/base-class', () => {
     .it('should fail if a cookie does not contain prismic_auth')
 
     test
-    .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({cookies: 'SESSION=a; prismic_auth=b'})))
+    .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({cookies: 'SESSION=a; prismic-auth=b'})))
     .add('prismic', () => new Prismic())
     .do(async ctx => {
       const result = await ctx.prismic.isAuthenticated()

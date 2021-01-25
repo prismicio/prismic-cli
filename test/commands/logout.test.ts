@@ -10,12 +10,13 @@ describe('logout', () => {
   })
 
   const fakeUnlink = sinon.fake.resolves(null)
+
   test
   .stdout()
   .stub(fs, 'unlink', fakeUnlink)
   .command(['logout'])
   .do(ctx => {
-    expect(fakeUnlink.called)
+    expect(fakeUnlink.called).to.be.true
     expect(ctx.stdout).to.contain('Logged out')
   })
   .it('runs logout')

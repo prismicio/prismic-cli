@@ -42,7 +42,16 @@ export interface CreateRepositoryArgs {
   domain: string;
   app?: Apps;
   customTypes?: Array<CustomType>;
-  signedDocuments?: any;
+  signedDocuments?: Documents;
+}
+
+export interface Document {
+  [key: string]: any;
+}
+
+export interface Documents {
+  signature: string;
+  documents: Document;
 }
 
 export const DEFAULT_CONFIG: LocalDB = {base: 'https://prismic.io', cookies: ''}
@@ -157,11 +166,12 @@ export default class Prismic {
   }
 
   public async isAuthenticated(): Promise<boolean> {
+    // TODO: find out if there is an refresh endpoint in prismic.io
     if (this.oauthAccessToken) return Promise.resolve(true) // TODO: check this some how
     if (!this.cookies) return Promise.resolve(false)
     const cookies = cookie.parse(this.cookies)
     if (!cookies.SESSION) return Promise.resolve(false)
-    if (!cookies.prismic_auth) return Promise.resolve(false)
+    if (!cookies['prismic-auth']) return Promise.resolve(false)
     return Promise.resolve(true) // TODO: check this some how
   }
 
@@ -204,9 +214,11 @@ export default class Prismic {
   }
 
   public async createRepository(args: CreateRepositoryArgs): Promise<AxiosResponse> {
+    const hasAuth = await this.isAuthenticated()
 
-    await this.isAuthenticated()
-
+    if (!hasAuth) {
+      return Promise.reject(new Error('Unauthorized'))
+    }
 
     return (
       this.oauthAccessToken ? this.createRepositoryWithToken(args) : this.createRepositoryWithCookie(args)
@@ -217,13 +229,17 @@ export default class Prismic {
     domain,
     // app, TODO: add app
     customTypes,
-    // TODO: add documents
+    signedDocuments,
   }: CreateRepositoryArgs): Promise<AxiosResponse> {
+    const signature = signedDocuments?.signature
+    const documents = signedDocuments?.documents ? JSON.stringify(signedDocuments.documents) : undefined
     const data = {
       domain,
       plan: 'personal',
       isAnnual: 'false',
       ...(customTypes?.length ? {'custom-types': JSON.stringify(customTypes)} : {}),
+      signature,
+      documents,
     }
 
     // const querystring = {app: 'slicemachine'}
@@ -232,18 +248,26 @@ export default class Prismic {
 
   private async createRepositoryWithToken({
     domain,
-    app,
-    // TODO: add custom-types,
-    // TODO: add documents,
+    // app,
+    customTypes,
+    signedDocuments,
   }: CreateRepositoryArgs): Promise<AxiosResponse> {
-    const data = {domain, plan: 'personal', isAnnual: 'false', app, access_token: this.oauthAccessToken}
+    const signature = signedDocuments?.signature
+    const documents = signedDocuments?.documents ? JSON.stringify(signedDocuments.documents) : undefined
+    const data = {
+      access_token: this.oauthAccessToken,
+      domain,
+      plan: 'personal',
+      isAnnual: 'false',
+      ...(customTypes?.length ? {'custom-types': JSON.stringify(customTypes)} : {}),
+      signature,
+      documents,
+    }
     const url = new URL(this.base)
     url.hostname = `api.${url.hostname}`
     url.pathname = '/management/repositories'
 
     const address = url.toString()
-    return this.axios().post(address, qs.stringify(data), {
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    })
+    return this.axios().post(address, data)
   }
 }
