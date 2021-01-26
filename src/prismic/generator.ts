@@ -21,4 +21,9 @@ env.register(
   'VueJS',
 )
 
+env.register(
+  require.resolve('../generators/NextJS'),
+  'Next.js',
+)
+
 export default env
