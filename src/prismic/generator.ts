@@ -26,4 +26,9 @@ env.register(
   'Next.js',
 )
 
+env.register(
+  require.resolve('../generators/Nuxt'),
+  'Nuxt',
+)
+
 export default env
