@@ -29,6 +29,8 @@ export default class New extends Command {
     force: flags.boolean({
       description: 'over write local files',
     }),
+
+    // TODO: add a generator command where a person can pass custom generator?s
   }
 
   static args = []
