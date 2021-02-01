@@ -294,12 +294,22 @@ export default class Nuxt extends PrismicGenerator {
       }
     })
 
-    console.log("\nREADY FOR NEXt STEP\n")
+    console.log("\nREADY FOR NExT STEP\n")
+
+    this.composeWith(require.resolve('./slicemachine-generator-nuxt'), {domain: this.domain})
 
     // doing the modifications see here: https://sao.vercel.app/saofile.html#actions
     // add: convert filters to https://github.com/mrmlnc/fast-glob#options-1 filters become ingore in the globOptions
 
     // NOTE: it would be much easier to add slicemachine as an option to nuxt
+  }
+
+  install() {
+    if (this.answers.pm === 'yarn') {
+      this.yarnInstall()
+    } else {
+      this.npmInstall()
+    }
   }
 }
 
