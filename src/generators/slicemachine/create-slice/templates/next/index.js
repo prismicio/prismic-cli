@@ -27,12 +27,15 @@ const <%= sliceName %> = ({ slice }) => (
   </section>
 );
 
-MySlice.propTypes = {
+<%= sliceName %>.propTypes = {
   slice: shape({
     primary: shape({
       title: array.isRequired,
     }).isRequired,
   }).isRequired,
 };
+
+<%= sliceName %>.displayName = <%= sliceName %>
+
 
 export default <%= sliceName %>;

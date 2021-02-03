@@ -192,7 +192,7 @@ export default class Nuxt extends PrismicGenerator {
         ],
         default: 'none'
       },
-      {
+      { // TODO: some of this logic is broken in create-nuxt-app as selecting vcs should ask user name?
         when: ({ devTools, ci }) => devTools.includes('dependabot') || ci !== 'none',
         name: 'gitUsername',
         message: 'What is your GitHub username?',
@@ -234,17 +234,18 @@ export default class Nuxt extends PrismicGenerator {
           file,
           condition,
         ]) => {
+          const pathToFile = path.join(action.templateDir, file)
           if (typeof condition === 'string') {
             const shouldIgnore = evaluate(condition, this.answers)
-            return shouldIgnore ? [...acc, file] : acc
+            return shouldIgnore ? acc : [...acc, pathToFile]
           }
-          return condition ? [...acc, file] : acc
+          return condition ? [...acc, pathToFile] : acc
         }, ['**/nuxt/node_modules/**'])
         const fromPath = path.join(action.templateDir, action.files)
         return this.fs.copyTpl(
           fromPath,
           this.destinationPath(),
-          {ci: 'none', ...this.answers, ...templateData},
+          {...this.answers, ...templateData},
           {},
           {globOptions: {ignore}},
         )
@@ -254,7 +255,7 @@ export default class Nuxt extends PrismicGenerator {
           from,
           to,
         ]) => {
-          this.moveDestination(from, to)
+          this.existsDestination(from) && this.moveDestination(from, to)
         })
       }
       case 'modify': {
@@ -286,7 +287,7 @@ export default class Nuxt extends PrismicGenerator {
           patterns = Object.keys(action.files).reduce((acc: Array<string>, [file, condition]) => {
             if (typeof condition === 'string') {
               const shouldIgnore = evaluate(condition, this.answers)
-              return shouldIgnore ? [...acc, file] : acc
+              return shouldIgnore ? acc : [...acc, file]
             }
             return condition ? [...acc, file] : acc
           }, [])
@@ -295,8 +296,6 @@ export default class Nuxt extends PrismicGenerator {
       }
       }
     })
-
-    this.composeWith(require.resolve('./slicemachine-generator-nuxt'), {domain: this.domain})
 
     // doing the modifications see here: https://sao.vercel.app/saofile.html#actions
     // add: convert filters to https://github.com/mrmlnc/fast-glob#options-1 filters become ingore in the globOptions

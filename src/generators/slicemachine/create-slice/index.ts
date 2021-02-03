@@ -68,10 +68,7 @@ export default class CreateSlice extends Generator {
 
   async writing() {
 
-    // const smFile = this.readDestinationJSON('sm.json', {libraries: []})
-
     const libName = path.join('@', this.answers.library)
-
 
     const {libraries} = this.readDestinationJSON('sm.json', {libraries: []}) as unknown as SliceMachineConfig
 
@@ -79,29 +76,28 @@ export default class CreateSlice extends Generator {
       this.fs.extendJSON('sm.json', {libraries: [...libraries, libName]})
     }
 
-    const pathToLib = path.join(this.answers.library, this.answers.sliceName)
+    const pathToLib = this.destinationPath(path.join(this.answers.library, this.answers.sliceName))
 
     // copy the template file
     // TODO: check if libaray exists first then modify the index.
-    this.copyTemplate('index.js', path.join(this.answers.library, 'index.js'), undefined, {
-      sliceName: this.answers.sliceName,
-    })
+    this.fs.copyTpl(
+      this.templatePath('index.js'),
+      this.destinationPath(path.join(this.answers.library, 'index.js')),
+      {sliceName: this.answers.sliceName},
+    )
 
     // load the mocks and models
-    this.copyTemplate('default/**', pathToLib, undefined, {
-      sliceName: this.answers.sliceName,
-      sliceType: this.answers.sliceType,
-    })
-
-    this.copyTemplate(path.join(this.options.framework, '**'), pathToLib, undefined, {
-      sliceName: this.answers.sliceName,
-      sliceType: this.answers.sliceType,
-    })
-  }
-
-  async conflicts() {
-    /* handel confilicts with sm.json */
-    // TODO: conflicts can happen with index.js and sm.jsons
+    this.fs.copyTpl(
+      this.templatePath('default/**'),
+      pathToLib,
+      {sliceName: this.answers.sliceName, sliceType: this.answers.sliceType},
+    )
+    
+    this.fs.copyTpl(
+      this.templatePath(path.join(this.options.framework, '**')),
+      pathToLib,
+      {sliceName: this.answers.sliceName, sliceType: this.answers.sliceType},
+    )
   }
 }
 

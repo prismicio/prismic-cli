@@ -2,7 +2,7 @@
   "id": "my_slice",
   "type": "SharedSlice",
   "name": "<%= sliceName %>",
-  "description": "<%= sliceName =>",
+  "description": "<%= sliceName %>",
   "variations": [{
     "id": "default-slice",
     "name": "Default slice",
