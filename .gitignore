@@ -34,7 +34,6 @@
 /package-lock.json
 /tmp
 __tmp__
-bin
 build/Release
 coverage
 jspm_packages

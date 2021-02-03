@@ -53,6 +53,10 @@ export default class Nuxt extends PrismicGenerator {
   async initializing() {
     // load the default template
     this.destinationRoot(this.path)
+    this.composeWith(require.resolve('../slicemachine'), {
+      framework: 'nuxt',
+      domain: this.domain,
+    })
   }
 
   async prompting() {
@@ -212,12 +216,10 @@ export default class Nuxt extends PrismicGenerator {
   async writing() {
     // template data to be passed to copyTmp
     const templateData: SaoTemplateData = saoSettings.templateData.bind(this)()
-    // this.log({...templateData, ...this.answers})
 
     this.outDir = this.destinationPath()
 
     const actions: Array<Action> = saoSettings.actions.bind(this)()
-    this.log(JSON.stringify(actions, null, 2))
 
     // load the files into mem-fs
     actions.forEach(action => {
@@ -293,8 +295,6 @@ export default class Nuxt extends PrismicGenerator {
       }
       }
     })
-
-    console.log("\nREADY FOR NExT STEP\n")
 
     this.composeWith(require.resolve('./slicemachine-generator-nuxt'), {domain: this.domain})
 

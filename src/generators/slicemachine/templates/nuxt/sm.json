@@ -1,0 +1,7 @@
+{
+  "libraries":[
+    "vue-essential-slices"
+  ],
+  "apiEndpoint": "https://<%= domain %>.cdn.prismic.io/api/v2",
+  "_latest": "0.0.43"
+} 

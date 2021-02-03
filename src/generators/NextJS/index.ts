@@ -1,5 +1,4 @@
 import PrismicGenerator, { TemplateOptions } from '../base'
-import * as path from 'path'
 
 export default class NextJS extends PrismicGenerator {
   /* constructor(args: string | string[], opts: TemplateOptions) {
@@ -18,8 +17,16 @@ export default class NextJS extends PrismicGenerator {
     })
   } */
 
- async configuring() {
+  async initializing() {
     this.destinationRoot(this.path)
+    this.composeWith(require.resolve('../slicemachine'), {
+      framework: 'next',
+      domain: this.domain,
+    })
+  }
+
+  async configuring() {
+    // this.destinationRoot(this.path)
     // add additional templates for slicemachiine and story-book
   }
 
@@ -30,13 +37,13 @@ export default class NextJS extends PrismicGenerator {
       {globOptions: {dot: true}}
     )
 
-    this.fs.copyTpl(
+    /* this.fs.copyTpl(
       this.templatePath('slicemachine/**'),
       this.destinationPath(),
       {domain: this.domain},
       undefined,
       {globOptions: {dot: true}}
-    )
+    ) */
 
     const pkjJson = {
       name: this.domain,
@@ -54,17 +61,17 @@ export default class NextJS extends PrismicGenerator {
         'react-dom': '^16',
 
         // prismic sm --setup
-        'prismic-javascript': '3',
-        'prismic-reactjs': '1',
-        'next-slicezone': '0',
-        'next-transpile-modules': '6',
-        'theme-ui': '0',
-        'essential-slices': '1',
+        //'prismic-javascript': '3',
+        //'prismic-reactjs': '1',
+        //'next-slicezone': '0',
+        //'next-transpile-modules': '6',
+        //'theme-ui': '0',
+        //'essential-slices': '1',
       },
       devDependencies: {
-        // sm --setup
-        '@babel/core': '^7.12.10',
-        'slice-machine-ui': '^0.0.43',
+        // sm --setup maybe?
+        //'@babel/core': '^7.12.10',
+        //'slice-machine-ui': '^0.0.43',
       },
 
     }
