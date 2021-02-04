@@ -36,7 +36,7 @@ export default class Nuxt extends PrismicGenerator {
 
   answers: Answers = {}
 
-  sao = {opts: {}} // figure out how to get git hub user name
+  sao = {opts: {}}
 
   outDir?: string;
   /**

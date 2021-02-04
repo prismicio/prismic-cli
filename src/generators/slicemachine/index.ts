@@ -47,6 +47,14 @@ function depsForFramework(framework: string) {
   }
 }
 
+function defaultLibForFrameWork(framework: string): string {
+  switch(framework) {
+    case 'next': return 'essential-slices';
+    case 'nuxt': return 'vue-essential-slices';
+    default: return ''
+  }
+}
+
 export default class SliceMachine extends Generator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
@@ -90,21 +98,6 @@ export default class SliceMachine extends Generator {
 
     this.fs.extendJSON(this.destinationPath('package.json'), pkgJson)
 
-    /*
-    const smJson = {
-      apiEndpoint: `https://${this.options.domain}.cdn.prismic.io/api/v2`,
-      libraries: [
-        '@/slices',
-        'vue-essential-slices',
-      ],
-      _latest: '0.0.43', // same version as slice-machine-ui
-    } 
-
-    
-
-    this.fs.extendJSON(this.destinationPath('sm.json'), smJson)
-    */
-
     if(this.options.framework === 'nuxt') {
 
       const config = this.readDestination('nuxt.config.js')
@@ -122,7 +115,11 @@ export default class SliceMachine extends Generator {
     }
     
 
-    this.copyTemplate('default/**', this.destinationPath())
+    this.fs.copyTpl(this.templatePath('default/**'), this.destinationPath(), {
+      domain: this.options.domain,
+      latest: '0.0.43',
+      defaultLibrary: defaultLibForFrameWork(this.options.framework)
+    })
 
   }
 }

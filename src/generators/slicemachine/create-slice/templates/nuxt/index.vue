@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: "<%= sliceName %>", // should match the folder name
+  name: "<%= sliceName %>",
   props: {
     slice: {
       type: Object,
