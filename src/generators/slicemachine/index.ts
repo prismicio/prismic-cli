@@ -1,4 +1,4 @@
-import * as Generator from 'yeoman-generator'
+import PrismicGenerator, { TemplateOptions } from '../base'
 import modifyNuxtConfig from './modify-nuxt-config'
 
 const nuxtDeps = {
@@ -55,7 +55,8 @@ function defaultLibForFrameWork(framework: string): string {
   }
 }
 
-export default class SliceMachine extends Generator {
+
+export default class NextJS extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
    * prompting - Where you prompt users for options (where you’d call this.prompt())
@@ -67,7 +68,7 @@ export default class SliceMachine extends Generator {
    * end - Called last, cleanup, say good bye, etc
    */
 
-  constructor(argv: string | string[], opts: Generator.CompositionOptions) { // TODO: options
+  constructor(argv: string | string[], opts:TemplateOptions) { // TODO: options
     super(argv, opts)
     this.option('framework', {
       type: String,
@@ -121,5 +122,16 @@ export default class SliceMachine extends Generator {
       defaultLibrary: defaultLibForFrameWork(this.options.framework)
     })
 
+    const customTypes = this.readCustomTypesFrom('custom_types')
+
+    return this.prismic.createRepository({
+      domain: this.domain,
+      customTypes, // TODO: customTypes are not being sent ?
+    }).then(res => {
+      const url = new URL(this.prismic.base)
+      url.host = `${res.data || this.domain}.${url.host}`
+      this.log(`A new repsitory has been created at: ${url.toString()}`)
+      return res
+    })
   }
 }

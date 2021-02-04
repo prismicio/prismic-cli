@@ -80,14 +80,14 @@ export default abstract class PrismicGenerator extends Generator {
   }
 
   readCustomTypesFrom(customTypesDirectory = 'custom_types'): Array<CustomType> {
-    const pathToCustomTypesMetaInfo = path.join(this.path, customTypesDirectory, 'index.json')
+    const pathToCustomTypesMetaInfo = this.destinationPath(customTypesDirectory, 'index.json')
 
     const customTypesMetaInfoAsString: string = this.fs.read(pathToCustomTypesMetaInfo, {defaults: '[]'})
 
     const customTypesMetaInfo: Array<CustomTypeMetaData> = JSON.parse(customTypesMetaInfoAsString)
 
     const customTypes: Array<CustomType> = customTypesMetaInfo.map((ct: CustomTypeMetaData) => {
-      const location = path.join(this.path, 'custom_types', ct.value)
+      const location = this.destinationPath('custom_types', ct.value)
       const value = this.fs.readJSON(location)
       return {...ct, value}
     })
@@ -96,7 +96,7 @@ export default abstract class PrismicGenerator extends Generator {
   }
 
   readDocumentsFrom(documentsDirectory = 'documents'): Documents | undefined {
-    const pathToDocuments = path.join(this.path, documentsDirectory)
+    const pathToDocuments = this.destinationPath(documentsDirectory)
     const pathToSignatureFile = path.join(pathToDocuments, 'index.json')
 
     if (this.fs.exists(pathToSignatureFile) === false) {

@@ -60,7 +60,7 @@ export default class CreateSlice extends Generator {
   }
 
 
-  async writing() {
+  async configuring() {
     const pathToLib = this.destinationPath(path.join(this.answers.library, this.answers.sliceName))
 
     this.fs.copyTpl(
@@ -74,7 +74,9 @@ export default class CreateSlice extends Generator {
       pathToLib,
       {sliceName: this.answers.sliceName, sliceType: this.answers.sliceType},
     )
+  }
 
+  async writing() {
     const libIndex = this.destinationPath(path.join(this.answers.library, 'index.js'))
     const hasLibIndex = fs.existsSync(libIndex)
 
