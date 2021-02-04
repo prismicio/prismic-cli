@@ -3,17 +3,18 @@ import * as Yeoman from 'yeoman-environment'
 const env: Yeoman<Yeoman.Options> = Yeoman.createEnv()
 
 env.register(
-  require.resolve('../generators/NodeJS'), // make this dynamic?
-  'NodeJS', // make this dynamic?
-)
-env.register(
-  require.resolve('../generators/React'),
-  'React',
+  require.resolve('../generators/NextJS'),
+  'Next.js',
 )
 
 env.register(
-  require.resolve('../generators/Angular2'),
-  'Angular2',
+  require.resolve('../generators/Nuxt'),
+  'Nuxt',
+)
+
+env.register(
+  require.resolve('../generators/React'),
+  'React',
 )
 
 env.register(
@@ -22,13 +23,13 @@ env.register(
 )
 
 env.register(
-  require.resolve('../generators/NextJS'),
-  'Next.js',
+  require.resolve('../generators/Angular2'),
+  'Angular2',
 )
 
 env.register(
-  require.resolve('../generators/Nuxt'),
-  'Nuxt',
+  require.resolve('../generators/NodeJS'), // make this dynamic?
+  'NodeJS', // make this dynamic?
 )
 
 export default env
