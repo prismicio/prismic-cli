@@ -32,18 +32,10 @@ export default class NextJS extends PrismicGenerator {
 
   async writing() {
     this.fs.copy(
-      this.templatePath('default/**'),
+      this.templatePath('**'),
       this.destinationPath(),
       {globOptions: {dot: true}}
     )
-
-    /* this.fs.copyTpl(
-      this.templatePath('slicemachine/**'),
-      this.destinationPath(),
-      {domain: this.domain},
-      undefined,
-      {globOptions: {dot: true}}
-    ) */
 
     const pkjJson = {
       name: this.domain,
@@ -59,21 +51,7 @@ export default class NextJS extends PrismicGenerator {
         next: '10.0.2',
         react: '^16',
         'react-dom': '^16',
-
-        // prismic sm --setup
-        //'prismic-javascript': '3',
-        //'prismic-reactjs': '1',
-        //'next-slicezone': '0',
-        //'next-transpile-modules': '6',
-        //'theme-ui': '0',
-        //'essential-slices': '1',
       },
-      devDependencies: {
-        // sm --setup maybe?
-        //'@babel/core': '^7.12.10',
-        //'slice-machine-ui': '^0.0.43',
-      },
-
     }
 
     this.fs.extendJSON(this.destinationPath('package.json'), pkjJson)
