@@ -56,6 +56,7 @@ export default class Nuxt extends PrismicGenerator {
     this.composeWith(require.resolve('../slicemachine'), {
       framework: 'nuxt',
       domain: this.domain,
+      prismic: this.prismic,
     })
   }
 

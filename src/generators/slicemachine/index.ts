@@ -30,7 +30,7 @@ const nextDevDeps = {
 }
 
 function depsForFramework(framework: string) {
-  switch(framework) {
+  switch (framework) {
     case 'next': {
       return {
         dependencies: nextDeps,
@@ -56,7 +56,7 @@ function defaultLibForFrameWork(framework: string): string {
 }
 
 
-export default class NextJS extends PrismicGenerator {
+export default class SliceMachine extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
    * prompting - Where you prompt users for options (where you’d call this.prompt())
@@ -68,7 +68,7 @@ export default class NextJS extends PrismicGenerator {
    * end - Called last, cleanup, say good bye, etc
    */
 
-  constructor(argv: string | string[], opts:TemplateOptions) { // TODO: options
+  constructor(argv: string | string[], opts: TemplateOptions) { // TODO: options
     super(argv, opts)
     this.option('framework', {
       type: String,
@@ -80,8 +80,8 @@ export default class NextJS extends PrismicGenerator {
       type: String,
       description: 'prismic.io subdomain',
     })
-    
   }
+  
   async initializing() {
     this.composeWith(require.resolve('./create-slice'), this.options)
   }
@@ -99,7 +99,7 @@ export default class NextJS extends PrismicGenerator {
 
     this.fs.extendJSON(this.destinationPath('package.json'), pkgJson)
 
-    if(this.options.framework === 'nuxt') {
+    if (this.options.framework === 'nuxt') {
 
       const config = this.readDestination('nuxt.config.js')
 
@@ -109,7 +109,7 @@ export default class NextJS extends PrismicGenerator {
 
     }
 
-    if(this.options.framework === 'next') {
+    if (this.options.framework === 'next') {
       // theses files could be removed from this package but would have to cocme from create-next-app
       // this.copyTemplate('next', this.destinationPath(), {globOptions:{dot: true}}, this.options)
       this.fs.copyTpl(this.templatePath(this.options.framework), this.destinationPath(), this.options, undefined, {globOptions: {dot: true}})
@@ -123,6 +123,8 @@ export default class NextJS extends PrismicGenerator {
     })
 
     const customTypes = this.readCustomTypesFrom('custom_types')
+
+    console.log(this.prismic)
 
     return this.prismic.createRepository({
       domain: this.domain,
