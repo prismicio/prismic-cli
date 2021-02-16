@@ -6,6 +6,9 @@ import {fs} from '../utils'
 import cli from 'cli-ux'
 import {posix} from 'path'
 import axios, {AxiosError} from 'axios'
+import * as inquirer from 'inquirer'
+
+import chalk from 'chalk'
 
 export default abstract class PrismicCommand extends Command {
   prismic: Prismic;
@@ -21,10 +24,28 @@ export default abstract class PrismicCommand extends Command {
   }
 
   async validateDomain(name: string | undefined): Promise<string> {
+    const base = new URL(this.prismic.base)
+
     return this.prismic.validateRepositoryName(name)
     .catch(error => {
       this.log(error.message)
-      return cli.prompt('prismic subdomain', {required: true}).then(this.validateDomain.bind(this))
+      return inquirer.prompt([{
+        type: 'input',
+        name: 'domain',
+        message: 'Name your prismic repository: ',
+        required: true,
+        default: name,
+        transformer(value) {
+          const reponame = value ? chalk.cyan(value) : chalk.dim.cyan('repo-name')
+          const msg = [
+            chalk.dim(`${base.protocol}//`),
+            reponame,
+            chalk.dim(`.${base.hostname}`),
+          ]
+          return msg.join('')
+        },
+      }]).then(this.validateDomain.bind(this))
+      // return cli.prompt('prismic subdomain', {required: true}).then(this.validateDomain.bind(this))
     })
   }
 
