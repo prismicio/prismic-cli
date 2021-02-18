@@ -19,10 +19,10 @@ export default class StoryBookNext extends Generator {
         storybook: 'nuxt storybook',
         'build-storybook': 'nuxt storybook build',
       },
-      devDependencies: [
-        '@nuxtjs/storybook',
-        'babel-loader',
-      ],
+      devDependencies: {
+        '@nuxtjs/storybook': '*',
+        'babel-loader': '*',
+      }
     }
 
     this.fs.extendJSON(this.destinationPath('package.json'), pkJson)
@@ -38,13 +38,11 @@ export default class StoryBookNext extends Generator {
     const libraries = smfile.libraries || []
 
     // read sm.json for local libraries.
-    const localLibs = libraries.filter(lib => lib.startsWith('@/'))
+    const localLibs = libraries.filter(lib => lib.startsWith('@/')).map(lib => lib.substring(2))
     
-    const stories = localLibs.map(p => `../${p}/**/*.stories.[tj]s`)
-
     const config = this.readDestination('nuxt.config.js')
 
-    const updatedConfig = modifyNuxtConfig(config, stories)
+    const updatedConfig = modifyNuxtConfig(config, localLibs)
 
     this.writeDestination('nuxt.config.js', updatedConfig)
   }

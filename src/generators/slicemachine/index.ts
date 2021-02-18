@@ -83,6 +83,7 @@ export default class SliceMachine extends PrismicGenerator {
   
   async initializing() {
     this.composeWith(require.resolve('./create-slice'), this.options)
+    this.composeWith(require.resolve('../storybook'), this.options)
   }
 
   async writing() { 

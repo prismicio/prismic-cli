@@ -18,7 +18,7 @@ function getKeys(properties: Array<t.ObjectMethod | t.ObjectProperty | t.SpreadE
 export default function modifyNuxtConfig(source: string, libraryNames: Array<string>): string {
   const ast = parser.parse(source, {sourceType: 'module'})
 
-  const pathString = (lib: string) => npath.join('~', lib, '**', '*.stories.js')
+  const pathString = (lib: string) => npath.join('~', lib, '**', '*.stories.[tj]s')
   const toSlicePath = (libName: string) => t.stringLiteral(pathString(libName))
   const pathsToSlices = libraryNames.map(libraryName => toSlicePath(libraryName))
 

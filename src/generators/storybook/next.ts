@@ -50,7 +50,7 @@ export default class StoryBookNext extends Generator {
     const libraries = smfile.libraries || []
 
     // read sm.json for local libraries.
-    const localLibs = libraries.filter(lib => lib.startsWith('@/'))
+    const localLibs = libraries.filter(lib => lib.startsWith('@/')).map(lib => lib.substring(2))
     
     const stories = localLibs.map(p => `../${p}/**/*.stories.[tj]s`)
 
