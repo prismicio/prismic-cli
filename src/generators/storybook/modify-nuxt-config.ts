@@ -4,7 +4,7 @@ import traverse from '@babel/traverse'
 import * as t from '@babel/types'
 import generate from '@babel/generator'
 
-import * as path from 'path'
+import * as npath from 'path'
 
 function getKeys(properties: Array<t.ObjectMethod | t.ObjectProperty | t.SpreadElement>): Array<string> {
   return properties.reduce<Array<string>>((acc, curr) => {
@@ -18,8 +18,7 @@ function getKeys(properties: Array<t.ObjectMethod | t.ObjectProperty | t.SpreadE
 export default function modifyNuxtConfig(source: string, libraryNames: Array<string>): string {
   const ast = parser.parse(source, {sourceType: 'module'})
 
-  // const pathToSlices = path.join('~', libraryName, '**', '*.stories.js')
-  const pathString = (lib: string) => path.join('~', lib, '**', '*.stories.js')
+  const pathString = (lib: string) => npath.join('~', lib, '**', '*.stories.js')
   const toSlicePath = (libName: string) => t.stringLiteral(pathString(libName))
   const pathsToSlices = libraryNames.map(libraryName => toSlicePath(libraryName))
 

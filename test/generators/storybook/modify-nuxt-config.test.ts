@@ -2,7 +2,7 @@ import {expect} from '@oclif/test'
 
 import modifyNuxtConfig from '../../../src/generators/storybook/modify-nuxt-config'
 
-describe.only('storybook#modify-nuxt-config', () => {
+describe('storybook#modify-nuxt-config', () => {
   it('should add ignore **/*.stories.js when no ignore field is present', () => {
     const input = 'export default {}'
     const result = modifyNuxtConfig(input, ['slices'])
