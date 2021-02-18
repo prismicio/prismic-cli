@@ -44,7 +44,7 @@ export default class StoryBookNext extends Generator {
 
     const config = this.readDestination('nuxt.config.js')
 
-    const updatedConfig = modifyNuxtConfig(config. stories)
+    const updatedConfig = modifyNuxtConfig(config, stories)
 
     this.writeDestination('nuxt.config.js', updatedConfig)
   }
