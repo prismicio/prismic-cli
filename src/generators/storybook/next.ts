@@ -1,0 +1,66 @@
+import {SliceMachineJson} from '../base'
+import * as Generator from 'yeoman-generator'
+
+export default class StoryBookNext extends Generator {
+  /**
+   * initializing - Your initialization methods (checking current project state, getting configs, etc)
+   * prompting - Where you prompt users for options (where you’d call this.prompt())
+   * configuring - Saving configurations and configure the project (creating .editorconfig files and other metadata files)
+   * default - If the method name doesn’t match a priority, it will be pushed to this group.
+   * writing - Where you write the generator specific files (routes, controllers, etc)
+   * conflicts - Where conflicts are handled (used internally)
+   * install - Where installations are run (npm, bower)
+   * end - Called last, cleanup, say good bye, etc
+   */
+
+  async writing() {
+    const pkJson = {
+      devDependencies: {
+        '@storybook/react': '*',
+        'babel-loader': '*',
+        'babel-plugin-react-require': '*',
+      },
+      scripts: {
+        storybook: 'start-storybook -p 8888',
+        'build-storybook': 'build-storybook',
+      },
+    }
+
+    this.fs.extendJSON(this.destinationPath('package.json'), pkJson)
+
+    const babelrc = {
+      presets: [
+        ['next/babel'],
+      ],
+      plugins: ['react-require'],
+    }
+
+    this.fs.extendJSON(this.destinationPath('.babelrc'), babelrc)
+
+    const smJson = {
+      storybook: 'http://localhost:8888'
+    }
+
+    this.fs.extendJSON(this.destinationPath('sm.json'), smJson)
+
+    // the default next teamplte doesn't contain a bablerc
+
+    const smfile = this.readDestinationJSON('sm.json') as unknown as SliceMachineJson
+
+    const libraries = smfile.libraries || []
+
+    // read sm.json for local libraries.
+    const localLibs = libraries.filter(lib => lib.startsWith('@/'))
+    
+    const stories = localLibs.map(p => `../${p}/**/*.stories.[tj]s`)
+
+    const storiesString = JSON.stringify(stories, null, 2)
+
+    const storyBookEntry = `module.exports = {
+      stories: ${storiesString}
+    }`
+
+    // TODO: what to do if main.js already axists?
+    this.writeDestination('.storybook/main.js',  storyBookEntry)
+  }
+}
