@@ -15,10 +15,14 @@ function getKeys(properties: Array<t.ObjectMethod | t.ObjectProperty | t.SpreadE
   }, [])
 }
 
-export default function modifyNuxtConfig(source: string, libraryName: string): string {
+export default function modifyNuxtConfig(source: string, libraryNames: Array<string>): string {
   const ast = parser.parse(source, {sourceType: 'module'})
 
-  const pathToSlices = path.join('~', libraryName, '**', '*.stories.js')
+  // const pathToSlices = path.join('~', libraryName, '**', '*.stories.js')
+  const pathString = (lib: string) => path.join('~', lib, '**', '*.stories.js')
+  const toSlicePath = (libName: string) => t.stringLiteral(pathString(libName))
+  const pathsToSlices = libraryNames.map(libraryName => toSlicePath(libraryName))
+
   traverse(ast, {
     ObjectExpression(path) {
       if (t.isObjectExpression(path) && t.isExportDeclaration(path.parent)) {
@@ -33,9 +37,7 @@ export default function modifyNuxtConfig(source: string, libraryName: string): s
               t.objectExpression([
                 t.objectProperty(
                   t.identifier('stories'),
-                  t.arrayExpression([
-                    t.stringLiteral(pathToSlices),
-                  ])
+                  t.arrayExpression(pathsToSlices)
                 ),
               ])
             )
@@ -49,21 +51,23 @@ export default function modifyNuxtConfig(source: string, libraryName: string): s
                 prop.value.properties.push(
                   t.objectProperty(
                     t.identifier('stories'),
-                    t.arrayExpression([
-                      t.stringLiteral(pathToSlices),
-                    ])
+                    t.arrayExpression(pathsToSlices)
                   )
                 )
               } else {
+                // TODO: how would this handle deletions
                 prop.value.properties.forEach((storyBookProps: t.ObjectMethod | t.ObjectProperty | t.SpreadElement) => {
                   if (t.isObjectProperty(storyBookProps) && t.isIdentifier(storyBookProps.key) && t.isArrayExpression(storyBookProps.value) && storyBookProps.key.name === 'stories') {
                     const values = storyBookProps.value.elements.reduce<Array<string>>((acc, curr) => {
                       if (t.isStringLiteral(curr)) return [...acc, curr.value]
                       return acc
                     }, [])
-                    if (values.includes(pathToSlices) === false) {
-                      storyBookProps.value.elements.push(t.stringLiteral(pathToSlices))
-                    }
+                    
+                    libraryNames.forEach(lib => {
+                      if (values.includes(pathString(lib)) === false && t.isArrayExpression(storyBookProps.value)) {
+                        storyBookProps.value.elements.push(toSlicePath(lib))
+                      }
+                    })
                   }
                 })
               }
