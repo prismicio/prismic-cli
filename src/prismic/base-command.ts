@@ -44,8 +44,7 @@ export default abstract class PrismicCommand extends Command {
           ]
           return msg.join('')
         },
-      }]).then(this.validateDomain.bind(this))
-      // return cli.prompt('prismic subdomain', {required: true}).then(this.validateDomain.bind(this))
+      }]).then(res => res.domain).then(this.validateDomain.bind(this))
     })
   }
 

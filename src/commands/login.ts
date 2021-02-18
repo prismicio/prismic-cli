@@ -37,7 +37,8 @@ export default class Login extends Command {
     .then(() => this.log(`Successfully logged in to ${data.base || this.prismic.base}`))
     .catch(error => {
       if (error.response && (error.response.status === 400 || error.response.status === 401)) {
-        return this.log(`Login error, check your credentials. If you forgot your password, visit ${data.base || this.prismic.base} to reset it`)
+        this.log(`Login error, check your credentials. If you forgot your password, visit ${data.base || this.prismic.base} to reset it`)
+        return this.run()
         // return this.run() for asking repeatedly
       // throw new CLIError(error.message)
       }

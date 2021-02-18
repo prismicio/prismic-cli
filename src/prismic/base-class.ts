@@ -177,6 +177,7 @@ export default class Prismic {
 
   public async validateRepositoryName(name?: string): Promise<string> {
     if (!name) return Promise.reject(new Error('repository name is required'))
+
     const domain = name.toLocaleLowerCase().trim()
 
     /* const allowedChars = /^[a-zA-Z0-9][-a-zA-Z0-9]{2,}[a-zA-Z0-9]$/
@@ -189,10 +190,10 @@ export default class Prismic {
     const errors = []
 
     const startsWithLetter = /^[a-z]/.test(domain)
-    if (!startsWithLetter) errors.push('Mst start with a letter.')
+    if (!startsWithLetter) errors.push('Must start with a letter.')
 
     const acceptedChars = /^[a-z0-9-]+$/.test(domain)
-    if (!acceptedChars) errors.push('Most contain only letters, numbers and hyphens.')
+    if (!acceptedChars) errors.push('Must contain only letters, numbers and hyphens.')
 
     const fourCharactersOrMore = domain.length >= 4
     if (!fourCharactersOrMore) errors.push('Must have four or more alphanumeric characters and/or hyphens.')

@@ -2,9 +2,8 @@ import {IConfig} from '@oclif/config'
 import {expect, test} from '@oclif/test'
 import {fs} from '../../src/utils'
 import Command from '../../src/prismic/base-command'
-import cli from 'cli-ux'
 import * as sinon from 'sinon'
-
+import * as inquirer from 'inquirer'
 class T extends Command {
   async run() {
     return Promise.resolve()
@@ -26,8 +25,8 @@ describe('prismic/base-command', () => {
       .get('/app/dashboard/repositories/fail/exists').reply(200, () => false)
       .get(`/app/dashboard/repositories/${repoName}/exists`).reply(200, () => true)
     })
-    .stub(cli, 'prompt', () => async (): Promise<string> => {
-      return Promise.resolve(repoName)
+    .stub(inquirer, 'prompt', async (): Promise<Record<string, string>> => {
+      return Promise.resolve({domain: repoName})
     })
     .add('cmd', () => {
       const opts = {} as IConfig

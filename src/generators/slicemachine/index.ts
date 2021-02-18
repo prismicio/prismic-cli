@@ -31,30 +31,29 @@ const nextDevDeps = {
 
 function depsForFramework(framework: string) {
   switch (framework) {
-    case 'next': {
-      return {
-        dependencies: nextDeps,
-        devDependencies: nextDevDeps,
-      }
+  case 'next': {
+    return {
+      dependencies: nextDeps,
+      devDependencies: nextDevDeps,
     }
-    case 'nuxt': {
-      return {
-        dependencies: nuxtDeps,
-        devDependencies: nuxtDevDeps,
-      }
+  }
+  case 'nuxt': {
+    return {
+      dependencies: nuxtDeps,
+      devDependencies: nuxtDevDeps,
     }
-    default: return {}
+  }
+  default: return {}
   }
 }
 
 function defaultLibForFrameWork(framework: string): string {
-  switch(framework) {
-    case 'next': return 'essential-slices';
-    case 'nuxt': return 'vue-essential-slices';
-    default: return ''
+  switch (framework) {
+  case 'next': return 'essential-slices'
+  case 'nuxt': return 'vue-essential-slices'
+  default: return ''
   }
 }
-
 
 export default class SliceMachine extends PrismicGenerator {
   /**
@@ -123,8 +122,6 @@ export default class SliceMachine extends PrismicGenerator {
     })
 
     const customTypes = this.readCustomTypesFrom('custom_types')
-
-    console.log(this.prismic)
 
     return this.prismic.createRepository({
       domain: this.domain,

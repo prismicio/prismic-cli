@@ -149,3 +149,10 @@ export interface Documents {
   signature: string;
   documents: Document;
 }
+
+export interface SliceMachineJson {
+  apiEndpoint: string;
+  libraries: Array<string>;
+  _latest: string;
+  storybook?: string;
+}
