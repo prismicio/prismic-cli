@@ -119,7 +119,7 @@ export default class SliceMachine extends PrismicGenerator {
     this.fs.copyTpl(this.templatePath('default/**'), this.destinationPath(), {
       domain: this.options.domain,
       latest: '0.0.43',
-      defaultLibrary: defaultLibForFrameWork(this.options.framework)
+      defaultLibrary: defaultLibForFrameWork(this.options.framework),
     })
 
     const customTypes = this.readCustomTypesFrom('custom_types')
