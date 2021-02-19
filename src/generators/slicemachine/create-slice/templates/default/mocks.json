@@ -1,9 +1,9 @@
 [{
-  "id": "default-slice",
-  "name": "Default slice",
+  "id": "<%= sliceId %>",
+  "name": "<%= sliceName %>", 
   "docURL": "...",
   "version": "sktwi1xtmkfgx8626",
-  "description": "<%= sliceName %>",
+  "description": "<%= description %>",
   "primary": {
     "title": [{
       "type": "heading1",

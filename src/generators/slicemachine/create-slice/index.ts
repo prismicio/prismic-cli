@@ -13,6 +13,10 @@ function pascalCaseToSnakeCase(str: string) {
   return str.split(/(?=[A-Z])/).join('_').toLowerCase()
 }
 
+function toDescription(str: string) {
+  return str.split(/(?=[A-Z0-9])/).join(' ')
+}
+
 export default class CreateSlice extends Generator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
@@ -63,10 +67,14 @@ export default class CreateSlice extends Generator {
   async configuring() {
     const pathToLib = this.destinationPath(path.join(this.answers.library, this.answers.sliceName))
 
+    const sliceId = pascalCaseToSnakeCase(this.answers.sliceName)
+
+    const description = toDescription(this.answers.sliceName)
+
     this.fs.copyTpl(
       this.templatePath('default/**'),
       pathToLib,
-      {sliceName: this.answers.sliceName, sliceType: this.answers.sliceType},
+      {sliceName: this.answers.sliceName, sliceType: this.answers.sliceType, sliceId: sliceId, description},
     )
     
     this.fs.copyTpl(
