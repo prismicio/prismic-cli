@@ -6,8 +6,9 @@ import * as qs from 'qs'
 import * as os from 'os'
 import {IConfig} from '@oclif/config'
 import {parseJsonSync} from '../utils'
-
+import cli from 'cli-ux'
 // Note to self it's easier to mock fs sync methods.
+
 
 export interface LoginData {
   email?: string;
@@ -171,8 +172,14 @@ export default class Prismic {
     if (!this.cookies) return Promise.resolve(false)
     const cookies = cookie.parse(this.cookies)
     if (!cookies.SESSION) return Promise.resolve(false)
-    if (!cookies['prismic-auth']) return Promise.resolve(false)
+    // if (!cookies['prismic-auth']) return Promise.resolve(false)
     return Promise.resolve(true) // TODO: check this some how
+  }
+
+  private async reAuthenticate() {
+    const email =  await cli.prompt('Email')
+    const password =  await cli.prompt('Password', {type: 'hide'})
+    return this.login({email, password}).catch(() => this.reAuthenticate)
   }
 
   public async validateRepositoryName(name?: string): Promise<string> {
@@ -218,7 +225,7 @@ export default class Prismic {
     const hasAuth = await this.isAuthenticated()
 
     if (!hasAuth) {
-      return Promise.reject(new Error('Unauthorized'))
+      await this.reAuthenticate()
     }
 
     return (
@@ -243,8 +250,15 @@ export default class Prismic {
       documents,
     }
 
+    const retry = () => this.createRepositoryWithCookie({domain, customTypes, signedDocuments})
+
     // const querystring = {app: 'slicemachine'}
-    return this.axios().post('/authentication/newrepository', data)
+    return this.axios().post('/authentication/newrepository', data).catch(error => {
+      if (error.response.status === 401) {
+        return this.reAuthenticate().then(retry)
+      }
+      throw error
+    })
   }
 
   private async createRepositoryWithToken({
@@ -268,7 +282,14 @@ export default class Prismic {
     url.hostname = `api.${url.hostname}`
     url.pathname = '/management/repositories'
 
+    const retry = () => this.createRepositoryWithToken({domain, customTypes, signedDocuments})
+
     const address = url.toString()
-    return this.axios().post(address, data)
+    return this.axios().post(address, data).catch(error => {
+      if (error.response.status === 401) {
+        return this.reAuthenticate().then(retry)
+      }
+      throw error
+    })
   }
 }
