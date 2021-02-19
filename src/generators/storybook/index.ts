@@ -13,12 +13,11 @@ export default class StoryBook extends PrismicGenerator {
       description: 'framework',
       storage: this.config, // adding this to a store for later usage by create-slice
     })
-
-    this.framework = this.config.get('framework')
   }
 
   async prompting() {
-    // maybe prompot for framework or check for framework
+    // TODO: maybe prompt for framework or check for framework
+    this.framework = this.options.framework || this.config.get('framework')
   }
 
   async configuring() {

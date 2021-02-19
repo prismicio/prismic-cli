@@ -2,21 +2,6 @@ import { AxiosResponse } from 'axios'
 import PrismicGenerator, { TemplateOptions } from '../base'
 
 export default class NextJS extends PrismicGenerator {
-  /* constructor(args: string | string[], opts: TemplateOptions) {
-    super(args, opts)
-
-    this.option('slicemachine', {
-      type: Boolean,
-      description: 'add slice-machine',
-      alias: 'sm',
-    })
-
-    this.option('story-book', {
-      type: Boolean,
-      description: 'add story-book',
-      alias: 'storybook',
-    })
-  } */
 
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
@@ -53,10 +38,9 @@ export default class NextJS extends PrismicGenerator {
         dev: 'next dev',
         build: 'next build',
         start: 'next start',
-        slicemachine: 'start-slicemachine --port 9999',
       },
       dependencies: {
-        next: '10.0.2',
+        next: '^10.0.7',
         react: '^16',
         'react-dom': '^16',
       },
