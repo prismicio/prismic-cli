@@ -254,7 +254,7 @@ export default class Prismic {
 
     // const querystring = {app: 'slicemachine'}
     return this.axios().post('/authentication/newrepository', data).catch(error => {
-      if (error.response.status === 401) {
+      if (error.response?.status === 401) {
         return this.reAuthenticate().then(retry)
       }
       throw error
@@ -286,7 +286,7 @@ export default class Prismic {
 
     const address = url.toString()
     return this.axios().post(address, data).catch(error => {
-      if (error.response.status === 401) {
+      if (error.response?.status === 401) {
         return this.reAuthenticate().then(retry)
       }
       throw error
