@@ -1,5 +1,4 @@
-import { AxiosResponse } from 'axios'
-import PrismicGenerator, { TemplateOptions } from '../base'
+import PrismicGenerator from '../base'
 
 export default class NextJS extends PrismicGenerator {
 
@@ -24,9 +23,11 @@ export default class NextJS extends PrismicGenerator {
   }
 
   async writing() {
-    this.fs.copy(
+    this.fs.copyTpl(
       this.templatePath('**'),
       this.destinationPath(),
+      {domain: this.domain},
+      undefined,
       {globOptions: {dot: true}}
     )
 
