@@ -63,7 +63,6 @@ export default class CreateSlice extends Generator {
     Object.assign(this.answers, {sliceName, library})
   }
 
-
   async configuring() {
     const pathToLib = this.destinationPath(path.join(this.answers.library, this.answers.sliceName))
 
@@ -76,7 +75,7 @@ export default class CreateSlice extends Generator {
       pathToLib,
       {sliceName: this.answers.sliceName, sliceType: this.answers.sliceType, sliceId: sliceId, description},
     )
-    
+
     this.fs.copyTpl(
       this.templatePath(path.join(this.options.framework || this.config.get('framework'), '**')),
       pathToLib,

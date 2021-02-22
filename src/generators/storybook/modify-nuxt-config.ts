@@ -61,7 +61,7 @@ export default function modifyNuxtConfig(source: string, libraryNames: Array<str
                       if (t.isStringLiteral(curr)) return [...acc, curr.value]
                       return acc
                     }, [])
-                    
+
                     libraryNames.forEach(lib => {
                       if (values.includes(pathString(lib)) === false && t.isArrayExpression(storyBookProps.value)) {
                         storyBookProps.value.elements.push(toSlicePath(lib))

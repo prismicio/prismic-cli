@@ -1,4 +1,4 @@
-import PrismicGenerator, { TemplateOptions } from '../base'
+import PrismicGenerator, {TemplateOptions} from '../base'
 import modifyNuxtConfig from './modify-nuxt-config'
 
 const nuxtDeps = {
@@ -80,14 +80,13 @@ export default class SliceMachine extends PrismicGenerator {
       description: 'prismic.io subdomain',
     })
   }
-  
+
   async initializing() {
     this.composeWith(require.resolve('./create-slice'), this.options)
     this.composeWith(require.resolve('../storybook'), this.options)
   }
 
-  async writing() { 
-
+  async writing() {
     const deps = depsForFramework(this.options.framework)
 
     const pkgJson = {
@@ -100,13 +99,11 @@ export default class SliceMachine extends PrismicGenerator {
     this.fs.extendJSON(this.destinationPath('package.json'), pkgJson)
 
     if (this.options.framework === 'nuxt') {
-
       const config = this.readDestination('nuxt.config.js')
 
       const updatedConfig = modifyNuxtConfig(config, this.options.domain)
-      
-      this.writeDestination('nuxt.config.js', updatedConfig)
 
+      this.writeDestination('nuxt.config.js', updatedConfig)
     }
 
     if (this.options.framework === 'next') {
@@ -114,7 +111,6 @@ export default class SliceMachine extends PrismicGenerator {
       // this.copyTemplate('next', this.destinationPath(), {globOptions:{dot: true}}, this.options)
       this.fs.copyTpl(this.templatePath(this.options.framework), this.destinationPath(), this.options, undefined, {globOptions: {dot: true}})
     }
-    
 
     this.fs.copyTpl(this.templatePath('default/**'), this.destinationPath(), {
       domain: this.options.domain,

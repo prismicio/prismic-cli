@@ -16,7 +16,7 @@ export default function modifyNuxtConfig(source: string, domain: string): string
   const ast = parser.parse(source, {sourceType: 'module'})
 
   const srcPollyFill = t.objectExpression([t.objectProperty(t.identifier('src'), t.stringLiteral('https://cdn.polyfill.io/v2/polyfill.min.js?features=Element.prototype.classList'))])
-  
+
   const srcFocusVisible = t.objectExpression([t.objectProperty(t.identifier('src'), t.stringLiteral('https://cdn.jsdelivr.net/npm/focus-visible@5.0.2/dist/focus-visible.min.js'))])
 
   const css = t.stringLiteral('vue-essential-slices/src/styles/styles.scss')
@@ -60,12 +60,10 @@ export default function modifyNuxtConfig(source: string, domain: string): string
   traverse(ast, {
     ObjectExpression(path: NodePath<t.ObjectExpression>) {
       path.node.properties.forEach((prop: t.ObjectMethod | t.ObjectProperty | t.SpreadElement) => {
-        
         if (t.isObjectProperty(prop) && t.isIdentifier(prop.key) && t.isObjectExpression(prop.value) && prop.key.name === 'head') {
-          
           const keys = getKeys(prop.value.properties)
           const hasScript = keys.includes('script')
-  
+
           if (hasScript === false) {
             return prop.value.properties.push(t.objectProperty(t.identifier('script'),  t.arrayExpression([
               srcPollyFill,
@@ -78,15 +76,15 @@ export default function modifyNuxtConfig(source: string, domain: string): string
             }
           })
         }
-  
+
         if (t.isObjectProperty(prop) && t.isIdentifier(prop.key) && t.isArrayExpression(prop.value) && prop.key.name === 'css') {
           return prop.value.elements.push(css)
         }
-        
+
         if (t.isObjectProperty(prop) && t.isIdentifier(prop.key) && t.isArrayExpression(prop.value) && prop.key.name === 'modules') {
           return prop.value.elements.push(modules)
         }
-  
+
         if (t.isObjectProperty(prop) && t.isIdentifier(prop.key) && t.isObjectExpression(prop.value) && prop.key.name === 'build') {
           const keys = getKeys(prop.value.properties)
           const hasTranspile = keys.includes('transpile')

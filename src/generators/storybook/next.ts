@@ -38,7 +38,7 @@ export default class StoryBookNext extends Generator {
     this.fs.extendJSON(this.destinationPath('.babelrc'), babelrc)
 
     const smJson = {
-      storybook: 'http://localhost:8888'
+      storybook: 'http://localhost:8888',
     }
 
     this.fs.extendJSON(this.destinationPath('sm.json'), smJson)
@@ -51,7 +51,7 @@ export default class StoryBookNext extends Generator {
 
     // read sm.json for local libraries.
     const localLibs = libraries.filter(lib => lib.startsWith('@/')).map(lib => lib.substring(2))
-    
+
     const stories = localLibs.map(p => `../${p}/**/*.stories.[tj]s`)
 
     const storiesString = JSON.stringify(stories, null, 2)

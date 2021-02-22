@@ -26,7 +26,7 @@ export default class CreateSlice extends Command {
 
   async run() {
     const {flags, args} = this.parse(CreateSlice)
-    
+
     const env = createEnv()
     env.register(require.resolve('../generators/slicemachine/create-slice'), 'slicemachine:create-slice')
 

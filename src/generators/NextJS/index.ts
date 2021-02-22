@@ -1,7 +1,6 @@
 import PrismicGenerator from '../base'
 
 export default class NextJS extends PrismicGenerator {
-
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
    * prompting - Where you prompt users for options (where you’d call this.prompt())

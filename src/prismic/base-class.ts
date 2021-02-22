@@ -9,7 +9,6 @@ import {parseJsonSync} from '../utils'
 import cli from 'cli-ux'
 // Note to self it's easier to mock fs sync methods.
 
-
 export interface LoginData {
   email?: string;
   password?: string;
@@ -187,13 +186,6 @@ export default class Prismic {
 
     const domain = name.toLocaleLowerCase().trim()
 
-    /* const allowedChars = /^[a-zA-Z0-9][-a-zA-Z0-9]{2,}[a-zA-Z0-9]$/
-    if (domain.length < 4) return Promise.reject(new Error('subdomain must be four or more characters long'))
-    if (domain[0] === '-') return Promise.reject(new Error('must not start with a hyphen'))
-    if (allowedChars.test(domain) === false) return Promise.reject(new Error('alphanumerical and hyphens only'))
-    */
-    // any other rules ?
-
     const errors = []
 
     const startsWithLetter = /^[a-z]/.test(domain)
@@ -281,6 +273,7 @@ export default class Prismic {
     const url = new URL(this.base)
     url.hostname = `api.${url.hostname}`
     url.pathname = '/management/repositories'
+    // url.searchParams.append('app', 'slicemachine')
 
     const retry = () => this.createRepositoryWithToken({domain, customTypes, signedDocuments})
 

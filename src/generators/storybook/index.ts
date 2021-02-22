@@ -1,13 +1,11 @@
 import PrismicGenerator, {TemplateOptions} from '../base'
 
-
 export default class StoryBook extends PrismicGenerator {
-
   framework: 'nuxt'| 'next'
 
   constructor(argv: string | string[], opts: TemplateOptions) {
     super(argv, opts)
-    
+
     this.option('framework', {
       type: String,
       description: 'framework',
