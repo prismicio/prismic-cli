@@ -83,23 +83,6 @@ describe('login', () => {
   .it('prompts for user name and password')
 
   test
-  .stdout()
-  .stub(fs, 'readFileSync', fakeReadFileSync)
-  .stub(cli, 'prompt', () => async (message: string): Promise<string> => {
-    if (message.includes('Email')) return Promise.resolve(fakeEmail)
-    if (message.includes('Password')) return Promise.resolve(fakePassword)
-    return Promise.resolve('')
-  })
-  .nock(prismicBase, api => {
-    return api
-    .post('/authentication/signin').reply(401)
-    .post('/authentication/signin', `email=${encodeURIComponent(fakeEmail)}&password=${encodeURIComponent(fakePassword)}`)
-    .reply(200, {}, {'set-cookie': [fakeCookie]})
-  })
-  .command(['login', '--email', 'fail', '--password', 'none'])
-  .it('when login fails with a status code 400 or 401 it should prompt the user to try again')
-
-  test
   .skip()
   .stderr()
   .stdout()

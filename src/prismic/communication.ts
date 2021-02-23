@@ -144,7 +144,7 @@ export default class Prismic {
       adapter: require('axios/lib/adapters/http'),
       ...options,
       headers,
-    } 
+    }
     // TODO: optionaly add the x_xsrf (_) parmeter to the query ie: ?_=my_x_xsrf_token
     return Axios.create(opts)
   }

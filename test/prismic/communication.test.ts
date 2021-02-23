@@ -9,7 +9,6 @@ import Prismic, {
   getOrCreateConfig,
   DEFAULT_CONFIG,
 } from '../../src/prismic/communication'
-import { AxiosResponse } from 'axios'
 
 const fileNotFound = new Error()
 Object.assign(fileNotFound, {code: 'ENOENT'})
@@ -189,7 +188,7 @@ describe('prismic/communication.ts', () => {
       const thenFn = sinon.fake()
       await ctx.prismic.validateRepositoryName('abc.').then(thenFn).catch(catchFn)
 
-      expect(catchFn.getCall(0).firstArg.message).to.contain('Most contain only letters, numbers and hyphens.')
+      expect(catchFn.getCall(0).firstArg.message).to.contain('Must contain only letters, numbers and hyphens.')
       expect(thenFn.notCalled).to.be.true
     })
     .it('should fail if the name contains non alphanumeric characters')
