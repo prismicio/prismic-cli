@@ -144,7 +144,7 @@ export default class Prismic {
       adapter: require('axios/lib/adapters/http'),
       ...options,
       headers,
-    }
+    } 
     // TODO: optionaly add the x_xsrf (_) parmeter to the query ie: ?_=my_x_xsrf_token
     return Axios.create(opts)
   }
@@ -175,7 +175,7 @@ export default class Prismic {
     return Promise.resolve(true) // TODO: check this some how
   }
 
-  private async reAuthenticate() {
+  public async reAuthenticate() {
     const email =  await cli.prompt('Email')
     const password =  await cli.prompt('Password', {type: 'hide'})
     return this.login({email, password}).catch(() => this.reAuthenticate)

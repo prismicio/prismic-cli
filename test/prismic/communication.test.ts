@@ -9,6 +9,7 @@ import Prismic, {
   getOrCreateConfig,
   DEFAULT_CONFIG,
 } from '../../src/prismic/communication'
+import { AxiosResponse } from 'axios'
 
 const fileNotFound = new Error()
 Object.assign(fileNotFound, {code: 'ENOENT'})
@@ -284,6 +285,26 @@ describe('prismic/communication.ts', () => {
       expect(result.data.domain).to.equal(repoName)
     })
     .it('should create a repo using an oauth access token')
+
+    test
+    .nock('https://prismic.io', api => {
+      api.post('/authentication/newrepository', /* query */).reply(401)
+      // api.post('/authentication/newrepository', /* query */).reply(200, {domain: repoName})
+      return api
+    })
+    .stub(fs, 'readFileSync', sinon.fake.returns(config))
+    .add('prismic', () => {
+      const p = new Prismic()
+      p.reAuthenticate = sinon.fake.rejects({})
+      return p
+    })
+    .do(async ctx => {
+      await ctx.prismic.createRepository({domain: repoName}).catch(() => ({}))
+      const reAuthenticate = ctx.prismic.reAuthenticate as sinon.SinonSpy<any, any>
+      // sinon.assert.called(reAuthenticate)
+      expect(reAuthenticate.called).to.be.true
+    })
+    .it('create asks to reAuthenticate on failure')
   })
 
   describe('isAuthenticated', () => {
