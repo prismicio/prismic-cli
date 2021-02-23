@@ -23,7 +23,7 @@ describe('login', () => {
 
   const fakeReadFail = sinon.fake.throws(fakeErrorFileNotFound)
   const fakeReadFileSync = sinon.fake.returns(JSON.stringify({base: fakeBase, cookies: ''}))
-  const fakeCookie = 'SESSION=tea; DOMAIN=.prismic.io X_XSFR=biscuits'
+  const fakeCookie = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=foo'
 
   const fakeWriteFile = sinon.fake.resolves(null)
   const fakeWriteFileSync = sinon.fake.returns(null)
@@ -85,15 +85,19 @@ describe('login', () => {
   test
   .stdout()
   .stub(fs, 'readFileSync', fakeReadFileSync)
+  .stub(cli, 'prompt', () => async (message: string): Promise<string> => {
+    if (message.includes('Email')) return Promise.resolve(fakeEmail)
+    if (message.includes('Password')) return Promise.resolve(fakePassword)
+    return Promise.resolve('')
+  })
   .nock(prismicBase, api => {
     return api
+    .post('/authentication/signin').reply(401)
     .post('/authentication/signin', `email=${encodeURIComponent(fakeEmail)}&password=${encodeURIComponent(fakePassword)}`)
-    .reply(400)
+    .reply(200, {}, {'set-cookie': [fakeCookie]})
   })
-  .command(['login', '--email', fakeEmail, '--password', fakePassword])
-  .it('when login fails with a status code 400 or 401 it should notify the user', ctx => {
-    expect(ctx.stdout).to.contain('Login error')
-  })
+  .command(['login', '--email', 'fail', '--password', 'none'])
+  .it('when login fails with a status code 400 or 401 it should prompt the user to try again')
 
   test
   .skip()
