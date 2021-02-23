@@ -30,7 +30,7 @@ export default class New extends Command {
       description: 'over write local files',
     }),
 
-    // TODO: add a generator command where a person can pass custom generator?s
+    // TODO: add a generator command flag where a person can pass custom generator?
   }
 
   static args = []

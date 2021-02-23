@@ -28,7 +28,7 @@ export default class PrismicNodeJS extends PrismicGenerator {
     return this.prismic.createRepository({
       domain: this.domain,
       customTypes,
-    }).then(res => {
+    }).then((res: AxiosResponse<any>) => {
       const url = new URL(this.prismic.base)
       url.host = `${res.data || this.domain}.${url.host}`
       this.log(`A new repsitory has been created at: ${url.toString()}`)

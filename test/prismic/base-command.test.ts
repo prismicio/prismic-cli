@@ -12,7 +12,6 @@ class T extends Command {
 
 describe('prismic/base-command', () => {
   describe('validate repository name', () => {
-    // maybe removable?
     const fakeBase = 'https://prismic.io'
     const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits'
     const config = JSON.stringify({base: fakeBase, cookies: fakeCookies}, null, '\t')
@@ -96,7 +95,7 @@ describe('prismic/base-command', () => {
       return new T([], opts)
     })
     .do(async ctx => ctx.cmd.maybeGitHubRepo('https://github.com/user'))
-    .catch(error => { // TODO: take a note of this pattern
+    .catch(error => {
       const message = 'Could not infer github repo from https://github.com/user'
       expect(error.message).to.equal(message)
     })
@@ -145,6 +144,6 @@ describe('prismic/base-command', () => {
     })
     .it('throws if not found')
 
-    // TODO: some othher error for line 116
+    // TODO: some other error for line 116
   })
 })

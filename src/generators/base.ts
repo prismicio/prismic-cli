@@ -7,7 +7,7 @@ import * as AdmZip from 'adm-zip'
 import * as path from 'path'
 import cli from 'cli-ux'
 import {fs} from '../utils'
-import Prismic, {CustomType, CustomTypeMetaData} from '../prismic/base-class'
+import Prismic, {CustomType, CustomTypeMetaData} from '../prismic/communication'
 
 export interface TemplateOptions extends Generator.GeneratorOptions {
   branch: string;

@@ -1,6 +1,6 @@
 import {Command} from '@oclif/command'
 import {IConfig} from '@oclif/config'
-import Prismic from './base-class'
+import Prismic from './communication'
 import * as path from 'path'
 import {fs} from '../utils'
 import cli from 'cli-ux'

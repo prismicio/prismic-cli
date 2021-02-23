@@ -1,5 +1,5 @@
 import {test, expect} from '@oclif/test'
-import {LocalDB} from '../../src/prismic/base-class'
+import {LocalDB} from '../../src/prismic/communication'
 import * as sinon from 'sinon'
 
 import {

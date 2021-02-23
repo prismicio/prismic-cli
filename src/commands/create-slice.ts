@@ -37,7 +37,6 @@ export default class CreateSlice extends Command {
         path: args.folder || process.cwd(),
       },  ((err: Error, results: any) => {
         if (err) {
-          // console.error(err)
           reject(err)
         } else {
           resolve(results)

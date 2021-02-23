@@ -4,7 +4,7 @@ const env: Yeoman<Yeoman.Options> = Yeoman.createEnv()
 
 env.register(
   require.resolve('../generators/NextJS'),
-  'Next.js',
+  'Next',
 )
 
 env.register(

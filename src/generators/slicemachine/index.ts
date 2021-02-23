@@ -86,6 +86,10 @@ export default class SliceMachine extends PrismicGenerator {
     this.composeWith(require.resolve('../storybook'), this.options)
   }
 
+  async prompting() {
+    // TODO: prompt for detect framework
+  }
+
   async writing() {
     const deps = depsForFramework(this.options.framework)
 
@@ -107,7 +111,7 @@ export default class SliceMachine extends PrismicGenerator {
     }
 
     if (this.options.framework === 'next') {
-      // theses files could be removed from this package but would have to cocme from create-next-app
+      // theses files could be removed from this package but would have to come from create-next-app
       // this.copyTemplate('next', this.destinationPath(), {globOptions:{dot: true}}, this.options)
       this.fs.copyTpl(this.templatePath(this.options.framework), this.destinationPath(), this.options, undefined, {globOptions: {dot: true}})
     }
@@ -122,7 +126,7 @@ export default class SliceMachine extends PrismicGenerator {
 
     return this.prismic.createRepository({
       domain: this.domain,
-      customTypes, // TODO: customTypes are not being sent ?
+      customTypes,
     }).then(res => {
       const url = new URL(this.prismic.base)
       url.host = `${res.data || this.domain}.${url.host}`

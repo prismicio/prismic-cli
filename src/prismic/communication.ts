@@ -103,7 +103,7 @@ export default class Prismic {
     return getOrCreateConfig(this.configPath)
   }
 
-  private async removeConfig(): Promise<void> { // maybe change void to this to make things chainable
+  private async removeConfig(): Promise<void> {
     return fs.unlink(this.configPath)
   }
 
@@ -149,7 +149,7 @@ export default class Prismic {
     return Axios.create(opts)
   }
 
-  public async login(data: LoginData): Promise<AxiosResponse | void> {
+  public async login(data: LoginData): Promise<AxiosResponse> {
     const {base, email, password, oauthaccesstoken} = data
     const params = oauthaccesstoken ? {oauthaccesstoken} : {email, password}
     if (base) {
