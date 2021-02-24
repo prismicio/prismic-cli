@@ -1,21 +1,28 @@
-import PrismicGenerator, {TemplateOptions} from '../base'
+import PrismicGenerator, {TemplateOptions} from '../../base'
 
 export default class StoryBook extends PrismicGenerator {
-  framework: 'nuxt'| 'next'
+  framework: 'nuxt'| 'next' | undefined
 
   constructor(argv: string | string[], opts: TemplateOptions) {
     super(argv, opts)
-
-    this.option('framework', {
-      type: String,
-      description: 'framework',
-      storage: this.config, // adding this to a store for later usage by create-slice
-    })
+    this.framework = this.framework || this.config.get('framework')
   }
 
   async prompting() {
     // TODO: maybe prompt for framework or check for framework
-    this.framework = this.options.framework || this.config.get('framework')
+    // this.framework = this.options.framework || this.config.get('framework')
+
+    if (!this.framework) {
+      this.prompt([
+        {
+          name: 'framework',
+          type: 'list',
+          choices: ['next', 'nuxt'],
+        },
+      ]).then(res => {
+        this.framework = res.framework
+      })
+    }
   }
 
   async configuring() {
