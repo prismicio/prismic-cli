@@ -1,6 +1,6 @@
 import {expect} from '@oclif/test'
 
-import modifyNuxtConfig from '../../../src/generators/storybook/modify-nuxt-config'
+import modifyNuxtConfig from '../../../src/generators/slicemachine/storybook/modify-nuxt-config'
 
 describe('storybook#modify-nuxt-config', () => {
   it('should add ignore **/*.stories.js when no ignore field is present', () => {

@@ -1,4 +1,4 @@
-import {SliceMachineJson} from '../base'
+import {SliceMachineJson} from '../../base'
 import * as Generator from 'yeoman-generator'
 
 export default class StoryBookNext extends Generator {

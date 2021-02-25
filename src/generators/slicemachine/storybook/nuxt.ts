@@ -1,4 +1,4 @@
-import {SliceMachineJson} from '../base'
+import {SliceMachineJson} from '../../base'
 import * as Generator from 'yeoman-generator'
 import modifyNuxtConfig from './modify-nuxt-config'
 export default class StoryBookNext extends Generator {
@@ -35,7 +35,7 @@ export default class StoryBookNext extends Generator {
 
     const smfile = this.readDestinationJSON('sm.json') as unknown as SliceMachineJson
 
-    const libraries = smfile.libraries || []
+    const libraries: Array<string> = smfile.libraries || []
 
     // read sm.json for local libraries.
     const localLibs = libraries.filter(lib => lib.startsWith('@/')).map(lib => lib.substring(2))

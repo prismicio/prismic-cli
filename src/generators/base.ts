@@ -15,6 +15,10 @@ export interface TemplateOptions extends Generator.GeneratorOptions {
   innerFolder: string;
 }
 
+export interface PkgJson  {
+  dependencies?: Record<string, string>;
+}
+
 export default abstract class PrismicGenerator extends Generator {
   domain: string;
 
@@ -121,6 +125,15 @@ export default abstract class PrismicGenerator extends Generator {
       documents,
     }
   }
+
+  /* loadPackageJson() {
+    // TODO: this can be buggy
+    // const pkJsonPath = path.join(this.path, 'package.json')
+    // const packageJson = require(pkJsonPath)
+    // this.fs.writeJSON('package.json', packageJson)
+    return this.fs.readJSON('package.json') as PkgJson
+    // return this.fs.readJSON('package.json', {}) as PkgJson
+  } */
 
   private branchFromUrl(source: string) {
     const lastSlash = source.lastIndexOf('/')

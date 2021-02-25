@@ -27,8 +27,8 @@ export default abstract class PrismicCommand extends Command {
     const base = new URL(this.prismic.base)
 
     return this.prismic.validateRepositoryName(name)
-    .catch(error => {
-      this.log(error.message)
+    .catch(_ => {
+      // console.error(error)
       return inquirer.prompt([{
         type: 'input',
         name: 'domain',

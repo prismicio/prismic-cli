@@ -1,4 +1,4 @@
-import * as Generator from 'yeoman-generator'
+import PrismicGenerator, {TemplateOptions} from '../../base'
 import * as isValidPath from 'is-valid-path'
 import * as path from 'path'
 import {fs} from '../../../utils'
@@ -17,7 +17,7 @@ function toDescription(str: string) {
   return str.split(/(?=[A-Z0-9])/).join(' ')
 }
 
-export default class CreateSlice extends Generator {
+export default class CreateSlice extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
    * prompting - Where you prompt users for options (where you’d call this.prompt())
@@ -30,17 +30,28 @@ export default class CreateSlice extends Generator {
    */
   answers: Record<string, string> = {}
 
-  constructor(argv: string|string[], opts: Generator.GeneratorOptions) {
-    super(argv, opts)
+  framework: 'next' | 'nuxt' | undefined
 
-    this.option('framework', {
-      type: String,
-      description: 'framework to use',
-      storage: this.config,
-    })
+  constructor(argv: string|string[], opts: TemplateOptions) {
+    super(argv, opts)
+    if (this.framework) this.config.set('framework', this.framework)
+    this.framework = this.framework || this.config.get('framework')
   }
 
   async prompting() {
+    if (!this.framework) {
+      await this.prompt([{
+        type: 'list',
+        name: 'framework',
+        choices: ['next', 'nuxt'],
+        message: 'framework',
+        store: true,
+      }]).then(({framework}) => {
+        this.framework = framework
+        this.config.set('framework', this.framework)
+      })
+    }
+
     const {library} = isValidPath(this.options.library) ? this.options : await this.prompt([{
       type: 'text',
       name: 'library',
@@ -77,7 +88,7 @@ export default class CreateSlice extends Generator {
     )
 
     this.fs.copyTpl(
-      this.templatePath(path.join(this.options.framework || this.config.get('framework'), '**')),
+      this.templatePath(path.join(this.framework || this.config.get('framework'), '**')),
       pathToLib,
       {sliceName: this.answers.sliceName, sliceType: this.answers.sliceType},
     )

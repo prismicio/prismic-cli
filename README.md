@@ -28,24 +28,25 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`prismic create-slice [FILE]`](#prismic-create-slice-file)
+* [`prismic create-slice [FOLDER]`](#prismic-create-slice-folder)
 * [`prismic help [COMMAND]`](#prismic-help-command)
 * [`prismic login`](#prismic-login)
 * [`prismic logout`](#prismic-logout)
 * [`prismic new`](#prismic-new)
-* [`prismic sm [FILE]`](#prismic-sm-file)
+* [`prismic slicemachine [FILE]`](#prismic-slicemachine-file)
 * [`prismic theme [FILE]`](#prismic-theme-file)
 
-## `prismic create-slice [FILE]`
+## `prismic create-slice [FOLDER]`
 
 ```
 USAGE
-  $ prismic create-slice [FILE]
+  $ prismic create-slice [FOLDER]
 
 OPTIONS
   -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help             show CLI help
+  -l, --library=library  [default: slices] library to add slice to
+  -n, --name=name        name of the new slice
 ```
 
 _See code: [src/commands/create-slice.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/create-slice.ts)_
@@ -108,18 +109,19 @@ OPTIONS
 
 _See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/new.ts)_
 
-## `prismic sm [FILE]`
+## `prismic slicemachine [FILE]`
 
 ```
 USAGE
-  $ prismic sm [FILE]
+  $ prismic slicemachine [FILE]
 
 OPTIONS
-  -h, --help     show CLI help
-  --createSlice  create a new slice
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
 ```
 
-_See code: [src/commands/sm.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/sm.ts)_
+_See code: [src/commands/slicemachine.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/slicemachine.ts)_
 
 ## `prismic theme [FILE]`
 
