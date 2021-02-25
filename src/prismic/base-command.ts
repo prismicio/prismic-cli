@@ -25,10 +25,10 @@ export default abstract class PrismicCommand extends Command {
 
   async validateDomain(name: string | undefined): Promise<string> {
     const base = new URL(this.prismic.base)
+    const validate = this.prismic.validateRepositoryName
 
     return this.prismic.validateRepositoryName(name)
     .catch(_ => {
-      // console.error(error)
       return inquirer.prompt([{
         type: 'input',
         name: 'domain',
@@ -44,7 +44,8 @@ export default abstract class PrismicCommand extends Command {
           ]
           return msg.join('')
         },
-      }]).then(res => res.domain).then(this.validateDomain.bind(this))
+        validate,
+      }]).then(res => res.domain)
     })
   }
 
