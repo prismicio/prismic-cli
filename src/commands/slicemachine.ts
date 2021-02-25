@@ -1,10 +1,8 @@
 import {flags} from '@oclif/command'
-import { IConfig } from '@oclif/config'
 import {createEnv} from 'yeoman-environment'
 import Command from '../prismic/base-command'
 
 export default class Slicemachine extends Command {
-
   static description = 'describe the command here'
 
   static flags = {
@@ -60,7 +58,7 @@ export default class Slicemachine extends Command {
         })
       })
     }
-    
+
     if (flags['add-storybook']) {
       return new Promise((resolve, reject) => {
         env.run('storybook', opts, (err: Error | null) => {
@@ -69,7 +67,7 @@ export default class Slicemachine extends Command {
         })
       })
     }
-    
+
     if (flags.setup) {
       return new Promise((resolve, reject) => {
         env.run('slicemachine', opts, (err: Error | null) => {
