@@ -11,6 +11,9 @@ export default class SliceMachine extends PrismicGenerator {
       this.config.set('framework', opts.framework)
     }
     this.framework = opts.framework || this.config.get('framework')
+    if (opts.path) {
+      this.destinationRoot(opts.path)
+    }
   }
 
   async prompting() {

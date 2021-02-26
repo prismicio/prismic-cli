@@ -28,6 +28,12 @@ export default class New extends Command {
 
     force: flags.boolean({
       description: 'over write local files',
+      default: false,
+    }),
+
+    'skip-install': flags.boolean({
+      description: 'prevent runing install command after generating project',
+      default: false,
     }),
 
     // TODO: add a generator command flag where a person can pass custom generator?
@@ -52,6 +58,7 @@ export default class New extends Command {
 
     return new Promise((resolve, reject) => {
       generator.run(template, {
+        ...flags,
         domain,
         path: folder,
         prismic: this.prismic,

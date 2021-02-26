@@ -18,6 +18,8 @@ export default class NextJS extends PrismicGenerator {
       framework: 'next',
       domain: this.domain,
       prismic: this.prismic,
+      path: this.path,
+      ...this.options,
     })
   }
 

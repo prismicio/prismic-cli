@@ -2,10 +2,12 @@ import PrismicGenerator, {TemplateOptions} from '../../base'
 const isValidPath = require('is-valid-path')
 import * as path from 'path'
 import {fs} from '../../../utils'
+import * as inquirer from 'inquirer' // this is easier to mock
 
 function validateSliceName(name: string): boolean {
   // PascalCase
   const regexp = /^([A-Z][a-z]+){2,}$/
+  if (!name) return false
   return regexp.test(name)
 }
 
@@ -41,8 +43,8 @@ export default class CreateSlice extends PrismicGenerator {
       this.framework = this.config.get('framework')
     }
 
-    if (opts.path) {
-      this.destinationRoot(opts.path)
+    if (this.path !== this.destinationRoot()) {
+      this.destinationRoot(this.path)
     }
   }
 
@@ -61,18 +63,18 @@ export default class CreateSlice extends PrismicGenerator {
       })
     }
 
-    const {library} = isValidPath(this.options.library) ? this.options : await this.prompt([{
+    const {library} = isValidPath(this.options.library) ? this.options : await inquirer.prompt([{
       type: 'text',
       name: 'library',
       default: 'slices',
       prefix: '🗂 ',
       message: 'Where should we create your new local library?',
       validate: (value: string) => {
-        return isValidPath(this.destinationPath(value)) || 'Invalid Path'
+        return (value && isValidPath(this.destinationPath(value))) || ('Invalid Path: ' + value)
       },
     }])
 
-    const {sliceName} = validateSliceName(this.options.sliceName) ? this.options : await this.prompt([{
+    const {sliceName} = validateSliceName(this.options.sliceName) ? this.options : await inquirer.prompt([{
       type: 'text',
       name: 'sliceName',
       message: 'Enter the name of your slice (2 words, PascalCased)',
@@ -112,7 +114,7 @@ export default class CreateSlice extends PrismicGenerator {
       const content = `export { default as ${this.answers.sliceName} } from './${this.answers.sliceName}`
       this.fs.append(libIndex, content)
       // TODO: do we want to make the user confirm updating these files?
-      fs.unlink(libIndex)
+      // fs.unlink(libIndex)
     } else {
       this.fs.copyTpl(
         this.templatePath('index.js'),
@@ -125,17 +127,8 @@ export default class CreateSlice extends PrismicGenerator {
     const {libraries} = this.readDestinationJSON('sm.json', {libraries: []}) as unknown as SliceMachineConfig
 
     if (libraries.includes(libName) === false) {
-      this.fs.extendJSON('sm.json', {libraries: [...libraries, libName]})
+      this.fs.extendJSON(this.destinationPath('sm.json'), {libraries: [...libraries, libName]})
     }
-
-    if (fs.existsSync(this.destinationPath('sm.json'))) {
-      // TODO: do we want to make the user confirm updating these files?
-      fs.unlink(this.destinationPath('sm.json'))
-    }
-  }
-
-  conflicts() {
-    // conflicts can be handled here.
   }
 }
 

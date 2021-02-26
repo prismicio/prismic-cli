@@ -13,7 +13,7 @@ export default class StoryBook extends PrismicGenerator {
       this.framework = this.config.get('framework')
     }
 
-    if (opts.path) {
+    if (opts.path !== this.destinationRoot()) {
       this.destinationRoot(opts.path)
     }
   }
