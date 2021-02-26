@@ -1,6 +1,6 @@
-import * as Yeoman from 'yeoman-environment'
+import {createEnv} from 'yeoman-environment'
 
-const env: Yeoman<Yeoman.Options> = Yeoman.createEnv()
+const env = createEnv()
 
 env.register(
   require.resolve('../generators/NextJS'),

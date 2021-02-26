@@ -13,6 +13,8 @@ export const unlink = fs.promises.unlink
 
 export const rmdir = fs.promises.rmdir
 
+export const mkdir = fs.promises.mkdir
+
 export const readFileSync = fs.readFileSync
 
 export const writeFileSync = fs.writeFileSync
@@ -21,3 +23,4 @@ export const existsSync = fs.existsSync
 
 export const createWriteStream = fs.createWriteStream
 
+export {copy} from 'fs-extra'

@@ -1,5 +1,5 @@
 import PrismicGenerator, {TemplateOptions} from '../../base'
-import * as isValidPath from 'is-valid-path'
+const isValidPath = require('is-valid-path')
 import * as path from 'path'
 import {fs} from '../../../utils'
 
@@ -34,11 +34,24 @@ export default class CreateSlice extends PrismicGenerator {
 
   constructor(argv: string|string[], opts: TemplateOptions) {
     super(argv, opts)
-    if (this.framework) this.config.set('framework', this.framework)
-    this.framework = this.framework || this.config.get('framework')
+    console.log("### Constructor ###")
+    console.log(opts)
+    if (opts.framework) {
+      this.config.set('framework', opts.framework)
+      this.framework = opts.framework
+    } else {
+      this.framework = this.config.get('framework')
+    }
+
+    if (opts.path) {
+      this.destinationRoot(opts.path)
+    }
+
+    console.log(this.framework)
   }
 
   async prompting() {
+    // TODO: try and detect framework
     if (!this.framework) {
       await this.prompt([{
         type: 'list',

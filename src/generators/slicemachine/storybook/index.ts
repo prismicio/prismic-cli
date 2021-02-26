@@ -3,9 +3,19 @@ import PrismicGenerator, {TemplateOptions} from '../../base'
 export default class StoryBook extends PrismicGenerator {
   framework: 'nuxt'| 'next' | undefined
 
-  constructor(argv: string | string[], opts: TemplateOptions) {
+  constructor(argv: string|string[], opts: TemplateOptions) {
     super(argv, opts)
-    this.framework = this.framework || this.config.get('framework')
+    // TODO: this logic is repeated in setup, create-slice and here
+    if (opts.framework) {
+      this.config.set('framework', opts.framework)
+      this.framework = opts.framework
+    } else {
+      this.framework = this.config.get('framework')
+    }
+
+    if (opts.path) {
+      this.destinationRoot(opts.path)
+    }
   }
 
   async prompting() {

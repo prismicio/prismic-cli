@@ -54,7 +54,7 @@ export default class StoryBookNext extends Generator {
 
     const stories = localLibs.map(p => `../${p}/**/*.stories.[tj]s`)
 
-    const storiesString = JSON.stringify(stories, null, 2)
+    const storiesString = JSON.stringify(stories)
 
     const storyBookEntry = `module.exports = {
       stories: ${storiesString}

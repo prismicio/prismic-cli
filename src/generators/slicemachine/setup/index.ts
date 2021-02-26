@@ -72,9 +72,20 @@ export default class SliceMachine extends PrismicGenerator {
 
   constructor(argv: string | string[], opts: TemplateOptions) { // TODO: options
     super(argv, opts)
-    if (this.framework) (this.config.set('framework', this.framework))
-    this.framework = this.framework || this.config.get('framework')
-    this.destinationPath(this.path)
+    // this.framework = opts.framework || this.framework
+
+    if (opts.framework) {
+      this.config.set('framework', opts.framework)
+      this.framework = opts.framework
+    } else {
+      this.framework = this.framework || this.config.get('framework')
+    }
+
+    if (opts.domain) {
+      this.domain = opts.domain
+    }
+
+    if (opts.path) this.destinationRoot(opts.path)
   }
 
   async prompting() {
@@ -83,13 +94,14 @@ export default class SliceMachine extends PrismicGenerator {
 
     const deps = pkJson.dependencies || {}
 
-    if (deps.next) {
+    if (!this.framework && deps.next) {
       this.framework = 'next'
-    } else if (deps.nuxt) {
+    } else if (!this.framework && deps.nuxt) {
       this.framework = 'nuxt'
     }
 
     if (!this.domain) {
+      const validateRepositoryName = this.prismic.validateRepositoryName
       const domainPrompt: Question = {
         type: 'input',
         name: 'domain',
@@ -104,7 +116,7 @@ export default class SliceMachine extends PrismicGenerator {
           return msg.join('')
         },
         validate: async (value: string) => {
-          const result = await this.prismic.validateRepositoryName(value)
+          const result = await validateRepositoryName(value)
           return result === value || result
         },
       }
@@ -147,7 +159,7 @@ export default class SliceMachine extends PrismicGenerator {
     if (this.framework === 'next') {
       // theses files could be removed from this package but would have to come from create-next-app
       // this.copyTemplate('next', this.destinationPath(), {globOptions:{dot: true}}, this.options)
-      this.fs.copy(this.templatePath(this.framework), this.destinationPath(), {globOptions: {dot: true}})
+      this.fs.copy(this.templatePath('next'), this.destinationPath(), {globOptions: {dot: true}})
     }
 
     this.fs.copyTpl(this.templatePath('default/**'), this.destinationPath(), {
@@ -157,7 +169,7 @@ export default class SliceMachine extends PrismicGenerator {
     })
 
     const customTypes = this.readCustomTypesFrom('custom_types')
-
+    
     return this.prismic.createRepository({
       domain: this.domain,
       customTypes,
