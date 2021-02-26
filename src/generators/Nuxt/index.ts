@@ -3,7 +3,7 @@ import * as path from 'path'
 
 import PrismicGenerator from '../base'
 
-import {Answers} from 'inquirer'
+import * as inquirer from 'inquirer'
 
 const saoSettings = require('create-nuxt-app/lib/saofile')
 
@@ -34,7 +34,7 @@ interface SaoTemplateData {
 }
 
 export default class Nuxt extends PrismicGenerator {
-  answers: Answers = {}
+  answers: inquirer.Answers = {}
 
   sao = {opts: {}}
 
@@ -57,12 +57,14 @@ export default class Nuxt extends PrismicGenerator {
       framework: 'nuxt',
       domain: this.domain,
       prismic: this.prismic,
+      force: this.force,
+      ...this.options,
     })
   }
 
   async prompting() {
     // ask normal nuxt questions from create-nuxt-app/lib/prompts
-    this.answers = await this.prompt([
+    this.answers = await inquirer.prompt([
       {
         name: 'name',
         message: 'Project name:',

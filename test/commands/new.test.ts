@@ -4,6 +4,7 @@ import {NodeJS as StubNodeJSZip} from '../__stubs__/template'
 import * as path from 'path'
 import * as os from 'os'
 import * as inquirer from 'inquirer'
+import * as sinon from 'sinon'
 
 describe('new', () => {
   const fakeDomain = 'fake-domain'
@@ -85,6 +86,77 @@ describe('new', () => {
 
       const pathToStoryBook = path.join(fakeFolder, '.storybook/main.js')
       expect(fs.existsSync(pathToStoryBook)).to.be.true
+    })
+  })
+
+  describe('nuxt', () => {
+    const fakeFolder = path.join(tmpDir, 'test-new-nuxt')
+
+    before(async () => {
+      if (fs.existsSync(fakeFolder)) {
+        await fs.rmdir(fakeFolder, {recursive: true})
+      }
+    })
+
+    const stubResp = sinon.stub()
+    .onFirstCall()
+    .resolves({
+      name: fakeDomain,
+      language: 'js',
+      pm: 'yarn',
+      ui: 'none',
+      features: [],
+      linter: [],
+      test: 'none',
+      mode: 'universal',
+      target: 'server',
+      devTools: [],
+      gitUsername: 'none',
+      vcs: 'none',
+    })
+    .onSecondCall()
+    .resolves({
+      library: 'slices',
+      sliceName: 'MySlice',
+    })
+    .onThirdCall()
+    .resolves({
+      library: 'slices',
+      sliceName: 'MySlice',
+    })
+
+    test
+    .stdout()
+    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(inquirer, 'prompt', stubResp)
+    .nock(fakeBase, api => {
+      return api
+      .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
+      .post('/authentication/newrepository').reply(200, fakeDomain)
+    })
+    .command(['new', '--template', 'Nuxt', '--domain', fakeDomain, '--folder', fakeFolder, '--force', '--skip-install'])
+    .it('should generate a nuxt slicemachine project', async _ => {
+      const pkJsonPath = path.join(fakeFolder, 'package.json')
+      const smJsonPath = path.join(fakeFolder, 'sm.json')
+      expect(fs.existsSync(pkJsonPath)).to.be.true
+      expect(fs.existsSync(smJsonPath)).to.be.true
+
+      const smJson = require(smJsonPath)
+      const pkJson = require(pkJsonPath)
+
+      expect(smJson.apiEndpoint).to.contain(fakeDomain)
+      expect(pkJson.scripts.slicemachine).to.equal('start-slicemachine --port 9999')
+
+      const pathToSlices = path.join(fakeFolder, 'slices')
+      expect(fs.existsSync(pathToSlices)).to.be.true
+
+      const pathToMySlice = path.join(pathToSlices, 'MySlice')
+      expect(fs.existsSync(pathToMySlice)).to.be.true
+
+      const pathToNuxtConfig = path.join(fakeFolder, 'nuxt.config.js')
+      expect(fs.existsSync(pathToNuxtConfig)).to.be.true
+      const config = await fs.readFile(pathToNuxtConfig, {encoding: 'utf-8'})
+      expect(config).to.include('stories: ["~/slices/**/*.stories.[tj]s"]')
     })
   })
 })
