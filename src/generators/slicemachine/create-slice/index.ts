@@ -34,8 +34,6 @@ export default class CreateSlice extends PrismicGenerator {
 
   constructor(argv: string|string[], opts: TemplateOptions) {
     super(argv, opts)
-    console.log("### Constructor ###")
-    console.log(opts)
     if (opts.framework) {
       this.config.set('framework', opts.framework)
       this.framework = opts.framework
@@ -46,8 +44,6 @@ export default class CreateSlice extends PrismicGenerator {
     if (opts.path) {
       this.destinationRoot(opts.path)
     }
-
-    console.log(this.framework)
   }
 
   async prompting() {

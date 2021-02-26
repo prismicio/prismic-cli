@@ -169,7 +169,7 @@ export default class SliceMachine extends PrismicGenerator {
     })
 
     const customTypes = this.readCustomTypesFrom('custom_types')
-    
+
     return this.prismic.createRepository({
       domain: this.domain,
       customTypes,
