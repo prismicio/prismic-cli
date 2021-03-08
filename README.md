@@ -19,7 +19,7 @@ $ npm install -g prismic-cli
 $ prismic COMMAND
 running command...
 $ prismic (-v|--version|version)
-prismic-cli/3.8.3 darwin-x64 node-v15.5.1
+prismic-cli/3.8.3 darwin-x64 node-v15.11.0
 $ prismic --help [COMMAND]
 USAGE
   $ prismic COMMAND
@@ -28,28 +28,13 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`prismic create-slice [FOLDER]`](#prismic-create-slice-folder)
 * [`prismic help [COMMAND]`](#prismic-help-command)
+* [`prismic list [FILE]`](#prismic-list-file)
 * [`prismic login`](#prismic-login)
 * [`prismic logout`](#prismic-logout)
 * [`prismic new`](#prismic-new)
-* [`prismic slicemachine [FILE]`](#prismic-slicemachine-file)
+* [`prismic slicemachine`](#prismic-slicemachine)
 * [`prismic theme [FILE]`](#prismic-theme-file)
-
-## `prismic create-slice [FOLDER]`
-
-```
-USAGE
-  $ prismic create-slice [FOLDER]
-
-OPTIONS
-  -f, --force
-  -h, --help             show CLI help
-  -l, --library=library  [default: slices] library to add slice to
-  -n, --name=name        name of the new slice
-```
-
-_See code: [src/commands/create-slice.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/create-slice.ts)_
 
 ## `prismic help [COMMAND]`
 
@@ -65,6 +50,20 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+
+## `prismic list [FILE]`
+
+```
+USAGE
+  $ prismic list [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/list.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/list.ts)_
 
 ## `prismic login`
 
@@ -105,20 +104,28 @@ OPTIONS
   -h, --help               show CLI help
   -t, --template=template  Prismic template for the project
   --force                  over write local files
+  --skip-install           prevent runing install command after generating project
 ```
 
 _See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/new.ts)_
 
-## `prismic slicemachine [FILE]`
+## `prismic slicemachine`
 
 ```
 USAGE
-  $ prismic slicemachine [FILE]
+  $ prismic slicemachine
 
 OPTIONS
+  -d, --domain=domain    prismic repo to to create
   -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help             show CLI help
+  --add-storybook        add storybook to a slicemachine project
+  --create-slice         add a slice to a slicemachine project
+  --folder=folder        [default: /Users/marc/Projects/prismic/prismic-cli]
+  --framework=next|nuxt
+  --library=library      name of the slice library
+  --setup                setup slice machine in an already existing project
+  --sliceName=sliceName  name of the slice
 ```
 
 _See code: [src/commands/slicemachine.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/slicemachine.ts)_
