@@ -44,4 +44,8 @@ export default class StoryBook extends PrismicGenerator {
     }
     // TODO handle other frameworks
   }
+
+  async install() {
+    this.npmInstall(undefined, {'legacy-peer-deps': true})
+  }
 }

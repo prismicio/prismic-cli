@@ -52,6 +52,6 @@ export default class NextJS extends PrismicGenerator {
   }
 
   async install() {
-    this.npmInstall()
+    this.npmInstall(undefined, {'legacy-peer-deps': true})
   }
 }
