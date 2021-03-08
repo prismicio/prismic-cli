@@ -270,7 +270,9 @@ describe('prismic/communication.ts', () => {
     })
     .it('create a repo using the cookie for auth')
 
+    // TODO: find out how the auth api handles oauth-tokens
     test
+    .skip()
     .stub(fs, 'readFileSync', sinon.fake.returns(configWithOauth))
     .nock('https://api.prismic.io', api => {
       // const query = qs.stringify({domain: repoName, plan: 'personal', isAnnual: 'false', access_token: 'token'})
@@ -292,6 +294,7 @@ describe('prismic/communication.ts', () => {
       return api
     })
     .stub(fs, 'readFileSync', sinon.fake.returns(config))
+    .stub(fs, 'writeFile', () => Promise.resolve())
     .add('prismic', () => {
       const p = new Prismic()
       p.reAuthenticate = sinon.fake.rejects({})
@@ -326,7 +329,6 @@ describe('prismic/communication.ts', () => {
     .it('should fail in cookie does not contain SESSION')
 
     test
-    .skip()
     .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({cookies: 'SESSION=a'})))
     .add('prismic', () => new Prismic())
     .do(async ctx => {
@@ -337,21 +339,30 @@ describe('prismic/communication.ts', () => {
 
     test
     .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({cookies: 'SESSION=a; prismic-auth=b'})))
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=b').reply(200, {})
+      api.get('/refreshtoken?token=b').reply(200, 'some-new-token')
+    })
     .add('prismic', () => new Prismic())
     .do(async ctx => {
       const result = await ctx.prismic.isAuthenticated()
       expect(result).to.be.true
+      expect(ctx.prismic.cookies).to.include('some-new-token')
     })
-    .it('should return true if a cookie is found')
+    .it('should check and refresh the token and return true if valid')
 
     test
-    .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({oauthAccessToken: 'xyz'})))
+    .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({cookies: 'SESSION=a; prismic-auth=b'})))
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=b').reply(401, {})
+    })
     .add('prismic', () => new Prismic())
     .do(async ctx => {
       const result = await ctx.prismic.isAuthenticated()
-      expect(result).to.be.true
+      expect(result).to.be.false
     })
-    .it('should return true if an oauth access token is found')
+    .it('should return false if token is invalid')
   })
 
   describe('prismic.axios', () => {

@@ -23,7 +23,7 @@ export default class PrismicNodeJS extends PrismicGenerator {
   async configuring() {
     // maybe create the repo after configuring?
     // maybe move this part to the generator?
-    this.log('Createing repository')
+    this.log('Creating repository')
     const customTypes = this.readCustomTypesFrom('custom_types')
     return this.prismic.createRepository({
       domain: this.domain,

@@ -81,6 +81,14 @@ export interface AxiosInstanceOptions extends AxiosRequestConfig {
   secure?: boolean;
 }
 
+export function toAuthUrl(path: 'validate' | 'refreshtoken', token: string, base = 'https://prismic.io') {
+  const url = new URL(base)
+  url.hostname = `auth.${url.hostname}`
+  url.pathname = path
+  url.searchParams.set('token', token)
+  return url.toString()
+}
+
 export default class Prismic {
   public configPath: string;
 
@@ -149,7 +157,7 @@ export default class Prismic {
     return Axios.create(opts)
   }
 
-  public async login(data: LoginData): Promise<AxiosResponse> {
+  public async login(data: LoginData): Promise<void> {
     const {base, email, password, oauthaccesstoken} = data
     const params = oauthaccesstoken ? {oauthaccesstoken} : {email, password}
     if (base) {
@@ -160,25 +168,61 @@ export default class Prismic {
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     })
     .then((res: AxiosResponse) => {
-      this.setCookies(res.headers['set-cookie'])
-      return res
+      return this.setCookies(res.headers['set-cookie'])
     })
   }
 
+  private async auth(path: 'validate' | 'refreshtoken'): Promise<AxiosResponse> {
+    const token = cookie.parse(this.cookies)['prismic-auth'] || ''
+    const url = toAuthUrl(path, token, this.base)
+    return this.axios().get(url)
+  }
+
+  async validateSession(): Promise<AxiosResponse> {
+    return this.auth('validate')
+  }
+
+  async refreshSession(): Promise<void> {
+    return this.auth('refreshtoken').then(res => {
+      const token = cookie.serialize('prismic-auth', res.data)
+      return this.setCookies([token])
+    })
+  }
+
+  async validateAndRefresh(): Promise<void> {
+    // TDOD: does this handle oauthAccessTokens?
+    return this.validateSession().then(() => this.refreshSession())
+  }
+
   public async isAuthenticated(): Promise<boolean> {
-    // TODO: find out if there is an refresh endpoint in prismic.io
-    if (this.oauthAccessToken) return Promise.resolve(true) // TODO: check this some how
+    // TODO: find out if / how the authh server handles oauth tokens
+    // if (this.oauthAccessToken) return Promise.resolve(true)
+
     if (!this.cookies) return Promise.resolve(false)
     const cookies = cookie.parse(this.cookies)
     if (!cookies.SESSION) return Promise.resolve(false)
-    // if (!cookies['prismic-auth']) return Promise.resolve(false)
-    return Promise.resolve(true) // TODO: check this some how
+    if (!cookies['prismic-auth']) return Promise.resolve(false)
+
+    return this.validateAndRefresh()
+    .then(() => true)
+    .catch(error => {
+      if (error?.response?.status === 401) {
+        return false
+      }
+      throw error
+    })
   }
 
-  public async reAuthenticate() {
+  public async reAuthenticate(): Promise<void> {
+    // TODO: this will eventually have to be moved.
     const email =  await cli.prompt('Email')
     const password =  await cli.prompt('Password', {type: 'hide'})
-    return this.login({email, password}).catch(() => this.reAuthenticate)
+    return this.login({email, password}).catch(error => {
+      if (error?.response?.status === 401) {
+        return this.reAuthenticate()
+      }
+      throw error
+    })
   }
 
   public async validateRepositoryName(name?: string): Promise<string> {
@@ -214,11 +258,13 @@ export default class Prismic {
   }
 
   public async createRepository(args: CreateRepositoryArgs): Promise<AxiosResponse> {
+    /*
     const hasAuth = await this.isAuthenticated()
 
     if (!hasAuth) {
       await this.reAuthenticate()
     }
+    */
 
     return (
       this.oauthAccessToken ? this.createRepositoryWithToken(args) : this.createRepositoryWithCookie(args)

@@ -2,6 +2,7 @@ import {flags} from '@oclif/command'
 import {createEnv} from 'yeoman-environment'
 import Command from '../prismic/base-command'
 import * as path from 'path'
+import login from './login'
 import {fs} from '../utils'
 
 const globby = require('fast-glob')
@@ -16,7 +17,7 @@ export default class Slicemachine extends Command {
 
     setup: flags.boolean({
       description: 'setup slice machine in an already existing project',
-      exclusive: ['create-slice', 'storybook', 'list'],
+      exclusive: ['create-slice', 'add-storybook', 'list'],
       default: false,
     }),
     domain: flags.string({
@@ -27,7 +28,7 @@ export default class Slicemachine extends Command {
 
     'create-slice': flags.boolean({
       description: 'add a slice to a slicemachine project',
-      exclusive: ['setup', 'storybook', 'list'],
+      exclusive: ['setup', 'add-storybook', 'list'],
       default: false,
     }),
 
@@ -59,6 +60,12 @@ export default class Slicemachine extends Command {
 
     folder: flags.string({
       default: process.cwd(),
+    }),
+
+    'skip-install': flags.boolean({
+      description: 'prevent npm install from running',
+      exclusive: ['create-slice', 'list'],
+      default: false,
     }),
 
   }
@@ -93,6 +100,10 @@ export default class Slicemachine extends Command {
 
     if (flags.setup) {
       const domain = await this.validateDomain(flags.domain)
+      const isAuthenticated = await this.prismic.isAuthenticated()
+      if (!isAuthenticated) {
+        await login.run([])
+      }
 
       return new Promise((resolve, reject) => {
         env.run('setup', {...opts, domain}, (err: Error | null) => {

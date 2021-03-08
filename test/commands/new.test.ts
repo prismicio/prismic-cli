@@ -8,7 +8,7 @@ import * as sinon from 'sinon'
 
 describe('new', () => {
   const fakeDomain = 'fake-domain'
-  const fakeBase = 'https://wroom.test'
+  const fakeBase = 'https://prismic.io'
   const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=xyz'
   const tmpDir = os.tmpdir()
 
@@ -24,6 +24,11 @@ describe('new', () => {
     test
     .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+    })
     .nock(fakeBase, api => {
       return api
       .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true) // we should really rename this.
@@ -54,11 +59,16 @@ describe('new', () => {
     test
     .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(inquirer, 'prompt', async () => {
       return {
         library: 'slices',
         sliceName: 'MySlice',
       }
+    })
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'some-token')
     })
     .nock(fakeBase, api => {
       return api
@@ -128,11 +138,16 @@ describe('new', () => {
     test
     .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(inquirer, 'prompt', stubResp)
     .nock(fakeBase, api => {
       return api
       .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
       .post('/authentication/newrepository').reply(200, fakeDomain)
+    })
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
     })
     .command(['new', '--template', 'Nuxt', '--domain', fakeDomain, '--folder', fakeFolder, '--force', '--skip-install'])
     .it('should generate a nuxt slicemachine project', async _ => {

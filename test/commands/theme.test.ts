@@ -6,7 +6,7 @@ import {Theme as ThemeZip} from '../__stubs__/template'
 
 describe('theme', () => {
   const fakeDomain = 'fake-theme-domain'
-  const fakeBase = 'https://wroom.test'
+  const fakeBase = 'https://prismic.io'
   const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=xyz'
   const tmpDir = os.tmpdir()
 
@@ -27,10 +27,15 @@ describe('theme', () => {
 
   test
   .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+  .stub(fs, 'writeFile', () => Promise.resolve())
   .nock(fakeBase, api => {
     return api
     .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true) // we should really rename this.
     .post('/authentication/newrepository').reply(200, fakeDomain)
+  })
+  .nock('https://auth.prismic.io', api => {
+    api.get('/validate?token=xyz').reply(200, {})
+    api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
   })
   .nock('https://github.com', api => {
     api.head('/prismicio/fake-theme/archive/main.zip').reply(404)
@@ -42,7 +47,7 @@ describe('theme', () => {
     })
   })
   .command(['theme', fakeSource, '--domain', fakeDomain, '--folder', fakeFolder, '--config', configFile])
-  .it('....', () => {
+  .it('creates a prismic project from a github url', () => {
     const configPath = path.join(fakeFolder, configFile)
     expect(fs.existsSync(fakeFolder)).to.be.true
     const conf = require(configPath)

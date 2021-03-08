@@ -26,12 +26,17 @@ describe('slicemachine', () => {
     test
     .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
     .nock(fakeBase, api => {
       return api
       .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
       .post('/authentication/newrepository').reply(200, fakeDomain)
     })
-    .command(['slicemachine', '--setup', '--folder', fakeFolder, '--framework', 'next', '--domain', fakeDomain, '--force'])
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+    })
+    .command(['slicemachine', '--setup', '--folder', fakeFolder, '--framework', 'next', '--domain', fakeDomain, '--force', '--skip-install'])
     .it('setup creates sm.json', _ => {
       const pkJsonPath = path.join(fakeFolder, 'package.json')
       const smJsonPath = path.join(fakeFolder, 'sm.json')
@@ -58,7 +63,7 @@ describe('slicemachine', () => {
 
     test
     .stdout()
-    .command(['slicemachine', '--add-storybook', '--framework', 'next', '--folder', fakeFolder, '--force'])
+    .command(['slicemachine', '--add-storybook', '--framework', 'next', '--folder', fakeFolder, '--force', '--skip-install'])
     .it('add-storybook', _ => {
       const pathToStoryBook = path.join(fakeFolder, '.storybook/main.js')
       expect(fs.existsSync(pathToStoryBook)).to.be.true
@@ -80,12 +85,17 @@ describe('slicemachine', () => {
     test
     .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+    })
     .nock(fakeBase, api => {
       return api
       .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
       .post('/authentication/newrepository').reply(200, fakeDomain)
     })
-    .command(['slicemachine', '--setup', '--folder', fakeFolder, '--framework', 'nuxt', '--domain', fakeDomain, '--force'])
+    .command(['slicemachine', '--setup', '--folder', fakeFolder, '--framework', 'nuxt', '--domain', fakeDomain, '--force', '--skip-install'])
     .it('setup creates sm.json', _ => {
       const pkJsonPath = path.join(fakeFolder, 'package.json')
       const smJsonPath = path.join(fakeFolder, 'sm.json')
@@ -112,7 +122,7 @@ describe('slicemachine', () => {
 
     test
     .stdout()
-    .command(['slicemachine', '--add-storybook', '--framework', 'nuxt', '--folder', fakeFolder, '--force'])
+    .command(['slicemachine', '--add-storybook', '--framework', 'nuxt', '--folder', fakeFolder, '--force', '--skip-install'])
     .it('add-storybook', _ => {
       const pathToNuxtConfig = path.join(fakeFolder, 'nuxt.config.js')
       expect(fs.existsSync(pathToNuxtConfig)).to.be.true
