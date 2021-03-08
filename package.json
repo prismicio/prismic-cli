@@ -28,6 +28,7 @@
     "cli-ux": "^5.5.1",
     "cookie": "^0.4.1",
     "create-nuxt-app": "^3.5.0",
+    "fast-glob": "^3.2.5",
     "fs-extra": "^9.1.0",
     "inquirer": "^7.3.3",
     "is-valid-path": "^0.1.1",

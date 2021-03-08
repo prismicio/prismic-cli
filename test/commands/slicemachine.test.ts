@@ -3,6 +3,8 @@ import * as path from 'path'
 import * as os from 'os'
 import {fs} from '../../src/utils'
 
+const globby = require('fast-glob')
+
 const tmpDir = os.tmpdir()
 const fakeDomain = 'fake-domain'
 const fakeBase = 'https://prismic.io'
@@ -117,5 +119,18 @@ describe('slicemachine', () => {
       const config = fs.readFileSync(pathToNuxtConfig, {encoding: 'utf-8'})
       expect(config).to.include('stories: ["~/slices/**/*.stories.[tj]s"]')
     })
+  })
+
+  test
+  .stdout()
+  .stderr()
+  .stub(fs, 'existsSync', () => true)
+  .stub(fs, 'readFile',  async () => JSON.stringify({libraries: ['@/slices']}))
+  .stub(globby, 'sync', () => [path.join('project', 'slices', 'MySlice', 'model.json')])
+  .command(['slicemachine', '--list'])
+  .it('should list slices from sm.json', ctx => {
+    expect(ctx.stderr).to.equal('')
+    expect(ctx.stdout).to.contain('@/slices')
+    expect(ctx.stdout).to.contain('MySlice')
   })
 })
