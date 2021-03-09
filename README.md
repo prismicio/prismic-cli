@@ -29,10 +29,11 @@ USAGE
 # Commands
 <!-- commands -->
 * [`prismic help [COMMAND]`](#prismic-help-command)
-* [`prismic list [FILE]`](#prismic-list-file)
+* [`prismic list`](#prismic-list)
 * [`prismic login`](#prismic-login)
 * [`prismic logout`](#prismic-logout)
 * [`prismic new`](#prismic-new)
+* [`prismic signup [FILE]`](#prismic-signup-file)
 * [`prismic slicemachine`](#prismic-slicemachine)
 * [`prismic theme [FILE]`](#prismic-theme-file)
 
@@ -51,16 +52,14 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
 
-## `prismic list [FILE]`
+## `prismic list`
 
 ```
 USAGE
-  $ prismic list [FILE]
+  $ prismic list
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help  show CLI help
 ```
 
 _See code: [src/commands/list.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/list.ts)_
@@ -109,6 +108,20 @@ OPTIONS
 
 _See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/new.ts)_
 
+## `prismic signup [FILE]`
+
+```
+USAGE
+  $ prismic signup [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/signup.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/signup.ts)_
+
 ## `prismic slicemachine`
 
 ```
@@ -124,7 +137,9 @@ OPTIONS
   --folder=folder        [default: /Users/marc/Projects/prismic/prismic-cli]
   --framework=next|nuxt
   --library=library      name of the slice library
+  --list                 list local slices
   --setup                setup slice machine in an already existing project
+  --skip-install         prevent npm install from running
   --sliceName=sliceName  name of the slice
 ```
 

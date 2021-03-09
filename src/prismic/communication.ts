@@ -144,6 +144,7 @@ export default class Prismic {
   }
 
   axios(options?: AxiosInstanceOptions): AxiosInstance {
+    // TODO: add User-Agent header
     const headers = {Cookie: this.cookies, ...options?.headers}
     const opts: AxiosRequestConfig = {
       baseURL: this.base,
@@ -176,6 +177,24 @@ export default class Prismic {
     const token = cookie.parse(this.cookies)['prismic-auth'] || ''
     const url = toAuthUrl(path, token, this.base)
     return this.axios().get(url)
+  }
+
+  async signUp(email: string, password: string, base?: string): Promise<AxiosResponse> {
+    if (base) {
+      this.base = base
+    }
+    return this.axios().post('/authentication/signup', undefined, {
+      params: {
+        ml: true, // TODO: what's this for?
+        email,
+        password,
+      },
+    }).then((res: AxiosResponse) => {
+      this.setCookies(res.headers['set-cookie'])
+      return res
+    }).catch(error => {
+      throw error
+    })
   }
 
   async validateSession(): Promise<AxiosResponse> {
