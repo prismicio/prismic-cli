@@ -42,6 +42,10 @@ export default class CreateSlice extends PrismicGenerator {
     } else {
       this.framework = this.config.get('framework')
     }
+
+    if (this.destinationRoot().endsWith(this.path) === false) {
+      this.destinationRoot(this.path)
+    }
   }
 
   async prompting() {

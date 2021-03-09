@@ -84,6 +84,10 @@ export default class SliceMachine extends PrismicGenerator {
     if (opts.domain) {
       this.domain = opts.domain
     }
+
+    if (this.destinationRoot().endsWith(this.path) === false) {
+      this.destinationRoot(this.path)
+    }
   }
 
   async prompting() {
@@ -156,7 +160,6 @@ export default class SliceMachine extends PrismicGenerator {
 
     if (this.framework === 'next') {
       // theses files could be removed from this package but would have to come from create-next-app
-      // this.copyTemplate('next', this.destinationPath(), {globOptions:{dot: true}}, this.options)
       this.fs.copy(this.templatePath('next'), this.destinationPath(), {globOptions: {dot: true}})
     }
 

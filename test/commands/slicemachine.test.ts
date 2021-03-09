@@ -52,6 +52,8 @@ describe('slicemachine', () => {
 
     test
     .stdout()
+    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
     .command(['slicemachine', '--create-slice', '--library', 'slices', '--sliceName', 'MySlice', '--folder', fakeFolder, '--force', '--framework', 'next'])
     .it('create-slice', _ => {
       const pathToSlices = path.join(fakeFolder, 'slices')
@@ -63,6 +65,8 @@ describe('slicemachine', () => {
 
     test
     .stdout()
+    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
     .command(['slicemachine', '--add-storybook', '--framework', 'next', '--folder', fakeFolder, '--force', '--skip-install'])
     .it('add-storybook', _ => {
       const pathToStoryBook = path.join(fakeFolder, '.storybook/main.js')
@@ -111,6 +115,8 @@ describe('slicemachine', () => {
 
     test
     .stdout()
+    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
     .command(['slicemachine', '--create-slice', '--library', 'slices', '--sliceName', 'MySlice', '--folder', fakeFolder, '--force', '--framework', 'nuxt'])
     .it('create-slice', _ => {
       const pathToSlices = path.join(fakeFolder, 'slices')
@@ -122,6 +128,8 @@ describe('slicemachine', () => {
 
     test
     .stdout()
+    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
     .command(['slicemachine', '--add-storybook', '--framework', 'nuxt', '--folder', fakeFolder, '--force', '--skip-install'])
     .it('add-storybook', _ => {
       const pathToNuxtConfig = path.join(fakeFolder, 'nuxt.config.js')
@@ -134,6 +142,8 @@ describe('slicemachine', () => {
   test
   .stdout()
   .stderr()
+  .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+  .stub(fs, 'writeFile', () => Promise.resolve())
   .stub(fs, 'existsSync', () => true)
   .stub(fs, 'readFile',  async () => JSON.stringify({libraries: ['@/slices']}))
   .stub(globby, 'sync', () => [path.join('project', 'slices', 'MySlice', 'model.json')])
