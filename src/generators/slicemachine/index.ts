@@ -11,9 +11,6 @@ export default class SliceMachine extends PrismicGenerator {
       this.config.set('framework', opts.framework)
     }
     this.framework = opts.framework || this.config.get('framework')
-    if (opts.path) {
-      this.destinationRoot(opts.path)
-    }
   }
 
   async prompting() {
@@ -42,7 +39,7 @@ export default class SliceMachine extends PrismicGenerator {
    */
 
   async default() {
-    const opts = {...this.options, prismic: this.prismic, domain: this.domain, path: this.destinationRoot(), framework: this.framework}
+    const opts = {...this.options, prismic: this.prismic, domain: this.domain, path: this.path, framework: this.framework}
     // options: framework, domain, path
     this.composeWith(require.resolve('./setup'), opts)
     // options: framework, prompts: library, sliceName

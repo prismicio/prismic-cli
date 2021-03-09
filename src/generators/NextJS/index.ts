@@ -14,11 +14,12 @@ export default class NextJS extends PrismicGenerator {
 
   async initializing() {
     this.destinationRoot(this.path)
+    
     this.composeWith(require.resolve('../slicemachine'), {
       framework: 'next',
       domain: this.domain,
       prismic: this.prismic,
-      path: this.path,
+      path: this.destinationRoot(),
       ...this.options,
     })
   }
@@ -42,9 +43,9 @@ export default class NextJS extends PrismicGenerator {
         start: 'next start',
       },
       dependencies: {
-        next: '^10.0.7',
-        react: '^16',
-        'react-dom': '^16',
+        next: '10.0.8',
+        react: '16.14.0',
+        'react-dom': '16.14.0',
       },
     }
 
@@ -52,6 +53,6 @@ export default class NextJS extends PrismicGenerator {
   }
 
   async install() {
-    this.npmInstall(undefined, {'legacy-peer-deps': true})
+    this.npmInstall()
   }
 }

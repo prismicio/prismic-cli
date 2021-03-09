@@ -12,10 +12,6 @@ export default class StoryBook extends PrismicGenerator {
     } else {
       this.framework = this.config.get('framework')
     }
-
-    if (opts.path !== this.destinationRoot()) {
-      this.destinationRoot(opts.path)
-    }
   }
 
   async prompting() {
@@ -46,6 +42,6 @@ export default class StoryBook extends PrismicGenerator {
   }
 
   async install() {
-    this.npmInstall(undefined, {'legacy-peer-deps': true})
+    this.npmInstall()
   }
 }

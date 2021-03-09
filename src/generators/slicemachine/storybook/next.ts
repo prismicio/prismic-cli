@@ -16,7 +16,7 @@ export default class StoryBookNext extends Generator {
   async writing() {
     const pkJson = {
       devDependencies: {
-        '@storybook/react': '^6.1.18',
+        '@storybook/react': '6.1.21',
         'babel-loader': '^8.2.2',
         'babel-plugin-react-require': '^3.1.3',
       },

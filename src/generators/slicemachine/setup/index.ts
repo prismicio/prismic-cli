@@ -84,8 +84,6 @@ export default class SliceMachine extends PrismicGenerator {
     if (opts.domain) {
       this.domain = opts.domain
     }
-
-    if (opts.path) this.destinationRoot(opts.path)
   }
 
   async prompting() {
@@ -169,7 +167,7 @@ export default class SliceMachine extends PrismicGenerator {
     })
 
     const customTypes = this.readCustomTypesFrom('custom_types')
-
+    
     return this.prismic.createRepository({
       domain: this.domain,
       customTypes,
@@ -182,6 +180,6 @@ export default class SliceMachine extends PrismicGenerator {
   }
 
   async install() {
-    this.npmInstall(undefined, {'legacy-peer-deps': true})
+    this.npmInstall()
   }
 }
