@@ -2,7 +2,7 @@ import {Command, flags} from '@oclif/command'
 import generator from './../prismic/generator'
 
 export default class List extends Command {
-  static description = 'Lists avaible project templates.'
+  static description = 'Lists available project templates.'
 
   static flags = {
     help: flags.help({char: 'h'}),
