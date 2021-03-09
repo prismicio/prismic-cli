@@ -131,10 +131,10 @@ describe('slicemachine', () => {
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
     .command(['slicemachine', '--add-storybook', '--framework', 'nuxt', '--folder', fakeFolder, '--force', '--skip-install'])
-    .it('add-storybook', _ => {
+    .it('add-storybook', async _ => {
       const pathToNuxtConfig = path.join(fakeFolder, 'nuxt.config.js')
       expect(fs.existsSync(pathToNuxtConfig)).to.be.true
-      const config = fs.readFileSync(pathToNuxtConfig, {encoding: 'utf-8'})
+      const config = await fs.readFile(pathToNuxtConfig, {encoding: 'utf-8'})
       expect(config).to.include('stories: ["~/slices/**/*.stories.[tj]s"]')
     })
   })
