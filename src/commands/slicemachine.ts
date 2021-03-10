@@ -17,18 +17,18 @@ export default class Slicemachine extends Command {
 
     setup: flags.boolean({
       description: 'setup slice machine in an already existing project',
-      exclusive: ['create-slice', 'add-storybook', 'list'],
+      exclusive: ['create-slice', 'add-storybook', 'list', 'bootstrap'],
       default: false,
     }),
     domain: flags.string({
       char: 'd',
       description: 'prismic repo to to create',
-      dependsOn: ['setup'],
+      dependsOn: ['setup', 'bootstrap'],
     }),
 
     'create-slice': flags.boolean({
       description: 'add a slice to a slicemachine project',
-      exclusive: ['setup', 'add-storybook', 'list'],
+      exclusive: ['setup', 'add-storybook', 'list', 'bootstrap'],
       default: false,
     }),
 
@@ -44,7 +44,7 @@ export default class Slicemachine extends Command {
 
     'add-storybook': flags.boolean({
       description: 'add storybook to a slicemachine project',
-      exclusive: ['setup', 'create-slice', 'list'],
+      exclusive: ['setup', 'create-slice', 'list', 'bootstrap'],
       default: false,
     }),
 
@@ -54,7 +54,7 @@ export default class Slicemachine extends Command {
 
     list: flags.boolean({
       description: 'list local slices',
-      exclusive: ['add-storybook', 'setup', 'create-slice'],
+      exclusive: ['add-storybook', 'setup', 'create-slice', 'bootstrap', 'sliceName', 'domain', 'library', 'framework', 'folder', 'skip-install'],
       default: false,
     }),
 
@@ -65,6 +65,12 @@ export default class Slicemachine extends Command {
     'skip-install': flags.boolean({
       description: 'prevent npm install from running',
       exclusive: ['create-slice', 'list'],
+      default: false,
+    }),
+
+    bootstrap: flags.boolean({
+      description: 'reconfigure a slicemachine project',
+      exclusive: ['setup', 'create-slice', 'list'],
       default: false,
     }),
 
@@ -145,6 +151,38 @@ export default class Slicemachine extends Command {
         })
       })
       .catch(this.error)
+    }
+
+    if (flags.bootstrap) {
+      const smFilePath = path.join(flags.folder, 'sm.json')
+
+      if (fs.existsSync(smFilePath) === false) {
+        return this.warn('No sm.json file found at:' + smFilePath)
+      }
+
+      const isAuthenticated = await this.prismic.isAuthenticated()
+      if (!isAuthenticated) {
+        await login.run([])
+      }
+
+      const domain = await this.validateDomain(flags.domain)
+
+      return this.prismic.createRepository({domain})
+      .then(res => {
+        const url = new URL(this.prismic.base)
+        url.hostname = `${res.data}.${url.hostname}`
+        return this.log(`log('Your SliceMachine repository was successfully created!') ${url.toString()}`)
+      })
+      .then(() => fs.readFile(smFilePath, 'utf-8'))
+      .then(str => JSON.parse(str))
+      .then(json => {
+        const url = new URL(this.prismic.base)
+        url.hostname = `${domain}.cdn.${url.hostname}`
+        url.pathname = 'api/v2'
+        return JSON.stringify({...json, apiEndpoint: url.toString()}, null, 2)
+      }).then(smFile => {
+        return fs.writeFile(smFilePath, smFile, 'utf-8')
+      })
     }
 
     if (!flags['create-slice'] && !flags['add-storybook'] && !flags.setup && !flags.list) {
