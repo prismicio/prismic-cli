@@ -1,6 +1,7 @@
 import {expect, test} from '@oclif/test'
 import * as path from 'path'
 import * as os from 'os'
+import * as sinon from 'sinon'
 import {fs} from '../../src/utils'
 
 const globby = require('fast-glob')
@@ -10,7 +11,7 @@ const fakeDomain = 'fake-domain'
 const fakeBase = 'https://prismic.io'
 const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=xyz'
 
-describe('slicemachine', () => {
+describe.only('slicemachine', () => {
   describe('Next.js', () => {
     const appName = 'test-slicemachine-next'
     const fakeFolder = path.join(tmpDir, appName)
@@ -152,5 +153,42 @@ describe('slicemachine', () => {
     expect(ctx.stderr).to.equal('')
     expect(ctx.stdout).to.contain('@/slices')
     expect(ctx.stdout).to.contain('MySlice')
+  })
+
+  describe('bootstrap', () => {
+    const boostrapFakeWriteFile = sinon.fake.resolves(undefined)
+
+    const setup = test
+    .stdout()
+    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'existsSync', () => true)
+    .stub(fs, 'readFile',  async () => JSON.stringify({apiEndpoint: 'https://marc.cdn.prismic.io/api/v2'}))
+    .stub(fs, 'writeFile', boostrapFakeWriteFile)
+
+    setup
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+    })
+    .nock(fakeBase, api => {
+      return api
+      .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
+      .post('/authentication/newrepository').reply(200, fakeDomain)
+    })
+    .command(['slicemachine', '--bootstrap', '--domain', fakeDomain])
+    .do(() => {
+      expect(boostrapFakeWriteFile.called).to.be.true
+      const lastWriteArgs = boostrapFakeWriteFile.lastCall.args
+      const data = lastWriteArgs[lastWriteArgs.length - 1]
+      expect(data).to.contain(`https://${fakeDomain}.cdn.prismic.io/api/v2`)
+    })
+    .it('should reconfigure a projects sm.json file')
+
+    setup
+    .stderr()
+    .stub(fs, 'existsSync', () => false)
+    .command(['slicemachine', '--bootstrap', '--domain', fakeDomain])
+    .do(ctx => expect(ctx.stderr).to.contain('sm.json file not found in:'))
+    .it('Should fail if no sm.json file is found')
   })
 })

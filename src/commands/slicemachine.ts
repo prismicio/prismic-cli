@@ -20,10 +20,11 @@ export default class Slicemachine extends Command {
       exclusive: ['create-slice', 'add-storybook', 'list', 'bootstrap'],
       default: false,
     }),
+
     domain: flags.string({
       char: 'd',
       description: 'prismic repo to to create',
-      dependsOn: ['setup', 'bootstrap'],
+      exclusive: ['add-storybook', 'create-slice', 'sliceName', 'library', 'list'],
     }),
 
     'create-slice': flags.boolean({
@@ -64,7 +65,7 @@ export default class Slicemachine extends Command {
 
     'skip-install': flags.boolean({
       description: 'prevent npm install from running',
-      exclusive: ['create-slice', 'list'],
+      exclusive: ['create-slice', 'list', 'bootstrap'],
       default: false,
     }),
 
@@ -157,7 +158,7 @@ export default class Slicemachine extends Command {
       const smFilePath = path.join(flags.folder, 'sm.json')
 
       if (fs.existsSync(smFilePath) === false) {
-        return this.warn('No sm.json file found at:' + smFilePath)
+        return this.warn('sm.json file not found in:' + smFilePath)
       }
 
       const isAuthenticated = await this.prismic.isAuthenticated()
@@ -181,7 +182,7 @@ export default class Slicemachine extends Command {
         url.pathname = 'api/v2'
         return JSON.stringify({...json, apiEndpoint: url.toString()}, null, 2)
       }).then(smFile => {
-        return fs.writeFile(smFilePath, smFile, 'utf-8')
+        return fs.writeFile(smFilePath, smFile)
       })
     }
 
