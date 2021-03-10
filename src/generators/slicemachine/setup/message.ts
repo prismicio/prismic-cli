@@ -8,17 +8,17 @@ const sliceZoneReadmeUrl = (framework?: string): string => {
 
 const quickStartDocsUrl = (framework?: string): string => {
   switch (framework) {
-  case 'nuxt': return 'https://prismic.io/docs/technologies/nuxtjs';
-  case 'next': return 'https://prismic.io/docs/technologies/quick-start-nextjs';
-  default: return 'https://slicemachine.dev/documentation/getting-started';
+  case 'nuxt': return 'https://prismic.io/docs/technologies/nuxtjs'
+  case 'next': return 'https://prismic.io/docs/technologies/quick-start-nextjs'
+  default: return 'https://slicemachine.dev/documentation/getting-started'
   }
 }
 
 const addSlicesDocsUrl = (framework?: string): string => {
   switch (framework) {
-  case 'nuxt': return 'https://prismic.io/docs/technologies/generate-model-component-nuxtjs';
-  case 'next': return 'https://prismic.io/docs/technologies/create-your-own-slices-components-nextjs';
-  default: return 'https://www.slicemachine.dev/';
+  case 'nuxt': return 'https://prismic.io/docs/technologies/generate-model-component-nuxtjs'
+  case 'next': return 'https://prismic.io/docs/technologies/create-your-own-slices-components-nextjs'
+  default: return 'https://www.slicemachine.dev/'
   }
 }
 
