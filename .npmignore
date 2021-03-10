@@ -38,3 +38,4 @@ jspm_packages
 
 __tmp__
 __e2e__
+.env
