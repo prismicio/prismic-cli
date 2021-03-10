@@ -2,6 +2,7 @@ import PrismicGenerator, {TemplateOptions} from '../../base'
 import {Question} from 'yeoman-generator'
 import modifyNuxtConfig from './modify-nuxt-config'
 import chalk from 'chalk'
+import message from './message'
 
 const nuxtDeps = {
   '@nuxtjs/prismic': '^1.2.4',
@@ -184,5 +185,9 @@ export default class SliceMachine extends PrismicGenerator {
 
   async install() {
     this.npmInstall()
+  }
+
+  async end() {
+    this.log(message(this.framework, this.domain, this.prismic.base))
   }
 }
