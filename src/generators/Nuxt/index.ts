@@ -310,7 +310,7 @@ export default class Nuxt extends PrismicGenerator {
     if (this.answers.pm === 'yarn') {
       this.yarnInstall()
     } else {
-      this.npmInstall(undefined, {'legacy-peer-deps': true})
+      this.npmInstall()
     }
   }
 }
