@@ -25,9 +25,9 @@ function genRepoName(repoName) {
   const email = process.env.PRISMIC_EMAIL || '';
   const name = email.slice(0, email.indexOf('@'));
   const sufix = name.replace(/\W/g,'');
-  const randomString = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
+  const randomString = Math.random().toString(36).replace(/[^a-z]+/g, () => Math.random().toString(36).substr(2, 4));
   const base = process.env.PRISMIC_BASE ? getDomainName(process.env.PRISMIC_BASE) : 'test'; 
-  return `${repoName}-${sufix}-${base}-${randomString}`;;
+  return `${repoName}-${sufix}-${base}-${randomString}`;
 }
 
 function getDomainName(str) {
