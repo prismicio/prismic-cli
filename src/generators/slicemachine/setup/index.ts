@@ -75,6 +75,10 @@ export default class SliceMachine extends PrismicGenerator {
     super(argv, opts)
     // this.framework = opts.framework || this.framework
 
+    if (this.destinationRoot().endsWith(this.path) === false) {
+      this.destinationRoot(this.path)
+    }
+
     if (opts.framework) {
       this.config.set('framework', opts.framework)
       this.framework = opts.framework
@@ -84,10 +88,6 @@ export default class SliceMachine extends PrismicGenerator {
 
     if (opts.domain) {
       this.domain = opts.domain
-    }
-
-    if (this.destinationRoot().endsWith(this.path) === false) {
-      this.destinationRoot(this.path)
     }
   }
 

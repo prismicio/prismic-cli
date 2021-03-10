@@ -6,15 +6,16 @@ export default class StoryBook extends PrismicGenerator {
   constructor(argv: string|string[], opts: TemplateOptions) {
     super(argv, opts)
     // TODO: this logic is repeated in setup, create-slice and here
+
+    if (this.destinationRoot().endsWith(this.path) === false) {
+      this.destinationRoot(this.path)
+    }
+
     if (opts.framework) {
       this.config.set('framework', opts.framework)
       this.framework = opts.framework
     } else {
       this.framework = this.config.get('framework')
-    }
-
-    if (this.destinationRoot().endsWith(this.path) === false) {
-      this.destinationRoot(this.path)
     }
   }
 
