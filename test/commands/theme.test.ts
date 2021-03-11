@@ -3,6 +3,7 @@ import * as path from 'path'
 import * as os from 'os'
 import {fs} from '../../src/utils'
 import {Theme as ThemeZip} from '../__stubs__/template'
+import Theme from '../../src/commands/theme'
 
 describe('theme', () => {
   const fakeDomain = 'fake-theme-domain'
@@ -53,4 +54,19 @@ describe('theme', () => {
     const conf = require(configPath)
     expect(conf.prismicRepo).to.include(fakeDomain)
   })
+
+  test
+  .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+  .stub(fs, 'writeFile', () => Promise.resolve())
+  .do(() => {
+    expect(Theme.flags.config).to.exist
+    expect(Theme.flags.customTypes).to.exist
+    expect(Theme.flags.documents).to.exist
+    expect(Theme.flags.domain).to.exist
+    expect(Theme.flags.folder).to.exist
+    expect(Theme.flags.force).to.exist
+    expect(Theme.flags.help).to.exist
+    expect(Theme.flags['theme-url']).to.exist
+  })
+  .it('theme flags')
 })

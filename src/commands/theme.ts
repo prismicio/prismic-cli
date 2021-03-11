@@ -19,7 +19,8 @@ export default class Theme extends Command {
       char: 'f',
       description: 'name of project folder',
     }),
-    themeUrl: flags.string({
+
+    'theme-url': flags.string({
       char: 't',
       description: 'Url or path to the theme',
     }),
@@ -57,7 +58,7 @@ export default class Theme extends Command {
 
     const domain = await this.validateDomain(flags.domain)
     const folder = await this.validateFolder(flags.folder, domain, flags.force)
-    const theme = await this.validateTheme(flags.themeUrl || args.file)
+    const theme = await this.validateTheme(flags['theme-url'] || args.file)
 
     generator.register(
       require.resolve('../generators/theme'),
