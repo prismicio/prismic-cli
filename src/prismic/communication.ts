@@ -105,6 +105,8 @@ export default class Prismic {
     this.base = base
     this.cookies = cookies
     this.oauthAccessToken = oauthAccessToken
+
+    this.validateRepositoryName = this.validateRepositoryName.bind(this)
   }
 
   private getConfig(): LocalDB {

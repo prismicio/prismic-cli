@@ -25,17 +25,17 @@ export default abstract class PrismicCommand extends Command {
 
   async validateDomain(name: string | undefined): Promise<string> {
     const base = new URL(this.prismic.base)
-    // TODO: tidy this up a bit
+    const validate = this.prismic.validateRepositoryName
+    const isValid = (name) ? validate(name) : Promise.reject(new Error(''))
 
-    return this.prismic.validateRepositoryName(name)
-    .catch(_ => {
-      this.warn(_.message)
+    return isValid.catch(_ => {
+      if (_.message) this.warn(_.message)
+
       return inquirer.prompt([{
         type: 'input',
         name: 'domain',
         message: 'Name your prismic repository: ',
         required: true,
-        default: name,
         transformer(value) {
           const reponame = value ? chalk.cyan(value) : chalk.dim.cyan('repo-name')
           const msg = [
@@ -45,7 +45,11 @@ export default abstract class PrismicCommand extends Command {
           ]
           return msg.join('')
         },
-      }]).then(res => res.domain).then(this.validateDomain.bind(this))
+        async validate(name) {
+          const result = await validate(name)
+          return result === name || result
+        },
+      }]).then(res => res.domain)
     })
   }
 
