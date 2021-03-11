@@ -47,26 +47,31 @@ export default abstract class PrismicGenerator extends Generator {
       responseType: 'stream',
     })
     .then(res => {
-      const total = res.headers['content-length'] // TODO: this may not exist :/
+      const total = res.headers['content-length']
       let count = 0
 
-      progressBar.start(total, count)
+      const startProgress = () => total ? progressBar.start(total, count) : cli.action.start('Downloading from github')
+      const updateProgress = (count: number) => total ? progressBar.update(count) : undefined
+      const stopProgress = () => total ? progressBar.stop() : cli.action.stop('Download complete')
+
+      startProgress()
+
       return new Promise<tmp.FileResult>((resolve, reject) => {
         const writeStream = fs.createWriteStream(tmpFile.path)
 
         res.data.on('data', chunk => {
           count += chunk.length
-          progressBar.update(count)
+          updateProgress(count)
         })
 
         res.data.pipe(writeStream)
         .on('finish', () => {
-          progressBar.stop()
+          stopProgress()
           return resolve(tmpFile)
         })
 
         .on('error', error => {
-          progressBar.stop()
+          stopProgress()
           return reject(error)
         })
       })
