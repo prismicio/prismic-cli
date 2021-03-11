@@ -49,7 +49,7 @@ export default abstract class PrismicCommand extends Command {
           const result = await validate(name)
           return result === name || result
         },
-      }]).then(res => res.domain).then(validate)
+      }]).then(res => res.domain).then(validate) // TODO: Find out a way to inquerer prompts in isolation.
     })
   }
 
