@@ -288,6 +288,29 @@ describe('prismic/communication.ts', () => {
     .it('should create a repo using an oauth access token')
 
     test
+    .skip()
+    .stub(fs, 'readFileSync', sinon.fake.returns(configWithOauth))
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .nock('https://api.prismic.io', api => {
+      // const query = qs.stringify({domain: repoName, plan: 'personal', isAnnual: 'false', access_token: 'token'})
+      return api.post('/management/repositories', /* query */).reply(303, {
+        domain: repoName,
+      })
+    })
+    .add('prismic', () => {
+      const p = new Prismic()
+      p.reAuthenticate = sinon.fake.rejects({})
+      return p
+    })
+    .do(async ctx => {
+      await ctx.prismic.createRepository({domain: repoName}).catch(() => ({}))
+      const reAuthenticate = ctx.prismic.reAuthenticate as sinon.SinonSpy<any, any>
+      // sinon.assert.called(reAuthenticate)
+      expect(reAuthenticate.called).to.be.true
+    })
+    .it('should ask to reAuthenticate if create repo fails')
+
+    test
     .nock('https://prismic.io', api => {
       api.post('/authentication/newrepository', /* query */).reply(401)
       // api.post('/authentication/newrepository', /* query */).reply(200, {domain: repoName})
@@ -307,6 +330,27 @@ describe('prismic/communication.ts', () => {
       expect(reAuthenticate.called).to.be.true
     })
     .it('create asks to reAuthenticate on failure')
+
+    test
+    .nock('https://prismic.io', api => {
+      api.post('/authentication/newrepository', /* query */).reply(303)
+      // api.post('/authentication/newrepository', /* query */).reply(200, {domain: repoName})
+      return api
+    })
+    .stub(fs, 'readFileSync', sinon.fake.returns(config))
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .add('prismic', () => {
+      const p = new Prismic()
+      p.reAuthenticate = sinon.fake.rejects({})
+      return p
+    })
+    .do(async ctx => {
+      await ctx.prismic.createRepository({domain: repoName}).catch(() => ({}))
+      const reAuthenticate = ctx.prismic.reAuthenticate as sinon.SinonSpy<any, any>
+      // sinon.assert.called(reAuthenticate)
+      expect(reAuthenticate.called).to.be.true
+    })
+    .it('create asks to reAuthenticate on 303 status code')
   })
 
   describe('isAuthenticated', () => {

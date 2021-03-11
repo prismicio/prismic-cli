@@ -312,8 +312,9 @@ export default class Prismic {
     const retry = () => this.createRepositoryWithCookie({domain, customTypes, signedDocuments})
 
     // const querystring = {app: 'slicemachine'}
-    return this.axios().post('/authentication/newrepository', data).catch(error => {
-      if (error.response?.status === 401) {
+    return this.axios({maxRedirects: 0}).post('/authentication/newrepository', data).catch(error => {
+      const status: number = Math.floor((error?.response?.status || 100) / 100)
+      if (status === 4 || status === 3) {
         return this.reAuthenticate().then(retry)
       }
       throw error
@@ -346,7 +347,8 @@ export default class Prismic {
 
     const address = url.toString()
     return this.axios().post(address, data).catch(error => {
-      if (error.response?.status === 401) {
+      const status: number = Math.floor((error?.response?.status || 100) / 100)
+      if (status === 4 || status === 3) {
         return this.reAuthenticate().then(retry)
       }
       throw error
