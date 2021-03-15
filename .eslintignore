@@ -2,3 +2,4 @@
 templates
 node_modules
 test/__stubs__/**
+.env*

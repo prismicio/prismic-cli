@@ -47,6 +47,9 @@ ${writingRoomUrl(domain, base)}
 - To add your own slice, run this command
 $> npx prismic-cli sm --create-slice
 
+- Run slicemachine
+$> npm run slicemachine
+
 If you're not sure where you should start,
 give SliceMachine documentation a try:
 

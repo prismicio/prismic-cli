@@ -11,6 +11,7 @@ Command line tool to bootstrap prismic projects.
 <!-- toc -->
 * [Usage](#usage)
 * [Commands](#commands)
+* [Development](#development)
 <!-- tocstop -->
 # Usage
 <!-- usage -->
@@ -33,7 +34,7 @@ USAGE
 * [`prismic login`](#prismic-login)
 * [`prismic logout`](#prismic-logout)
 * [`prismic new`](#prismic-new)
-* [`prismic signup [FILE]`](#prismic-signup-file)
+* [`prismic signup`](#prismic-signup)
 * [`prismic slicemachine`](#prismic-slicemachine)
 * [`prismic theme [FILE]`](#prismic-theme-file)
 
@@ -108,16 +109,16 @@ OPTIONS
 
 _See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/new.ts)_
 
-## `prismic signup [FILE]`
+## `prismic signup`
 
 ```
 USAGE
-  $ prismic signup [FILE]
+  $ prismic signup
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help           show CLI help
+  --email=email        email address
+  --password=password  password
 ```
 
 _See code: [src/commands/signup.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/signup.ts)_
@@ -133,6 +134,7 @@ OPTIONS
   -f, --force
   -h, --help             show CLI help
   --add-storybook        add storybook to a slicemachine project
+  --bootstrap            reconfigure a slicemachine project
   --create-slice         add a slice to a slicemachine project
   --folder=folder        [default: /Users/marc/Projects/prismic/prismic-cli]
   --framework=next|nuxt
@@ -155,7 +157,7 @@ OPTIONS
   -d, --domain=domain        name of the prismic repository ie: example, becomes https://example.prismic.io
   -f, --folder=folder        name of project folder
   -h, --help                 show CLI help
-  -t, --themeUrl=themeUrl    Url or path to the theme
+  -t, --theme-url=theme-url  Url or path to the theme
   --config=config            [default: prismic-configuration.js] path to prismic configuration file
   --customTypes=customTypes  [default: custom_types] path to custom types directory in the theme
   --documents=documents      [default: documents] path to documents in the theme
@@ -164,3 +166,36 @@ OPTIONS
 
 _See code: [src/commands/theme.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/theme.ts)_
 <!-- commandsstop -->
+
+# Development
+
+## Running Locally
++ Clone this repository `git clone https://github.com/prismic.io/prismic-cli`
++ Enter the newly cloned repository and install the dependencies with `npm install` or `yarn`
++ Commands can be executed from the **bin/run** file i.e: `./bin/run --help`
+
+## Testing
+Run tests with `npm test` or `yarn test`
+The main testing libary used is [@oclif/test](https://github.com/oclif/test) the documentation on how to use the testing library can be found here https://github.com/oclif/fancy-test
+
+## Linting
+[eslint](https://eslint.org/) is automatically run after the `test` script, but it can also be invoked by running `npm run posttest` or `yarn posttest`, optionally with a `--fix` flag. 
+
+## Built With
++ [Oclif](https://oclif.io/)
++ [Yeoman](https://yeoman.io/)
+
+
+## Files and Folders
+_This should change in later releases._
+
+[src/prismic/communication.ts](src/prismic/communication.ts) Handles communication and sessions with prismic. This class is injected in to commnads as `this.prismic`. 
+
+[src/prismic/base-command.ts](src/prismic/base-command.ts) Customized command class used in [src/commands](src/commands) that provides an instance of `this.prismic` and a few utility methods shared across commands.
+
+[src/prismic/generator.ts](src/prismic/generator.ts) Sets up a [yeoman-environment](https://github.com/yeoman/environment) used by the `new` and `theme` commands.
+
+[src/generators](src/generators) Yeoman generators for source code generation.
+[src/generators/base](src/generators/base.ts) A customized base yeoman generator that provided utility methods for generating a prismic project.
+
+[src/utils](src/utils) utility functions, library configuration and a proxy for `fs` modules so the modules can be used and mocked during the tests while leaving other uses in different libraries un-mocked.

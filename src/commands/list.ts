@@ -1,4 +1,5 @@
-import {Command, flags} from '@oclif/command'
+import {flags} from '@oclif/command'
+import {Command} from './../prismic'
 import generator from './../prismic/generator'
 
 export default class List extends Command {

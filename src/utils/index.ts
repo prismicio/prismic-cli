@@ -16,5 +16,5 @@ export function parseJsonSync<T>(jsonString: string): T {
   return obj
 }
 
-// proxies to prevent mocking of node.js initeral functions.
+// proxies to prevent mocking of node.js internal functions.
 
