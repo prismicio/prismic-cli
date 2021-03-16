@@ -7,6 +7,7 @@ import cli from 'cli-ux'
 import {posix} from 'path'
 import axios, {AxiosError} from 'axios'
 import * as inquirer from 'inquirer'
+import datadog from '../utils/data-dog'
 
 import chalk from 'chalk'
 
@@ -19,8 +20,8 @@ export default abstract class PrismicCommand extends Command {
   }
 
   async catch(err: any): Promise<any> {
-    // TODO: add sentry here
-    super.catch(err)
+    await datadog(err, this).catch(() => this.warn('Failed to send error to datadog'))
+    return super.catch(err)
   }
 
   async validateDomain(name: string | undefined): Promise<string> {
