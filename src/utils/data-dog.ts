@@ -3,7 +3,6 @@ import PrismicCommand from './../prismic/base-command'
 import {serializeError} from 'serialize-error'
 
 export default async function datadog(error: string | Error, payload: PrismicCommand): Promise<AxiosResponse> {
-
   const maybeError = typeof error === 'string' ? {} : serializeError(error)
 
   const sainPayload = {
