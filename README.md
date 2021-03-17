@@ -37,6 +37,7 @@ USAGE
 * [`prismic signup`](#prismic-signup)
 * [`prismic slicemachine`](#prismic-slicemachine)
 * [`prismic theme [FILE]`](#prismic-theme-file)
+* [`prismic whoami`](#prismic-whoami)
 
 ## `prismic help [COMMAND]`
 
@@ -165,6 +166,18 @@ OPTIONS
 ```
 
 _See code: [src/commands/theme.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/theme.ts)_
+
+## `prismic whoami`
+
+```
+USAGE
+  $ prismic whoami
+
+OPTIONS
+  -h, --help  show CLI help
+```
+
+_See code: [src/commands/whoami.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/whoami.ts)_
 <!-- commandsstop -->
 
 # Development
