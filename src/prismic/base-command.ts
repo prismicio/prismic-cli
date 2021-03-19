@@ -17,6 +17,7 @@ export default abstract class PrismicCommand extends Command {
   constructor(argv: string[], config: IConfig) {
     super(argv, config)
     this.prismic = new Prismic(config)
+    this.login = this.login.bind(this)
   }
 
   async catch(err: any): Promise<any> {
