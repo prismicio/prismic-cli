@@ -5,17 +5,61 @@ import * as path from 'path'
 import * as os from 'os'
 import * as inquirer from 'inquirer'
 import * as sinon from 'sinon'
+import New from '../../src/commands/new'
+import login from '../../src/commands/login'
 
 describe('new', () => {
+  test.do(() => {
+    expect(New.flags.domain).to.exist
+    expect(New.flags.folder).to.exist
+    expect(New.flags.force).to.exist
+    expect(New.flags.generator).to.exist
+    expect(New.flags.help).to.exist
+    expect(New.flags['skip-install']).to.exist
+    expect(New.flags.template).to.exist
+  }).it('flags')
+
   const fakeDomain = 'fake-domain'
   const fakeBase = 'https://prismic.io'
   const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=xyz'
   const tmpDir = os.tmpdir()
 
+  describe('checking for auth', () => {
+    const fakeFolder = path.join(tmpDir, 'test-new-login')
+
+    beforeEach(async () => {
+      if (fs.existsSync(fakeFolder)) {
+        await fs.rmdir(fakeFolder, {recursive: true})
+      }
+    })
+
+    const mockLogin = sinon.fake.resolves(true)
+    test
+    .stdout()
+    .stderr()
+    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(login, 'run', mockLogin)
+    .nock('https://auth.prismic.io', api => api.get('/validate?token=xyz').reply(403, {}))
+    .nock(fakeBase, api => {
+      return api
+      .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true) // we should really rename this.
+      .post('/authentication/newrepository').reply(200, fakeDomain)
+    })
+    .nock('https://github.com', api => {
+      api.get('/prismicio/nodejs-sdk/archive/master.zip')
+      .reply(200, StubNodeJSZip.toBuffer(), {'Content-Type': 'application/zip'})
+    })
+    .command(['new', '--domain', fakeDomain, '--folder', fakeFolder, '--template', 'NodeJS'])
+    .it('should call login if user is not authenticated', () => {
+      expect(mockLogin.called).to.be.true
+    })
+  })
+
   describe('nodejs-sdk', () => {
     const fakeFolder = path.join(tmpDir, 'test-new-nodejs-sdk')
 
-    before(async () => {
+    beforeEach(async () => {
       if (fs.existsSync(fakeFolder)) {
         await fs.rmdir(fakeFolder, {recursive: true})
       }
@@ -38,7 +82,7 @@ describe('new', () => {
       api.get('/prismicio/nodejs-sdk/archive/master.zip')
       .reply(200, StubNodeJSZip.toBuffer(), {'Content-Type': 'application/zip'})
     })
-    .command(['new', '--domain', fakeDomain, '--folder', fakeFolder, '--template', 'NodeJS'])
+    .command(['new', '--domain', fakeDomain, '--folder', fakeFolder, '--template', 'NodeJS', '--force'])
     .it('creates a new repository from a given template in: ' + fakeFolder, () => {
       const configPath = path.join(fakeFolder, 'prismic-configuration.js')
       expect(fs.existsSync(fakeFolder)).to.be.true
@@ -172,6 +216,69 @@ describe('new', () => {
       expect(fs.existsSync(pathToNuxtConfig)).to.be.true
       const config = await fs.readFile(pathToNuxtConfig, {encoding: 'utf-8'})
       expect(config).to.include('stories: ["~/slices/**/*.stories.[tj]s"]')
+    })
+  })
+
+  describe('generator', () => {
+    const fakeFolder = path.join(tmpDir, 'test-new-generator')
+    const fakeGenerator = path.resolve(__dirname, '../__stubs__/fake-generator')
+    const fakeYeomanGenerator = path.resolve(__dirname, '../__stubs__/generator-fake-yeoman-generator')
+
+    before(async () => {
+      if (fs.existsSync(fakeFolder)) {
+        await fs.rmdir(fakeFolder, {recursive: true})
+      }
+    })
+
+    const fakeReadFileSync = sinon.stub()
+    fakeReadFileSync.onCall(0).returns(JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+
+    test
+    .stdout()
+    .stderr()
+    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(fs, 'existsSync', () => false)
+    .nock(fakeBase, api => api.get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true))
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+    })
+    .command(['new', '--generator', fakeGenerator, '--force', '--domain', fakeDomain, '--folder', fakeFolder])
+    .it('should warn the user if generator does not exist', ctx => {
+      expect(ctx.stderr).to.contain('Warning: Could not find')
+    })
+
+    test
+    .stdout()
+    .stderr()
+    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(fs, 'existsSync', sinon.stub().onCall(0).returns(true).onCall(1).returns(true).onCall(2).returns(false).onCall(3).returns(false))
+    .nock(fakeBase, api => api.get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true))
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+    })
+    .command(['new', '--generator', fakeYeomanGenerator, '--force', '--domain', fakeDomain, '--folder', fakeFolder])
+    .it('should warn the user if generator does not exist', ctx => {
+      expect(ctx.stderr).to.contain('main field is misconfigured... trying')
+      expect(ctx.stderr).to.contain('did not resolve, exiting')
+    })
+
+    test
+    .stdout()
+    .stderr()
+    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .nock(fakeBase, api => api.get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true))
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+    })
+    .command(['new', '--generator', fakeYeomanGenerator, '--force', '--domain', fakeDomain, '--folder', fakeFolder])
+    .it('should run a yeoman generator', ctx => {
+      expect(ctx.stdout).to.contain('Done running the generator')
     })
   })
 })

@@ -227,7 +227,8 @@ export default class Prismic {
     return this.validateAndRefresh()
     .then(() => true)
     .catch(error => {
-      if (error?.response?.status === 401) {
+      const status = error?.response?.status || 100
+      if (Math.floor(status / 100) === 4) {
         return false
       }
       throw error
