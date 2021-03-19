@@ -148,8 +148,12 @@ export default class Prismic {
   }
 
   axios(options?: AxiosInstanceOptions): AxiosInstance {
-    // TODO: add User-Agent header
-    const headers = {'User-Agent': `prismic-cli/${version}`, Cookie: this.cookies, ...options?.headers}
+    const cookie = this.getConfig().cookies
+    const headers = {
+      'User-Agent': `prismic-cli/${version}`,
+      Cookie: cookie,
+      ...options?.headers,
+    }
     const opts: AxiosRequestConfig = {
       baseURL: this.base,
       // withCredentials: true,

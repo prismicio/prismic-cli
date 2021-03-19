@@ -48,16 +48,11 @@ export default class New extends Command {
 
   static args = []
 
-  async login(): Promise<any> {
-    await login.run(this.argv, this.config)
-    return new New(this.argv, this.config).run()
-  }
-
   async run() {
     const isAuthenticated = await this.prismic.isAuthenticated()
 
     if (!isAuthenticated) {
-      return this.login()
+      await login.run(this.argv, this.config)
     }
 
     const {flags} = this.parse(New)

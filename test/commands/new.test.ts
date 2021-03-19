@@ -35,9 +35,8 @@ describe('new', () => {
 
     const mockLogin = sinon.fake.resolves(true)
     test
-    .skip()
-    // .stdout()
-    // .stderr()
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(login, 'run', mockLogin)
