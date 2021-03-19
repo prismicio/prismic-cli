@@ -24,10 +24,14 @@ export default abstract class PrismicCommand extends Command {
     return super.catch(err)
   }
 
-  async login(email?: string, password?: string): Promise<void> {
-    const eml =  email || await cli.prompt('Email')
-    const pwd =  password || await cli.prompt('Password', {type: 'hide'})
-    return this.prismic.login({email: eml, password: pwd}).catch(() => this.login())
+  async login(): Promise<void> {
+    // used when sa session in fails
+    if (this.prismic.base !== 'https://prismic.io') {
+      this.warn(`current base is set to ${this.prismic.base}`)
+    }
+    const email =  await cli.prompt('Email')
+    const password =  await cli.prompt('Password', {type: 'hide'})
+    return this.prismic.login({email, password}).catch(() => this.login())
   }
 
   async validateDomain(name: string | undefined): Promise<string> {
