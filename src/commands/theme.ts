@@ -1,7 +1,6 @@
 import {flags} from '@oclif/command'
 import {Command} from '../prismic'
 import generator from '../prismic/generator'
-import login from './login'
 
 export default class Theme extends Command {
   static description = 'Create a project from a zip file or github repository with a new prismic repository.'
@@ -51,7 +50,7 @@ export default class Theme extends Command {
   async run() {
     const isAuthenticated = await this.prismic.isAuthenticated()
     if (!isAuthenticated) {
-      await login.run(this.argv, this.config)
+      await this.login()
     }
 
     const {flags, args} = this.parse(Theme)

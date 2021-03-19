@@ -3,7 +3,6 @@ import {cli} from 'cli-ux'
 import * as inquirer from 'inquirer'
 import {Command} from '../prismic'
 import prismicGenerators from '../prismic/generator'
-import login from './login'
 import * as path from 'path'
 import {fs} from '../utils'
 
@@ -52,7 +51,7 @@ export default class New extends Command {
     const isAuthenticated = await this.prismic.isAuthenticated()
 
     if (!isAuthenticated) {
-      await login.run(this.argv, this.config)
+      await this.login()
     }
 
     const {flags} = this.parse(New)

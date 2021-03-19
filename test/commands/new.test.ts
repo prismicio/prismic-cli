@@ -6,7 +6,7 @@ import * as os from 'os'
 import * as inquirer from 'inquirer'
 import * as sinon from 'sinon'
 import New from '../../src/commands/new'
-import login from '../../src/commands/login'
+import cli from 'cli-ux'
 
 describe('new', () => {
   test.do(() => {
@@ -33,27 +33,29 @@ describe('new', () => {
       }
     })
 
-    const mockLogin = sinon.fake.resolves(true)
     test
     .stdout()
     .stderr()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
-    .stub(login, 'run', mockLogin)
+    .stub(cli, 'prompt', () => async (message: string): Promise<string> => {
+      if (message.includes('Email')) return Promise.resolve('email')
+      if (message.includes('Password')) return Promise.resolve('password')
+      return Promise.resolve('')
+    })
     .nock('https://auth.prismic.io', api => api.get('/validate?token=xyz').reply(403, {}))
     .nock(fakeBase, api => {
       return api
       .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true) // we should really rename this.
       .post('/authentication/newrepository').reply(200, fakeDomain)
+      .post('/authentication/signin', 'email=email&password=password').reply(200, {})
     })
     .nock('https://github.com', api => {
       api.get('/prismicio/nodejs-sdk/archive/master.zip')
       .reply(200, StubNodeJSZip.toBuffer(), {'Content-Type': 'application/zip'})
     })
     .command(['new', '--domain', fakeDomain, '--folder', fakeFolder, '--template', 'NodeJS'])
-    .it('should call login if user is not authenticated', () => {
-      expect(mockLogin.called).to.be.true
-    })
+    .it('should call login if user is not authenticated')
   })
 
   describe('nodejs-sdk', () => {
