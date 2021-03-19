@@ -33,6 +33,7 @@
     "inquirer": "^7.3.3",
     "is-valid-path": "^0.1.1",
     "qs": "^6.9.4",
+    "serialize-error": "^8.0.1",
     "sinon": "^9.2.1",
     "tmp-promise": "^3.0.2",
     "tslib": "^1",
