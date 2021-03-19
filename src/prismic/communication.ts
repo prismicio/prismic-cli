@@ -9,6 +9,8 @@ import {parseJsonSync} from '../utils'
 import cli from 'cli-ux'
 // Note to self it's easier to mock fs sync methods.
 
+const version: string = require('../../package.json').version
+
 export interface LoginData {
   email?: string;
   password?: string;
@@ -147,7 +149,7 @@ export default class Prismic {
 
   axios(options?: AxiosInstanceOptions): AxiosInstance {
     // TODO: add User-Agent header
-    const headers = {Cookie: this.cookies, ...options?.headers}
+    const headers = {'User-Agent': `prismic-cli/${version}`, Cookie: this.cookies, ...options?.headers}
     const opts: AxiosRequestConfig = {
       baseURL: this.base,
       // withCredentials: true,
