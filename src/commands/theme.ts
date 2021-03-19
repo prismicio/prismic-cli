@@ -48,6 +48,11 @@ export default class Theme extends Command {
 
   static args = [{name: 'file'}]
 
+  async login(): Promise<any> {
+    await login.run(this.argv, this.config)
+    return new Theme(this.argv, this.config).run()
+  }
+
   async run() {
     const isAuthenticated = await this.prismic.isAuthenticated()
     if (!isAuthenticated) {
