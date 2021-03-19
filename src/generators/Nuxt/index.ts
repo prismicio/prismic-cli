@@ -122,7 +122,7 @@ export default class Nuxt extends PrismicGenerator {
         choices: [
           {name: 'Axios - Promise based HTTP client', value: 'axios'},
           {name: 'Progressive Web App (PWA)', value: 'pwa'},
-          // { name: 'Content - Git-based headless CMS', value: 'content' }
+          {name: 'Content - Git-based headless CMS', value: 'content'}
         ],
         default: [],
       },
