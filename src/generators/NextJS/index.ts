@@ -41,6 +41,7 @@ export default class NextJS extends PrismicGenerator {
         dev: 'next dev',
         build: 'next build',
         start: 'next start',
+        export: 'next export',
       },
       dependencies: {
         next: '10.0.8',
