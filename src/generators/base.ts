@@ -50,7 +50,7 @@ export default abstract class PrismicGenerator extends Generator {
       const total = res.headers['content-length']
       let count = 0
 
-      const startProgress = () => total ? progressBar.start(total, count) : cli.action.start('Downloading from github')
+      const startProgress = () => total ? progressBar.start(total, count) : cli.action.start('Downloading starter project')
       const updateProgress = (count: number) => total ? progressBar.update(count) : undefined
       const stopProgress = () => total ? progressBar.stop() : cli.action.stop('Download complete')
 
@@ -76,14 +76,12 @@ export default abstract class PrismicGenerator extends Generator {
         })
       })
     }).then(() => {
-      cli.action.start('Extracting Zip to mem-fs')
       const zip = new AdmZip(tmpFile.path)
       zip.extractAllTo(tmpDir.path)
       return tmpFile.cleanup()
     }).then(() => {
       const location = innerFolder ? path.join(tmpDir.path, innerFolder) : tmpDir.path
       this.fs.copy(location, this.path)
-      cli.action.stop()
       return this
     })
   }
