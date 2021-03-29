@@ -34,7 +34,7 @@ export default class New extends Command {
     }),
 
     'skip-install': flags.boolean({
-      description: 'prevent runing install command after generating project',
+      description: 'prevent running install command after generating project',
       default: false,
     }),
 
