@@ -4,6 +4,9 @@ import * as path from 'path'
 import {fs} from '../../../utils'
 import * as inquirer from 'inquirer' // this is easier to mock
 
+const {snakelize} = require('sm-commons/utils/str')
+const {SM_FILE} = require('sm-commons/consts')
+
 function validateSliceName(name: string): boolean {
   // PascalCase
   const regexp = /^([A-Z][a-z]+){2,}$/
@@ -11,8 +14,8 @@ function validateSliceName(name: string): boolean {
   return regexp.test(name)
 }
 
-function pascalCaseToSnakeCase(str: string) {
-  return str.split(/(?=[A-Z])/).join('_').toLowerCase()
+function pascalCaseToSnakeCase(str: string): string {
+  return snakelize(str)
 }
 
 function toDescription(str: string) {
@@ -125,10 +128,10 @@ export default class CreateSlice extends PrismicGenerator {
     }
 
     const libName = path.join('@', this.answers.library)
-    const {libraries} = this.readDestinationJSON('sm.json', {libraries: []}) as unknown as SliceMachineConfig
+    const {libraries} = this.readDestinationJSON(SM_FILE, {libraries: []}) as unknown as SliceMachineConfig
 
     if (libraries.includes(libName) === false) {
-      this.fs.extendJSON(this.destinationPath('sm.json'), {libraries: [...libraries, libName]})
+      this.fs.extendJSON(this.destinationPath(SM_FILE), {libraries: [...libraries, libName]})
     }
   }
 }

@@ -1,6 +1,8 @@
 import {SliceMachineJson} from '../../base'
 import * as Generator from 'yeoman-generator'
 import modifyNuxtConfig from './modify-nuxt-config'
+const {SM_FILE} = require('sm-commons/consts')
+
 export default class StoryBookNext extends Generator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
@@ -31,13 +33,13 @@ export default class StoryBookNext extends Generator {
       storybook: 'http://localhost:3003',
     }
 
-    this.fs.extendJSON(this.destinationPath('sm.json'), smJson)
+    this.fs.extendJSON(this.destinationPath(SM_FILE), smJson)
 
-    const smfile = this.readDestinationJSON('sm.json') as unknown as SliceMachineJson
+    const smfile = this.readDestinationJSON(SM_FILE) as unknown as SliceMachineJson
 
     const libraries: Array<string> = smfile.libraries || []
 
-    // read sm.json for local libraries.
+    // read sm file for local libraries.
     const localLibs = libraries.filter(lib => lib.startsWith('@/')).map(lib => lib.substring(2))
 
     const config = this.readDestination('nuxt.config.js')

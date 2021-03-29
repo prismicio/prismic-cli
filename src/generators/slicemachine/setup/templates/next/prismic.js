@@ -3,7 +3,7 @@
 import Prismic from 'prismic-javascript'
 import Link from 'next/link'
 
-import smConfig from './sm.json'
+import smConfig from '<%= smFile %>'
 
 export const apiEndpoint = smConfig.apiEndpoint
 

@@ -7,6 +7,8 @@ import {fs} from '../utils'
 
 const globby = require('fast-glob')
 
+const {SM_FILE} = require('sm-commons/consts')
+
 export default class Slicemachine extends Command {
   static description = 'Slice Machine Commands'
 
@@ -123,9 +125,9 @@ export default class Slicemachine extends Command {
     }
 
     if (flags.list) {
-      const pathToSMFile = path.join(folder, 'sm.json')
+      const pathToSMFile = path.join(folder, SM_FILE)
       if (fs.existsSync(pathToSMFile) === false) {
-        this.error(`Could not find sm.json at: ${pathToSMFile}`)
+        this.error(`Could not find ${SM_FILE} at: ${pathToSMFile}`)
       }
 
       return fs.readFile(pathToSMFile, 'utf-8')
@@ -157,10 +159,10 @@ export default class Slicemachine extends Command {
     }
 
     if (flags.bootstrap) {
-      const smFilePath = path.join(folder, 'sm.json')
+      const smFilePath = path.join(folder, SM_FILE)
 
       if (fs.existsSync(smFilePath) === false) {
-        return this.warn('sm.json file not found in:' + smFilePath)
+        return this.warn(`${SM_FILE} file not found in: ${smFilePath}`)
       }
 
       const isAuthenticated = await this.prismic.isAuthenticated()

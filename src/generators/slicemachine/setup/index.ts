@@ -4,6 +4,8 @@ import modifyNuxtConfig from './modify-nuxt-config'
 import chalk from 'chalk'
 import message from './message'
 
+const {SM_FILE} = require('sm-commons/consts')
+
 const nuxtDeps = {
   '@nuxtjs/prismic': '^1.2.4',
   '@prismicio/vue': '^2.0.7',
@@ -161,7 +163,7 @@ export default class SliceMachine extends PrismicGenerator {
 
     if (this.framework === 'next') {
       // theses files could be removed from this package but would have to come from create-next-app
-      this.fs.copy(this.templatePath('next'), this.destinationPath(), {globOptions: {dot: true}})
+      this.fs.copyTpl(this.templatePath('next'), this.destinationPath(), {smFile: SM_FILE}, undefined, {globOptions: {dot: true}})
     }
 
     this.fs.copyTpl(this.templatePath('default/**'), this.destinationPath(), {
@@ -169,6 +171,11 @@ export default class SliceMachine extends PrismicGenerator {
       latest: '0.0.43',
       defaultLibrary: defaultLibForFrameWork(this.framework),
     })
+
+    // maybe rename sm file
+    if (this.existsDestination('sm.json') && SM_FILE !== 'sm.json') {
+      this.moveDestination('sm.json', SM_FILE)
+    }
 
     const customTypes = this.readCustomTypesFrom('custom_types')
 
@@ -178,7 +185,7 @@ export default class SliceMachine extends PrismicGenerator {
     }).then(res => {
       const url = new URL(this.prismic.base)
       url.host = `${res.data || this.domain}.${url.host}`
-      this.log(`A new repsitory has been created at: ${url.toString()}`)
+      this.log(`A new repository has been created at: ${url.toString()}`)
       return res
     })
   }
