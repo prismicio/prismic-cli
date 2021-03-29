@@ -17,8 +17,8 @@ export default class PrismicAngular extends PrismicGenerator {
       return res
     })
     .then((res: AxiosResponse<any>) => {
-      const location = this.destinationPath(path.join(this.path, 'src', 'prismic-configuration.ts'))
-      const oldConfig = this.fs.read(location)
+      const location = path.join(this.path, 'src', 'prismic-configuration.ts')
+      const oldConfig = this.readDestination(location)
       const newConfig = oldConfig.replace(/your-repo-name/g, res.data || this.domain)
       this.fs.write(location, newConfig)
     })
