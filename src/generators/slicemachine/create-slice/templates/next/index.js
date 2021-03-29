@@ -1,5 +1,4 @@
 import React from 'react';
-import { array, shape } from 'prop-types';
 import { RichText } from 'prismic-reactjs';
 
 const <%= sliceName %> = ({ slice }) => (
@@ -28,14 +27,6 @@ const <%= sliceName %> = ({ slice }) => (
     `}</style>
   </section>
 );
-
-<%= sliceName %>.propTypes = {
-  slice: shape({
-    primary: shape({
-      title: array.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
 
 <%= sliceName %>.displayName = <%= sliceName %>
 
