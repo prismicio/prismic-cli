@@ -16,14 +16,10 @@ export default class PrismicNodeJS extends PrismicGenerator {
    */
 
   async initializing() {
-    // this.destinationRoot(this.path) // this lets us use mem-fs with out pre-fix this path
     return this.downloadAndExtractZipFrom('https://github.com/prismicio/nodejs-sdk/archive/master.zip', 'nodejs-sdk-master')
   }
 
   async configuring() {
-    // maybe create the repo after configuring?
-    // maybe move this part to the generator?
-    this.log('Creating repository')
     const customTypes = this.readCustomTypesFrom('custom_types')
     return this.prismic.createRepository({
       domain: this.domain,
