@@ -100,12 +100,13 @@ USAGE
   $ prismic new
 
 OPTIONS
-  -d, --domain=domain      name of the prismic repository ie: example, becomes https://example.prismic.io
-  -f, --folder=folder      name of project folder
-  -h, --help               show CLI help
-  -t, --template=template  Prismic template for the project
-  --force                  over write local files
-  --skip-install           prevent runing install command after generating project
+  -d, --domain=domain        name of the prismic repository ie: example, becomes https://example.prismic.io
+  -f, --folder=folder        name of project folder
+  -g, --generator=generator  Run a local yeoman generator
+  -h, --help                 show CLI help
+  -t, --template=template    Prismic template for the project
+  --force                    over write local files
+  --skip-install             prevent runing install command after generating project
 ```
 
 _See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/new.ts)_
@@ -137,7 +138,7 @@ OPTIONS
   --add-storybook        add storybook to a slicemachine project
   --bootstrap            reconfigure a slicemachine project
   --create-slice         add a slice to a slicemachine project
-  --folder=folder        [default: /Users/marc/Projects/prismic/prismic-cli]
+  --folder=folder        output directory
   --framework=next|nuxt
   --library=library      name of the slice library
   --list                 list local slices
