@@ -60,7 +60,7 @@ export default class Slicemachine extends Command {
     }),
 
     folder: flags.string({
-      default: process.cwd(),
+      description: 'output directory',
     }),
 
     'skip-install': flags.boolean({
@@ -85,7 +85,9 @@ export default class Slicemachine extends Command {
 
     const {flags} = this.parse(Slicemachine)
 
-    const opts = {...flags, prismic: this.prismic, path: flags.folder}
+    const folder = flags.folder || process.cwd()
+
+    const opts = {...flags, prismic: this.prismic, path: folder}
 
     if (flags['create-slice']) {
       return new Promise((resolve, reject) => {
@@ -121,7 +123,7 @@ export default class Slicemachine extends Command {
     }
 
     if (flags.list) {
-      const pathToSMFile = path.join(flags.folder, 'sm.json')
+      const pathToSMFile = path.join(folder, 'sm.json')
       if (fs.existsSync(pathToSMFile) === false) {
         this.error(`Could not find sm.json at: ${pathToSMFile}`)
       }
@@ -133,7 +135,7 @@ export default class Slicemachine extends Command {
         libs.forEach((lib: string) => {
           const isLocal = lib.startsWith('@/') || lib.startsWith('~') || lib.startsWith('/')
           const pathToSlices = path.posix.join(
-            flags.folder,
+            folder,
             isLocal ? '.' : 'node_modules',
             isLocal ? lib.substring(1, lib.length) : lib,
             '**',
@@ -155,7 +157,7 @@ export default class Slicemachine extends Command {
     }
 
     if (flags.bootstrap) {
-      const smFilePath = path.join(flags.folder, 'sm.json')
+      const smFilePath = path.join(folder, 'sm.json')
 
       if (fs.existsSync(smFilePath) === false) {
         return this.warn('sm.json file not found in:' + smFilePath)

@@ -185,7 +185,7 @@ describe('slicemachine', () => {
     .it('should reconfigure a projects sm.json file')
 
     setup
-    .stderr() 
+    .stderr()
     .stub(fs, 'existsSync', () => false)
     .command(['slicemachine', '--bootstrap', '--domain', fakeDomain])
     .do(ctx => expect(ctx.stderr).to.contain('sm.json file not found'))
