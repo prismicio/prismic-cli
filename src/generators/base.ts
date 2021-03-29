@@ -131,15 +131,6 @@ export default abstract class PrismicGenerator extends Generator {
     }
   }
 
-  /* loadPackageJson() {
-    // TODO: this can be buggy
-    // const pkJsonPath = path.join(this.path, 'package.json')
-    // const packageJson = require(pkJsonPath)
-    // this.fs.writeJSON('package.json', packageJson)
-    return this.fs.readJSON('package.json') as PkgJson
-    // return this.fs.readJSON('package.json', {}) as PkgJson
-  } */
-
   private branchFromUrl(source: string) {
     const lastSlash = source.lastIndexOf('/')
     const fileExtension = source.lastIndexOf('.')
