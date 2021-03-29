@@ -8,7 +8,6 @@ export default class PrismicAngular extends PrismicGenerator {
   }
 
   async configuring() {
-    this.log('Creating repository')
     return this.prismic.createRepository({
       domain: this.domain,
     }).then(res => {
@@ -18,7 +17,7 @@ export default class PrismicAngular extends PrismicGenerator {
       return res
     })
     .then((res: AxiosResponse<any>) => {
-      const location = path.join(this.path, 'src/prismic-configuration.ts')
+      const location = this.destinationPath(path.join(this.path, 'src', 'prismic-configuration.ts'))
       const oldConfig = this.fs.read(location)
       const newConfig = oldConfig.replace(/your-repo-name/g, res.data || this.domain)
       this.fs.write(location, newConfig)

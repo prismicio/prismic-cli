@@ -81,7 +81,7 @@ export default abstract class PrismicGenerator extends Generator {
       return tmpFile.cleanup()
     }).then(() => {
       const location = innerFolder ? path.join(tmpDir.path, innerFolder) : tmpDir.path
-      this.fs.copy(location, this.path)
+      this.fs.copy(location, this.path, {globOptions: {dot: true}})
       return this
     })
   }
