@@ -26,4 +26,8 @@ export default class PrismicReact extends PrismicGenerator {
       this.fs.write(location, newConfig)
     })
   }
+
+  async install() {
+    return this.npmInstall()
+  }
 }

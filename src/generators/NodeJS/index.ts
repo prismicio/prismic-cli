@@ -37,4 +37,8 @@ export default class PrismicNodeJS extends PrismicGenerator {
       this.fs.write(location, newConfig)
     })
   }
+
+  async install() {
+    return this.npmInstall()
+  }
 }
