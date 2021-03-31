@@ -106,7 +106,7 @@ OPTIONS
   -h, --help                 show CLI help
   -t, --template=template    Prismic template for the project
   --force                    over write local files
-  --skip-install             prevent runing install command after generating project
+  --skip-install             prevent running install command after generating project
 ```
 
 _See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/new.ts)_
