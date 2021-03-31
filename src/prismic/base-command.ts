@@ -32,7 +32,15 @@ export default abstract class PrismicCommand extends Command {
     }
     const email =  await cli.prompt('Email')
     const password =  await cli.prompt('Password', {type: 'hide'})
-    return this.prismic.login({email, password}).catch(() => this.login())
+    return this.prismic.login({email, password})
+    .then(() => this.log(`Successfully logged in to ${this.prismic.base}`))
+    .catch((error: AxiosError) => {
+      if (error.response && (error.response.status === 400 || error.response.status === 401)) {
+        this.log(`Login error, check your credentials. If you forgot your password, visit ${this.prismic.base} to reset it`)
+        return this.login()
+      }
+      throw error
+    })
   }
 
   async validateDomain(name: string | undefined): Promise<string> {
