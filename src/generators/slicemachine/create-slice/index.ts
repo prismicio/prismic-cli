@@ -83,7 +83,9 @@ export default class CreateSlice extends PrismicGenerator {
       name: 'sliceName',
       message: 'Enter the name of your slice (2 words, PascalCased)',
       default: this.options.sliceName || 'TestSlice',
-      validate: validateSliceName, // change validation to check for the slice as well.
+      validate: value => {
+        return validateSliceName(value) || 'Must be PascalCased'
+      }, // change validation to check for the slice as well.
     }])
 
     Object.assign(this.answers, {sliceName, library})
