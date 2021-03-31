@@ -22,8 +22,10 @@ export default class StoryBookNext extends Generator {
         'build-storybook': 'nuxt storybook build',
       },
       devDependencies: {
-        '@nuxtjs/storybook': '*',
+        '@nuxtjs/storybook': '3.3.1',
         'babel-loader': '*',
+        '@storybook/vue': '6.1.21',
+        'vue-loader': '15.9.6',
       },
     }
 
