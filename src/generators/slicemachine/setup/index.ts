@@ -6,47 +6,37 @@ import message from './message'
 
 const {SM_FILE} = require('sm-commons/consts')
 
-const nuxtDeps = {
-  '@nuxtjs/prismic': '^1.2.4',
-  '@prismicio/vue': '^2.0.7',
-  'nuxt-sm': '^0.0.6',
-  'vue-essential-slices': '^0.2.0',
-  'vue-slicezone': '^0.0.29',
-}
-
-const nextDeps = {
-  'prismic-javascript': '3',
-  'prismic-reactjs': '1',
-  'next-slicezone': '0',
-  'next-transpile-modules': '6',
-  'theme-ui': '0',
-  'essential-slices': '1',
-}
-
-const nuxtDevDeps = {
-  'node-sass': '^5.0.0',
-  'sass-loader': '^10.1.1',
-  'slice-machine-ui': '^0.0.43',
-}
-
-const nextDevDeps = {
-  '@babel/core': '^7.12.10',
-  'slice-machine-ui': '^0.0.43',
-}
-
-function depsForFramework(framework: string | undefined) {
+function depsForFramework(framework?: string) {
   switch (framework) {
-  case 'next': {
-    return {
-      dependencies: nextDeps,
-      devDependencies: nextDevDeps,
-    }
+  case 'next': return {
+    'prismic-javascript': '^3.0.2',
+    'prismic-reactjs': '^1.3.3',
+    'next-slicezone': '^0.0.14',
+    'next-transpile-modules': '^6.4.0',
+    'theme-ui': '^0.3.5',
+    'essential-slices': '^1.0.3',
   }
-  case 'nuxt': {
-    return {
-      dependencies: nuxtDeps,
-      devDependencies: nuxtDevDeps,
-    }
+  case 'nuxt': return {
+    '@nuxtjs/prismic': '^1.2.6',
+    '@prismicio/vue': '^2.0.11',
+    'nuxt-sm': '^0.0.6',
+    'vue-essential-slices': '^0.3.0',
+    'vue-slicezone': '^0.0.30',
+  }
+  default: return {}
+  }
+}
+
+function devDepsForFramework(framework?: string) {
+  switch (framework) {
+  case 'next': return {
+    '@babel/core': '^7.12.10',
+    'slice-machine-ui': '^0.0.45',
+  }
+  case 'nuxt': return {
+    'node-sass': '^5.0.0',
+    'sass-loader': '^10.1.1',
+    'slice-machine-ui': '^0.0.45',
   }
   default: return {}
   }
@@ -73,9 +63,12 @@ export default class SliceMachine extends PrismicGenerator {
    */
   framework: 'next'| 'nuxt' | undefined
 
+  pm: 'npm' | 'yarn' | undefined
+
   constructor(argv: string | string[], opts: TemplateOptions) { // TODO: options
     super(argv, opts)
     // this.framework = opts.framework || this.framework
+    this.pm = this.pm || 'npm'
 
     if (this.destinationRoot().endsWith(this.path) === false) {
       this.destinationRoot(this.path)
@@ -142,13 +135,12 @@ export default class SliceMachine extends PrismicGenerator {
   }
 
   async writing() {
-    const deps = depsForFramework(this.framework)
-
     const pkgJson = {
       scripts: {
         slicemachine: 'start-slicemachine --port 9999',
       },
-      ...deps,
+      dependencies: depsForFramework(this.framework),
+      devDependencies: devDepsForFramework(this.framework),
     }
 
     this.fs.extendJSON(this.destinationPath('package.json'), pkgJson)
@@ -191,7 +183,11 @@ export default class SliceMachine extends PrismicGenerator {
   }
 
   async install() {
-    this.npmInstall()
+    if (this.pm === 'yarn') {
+      this.yarnInstall()
+    } else {
+      this.npmInstall()
+    }
   }
 
   async end() {

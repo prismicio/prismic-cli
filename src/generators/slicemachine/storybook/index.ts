@@ -1,11 +1,14 @@
 import PrismicGenerator, {TemplateOptions} from '../../base'
 
 export default class StoryBook extends PrismicGenerator {
-  framework: 'nuxt'| 'next' | undefined
+  framework: 'nuxt'| 'next' | undefined;
+
+  pm: 'npm' | 'yarn' | undefined;
 
   constructor(argv: string|string[], opts: TemplateOptions) {
     super(argv, opts)
     // TODO: this logic is repeated in setup, create-slice and here
+    this.pm = this.pm || 'npm'
 
     if (this.destinationRoot().endsWith(this.path) === false) {
       this.destinationRoot(this.path)
@@ -20,9 +23,6 @@ export default class StoryBook extends PrismicGenerator {
   }
 
   async prompting() {
-    // TODO: maybe prompt for framework or check for framework
-    // this.framework = this.options.framework || this.config.get('framework')
-
     if (!this.framework) {
       this.prompt([
         {
@@ -43,10 +43,12 @@ export default class StoryBook extends PrismicGenerator {
     if (this.framework === 'nuxt') {
       this.composeWith(require.resolve('./nuxt'), this.options)
     }
-    // TODO handle other frameworks
   }
 
   async install() {
-    this.npmInstall()
+    if (this.pm === 'yarn') {
+      return this.yarnInstall()
+    }
+    return this.npmInstall()
   }
 }

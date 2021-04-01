@@ -1,9 +1,10 @@
 import {SliceMachineJson} from '../../base'
-import * as Generator from 'yeoman-generator'
+import PrismicGenerator, {TemplateOptions} from '../../base'
+
 import modifyNuxtConfig from './modify-nuxt-config'
 const {SM_FILE} = require('sm-commons/consts')
 
-export default class StoryBookNext extends Generator {
+export default class StoryBookNext extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
    * prompting - Where you prompt users for options (where you’d call this.prompt())
@@ -15,6 +16,14 @@ export default class StoryBookNext extends Generator {
    * end - Called last, cleanup, say good bye, etc
   */
 
+  pm: 'npm' | 'yarn' | undefined;
+
+  constructor(argv: string | string[], opts: TemplateOptions) { // TODO: options
+    super(argv, opts)
+    // this.framework = opts.framework || this.framework
+    this.pm = this.pm || 'npm'
+  }
+
   async writing() {
     const pkJson = {
       scripts: {
@@ -22,10 +31,9 @@ export default class StoryBookNext extends Generator {
         'build-storybook': 'nuxt storybook build',
       },
       devDependencies: {
-        '@nuxtjs/storybook': '3.3.1',
-        'babel-loader': '*',
         '@storybook/vue': '6.1.21',
         'vue-loader': '15.9.6',
+        '@nuxtjs/storybook': '3.3.1',
       },
     }
 
@@ -49,6 +57,13 @@ export default class StoryBookNext extends Generator {
     const updatedConfig = modifyNuxtConfig(config, localLibs)
 
     this.writeDestination('nuxt.config.js', updatedConfig)
+  }
+
+  async install() {
+    if (this.pm === 'yarn') {
+      return this.yarnInstall()
+    }
+    return this.npmInstall()
   }
 }
 

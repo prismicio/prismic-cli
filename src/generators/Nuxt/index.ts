@@ -51,15 +51,7 @@ export default class Nuxt extends PrismicGenerator {
    */
 
   async initializing() {
-    // load the default template
     this.destinationRoot(this.path)
-    this.composeWith(require.resolve('../slicemachine'), {
-      framework: 'nuxt',
-      domain: this.domain,
-      prismic: this.prismic,
-      force: this.force,
-      ...this.options,
-    })
   }
 
   async prompting() {
@@ -214,6 +206,17 @@ export default class Nuxt extends PrismicGenerator {
         default: 'git',
       },
     ])
+  }
+
+  async configuring() {
+    this.composeWith(require.resolve('../slicemachine'), {
+      framework: 'nuxt',
+      domain: this.domain,
+      prismic: this.prismic,
+      force: this.force,
+      pm: this.answers.pm,
+      ...this.options,
+    })
   }
 
   async writing() {
