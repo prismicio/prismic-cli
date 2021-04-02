@@ -86,10 +86,10 @@ export default class Slicemachine extends Command {
     }),
 
     customTypeEndpoint: flags.string({
-      description: 'use a diffrent custom-type endppoint',
+      description: 'use a different custom-type endpoint',
       hidden: true,
-      // dependsOn: ['develop'],
-      default: 'https://silo2hqf53.execute-api.us-east-1.amazonaws.com/prod/slices',
+      dependsOn: ['develop'],
+      // default: 'https://silo2hqf53.execute-api.us-east-1.amazonaws.com/prod/slices',
     }),
   }
 
@@ -209,7 +209,9 @@ export default class Slicemachine extends Command {
       if (!isAuthenticated) await this.login()
 
       const token = cookie.parse(this.prismic.cookies)['prismic-auth']
-      return this.prismic.axios().get(flags.customTypeEndpoint, {
+      const endpoint = flags.customTypeEndpoint || 'https://silo2hqf53.execute-api.us-east-1.amazonaws.com/prod/slices'
+
+      return this.prismic.axios().get(endpoint, {
         validateStatus: status => status < 209,
         headers: {
           'Content-Type': 'application/json',
