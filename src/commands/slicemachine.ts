@@ -2,8 +2,10 @@ import {flags} from '@oclif/command'
 import {createEnv} from 'yeoman-environment'
 import Command from '../prismic/base-command'
 import * as path from 'path'
-import login from './login'
 import {fs} from '../utils'
+import * as cookie from '../utils/cookie'
+import {execSync} from 'child_process'
+import {lookpath} from 'lookpath'
 
 const globby = require('fast-glob')
 
@@ -19,19 +21,19 @@ export default class Slicemachine extends Command {
 
     setup: flags.boolean({
       description: 'setup slice machine in an already existing project',
-      exclusive: ['create-slice', 'add-storybook', 'list', 'bootstrap'],
+      exclusive: ['create-slice', 'add-storybook', 'list', 'bootstrap', 'develop'],
       default: false,
     }),
 
     domain: flags.string({
       char: 'd',
       description: 'prismic repo to to create',
-      exclusive: ['add-storybook', 'create-slice', 'sliceName', 'library', 'list'],
+      exclusive: ['add-storybook', 'create-slice', 'sliceName', 'library', 'list', 'develop'],
     }),
 
     'create-slice': flags.boolean({
       description: 'add a slice to a slicemachine project',
-      exclusive: ['setup', 'add-storybook', 'list', 'bootstrap'],
+      exclusive: ['setup', 'add-storybook', 'list', 'bootstrap', 'develop'],
       default: false,
     }),
 
@@ -47,7 +49,7 @@ export default class Slicemachine extends Command {
 
     'add-storybook': flags.boolean({
       description: 'add storybook to a slicemachine project',
-      exclusive: ['setup', 'create-slice', 'list', 'bootstrap'],
+      exclusive: ['setup', 'create-slice', 'list', 'bootstrap', 'develop'],
       default: false,
     }),
 
@@ -57,7 +59,7 @@ export default class Slicemachine extends Command {
 
     list: flags.boolean({
       description: 'list local slices',
-      exclusive: ['add-storybook', 'setup', 'create-slice', 'bootstrap', 'sliceName', 'domain', 'library', 'framework', 'folder', 'skip-install'],
+      exclusive: ['add-storybook', 'setup', 'create-slice', 'bootstrap', 'sliceName', 'domain', 'library', 'framework', 'folder', 'skip-install', 'develop'],
       default: false,
     }),
 
@@ -73,10 +75,22 @@ export default class Slicemachine extends Command {
 
     bootstrap: flags.boolean({
       description: 'reconfigure a slicemachine project',
-      exclusive: ['setup', 'create-slice', 'list'],
+      exclusive: ['setup', 'create-slice', 'list', 'develop'],
       default: false,
     }),
 
+    develop: flags.boolean({
+      description: 'run slice machine',
+      exclusive: ['setup', 'create-slice', 'list', 'bootstrap'],
+      default: false,
+    }),
+
+    customTypeEndpoint: flags.string({
+      description: 'use a diffrent custom-type endppoint',
+      hidden: true,
+      // dependsOn: ['develop'],
+      default: 'https://silo2hqf53.execute-api.us-east-1.amazonaws.com/prod/slices',
+    }),
   }
 
   async run() {
@@ -113,7 +127,7 @@ export default class Slicemachine extends Command {
       const domain = await this.validateDomain(flags.domain)
       const isAuthenticated = await this.prismic.isAuthenticated()
       if (!isAuthenticated) {
-        await login.run([])
+        await this.login()
       }
 
       return new Promise((resolve, reject) => {
@@ -167,7 +181,7 @@ export default class Slicemachine extends Command {
 
       const isAuthenticated = await this.prismic.isAuthenticated()
       if (!isAuthenticated) {
-        await login.run([])
+        await this.login()
       }
 
       const domain = await this.validateDomain(flags.domain)
@@ -190,8 +204,54 @@ export default class Slicemachine extends Command {
       })
     }
 
+    if (flags.develop) {
+      const isAuthenticated = await this.prismic.isAuthenticated()
+      if (!isAuthenticated) await this.login()
+
+      const token = cookie.parse(this.prismic.cookies)['prismic-auth']
+      return this.prismic.axios().get(flags.customTypeEndpoint, {
+        validateStatus: status => status < 209,
+        headers: {
+          'Content-Type': 'application/json',
+          repository: this.readRepoName(),
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(async () => {
+        const hasYarn = await lookpath('yarn')
+        const usingYarn = fs.existsSync(path.join(process.cwd(), 'yarn.lock'))
+        const pm = hasYarn && usingYarn ? 'yarn' : 'npm'
+        return execSync(`${pm} slicemachine`, {stdio: 'inherit'})
+      })
+      .catch(error => {
+        if (error?.response) {
+          return this.warn(`[slices API]: ${error.response.statusText}`)
+        }
+        throw error
+      })
+    }
+
     if (!flags['create-slice'] && !flags['add-storybook'] && !flags.setup && !flags.list) {
       return this._help()
+    }
+  }
+
+  private readRepoName(): string {
+    const pathToSMFile = path.join(process.cwd(), SM_FILE)
+
+    if (fs.existsSync(pathToSMFile) === false) {
+      this.warn(`[slice-machine] No "apiEndpoint" value found in ${pathToSMFile} .\nIn order to run this command, you need to set a Prismic repository endpoint`)
+      return this.exit()
+    }
+
+    const smFile = fs.readFileSync(pathToSMFile, 'utf-8')
+    try {
+      const apiEndpoint: string = JSON.parse(smFile).apiEndpoint
+      const url = new URL(apiEndpoint)
+      return url.hostname.split('.')[0]
+    } catch {
+      this.warn('[slice-machine] Could not parse domain from given "apiEndpoint" (must start with https protocol)')
+      return this.exit()
     }
   }
 }

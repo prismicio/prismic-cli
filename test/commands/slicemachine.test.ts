@@ -31,7 +31,7 @@ describe('slicemachine', () => {
     .nock(fakeBase, api => {
       return api
       .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
-      .post('/authentication/newrepository').reply(200, fakeDomain)
+      .post('/authentication/newrepository?app=slicemachine').reply(200, fakeDomain)
     })
     .nock('https://auth.prismic.io', api => {
       api.get('/validate?token=xyz').reply(200, {})
@@ -98,7 +98,7 @@ describe('slicemachine', () => {
     .nock(fakeBase, api => {
       return api
       .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
-      .post('/authentication/newrepository').reply(200, fakeDomain)
+      .post('/authentication/newrepository?app=slicemachine').reply(200, fakeDomain)
     })
     .command(['slicemachine', '--setup', '--folder', fakeFolder, '--framework', 'nuxt', '--domain', fakeDomain, '--force', '--skip-install'])
     .it('setup creates sm.json', _ => {
@@ -173,7 +173,7 @@ describe('slicemachine', () => {
     .nock(fakeBase, api => {
       return api
       .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
-      .post('/authentication/newrepository').reply(200, fakeDomain)
+      .post('/authentication/newrepository?app=slicemachine').reply(200, fakeDomain)
     })
     .command(['slicemachine', '--bootstrap', '--domain', fakeDomain])
     .do(() => {

@@ -4185,6 +4185,11 @@
     "cli-cursor" "^2.0.0"
     "wrap-ansi" "^3.0.1"
 
+"lookpath@^1.2.0":
+  "integrity" "sha512-cUl+R2bGJcSJiHLVKzGHRTYTBhudbHIgd7s63gfGHteaz0BBKEEz2yw2rgbxZAFze92KlbkiWzL1ylYOmqIPVA=="
+  "resolved" "https://registry.npmjs.org/lookpath/-/lookpath-1.2.0.tgz"
+  "version" "1.2.0"
+
 "loud-rejection@^1.0.0":
   "integrity" "sha1-W0b4AUft7leIcPCG0Eghz5mOVR8="
   "resolved" "https://registry.npmjs.org/loud-rejection/-/loud-rejection-1.6.0.tgz"

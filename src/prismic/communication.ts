@@ -317,9 +317,13 @@ export default class Prismic {
 
     const retry = () => this.createRepositoryWithCookie({domain, customTypes, signedDocuments})
 
+    const url = new URL(this.base)
+    url.pathname = '/authentication/newrepository'
+    url.searchParams.append('app', 'slicemachine')
+
     // const querystring = {app: 'slicemachine'}
     cli.action.start('creating prismic repository')
-    return this.axios({maxRedirects: 0}).post('/authentication/newrepository', data)
+    return this.axios({maxRedirects: 0}).post(url.toString(), data)
     .then(res => {
       cli.action.stop()
       return res
@@ -354,7 +358,7 @@ export default class Prismic {
     const url = new URL(this.base)
     url.hostname = `api.${url.hostname}`
     url.pathname = '/management/repositories'
-    // url.searchParams.append('app', 'slicemachine')
+    url.searchParams.append('app', 'slicemachine')
 
     const retry = () => this.createRepositoryWithToken({domain, customTypes, signedDocuments})
 

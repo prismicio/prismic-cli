@@ -32,7 +32,7 @@ describe('theme', () => {
   .nock(fakeBase, api => {
     return api
     .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true) // we should really rename this.
-    .post('/authentication/newrepository').reply(200, fakeDomain)
+    .post('/authentication/newrepository?app=slicemachine').reply(200, fakeDomain)
   })
   .nock('https://auth.prismic.io', api => {
     api.get('/validate?token=xyz').reply(200, {})
