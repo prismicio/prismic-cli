@@ -54,7 +54,7 @@ describe('new', () => {
       api.get('/prismicio/nodejs-sdk/archive/master.zip')
       .reply(200, StubNodeJSZip.toBuffer(), {'Content-Type': 'application/zip'})
     })
-    .command(['new', '--domain', fakeDomain, '--folder', fakeFolder, '--template', 'NodeJS'])
+    .command(['new', '--domain', fakeDomain, '--folder', fakeFolder, '--template', 'NodeJS', '--skip-install'])
     .it('should call login if user is not authenticated')
   })
 
@@ -84,7 +84,7 @@ describe('new', () => {
       api.get('/prismicio/nodejs-sdk/archive/master.zip')
       .reply(200, StubNodeJSZip.toBuffer(), {'Content-Type': 'application/zip'})
     })
-    .command(['new', '--domain', fakeDomain, '--folder', fakeFolder, '--template', 'NodeJS', '--force'])
+    .command(['new', '--domain', fakeDomain, '--folder', fakeFolder, '--template', 'NodeJS', '--force', '--skip-install'])
     .it('creates a new repository from a given template in: ' + fakeFolder, () => {
       const configPath = path.join(fakeFolder, 'prismic-configuration.js')
       expect(fs.existsSync(fakeFolder)).to.be.true
