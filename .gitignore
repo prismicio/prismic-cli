@@ -42,3 +42,9 @@ jspm_packages
 
 # bin folder
 bin
+
+# temp folder for tests
+__tmp__
+
+# env
+.env

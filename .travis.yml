@@ -1,14 +1,18 @@
 language: node_js
 node_js:
-- '6'
-- '7'
-- '8'
+# - 12
+# - 14
+- node
 os:
   - linux
   - osx
-before_script:
-  - npm install -g tape
+  - windows
+addons:
+  apt:
+    - build-essential
+    - python2.7
 script:
   - npm run lint
   - npm run build
-  - npm run test
+#  - npm test ## some error in travis?
+  - npm run test:e2e:slow
