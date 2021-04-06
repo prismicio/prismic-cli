@@ -1,4 +1,4 @@
-import PrismicGenerator, {TemplateOptions} from '../base'
+import PrismicGenerator, {TemplateOptions} from '../prismic-generator'
 
 /* one shot setup, create-slice and add storybook alot of this is repeated.... maybe it should be an abstract class */
 

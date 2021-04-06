@@ -1,6 +1,4 @@
-import {SliceMachineJson} from '../../base'
-import PrismicGenerator, {TemplateOptions} from '../../base'
-
+import PrismicGenerator, {TemplateOptions, SliceMachineJson} from '../../prismic-generator'
 import modifyNuxtConfig from './modify-nuxt-config'
 const {SM_FILE} = require('sm-commons/consts')
 

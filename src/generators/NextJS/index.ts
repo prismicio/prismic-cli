@@ -1,4 +1,4 @@
-import PrismicGenerator from '../base'
+import PrismicGenerator from '../prismic-generator'
 
 export default class NextJS extends PrismicGenerator {
   /**

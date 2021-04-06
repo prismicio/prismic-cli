@@ -1,4 +1,4 @@
-import PrismicGenerator, {TemplateOptions} from '../../base'
+import PrismicGenerator, {TemplateOptions} from '../../prismic-generator'
 import {Question} from 'yeoman-generator'
 import modifyNuxtConfig from './modify-nuxt-config'
 import chalk from 'chalk'

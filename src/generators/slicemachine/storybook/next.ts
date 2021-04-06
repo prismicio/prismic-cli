@@ -1,5 +1,4 @@
-import {SliceMachineJson} from '../../base'
-import * as Generator from 'yeoman-generator'
+import Generator, {SliceMachineJson} from '../../prismic-generator'
 const {SM_FILE} = require('sm-commons/consts')
 
 export default class StoryBookNext extends Generator {

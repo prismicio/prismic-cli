@@ -1,4 +1,4 @@
-import PrismicGenerator, {TemplateOptions} from '../../base'
+import PrismicGenerator, {TemplateOptions} from '../../prismic-generator'
 const isValidPath = require('is-valid-path')
 import * as path from 'path'
 import {fs} from '../../../utils'

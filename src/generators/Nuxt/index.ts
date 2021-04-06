@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import * as path from 'path'
 
-import PrismicGenerator from '../base'
+import PrismicGenerator from '../prismic-generator'
 
 import * as inquirer from 'inquirer'
 

@@ -1,4 +1,4 @@
-import PrismicGenerator, {TemplateOptions} from '../../base'
+import PrismicGenerator, {TemplateOptions} from '../../prismic-generator'
 
 export default class StoryBook extends PrismicGenerator {
   framework: 'nuxt'| 'next' | undefined;

@@ -1,4 +1,4 @@
-import PrismicGenerator from '../base'
+import PrismicGenerator from '../prismic-generator'
 import * as path from 'path'
 import {AxiosResponse} from 'axios'
 
