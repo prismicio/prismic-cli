@@ -1,6 +1,6 @@
 import {flags} from '@oclif/command'
 import {Command} from '../prismic'
-import generator from '../prismic/generator'
+import generator from '../prismic/yeoman-env'
 
 export default class Theme extends Command {
   static description = 'Create a project from a zip file or github repository with a new prismic repository.'

@@ -2,7 +2,7 @@ import {flags} from '@oclif/command'
 import {cli} from 'cli-ux'
 import * as inquirer from 'inquirer'
 import {Command} from '../prismic'
-import prismicGenerators from '../prismic/generator'
+import prismicGenerators from '../prismic/yeoman-env'
 import * as path from 'path'
 import {fs} from '../utils'
 

@@ -1,6 +1,6 @@
 import {flags} from '@oclif/command'
 import {Command} from './../prismic'
-import generator from './../prismic/generator'
+import generator from '../prismic/yeoman-env'
 
 export default class List extends Command {
   static description = 'Lists available project templates.'
