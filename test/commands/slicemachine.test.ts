@@ -1,8 +1,11 @@
-import {expect, test} from '@oclif/test'
+import {expect, test, FancyTypes} from '@oclif/test'
 import * as path from 'path'
 import * as os from 'os'
 import * as sinon from 'sinon'
 import {fs} from '../../src/utils'
+import * as lookpath from 'lookpath'
+import * as child_process from 'child_process'
+const {SM_FILE} = require('sm-commons/consts')
 
 const globby = require('fast-glob')
 
@@ -140,19 +143,21 @@ describe('slicemachine', () => {
     })
   })
 
-  test
-  .stdout()
-  .stderr()
-  .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
-  .stub(fs, 'writeFile', () => Promise.resolve())
-  .stub(fs, 'existsSync', () => true)
-  .stub(fs, 'readFile',  async () => JSON.stringify({libraries: ['@/slices']}))
-  .stub(globby, 'sync', () => [path.join('project', 'slices', 'MySlice', 'model.json')])
-  .command(['slicemachine', '--list'])
-  .it('should list slices from sm.json', ctx => {
-    expect(ctx.stderr).to.equal('')
-    expect(ctx.stdout).to.contain('@/slices')
-    expect(ctx.stdout).to.contain('MySlice')
+  describe('list', () => {
+    test
+    .stdout()
+    .stderr()
+    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(fs, 'existsSync', () => true)
+    .stub(fs, 'readFile',  async () => JSON.stringify({libraries: ['@/slices']}))
+    .stub(globby, 'sync', () => [path.join('project', 'slices', 'MySlice', 'model.json')])
+    .command(['slicemachine', '--list'])
+    .it('should list slices from sm.json', ctx => {
+      expect(ctx.stderr).to.equal('')
+      expect(ctx.stdout).to.contain('@/slices')
+      expect(ctx.stdout).to.contain('MySlice')
+    })
   })
 
   describe('bootstrap', () => {
@@ -190,5 +195,47 @@ describe('slicemachine', () => {
     .command(['slicemachine', '--bootstrap', '--domain', fakeDomain])
     .do(ctx => expect(ctx.stderr).to.contain('sm.json file not found'))
     .it('Should fail if no sm.json file is found')
+  })
+
+  describe('develop', () => {
+    const fakeConfig = JSON.stringify({base: fakeBase, cookies: fakeCookies})
+    const fakeSmJson = JSON.stringify({apiEndpoint: 'https://fake.cdn.prismic.io/api/v2'})
+    const fakeAuth = (api: FancyTypes.NockScope) => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+    }
+
+    const fakeExecSync = sinon.fake.returns(undefined)
+
+    const fakeReadFileSync: any = (args: string): string => {
+      if (args.includes(SM_FILE)) return fakeSmJson
+      return fakeConfig
+    }
+
+    test
+    .stub(fs, 'readFileSync', fakeReadFileSync)
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .nock('https://auth.prismic.io', fakeAuth)
+    .stub(lookpath, 'lookpath', async () => true)
+    .stub(fs, 'existsSync', () => true)
+    .stub(child_process, 'execSync', fakeExecSync)
+    .command(['slicemachine', '--develop'])
+    .do(() => {
+      expect(fakeExecSync.firstCall.args[0]).to.equal('yarn slicemachine')
+    })
+    .it('when authenticated and inside of a nodejs project it should call yarn slicemachine')
+
+    test
+    .stub(fs, 'readFileSync', fakeReadFileSync)
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .nock('https://auth.prismic.io', fakeAuth)
+    .stub(lookpath, 'lookpath', async () => false)
+    .stub(fs, 'existsSync', () => true)
+    .stub(child_process, 'execSync', fakeExecSync)
+    .command(['slicemachine', '--develop'])
+    .do(() => {
+      expect(fakeExecSync.secondCall.args[0]).to.equal('npm run slicemachine')
+    })
+    .it('when authenticated and inside of a nodejs project it should call npm run slicemachine')
   })
 })

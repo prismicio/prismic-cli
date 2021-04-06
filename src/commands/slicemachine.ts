@@ -3,7 +3,6 @@ import {createEnv} from 'yeoman-environment'
 import Command from '../prismic/base-command'
 import * as path from 'path'
 import {fs} from '../utils'
-import * as cookie from '../utils/cookie'
 import {execSync} from 'child_process'
 import {lookpath} from 'lookpath'
 
@@ -208,29 +207,12 @@ export default class Slicemachine extends Command {
       const isAuthenticated = await this.prismic.isAuthenticated()
       if (!isAuthenticated) await this.login()
 
-      const token = cookie.parse(this.prismic.cookies)['prismic-auth']
-      const endpoint = flags.customTypeEndpoint || 'https://silo2hqf53.execute-api.us-east-1.amazonaws.com/prod/slices'
+      this.checkIsInASlicemachineProject()
 
-      return this.prismic.axios().get(endpoint, {
-        validateStatus: status => status < 209,
-        headers: {
-          'Content-Type': 'application/json',
-          repository: this.readRepoName(),
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(async () => {
-        const hasYarn = await lookpath('yarn')
-        const usingYarn = fs.existsSync(path.join(process.cwd(), 'yarn.lock'))
-        const pm = hasYarn && usingYarn ? 'yarn' : 'npm'
-        return execSync(`${pm} slicemachine`, {stdio: 'inherit'})
-      })
-      .catch(error => {
-        if (error?.response) {
-          return this.warn(`[slices API]: ${error.response.statusText}`)
-        }
-        throw error
-      })
+      const hasYarn = await lookpath('yarn')
+      const usingYarn = fs.existsSync(path.join(process.cwd(), 'yarn.lock'))
+      const pm = hasYarn && usingYarn ? 'yarn' : 'npm run'
+      return execSync(`${pm} slicemachine`, {stdio: 'inherit'})
     }
 
     if (!flags['create-slice'] && !flags['add-storybook'] && !flags.setup && !flags.list) {
@@ -238,11 +220,11 @@ export default class Slicemachine extends Command {
     }
   }
 
-  private readRepoName(): string {
+  private checkIsInASlicemachineProject(): string {
     const pathToSMFile = path.join(process.cwd(), SM_FILE)
 
     if (fs.existsSync(pathToSMFile) === false) {
-      this.warn(`[slice-machine] No "apiEndpoint" value found in ${pathToSMFile} .\nIn order to run this command, you need to set a Prismic repository endpoint`)
+      this.warn(`[slice-machine] Could not find ${pathToSMFile}`)
       return this.exit()
     }
 
@@ -252,7 +234,7 @@ export default class Slicemachine extends Command {
       const url = new URL(apiEndpoint)
       return url.hostname.split('.')[0]
     } catch {
-      this.warn('[slice-machine] Could not parse domain from given "apiEndpoint" (must start with https protocol)')
+      this.warn(`[slice-machine] No "apiEndpoint" value found in ${pathToSMFile} .\nIn order to run this command, you need to set a Prismic repository endpoint`)
       return this.exit()
     }
   }
