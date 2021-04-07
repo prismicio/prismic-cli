@@ -3,6 +3,7 @@ import {Question} from 'yeoman-generator'
 import modifyNuxtConfig from './modify-nuxt-config'
 import chalk from 'chalk'
 import message from './message'
+import {existsSync} from 'fs'
 
 const {SM_FILE} = require('sm-commons/consts')
 
@@ -65,9 +66,8 @@ export default class SliceMachine extends PrismicGenerator {
 
   pm: 'npm' | 'yarn' | undefined
 
-  constructor(argv: string | string[], opts: TemplateOptions) { // TODO: options
+  constructor(argv: string | string[], opts: TemplateOptions) {
     super(argv, opts)
-    // this.framework = opts.framework || this.framework
     this.pm = this.pm || 'npm'
 
     if (this.destinationRoot().endsWith(this.path) === false) {
@@ -155,9 +155,14 @@ export default class SliceMachine extends PrismicGenerator {
 
     if (this.framework === 'next') {
       // theses files could be removed from this package but would have to come from create-next-app
-      this.fs.copyTpl(this.templatePath('next'), this.destinationPath(), {smFile: SM_FILE}, undefined, {globOptions: {dot: true}})
-    }
+      const useSrc = existsSync(this.destinationPath('src'))
+      this.fs.copyTpl(this.templatePath('next'), this.destinationPath(), {smFile: SM_FILE, useSrc}, undefined, {globOptions: {dot: true}})
 
+      if (useSrc) {
+        this.deleteDestination('pages')
+        this.fs.copyTpl(this.templatePath('next/pages'), this.destinationPath('src/pages'), {smFile: SM_FILE, useSrc}, undefined, {globOptions: {dot: true}})
+      }
+    }
     this.fs.copyTpl(this.templatePath('default/**'), this.destinationPath(), {
       domain: this.domain,
       latest: '0.0.43',
@@ -168,7 +173,6 @@ export default class SliceMachine extends PrismicGenerator {
     if (this.existsDestination('sm.json') && SM_FILE !== 'sm.json') {
       this.moveDestination('sm.json', SM_FILE)
     }
-
     const customTypes = this.readCustomTypesFrom('custom_types')
 
     return this.prismic.createRepository({
