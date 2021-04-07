@@ -53,7 +53,18 @@ export default class CreateSlice extends PrismicGenerator {
   }
 
   async prompting() {
-    // TODO: try and detect framework
+    const pkJson = this.readDestinationJSON('package.json', {}) as Record<string, any>
+
+    const deps = pkJson.dependencies || {}
+
+    if (!this.framework && deps.next) {
+      this.framework = 'next'
+      this.config.set('framework', this.framework)
+    } else if (!this.framework && deps.nuxt) {
+      this.framework = 'nuxt'
+      this.config.set('framework', this.framework)
+    }
+
     if (!this.framework) {
       await this.prompt([{
         type: 'list',
