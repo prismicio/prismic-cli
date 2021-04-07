@@ -13,6 +13,8 @@ const {SM_FILE} = require('sm-commons/consts')
 export default class Slicemachine extends Command {
   static description = 'Slice Machine Commands'
 
+  static aliases = ['sm']
+
   static flags = {
     help: flags.help({char: 'h'}),
 
