@@ -20,7 +20,7 @@ $ npm install -g prismic-cli
 $ prismic COMMAND
 running command...
 $ prismic (-v|--version|version)
-prismic-cli/3.8.3 darwin-x64 node-v15.11.0
+prismic-cli/3.8.10 darwin-x64 node-v15.11.0
 $ prismic --help [COMMAND]
 USAGE
   $ prismic COMMAND
@@ -64,7 +64,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/list.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/list.ts)_
+_See code: [src/commands/list.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.10/src/commands/list.ts)_
 
 ## `prismic login`
 
@@ -79,7 +79,7 @@ OPTIONS
   --password=password                  password
 ```
 
-_See code: [src/commands/login.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.10/src/commands/login.ts)_
 
 ## `prismic logout`
 
@@ -91,7 +91,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.10/src/commands/logout.ts)_
 
 ## `prismic new`
 
@@ -109,7 +109,7 @@ OPTIONS
   --skip-install             prevent running install command after generating project
 ```
 
-_See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.10/src/commands/new.ts)_
 
 ## `prismic signup`
 
@@ -123,7 +123,7 @@ OPTIONS
   --password=password  password
 ```
 
-_See code: [src/commands/signup.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/signup.ts)_
+_See code: [src/commands/signup.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.10/src/commands/signup.ts)_
 
 ## `prismic slicemachine`
 
@@ -138,6 +138,7 @@ OPTIONS
   --add-storybook        add storybook to a slicemachine project
   --bootstrap            reconfigure a slicemachine project
   --create-slice         add a slice to a slicemachine project
+  --develop              run slice machine
   --folder=folder        output directory
   --framework=next|nuxt
   --library=library      name of the slice library
@@ -145,9 +146,12 @@ OPTIONS
   --setup                setup slice machine in an already existing project
   --skip-install         prevent npm install from running
   --sliceName=sliceName  name of the slice
+
+ALIASES
+  $ prismic sm
 ```
 
-_See code: [src/commands/slicemachine.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/slicemachine.ts)_
+_See code: [src/commands/slicemachine.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.10/src/commands/slicemachine.ts)_
 
 ## `prismic theme [FILE]`
 
@@ -166,7 +170,7 @@ OPTIONS
   --force                    over-write local files
 ```
 
-_See code: [src/commands/theme.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/theme.ts)_
+_See code: [src/commands/theme.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.10/src/commands/theme.ts)_
 
 ## `prismic whoami`
 
@@ -178,7 +182,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/whoami.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.3/src/commands/whoami.ts)_
+_See code: [src/commands/whoami.ts](https://github.com/prismicio/prismic-cli/blob/v3.8.10/src/commands/whoami.ts)_
 <!-- commandsstop -->
 
 # Development
