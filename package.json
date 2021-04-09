@@ -1,7 +1,7 @@
 {
   "name": "prismic-cli",
-  "description": "Command line tool to bootstrap prismic projects.",
-  "version": "3.8.3",
+  "description": "Command line to bootstrap prismic projects.",
+  "version": "3.8.10",
   "author": "prismic.io developers",
   "bin": {
     "prismic": "bin/run"
