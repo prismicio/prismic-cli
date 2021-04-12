@@ -14,7 +14,7 @@ function depsForFramework(framework?: string) {
     'prismic-reactjs': '^1.3.3',
     'next-slicezone': '^0.0.14',
     'next-transpile-modules': '^6.4.0',
-    'theme-ui': '^0.3.5',
+    'theme-ui': '^0.6.2',
     'essential-slices': '^1.0.3',
   }
   case 'nuxt': return {
