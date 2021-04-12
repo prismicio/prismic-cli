@@ -14,7 +14,7 @@ const fakeDomain = 'fake-domain'
 const fakeBase = 'https://prismic.io'
 const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=xyz'
 
-describe('slicemachine', () => {
+describe.only('slicemachine', () => {
   describe('Next.js', () => {
     const appName = 'test-slicemachine-next'
     const fakeFolder = path.join(tmpDir, appName)
@@ -31,6 +31,7 @@ describe('slicemachine', () => {
     .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(lookpath, 'lookpath', async () => false)
     .nock(fakeBase, api => {
       return api
       .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
@@ -71,6 +72,7 @@ describe('slicemachine', () => {
     .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(lookpath, 'lookpath', async () => false)
     .command(['slicemachine', '--add-storybook', '--framework', 'next', '--folder', fakeFolder, '--force', '--skip-install'])
     .it('add-storybook', _ => {
       const pathToStoryBook = path.join(fakeFolder, '.storybook/main.js')
@@ -94,6 +96,7 @@ describe('slicemachine', () => {
     .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(lookpath, 'lookpath', async () => false)
     .nock('https://auth.prismic.io', api => {
       api.get('/validate?token=xyz').reply(200, {})
       api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
@@ -134,6 +137,7 @@ describe('slicemachine', () => {
     .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(lookpath, 'lookpath', async () => false)
     .command(['slicemachine', '--add-storybook', '--framework', 'nuxt', '--folder', fakeFolder, '--force', '--skip-install'])
     .it('add-storybook', async _ => {
       const pathToNuxtConfig = path.join(fakeFolder, 'nuxt.config.js')
