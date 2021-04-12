@@ -24,7 +24,7 @@ export default class StoryBook extends PrismicGenerator {
 
   async prompting() {
     if (!this.framework) {
-      this.prompt([
+      await this.prompt([
         {
           name: 'framework',
           type: 'list',
@@ -32,6 +32,7 @@ export default class StoryBook extends PrismicGenerator {
         },
       ]).then(res => {
         this.framework = res.framework
+        this.config.set('framework', this.framework)
       })
     }
   }
