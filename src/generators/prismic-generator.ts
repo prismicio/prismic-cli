@@ -8,6 +8,7 @@ import * as path from 'path'
 import cli from 'cli-ux'
 import {fs} from '../utils'
 import Prismic, {CustomType, CustomTypeMetaData} from '../prismic/communication'
+import {lookpath} from 'lookpath'
 
 export interface TemplateOptions extends Generator.GeneratorOptions {
   branch: string;
@@ -28,12 +29,36 @@ export default abstract class PrismicGenerator extends Generator {
 
   prismic: Prismic;
 
+  pm: 'yarn' | 'npm' | undefined;
+
   constructor(args: string | string[], opts: TemplateOptions) {
     super(args, opts)
     this.path = opts.path
     this.force = opts.force
     this.domain = opts.domain
     this.prismic = opts.prismic
+  }
+
+  async promptForPackageManager(): Promise<'yarn'|'npm'> {
+    const hasYarn = await lookpath('yarn')
+    const usesYarn = fs.existsSync(this.destinationPath('yarn.lock'))
+    if (!hasYarn) {
+      this.pm = 'npm'
+      return this.pm
+    }
+    if (usesYarn) {
+      this.pm = 'yarn'
+      return this.pm
+    }
+    return this.prompt({
+      type: 'list',
+      name: 'pm',
+      message: 'package manager',
+      choices: ['yarn', 'npm'],
+    }).then(res => {
+      this.pm = res.pm
+      return res.pm
+    })
   }
 
   async downloadAndExtractZipFrom(source: string, innerFolder?: string): Promise<this> {

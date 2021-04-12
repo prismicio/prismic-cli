@@ -24,6 +24,10 @@ export default class NextJS extends PrismicGenerator {
     })
   }
 
+  async prompting() {
+    if (!this.pm) await this.promptForPackageManager()
+  }
+
   async writing() {
     this.fs.copyTpl(
       this.templatePath('**'),
@@ -54,6 +58,10 @@ export default class NextJS extends PrismicGenerator {
   }
 
   async install() {
-    this.npmInstall()
+    if (this.pm === 'yarn') {
+      this.yarnInstall()
+    } else {
+      this.npmInstall()
+    }
   }
 }

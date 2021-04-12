@@ -7,8 +7,6 @@ export default class StoryBook extends PrismicGenerator {
 
   constructor(argv: string|string[], opts: TemplateOptions) {
     super(argv, opts)
-    // TODO: this logic is repeated in setup, create-slice and here
-    this.pm = this.pm || 'npm'
 
     if (this.destinationRoot().endsWith(this.path) === false) {
       this.destinationRoot(this.path)
@@ -35,6 +33,8 @@ export default class StoryBook extends PrismicGenerator {
         this.config.set('framework', this.framework)
       })
     }
+
+    if (!this.pm) await this.promptForPackageManager()
   }
 
   async configuring() {

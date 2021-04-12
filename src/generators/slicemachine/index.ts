@@ -3,7 +3,7 @@ import PrismicGenerator, {TemplateOptions} from '../prismic-generator'
 /* one shot setup, create-slice and add storybook alot of this is repeated.... maybe it should be an abstract class */
 
 export default class SliceMachine extends PrismicGenerator {
-  framework: 'nuxt' | 'next' | undefined
+  framework: 'nuxt' | 'next' | undefined;
 
   constructor(args: string | string[], opts: TemplateOptions) {
     super(args, opts)
@@ -25,6 +25,8 @@ export default class SliceMachine extends PrismicGenerator {
         this.framework = framework
       })
     }
+
+    if (!this.pm) await this.promptForPackageManager()
   }
 
   /**
@@ -39,7 +41,7 @@ export default class SliceMachine extends PrismicGenerator {
    */
 
   async default() {
-    const opts = {...this.options, prismic: this.prismic, domain: this.domain, path: this.path, framework: this.framework}
+    const opts = {...this.options, prismic: this.prismic, domain: this.domain, path: this.path, framework: this.framework, pm: this.pm}
     // options: framework, domain, path
     this.composeWith(require.resolve('./setup'), opts)
     // options: framework, prompts: library, sliceName

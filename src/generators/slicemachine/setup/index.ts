@@ -68,7 +68,6 @@ export default class SliceMachine extends PrismicGenerator {
 
   constructor(argv: string | string[], opts: TemplateOptions) {
     super(argv, opts)
-    this.pm = this.pm || 'npm'
 
     if (this.destinationRoot().endsWith(this.path) === false) {
       this.destinationRoot(this.path)
@@ -132,6 +131,8 @@ export default class SliceMachine extends PrismicGenerator {
       this.framework = await this.prompt(frameWorkPrompt).then(res => res.framework)
       this.config.set('framework', this.framework)
     }
+
+    if (!this.pm) await this.promptForPackageManager()
   }
 
   async writing() {
