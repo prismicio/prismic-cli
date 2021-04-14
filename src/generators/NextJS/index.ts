@@ -15,18 +15,21 @@ export default class NextJS extends PrismicGenerator {
   async initializing() {
     this.destinationRoot(this.path)
     this.config.set('framework', 'next')
+  }
 
+  async prompting() {
+    if (!this.pm) await this.promptForPackageManager()
+  }
+
+  async default() {
     this.composeWith(require.resolve('../slicemachine'), {
       framework: 'next',
       domain: this.domain,
       prismic: this.prismic,
       path: this.destinationRoot(),
+      pm: this.pm,
       ...this.options,
     })
-  }
-
-  async prompting() {
-    if (!this.pm) await this.promptForPackageManager()
   }
 
   async writing() {

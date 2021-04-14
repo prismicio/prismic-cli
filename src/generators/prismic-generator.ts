@@ -37,6 +37,7 @@ export default abstract class PrismicGenerator extends Generator {
     this.force = opts.force
     this.domain = opts.domain
     this.prismic = opts.prismic
+    this.pm = opts.pm
   }
 
   async promptForPackageManager(): Promise<'yarn'|'npm'> {
