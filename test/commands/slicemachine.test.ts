@@ -14,7 +14,7 @@ const fakeDomain = 'fake-domain'
 const fakeBase = 'https://prismic.io'
 const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=xyz'
 
-describe.only('slicemachine', () => {
+describe('slicemachine', () => {
   describe('Next.js', () => {
     const appName = 'test-slicemachine-next'
     const fakeFolder = path.join(tmpDir, appName)

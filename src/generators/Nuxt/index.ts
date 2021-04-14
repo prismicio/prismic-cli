@@ -52,6 +52,7 @@ export default class Nuxt extends PrismicGenerator {
 
   async initializing() {
     this.destinationRoot(this.path)
+    this.config.set('framework', 'nuxt')
   }
 
   async prompting() {

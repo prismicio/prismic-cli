@@ -7,6 +7,7 @@ import * as inquirer from 'inquirer'
 import * as sinon from 'sinon'
 import New from '../../src/commands/new'
 import cli from 'cli-ux'
+import * as lookpath from 'lookpath'
 
 describe('new', () => {
   test.do(() => {
@@ -106,6 +107,7 @@ describe('new', () => {
     .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(lookpath, 'lookpath', async () => false)
     .stub(inquirer, 'prompt', async () => {
       return {
         library: 'slices',
@@ -185,6 +187,7 @@ describe('new', () => {
     .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(lookpath, 'lookpath', async () => false)
     .stub(inquirer, 'prompt', stubResp)
     .nock(fakeBase, api => {
       return api
