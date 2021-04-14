@@ -1,0 +1,46 @@
+{
+  "private": true,
+  "name": "generator-fake-yeoman-generator",
+  "version": "0.0.0",
+  "description": "fake generator with broken main field",
+  "files": [
+    "generators"
+  ],
+  "main": "generators/index.js",
+  "keywords": [],
+  "devDependencies": {},
+  "engines": {
+    "npm": ">= 4.0.0"
+  },
+  "dependencies": {},
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.json": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "xo",
+      "prettier"
+    ],
+    "env": {
+      "jest": true,
+      "node": true
+    },
+    "rules": {
+      "prettier/prettier": "error"
+    },
+    "plugins": [
+      "prettier"
+    ]
+  },
+  "scripts": {
+    "pretest": "eslint .",
+    "test": "jest"
+  }
+}
