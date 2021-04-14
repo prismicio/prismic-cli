@@ -52,7 +52,6 @@ export default class Nuxt extends PrismicGenerator {
 
   async initializing() {
     this.destinationRoot(this.path)
-    this.config.set('framework', 'nuxt')
   }
 
   async prompting() {
@@ -210,6 +209,7 @@ export default class Nuxt extends PrismicGenerator {
   }
 
   async configuring() {
+    this.config.set('framework', 'nuxt')
     this.composeWith(require.resolve('../slicemachine'), {
       framework: 'nuxt',
       domain: this.domain,
