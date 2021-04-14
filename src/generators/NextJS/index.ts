@@ -65,7 +65,7 @@ export default class NextJS extends PrismicGenerator {
     if (this.pm === 'yarn') {
       this.yarnInstall()
     } else {
-      this.npmInstall()
+      this.npmInstall(undefined, {'legacy-peer-deps': true})
     }
   }
 }

@@ -50,6 +50,6 @@ export default class StoryBook extends PrismicGenerator {
     if (this.pm === 'yarn') {
       return this.yarnInstall()
     }
-    return this.npmInstall()
+    return this.npmInstall(undefined, {'legacy-peer-deps': true}) // TODO: remove once storybook installs with out peer-dep related errors
   }
 }
