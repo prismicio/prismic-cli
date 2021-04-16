@@ -221,6 +221,20 @@ describe('prismic/communication.ts', () => {
 
     test
     .stub(fs, 'readFileSync', sinon.fake.returns(config))
+    .add('prismic', () => new Prismic())
+    .do(async ctx => {
+      const catchFn = sinon.fake()
+      const thenFn = sinon.fake()
+      const repoName = Array.from({length: 31}, () => 'a').join('')
+      await ctx.prismic.validateRepositoryName(repoName).then(thenFn).catch(catchFn)
+
+      expect(catchFn.getCall(0).firstArg.message).to.contain('30 characters or less')
+      expect(thenFn.notCalled).to.be.true
+    })
+    .it('Max length 30 characters')
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(config))
     .nock(fakeBase, api => {
       return api.get(`/app/dashboard/repositories/${repoName}/exists`)
       .reply(200, () => false)

@@ -271,6 +271,9 @@ export default class Prismic {
     const endsWithALetterOrNumber = /[a-z0-9]$/.test(domain)
     if (!endsWithALetterOrNumber) errors.push('Must end in a letter or a number.')
 
+    const thirtyCharacterOrLess = domain.length <= 30
+    if (!thirtyCharacterOrLess) errors.push('Must be 30 characters or less')
+
     if (errors.length > 0) {
       const errorString = errors.map((d, i) => `(${i + 1}: ${d}`).join(' ')
       const msg = `Validation errors: ${errorString}`
