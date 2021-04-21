@@ -1,0 +1,15 @@
+[
+  {
+    "id": "page",
+    "name": "Page",
+    "repeatable": true,
+    "value": "page.json"
+  },
+  {
+    "id": "navigation",
+    "name": "Navigation",
+    "repeatable": true,
+    "value": "navigation.json",
+    "mergeSlices": false
+  }
+]
