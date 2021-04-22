@@ -44,8 +44,6 @@
     "yeoman-generator": "^4.12.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^11.0.0",
-    "@commitlint/config-conventional": "^11.0.0",
     "@oclif/dev-cli": "^1",
     "@oclif/test": "^1",
     "@types/babel__generator": "^7.6.2",
@@ -57,11 +55,7 @@
     "@types/mocha": "^5",
     "@types/tmp": "^0.2.0",
     "chai": "^4",
-    "eslint": "^5.13",
-    "eslint-config-oclif": "^3.1",
-    "eslint-config-oclif-typescript": "^0.1",
     "globby": "^10",
-    "husky": "^4.3.0",
     "mocha": "^5",
     "nock": "^13.0.5",
     "nyc": "^14",
@@ -89,16 +83,6 @@
     "bin": "prismic",
     "plugins": [
       "@oclif/plugin-help"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
     ]
   },
   "repository": "prismicio/prismic-cli",
