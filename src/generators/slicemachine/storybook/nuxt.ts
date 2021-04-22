@@ -50,6 +50,8 @@ export default class StoryBookNext extends PrismicGenerator {
     // read sm file for local libraries.
     const localLibs = libraries.filter(lib => lib.startsWith('@/')).map(lib => lib.substring(2))
 
+    // TODO: add   "../.slicemachine/assets/slices/**/*.stories.js" to story book config.
+
     const config = this.readDestination('nuxt.config.js')
 
     const updatedConfig = modifyNuxtConfig(config, localLibs)

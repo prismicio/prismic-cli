@@ -54,6 +54,8 @@ export default class StoryBookNext extends Generator {
 
     const stories = localLibs.map(p => `../${p}/**/*.stories.[tj]s`)
 
+    // TODO: add   "../.slicemachine/assets/slices/**/*.stories.js"
+
     const storiesString = JSON.stringify(stories)
 
     const storyBookEntry = `
