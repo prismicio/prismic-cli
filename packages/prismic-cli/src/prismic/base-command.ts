@@ -9,7 +9,7 @@ import axios, {AxiosError} from 'axios'
 import * as inquirer from 'inquirer'
 import datadog from '../utils/data-dog'
 
-import chalk from 'chalk'
+import * as chalk from 'chalk'
 
 export default abstract class PrismicCommand extends Command {
   prismic: Prismic;

@@ -1,7 +1,7 @@
 import PrismicGenerator, {TemplateOptions} from '../../prismic-generator'
 import {Question} from 'yeoman-generator'
 import modifyNuxtConfig from './modify-nuxt-config'
-import chalk from 'chalk'
+import * as chalk from 'chalk'
 import message from './message'
 import {existsSync} from 'fs'
 
