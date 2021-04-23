@@ -46,6 +46,15 @@ export default abstract class PrismicGenerator extends Generator {
     this.pm = opts.pm
   }
 
+  /**
+   * Will infer to use yarn or npm and prompt the user to select a package manager when in doubt.
+   * The result is assigned "this.pm" and return ed.
+   * @example
+   * ```ts
+   * if(!this.pm) await this.promptForPackageManager()
+   * ```
+   *
+   */
   async promptForPackageManager(): Promise<'yarn'|'npm'> {
     const hasYarn = await lookpath('yarn')
     const usesYarn = fs.existsSync(this.destinationPath('yarn.lock'))
@@ -68,6 +77,18 @@ export default abstract class PrismicGenerator extends Generator {
     })
   }
 
+  /**
+   * Downloads a zip file and extracts it to yeoman's mem-fs.
+   * Mainly use in the theme command/generator
+   *
+   * @param {string} source - the full url to a zip file with a template repo
+   * @param {?string} innerFolder - the folder to extract from the downloaded zip file
+   *
+   * @example
+   * ```ts
+   * this.downloadAndExtractZipFrom('https://github.com/prismicio/fake-theme/archive/master.zip, 'fake-theme-master')
+   * ```
+   */
   async downloadAndExtractZipFrom(source: string, innerFolder?: string): Promise<this> {
     const tmpFile = await tmp.file()
     const tmpDir = await tmp.dir()
@@ -118,6 +139,19 @@ export default abstract class PrismicGenerator extends Generator {
     })
   }
 
+  /**
+   * Read custom-types from mem-fs. This is used to send custom types during repo creation
+   *
+   * @param {?string} customTypesDirectory - the directory to read the custom types from defaults to 'custom_types'
+   * @returns {Array<CustomType>} - or an empty array
+   *
+   * @example
+   * ```ts
+   * this.downloadAndExtractZipFrom('https://github.com/prismicio/fake-theme/archive/master.zip, 'fake-theme-master')
+   * const customTypes = this.readCustomTypesFrom('custom_types')
+   * this.prismic.createRepository({ domain: this.domain, customTypes })
+   * ```
+   */
   readCustomTypesFrom(customTypesDirectory = 'custom_types'): Array<CustomType> {
     const pathToCustomTypesMetaInfo = this.destinationPath(customTypesDirectory, 'index.json')
 
@@ -134,6 +168,21 @@ export default abstract class PrismicGenerator extends Generator {
     return customTypes
   }
 
+  /**
+   * Used in the theme generator,
+   * This reads and formats the documents in the `documentsDirectory` so they can be sent to prismic during repo-creation.
+   *
+   * @param {?string} documentsDirectory - defaults to 'documents'
+   * @returns {Documents} or undefined
+   *
+   * @example
+   * ```ts
+   * await this.downloadAndExtractZipFrom('https://github.com/prismicio/fake-theme/archive/master.zip, 'fake-theme-master')
+   * const customTypes = this.readCustomTypesFrom('custom_types')
+   * const documents = this.readDocumentsFrom('documents')
+   * await this.prismic.createRepository({ domain: this.domain, customTypes, documents })
+   * ```
+   */
   readDocumentsFrom(documentsDirectory = 'documents'): Documents | undefined {
     const pathToDocuments = this.destinationPath(documentsDirectory)
     const pathToSignatureFile = path.join(pathToDocuments, 'index.json')
@@ -172,6 +221,18 @@ export default abstract class PrismicGenerator extends Generator {
     const paths = url.pathname.split('/').filter(_ => _)
     return paths[1]
   }
+
+  /**
+   * Used in the theme command and generators that use github urls so the inner folder of the downloaded zip can be extracted to mem-fs
+   *
+   * @param {string} source - a url to a zip file on github.
+   * @returns a string that should be the inner folder of the zip file.
+   * @example
+   * ```ts
+   * const url = 'https://github.com/prismicio/fake-theme/archive/master.zip'
+   * this.innerFolderFromGitRepo(url) // fake-theme-master
+   * ```
+   */
 
   innerFolderFromGitRepo(source: string) {
     const branch = this.branchFromUrl(source)
