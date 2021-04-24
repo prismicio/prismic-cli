@@ -1,9 +1,31 @@
 ### I would not recommend using this module at all.
 
+I will use it only with some real strict safety measurements
+
+- using a very small and easy to smoke test project
+- never create/adjust types in the GUI/prismic dashboard (only using the sync command to update types)
+- e2e+smoke test on staging environment with identical content as production.
+- backup plan if the api goes down (e.g when you hit an api rate limit or something similar). Might add something that will echo out JSON type objects that you can copy paste to the prismic dashboard as backup plan.
+
 ## :skull: :skull: THIS MODULE WILL WIPE YOUR CUSTOM TYPES. :skull: :skull:
 
-:skull: :skull: :skull: https://github.com/Bram-Zijp/prismic-cli/commit/3d34f2f9af71e2324df53f31f79072dbe1c9005c :skull: :skull: :skull:
+#### Do not use on production environments (if you really want to, be sure to dig into the implications, the custom types API and the way this fork uses the custom types API)
+
+:skull: :skull: :skull: https://github.com/Bram-Zijp/prismic-cli/commit/22e085c400dadad9563f6e1288d1c928fedade64 :skull: :skull: :skull:
 :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull:
+
+### What?
+
+(tested in Next.js Prismic Slicemachine project):
+It parses your slices and custom_types/index.json files (see slicemachine example projects) and injects slices into it (unless specified not to).
+`prismic sync --token [your_custom_types_api_token] // will upsert (update/insert) types from custom_types/index.json`
+`prismic sync --delete --token [your_custom_types_api_token] // upsert (update/insert) all types that are in and deletes ALL types are not in "your custom_types/index.json" file`
+
+Instead of the --token argument, you can also set the following environment variable:
+
+```
+PRISMIC_TYPES_TOKEN=[your_custom_types_api_token]
+```
 
 # Prismic Command Line for Javascript
 

@@ -1,7 +1,7 @@
 {
   "name": "@sa-pixaper/prismic-cli",
   "description": "Command line to bootstrap prismic projects.",
-  "version": "3.8.16",
+  "version": "3.8.17",
   "author": "prismic.io developers",
   "license": "Apache-2.0",
   "scripts": {
