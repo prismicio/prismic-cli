@@ -1,4 +1,4 @@
-### I would not recommend using this module at all.
+### This fork is not for production use but for demoing purposes only.
 
 I will use it only with some real strict safety measurements
 
@@ -6,13 +6,7 @@ I will use it only with some real strict safety measurements
 - never create/adjust types in the GUI/prismic dashboard (only using the sync command to update types)
 - e2e+smoke test on staging environment with identical content as production.
 - backup plan if the api goes down (e.g when you hit an api rate limit or something similar). Might add something that will echo out JSON type objects that you can copy paste to the prismic dashboard as backup plan.
-
-## :skull: :skull: THIS MODULE WILL WIPE YOUR CUSTOM TYPES. :skull: :skull:
-
-#### Do not use on production environments (if you really want to, be sure to dig into the implications, the custom types API and the way this fork uses the custom types API)
-
-:skull: :skull: :skull: https://github.com/Bram-Zijp/prismic-cli/commit/22e085c400dadad9563f6e1288d1c928fedade64 :skull: :skull: :skull:
-:skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull: :skull:
+- get more confident this fork is stable.
 
 ### What?
 
