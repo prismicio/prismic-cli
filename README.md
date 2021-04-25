@@ -16,16 +16,15 @@ I will use it only with some real strict safety measurements
 
 ### What?
 
-(tested in Next.js Prismic Slicemachine project):
-It parses your slices and custom_types/index.json files (see slicemachine example projects) and injects slices into it (unless specified not to).
-`prismic sync --token [your_custom_types_api_token] // will upsert (update/insert) types from custom_types/index.json`
-`prismic sync --delete --token [your_custom_types_api_token] // upsert (update/insert) all types that are in and deletes ALL types are not in "your custom_types/index.json" file`
+Added command
 
-Instead of the --token argument, you can also set the following environment variable:
+- `prismic sync`
 
-```
-PRISMIC_TYPES_TOKEN=[your_custom_types_api_token]
-```
+Arguments
+
+- `--custom-types` will upsert custom_types
+- `--slices` will upsert slices
+- `--dangerous-delete` will also delete "custom_types" and or "slices" from your Prismic CMS API if they don't exist in your codebase it's "custom_types" or "slices library's". E.g. `prismic sync --dangerous-delete --custom-types` will delete and upsert "custom-types" only, where appropriate.
 
 # Prismic Command Line for Javascript
 

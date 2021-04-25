@@ -1,7 +1,7 @@
 {
   "name": "@sa-pixaper/prismic-cli",
   "description": "Command line to bootstrap prismic projects.",
-  "version": "3.8.17",
+  "version": "3.9.17",
   "author": "prismic.io developers",
   "license": "Apache-2.0",
   "scripts": {
@@ -41,6 +41,7 @@
     "copy-template-dir": "^1.4.0",
     "deep-equal": "^1.1.0",
     "deepmerge": "^4.2.2",
+    "form-data": "^3.0.1",
     "globby": "^11.0.0",
     "inquirer": "^7.3.3",
     "is-valid-path": "^0.1.1",
@@ -50,7 +51,6 @@
     "lodash.merge": "^4.6.2",
     "lodash.set": "^4.3.2",
     "mime": "^2.5.2",
-    "form-data": "^3.0.1",
     "mustache": "^3.1.0",
     "node-fetch": "^2.6.1",
     "open": "^7.0.0",
@@ -64,6 +64,7 @@
     "sm-commons": "0.0.21",
     "tmp": "~0.0.33",
     "url-join": "^4.0.1",
+    "variable-diff": "^2.0.2",
     "vue-docgen-api": "^3.25.0"
   },
   "devDependencies": {
