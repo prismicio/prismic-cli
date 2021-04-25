@@ -1,0 +1,27 @@
+[
+  {
+    "id": "default-slice",
+    "name": "Default slice",
+    "docURL": "...",
+    "version": "sktwi1xtmkfgx8626",
+    "description": "OkSlice",
+    "primary": {
+      "title": [
+        {
+          "type": "paragraph",
+          "text": "Cillum ea ad laborum exercitation ea sunt sint aliquip minim irure cupidatat voluptate. Incididunt anim in qui deserunt laboris occaecat reprehenderit quis ea Lorem labore fugiat nostrud aliquip tempor.",
+          "spans": []
+        }
+      ],
+      "description": [
+        {
+          "type": "paragraph",
+          "text": "Laborum elit do excepteur est duis qui adipisicing magna non laboris ad enim.",
+          "spans": []
+        }
+      ]
+    },
+    "items": [],
+    "slice_type": "ok_slice"
+  }
+]
