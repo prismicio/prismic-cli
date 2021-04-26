@@ -43,7 +43,8 @@
     "tmp-promise": "^3.0.2",
     "tslib": "^1",
     "yeoman-environment": "^2.10.3",
-    "yeoman-generator": "^4.12.0"
+    "yeoman-generator": "^4.12.0",
+    "generator-prismic-nodejs" : "^4.0.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",

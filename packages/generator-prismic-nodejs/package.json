@@ -1,0 +1,23 @@
+{
+  "name": "generator-prismic-nodejs",
+  "version": "4.0.0",
+  "description": "This is a blank NodeJS (using express) project that will connect to any prismic.io repository. It uses the prismic.io JavaScript development kit, and provides a few helpers to integrate with express.",
+  "main": "lib/generators/app/index.js",
+  "author": "MarcMcIntosh",
+  "license": "Apache-2.0",
+  "private": false,
+  "engines": {
+    "node": ">=15.0.0"
+  },
+  "dependencies": {
+    "@prismicio/prismic-yeoman-generator": "^4.0.0",
+    "tslib": "^1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.10",
+    "typescript": "^3.3"
+  },
+  "scripts": {
+    "prepack": "rm -rf lib && tsc -b"
+  }
+}
