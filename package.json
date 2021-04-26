@@ -7,7 +7,7 @@
     "eslint": "^5.13",
     "eslint-config-oclif": "^3.1",
     "eslint-config-oclif-typescript": "^0.1",
-    "husky": "^4.3.0",
+    "husky": "^6.0.0",
     "lerna": "^3.22.1"
   },
   "workspaces": [
