@@ -4,12 +4,12 @@ const env = createEnv()
 
 env.register(
   require.resolve('../generators/NextJS'),
-  'Next',
+  'prismic-next',
 )
 
 env.register(
   require.resolve('../generators/Nuxt'),
-  'Nuxt',
+  'prismic-nuxt',
 )
 
 export const all = env.lookup({

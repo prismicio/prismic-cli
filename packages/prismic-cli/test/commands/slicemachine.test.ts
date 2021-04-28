@@ -151,6 +151,7 @@ describe('slicemachine', () => {
     test
     .stdout()
     .stderr()
+    .skip()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(fs, 'existsSync', () => true)

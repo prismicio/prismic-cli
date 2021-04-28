@@ -3,8 +3,6 @@ import {cli} from 'cli-ux'
 import * as inquirer from 'inquirer'
 import {Command} from '../prismic'
 import prismicGenerators, {names} from '../prismic/yeoman-env'
-import * as path from 'path'
-import {fs} from '../utils'
 
 export default class New extends Command {
   static description = 'Create a project with a new prismic repository.'
@@ -15,7 +13,7 @@ export default class New extends Command {
     domain: flags.string({
       char: 'd',
       description: 'name of the prismic repository ie: example, becomes https://example.prismic.io',
-      parse: input => input.toLowerCase().trim(),
+      parse: (input: string) => input.toLowerCase().trim(),
     }),
 
     folder: flags.string({
@@ -54,14 +52,12 @@ export default class New extends Command {
     const folder = await this.validateFolder(flags.folder, domain, flags.force)
 
     const generators = names.map(value => {
-      const nameWithOutPrefix = value.replace('prismic-', '')
+      const nameWithOutPrefix = value.replace('prismic-', '').replace(/js$/i, 'JS')
       return {
-        name: nameWithOutPrefix,
+        name: nameWithOutPrefix.charAt(0).toUpperCase() + nameWithOutPrefix.slice(1),
         value,
       }
     })
-
-    // const template = await this.validateTemplate(flags.template, Object.keys(generators))
 
     const isValidTemplate = flags.template && names.includes(`prismic-${flags.template.toLowerCase()}`) ? `prismic-${flags.template.toLowerCase()}` : ''
 
@@ -78,9 +74,9 @@ export default class New extends Command {
         domain,
         path: folder,
         prismic: this.prismic,
-      }, ((err: Error, results: any) => {
-        if (err) reject(err)
-        else resolve(results)
+      }, ((err: Error) => {
+        if (err) return reject(err)
+        return resolve(null)
       }) as (err: Error | null) => void)
     })
   }

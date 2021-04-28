@@ -1,6 +1,6 @@
 import {flags} from '@oclif/command'
 import {Command} from './../prismic'
-import generator from '../prismic/yeoman-env'
+import {names} from '../prismic/yeoman-env'
 
 export default class List extends Command {
   static description = 'Lists available project templates.'
@@ -10,8 +10,11 @@ export default class List extends Command {
   }
 
   async run() {
-    const generators = generator.getGeneratorsMeta()
+    const generators = names.map(name => {
+      const nameWithOutPrismicPrefix = name.replace('prismic-', '').replace(/js$/i, 'JS')
+      return nameWithOutPrismicPrefix.charAt(0).toUpperCase() + nameWithOutPrismicPrefix.slice(1)
+    })
 
-    Object.keys(generators).forEach(d => this.log(d))
+    generators.forEach(d => this.log(d))
   }
 }

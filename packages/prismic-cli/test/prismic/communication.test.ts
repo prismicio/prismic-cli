@@ -297,7 +297,7 @@ describe('prismic/communication.ts', () => {
     .add('prismic', () => new Prismic())
     .do(async ctx => {
       const result = await ctx.prismic.createRepository({domain: repoName})
-      expect(result.data.domain).to.equal(repoName)
+      expect(result.data).to.equal(repoName)
     })
     .it('should create a repo using an oauth access token')
 

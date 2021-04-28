@@ -8,7 +8,7 @@ describe('list', () => {
     expect(ctx.stdout).to.contain('Next')
     expect(ctx.stdout).to.contain('Nuxt')
     expect(ctx.stdout).to.contain('React')
-    expect(ctx.stdout).to.contain('VueJS')
+    expect(ctx.stdout).to.contain('Vue')
     expect(ctx.stdout).to.contain('Angular2')
     expect(ctx.stdout).to.contain('NodeJS')
   })

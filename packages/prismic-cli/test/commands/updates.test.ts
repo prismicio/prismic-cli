@@ -50,6 +50,7 @@ describe('hooks', () => {
   .it('update hook: will use a configured npm-registry')
 
   test
+  .skip()
   .stdout()
   .stderr()
   .stub(libnpmconfig, 'read', () => ({registry: 'https://registry.npmjs.org/'}))

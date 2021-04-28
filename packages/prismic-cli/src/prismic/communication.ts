@@ -306,7 +306,7 @@ export default class Prismic {
     // app, TODO: add app
     customTypes,
     signedDocuments,
-  }: CreateRepositoryArgs): Promise<AxiosResponse> {
+  }: CreateRepositoryArgs): Promise<AxiosResponse<string>> {
     const signature = signedDocuments?.signature
     const documents = signedDocuments?.documents ? JSON.stringify(signedDocuments.documents) : undefined
     const data = {
@@ -326,7 +326,7 @@ export default class Prismic {
 
     // const querystring = {app: 'slicemachine'}
     cli.action.start('creating prismic repository')
-    return this.axios({maxRedirects: 0}).post(url.toString(), data)
+    return this.axios({maxRedirects: 0}).post<string>(url.toString(), data)
     .then(res => {
       cli.action.stop()
       return res
@@ -346,7 +346,7 @@ export default class Prismic {
     // app,
     customTypes,
     signedDocuments,
-  }: CreateRepositoryArgs): Promise<AxiosResponse> {
+  }: CreateRepositoryArgs): Promise<AxiosResponse<string>> {
     const signature = signedDocuments?.signature
     const documents = signedDocuments?.documents ? JSON.stringify(signedDocuments.documents) : undefined
     const data = {
@@ -367,10 +367,10 @@ export default class Prismic {
 
     const address = url.toString()
     cli.action.start('creating prismic repository')
-    return this.axios().post(address, data)
+    return this.axios().post<ObjectWithDomain>(address, data)
     .then(res => {
       cli.action.stop()
-      return res
+      return {...res, data: res.data.domain}
     })
     .catch(error => {
       cli.action.stop()
@@ -381,4 +381,8 @@ export default class Prismic {
       throw error
     })
   }
+}
+
+interface ObjectWithDomain {
+  domain: string;
 }

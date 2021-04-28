@@ -14,7 +14,6 @@ describe('new', () => {
     expect(New.flags.domain).to.exist
     expect(New.flags.folder).to.exist
     expect(New.flags.force).to.exist
-    expect(New.flags.generator).to.exist
     expect(New.flags.help).to.exist
     expect(New.flags['skip-install']).to.exist
     expect(New.flags.template).to.exist
@@ -35,10 +34,10 @@ describe('new', () => {
     })
 
     test
-    .stdout()
     .stderr()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(lookpath, 'lookpath', async () => false)
     .stub(cli, 'prompt', () => async (message: string): Promise<string> => {
       if (message.includes('Email')) return Promise.resolve('email')
       if (message.includes('Password')) return Promise.resolve('password')
@@ -221,69 +220,6 @@ describe('new', () => {
       expect(fs.existsSync(pathToNuxtConfig)).to.be.true
       const config = await fs.readFile(pathToNuxtConfig, {encoding: 'utf-8'})
       expect(config).to.include('stories: ["~/slices/**/*.stories.[tj]s"]')
-    })
-  })
-
-  describe('generator', () => {
-    const fakeFolder = path.join(tmpDir, 'test-new-generator')
-    const fakeGenerator = path.resolve(__dirname, '../__stubs__/fake-generator')
-    const fakeYeomanGenerator = path.resolve(__dirname, '../__stubs__/generator-fake-yeoman-generator')
-
-    before(async () => {
-      if (fs.existsSync(fakeFolder)) {
-        await fs.rmdir(fakeFolder, {recursive: true})
-      }
-    })
-
-    const fakeReadFileSync = sinon.stub()
-    fakeReadFileSync.onCall(0).returns(JSON.stringify({base: fakeBase, cookies: fakeCookies}))
-
-    test
-    .stdout()
-    .stderr()
-    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
-    .stub(fs, 'writeFile', () => Promise.resolve())
-    .stub(fs, 'existsSync', () => false)
-    .nock(fakeBase, api => api.get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true))
-    .nock('https://auth.prismic.io', api => {
-      api.get('/validate?token=xyz').reply(200, {})
-      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
-    })
-    .command(['new', '--generator', fakeGenerator, '--force', '--domain', fakeDomain, '--folder', fakeFolder])
-    .it('should warn the user if generator does not exist', ctx => {
-      expect(ctx.stderr).to.contain('Warning: Could not find')
-    })
-
-    test
-    .stdout()
-    .stderr()
-    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
-    .stub(fs, 'writeFile', () => Promise.resolve())
-    .stub(fs, 'existsSync', sinon.stub().onCall(0).returns(true).onCall(1).returns(true).onCall(2).returns(false).onCall(3).returns(false))
-    .nock(fakeBase, api => api.get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true))
-    .nock('https://auth.prismic.io', api => {
-      api.get('/validate?token=xyz').reply(200, {})
-      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
-    })
-    .command(['new', '--generator', fakeYeomanGenerator, '--force', '--domain', fakeDomain, '--folder', fakeFolder])
-    .it('should warn the user if generator does not exist', ctx => {
-      expect(ctx.stderr).to.contain('main field is misconfigured... trying')
-      expect(ctx.stderr).to.contain('did not resolve, exiting')
-    })
-
-    test
-    .stdout()
-    .stderr()
-    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
-    .stub(fs, 'writeFile', () => Promise.resolve())
-    .nock(fakeBase, api => api.get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true))
-    .nock('https://auth.prismic.io', api => {
-      api.get('/validate?token=xyz').reply(200, {})
-      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
-    })
-    .command(['new', '--generator', fakeYeomanGenerator, '--force', '--domain', fakeDomain, '--folder', fakeFolder])
-    .it('should run a yeoman generator', ctx => {
-      expect(ctx.stdout).to.contain('Done running the generator')
     })
   })
 })

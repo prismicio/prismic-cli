@@ -8,8 +8,8 @@ import cli from 'cli-ux'
 import * as fs from 'fs'
 import {lookpath} from 'lookpath'
 
-import type Prismic from 'prismic-cli/lib/prismic/communication'
-import type {CustomType, CustomTypeMetaData} from 'prismic-cli/lib/prismic/communication'
+import type Prismic from 'prismic-cli/src/prismic/communication'
+import type {CustomType, CustomTypeMetaData} from 'prismic-cli/src/prismic/communication'
 
 export interface TemplateOptions extends Generator.GeneratorOptions {
   // branch: string;

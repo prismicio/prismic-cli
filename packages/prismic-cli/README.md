@@ -29,6 +29,7 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`prismic create-generator`](#prismic-create-generator)
 * [`prismic help [COMMAND]`](#prismic-help-command)
 * [`prismic list`](#prismic-list)
 * [`prismic login`](#prismic-login)
@@ -39,7 +40,26 @@ USAGE
 * [`prismic theme [FILE]`](#prismic-theme-file)
 * [`prismic whoami`](#prismic-whoami)
 
+## `prismic create-generator`
+
+create a new generator
+
+```
+USAGE
+  $ prismic create-generator
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name for the generator
+  --skip-install
+```
+
+_See code: [src/commands/create-generator.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.0/src/commands/create-generator.ts)_
+
 ## `prismic help [COMMAND]`
+
+display help for prismic
 
 ```
 USAGE
@@ -52,9 +72,11 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
 
 ## `prismic list`
+
+Lists available project templates.
 
 ```
 USAGE
@@ -67,6 +89,8 @@ OPTIONS
 _See code: [src/commands/list.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.0/src/commands/list.ts)_
 
 ## `prismic login`
+
+Login to prismic
 
 ```
 USAGE
@@ -83,6 +107,8 @@ _See code: [src/commands/login.ts](https://github.com/prismicio/prismic-cli/blob
 
 ## `prismic logout`
 
+logout of prismic
+
 ```
 USAGE
   $ prismic logout
@@ -95,23 +121,26 @@ _See code: [src/commands/logout.ts](https://github.com/prismicio/prismic-cli/blo
 
 ## `prismic new`
 
+Create a project with a new prismic repository.
+
 ```
 USAGE
   $ prismic new
 
 OPTIONS
-  -d, --domain=domain        name of the prismic repository ie: example, becomes https://example.prismic.io
-  -f, --folder=folder        name of project folder
-  -g, --generator=generator  Run a local yeoman generator
-  -h, --help                 show CLI help
-  -t, --template=template    Prismic template for the project
-  --force                    over write local files
-  --skip-install             prevent running install command after generating project
+  -d, --domain=domain      name of the prismic repository ie: example, becomes https://example.prismic.io
+  -f, --folder=folder      name of project folder
+  -h, --help               show CLI help
+  -t, --template=template  Prismic template for the project
+  --force                  over write local files
+  --skip-install           prevent running install command after generating project
 ```
 
 _See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.0/src/commands/new.ts)_
 
 ## `prismic signup`
+
+Create a prismic account
 
 ```
 USAGE
@@ -126,6 +155,8 @@ OPTIONS
 _See code: [src/commands/signup.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.0/src/commands/signup.ts)_
 
 ## `prismic slicemachine`
+
+Slice Machine Commands
 
 ```
 USAGE
@@ -155,6 +186,8 @@ _See code: [src/commands/slicemachine.ts](https://github.com/prismicio/prismic-c
 
 ## `prismic theme [FILE]`
 
+Create a project from a zip file or github repository with a new prismic repository.
+
 ```
 USAGE
   $ prismic theme [FILE]
@@ -173,6 +206,8 @@ OPTIONS
 _See code: [src/commands/theme.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.0/src/commands/theme.ts)_
 
 ## `prismic whoami`
+
+Shows the user name of the current user
 
 ```
 USAGE
