@@ -22,5 +22,8 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
+  },
+  "scripts": {
+    "prepack": "yarn workspaces run prepack"
   }
 }
