@@ -9,6 +9,9 @@
   "engines": {
     "node": ">=15.0.0"
   },
+  "files": [
+    "generators"
+  ],
   "dependencies": {
     "@prismicio/prismic-yeoman-generator": "^4.0.0",
     "tslib": "^1"
