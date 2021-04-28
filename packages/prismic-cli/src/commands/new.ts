@@ -2,7 +2,7 @@ import {flags} from '@oclif/command'
 import {cli} from 'cli-ux'
 import * as inquirer from 'inquirer'
 import {Command} from '../prismic'
-import prismicGenerators from '../prismic/yeoman-env'
+import prismicGenerators, {names} from '../prismic/yeoman-env'
 import * as path from 'path'
 import {fs} from '../utils'
 
@@ -37,12 +37,6 @@ export default class New extends Command {
       description: 'prevent running install command after generating project',
       default: false,
     }),
-
-    generator: flags.string({
-      char: 'g',
-      description: 'Run a local yeoman generator',
-      exclusive: ['template'],
-    }),
   }
 
   static args = []
@@ -59,45 +53,24 @@ export default class New extends Command {
     const domain = await this.validateDomain(flags.domain)
     const folder = await this.validateFolder(flags.folder, domain, flags.force)
 
-    if (flags.generator) {
-      // validate folder exists.
-
-      if (fs.existsSync(flags.generator) === false) {
-        return this.warn(`Could not find: ${flags.generator}`)
+    const generators = names.map(value => {
+      const nameWithOutPrefix = value.replace('prismic-', '')
+      return {
+        name: nameWithOutPrefix,
+        value,
       }
-      // run a custom generator
+    })
 
-      const pathToPkgJson = path.resolve(flags.generator, 'package.json')
+    // const template = await this.validateTemplate(flags.template, Object.keys(generators))
 
-      const pkgJson = require(pathToPkgJson)
+    const isValidTemplate = flags.template && names.includes(`prismic-${flags.template.toLowerCase()}`) ? `prismic-${flags.template.toLowerCase()}` : ''
 
-      const name: string = pkgJson?.name || await cli.prompt('Generator name:')
-
-      // issue with the main field from yo generator where the main field is incorrect.
-      let main: string = path.resolve(flags.generator, pkgJson?.main)
-
-      if (fs.existsSync(main) === false) {
-        this.warn(`${pathToPkgJson}: main field is misconfigured... trying ${path.join(flags.generator, 'generators', 'app', 'index.js')}`)
-        main = path.resolve(flags.generator, 'generators', 'app', 'index.js')
-      }
-
-      if (fs.existsSync(main) === false) {
-        return this.warn(`${main} did not resolve, exiting`)
-      }
-
-      prismicGenerators.register(main, name)
-      return this.runGenerator(name, domain, folder)
-    }
-
-    const generators = prismicGenerators.getGeneratorsMeta()
-
-    const template = await this.validateTemplate(flags.template, Object.keys(generators))
-
-    return this.runGenerator(template, domain, folder)
-  }
-
-  private async runGenerator(template: string, domain: string, folder: string) {
-    const {flags} = this.parse(New)
+    const template: string = isValidTemplate || await inquirer.prompt({
+      type: 'list',
+      name: 'template',
+      message: 'Template to use',
+      choices: generators,
+    }).then(res => res.template)
 
     return new Promise((resolve, reject) => {
       prismicGenerators.run(template, {

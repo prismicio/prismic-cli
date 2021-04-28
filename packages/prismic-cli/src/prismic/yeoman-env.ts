@@ -1,4 +1,4 @@
-import {createEnv} from 'yeoman-environment'
+import {createEnv, GeneratorMeta} from 'yeoman-environment'
 
 const env = createEnv()
 
@@ -12,24 +12,19 @@ env.register(
   'Nuxt',
 )
 
-env.register(
-  require.resolve('../generators/React'),
-  'React',
-)
+export const all = env.lookup({
+  packagePatterns: ['generator-prismic-*'],
+})
 
-env.register(
-  require.resolve('../generators/Vue'),
-  'VueJS',
-)
+export const names = env.getGeneratorNames() // names of the generators
 
-env.register(
-  require.resolve('../generators/Angular2'),
-  'Angular2',
-)
+export const meta = env.getGeneratorsMeta() // local first logic
 
-env.register(
-  require.resolve('../generators/NodeJS'), // make this dynamic?
-  'NodeJS', // make this dynamic?
-)
+export const apps = Object.entries(meta).reduce<Record<string, GeneratorMeta>>((acc, [key, value]) => {
+  if (key.endsWith(':app')) {
+    return {...acc, [key]: value}
+  }
+  return acc
+}, {})
 
 export default env

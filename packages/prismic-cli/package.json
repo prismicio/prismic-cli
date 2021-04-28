@@ -18,6 +18,7 @@
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^3",
+    "@prismicio/prismic-generator-generator": "^4.0.0",
     "@types/adm-zip": "^0.4.33",
     "@types/inquirer": "^7.3.1",
     "@types/node": "^14.14.10",
@@ -31,6 +32,10 @@
     "email-validator": "^2.0.4",
     "fast-glob": "^3.2.5",
     "fs-extra": "^9.1.0",
+    "generator-prismic-nodejs": "^4.0.0",
+    "generator-prismic-angular2": "^4.0.0",
+    "generator-prismic-react": "^4.0.0",
+    "generator-prismic-vue": "^4.0.0",
     "inquirer": "^7.3.3",
     "is-valid-path": "^0.1.1",
     "libnpmconfig": "^1.2.1",
@@ -42,9 +47,8 @@
     "sm-commons": "^0.0.23",
     "tmp-promise": "^3.0.2",
     "tslib": "^1",
-    "yeoman-environment": "^2.10.3",
-    "yeoman-generator": "^4.12.0",
-    "generator-prismic-nodejs" : "^4.0.0"
+    "yeoman-environment": "^3.2.0",
+    "yeoman-generator": "^4.12.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",

@@ -287,7 +287,7 @@ export default class Prismic {
     })
   }
 
-  public async createRepository(args: CreateRepositoryArgs): Promise<AxiosResponse> {
+  public async createRepository(args: CreateRepositoryArgs): Promise<AxiosResponse<string>> {
     /*
     const hasAuth = await this.isAuthenticated()
 
