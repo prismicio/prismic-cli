@@ -5,6 +5,9 @@
   "main": "lib/index.js",
   "repository": "https://github.com/prismicio/prismic-cli",
   "author": "prismic.io developers",
+  "files": [
+    "lib"
+  ],
   "contributors": [
     "Marc McIntosh <marcmcintosh1987@gmail.com>"
   ],

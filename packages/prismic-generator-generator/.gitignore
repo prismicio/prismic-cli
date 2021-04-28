@@ -1,0 +1,4 @@
+node_modules
+*.log
+app/index.js
+app/index.d.ts
