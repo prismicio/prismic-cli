@@ -53,7 +53,6 @@ export default class StoryBookNext extends PrismicGenerator {
     // TODO: add   "../.slicemachine/assets/slices/**/*.stories.js" to story book config.
 
     const config = this.readDestination('nuxt.config.js')
-
     const updatedConfig = modifyNuxtConfig(config, localLibs)
 
     this.writeDestination('nuxt.config.js', updatedConfig)

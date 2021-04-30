@@ -52,7 +52,12 @@ export default class StoryBookNext extends Generator {
     // read sm file for local libraries.
     const localLibs = libraries.filter(lib => lib.startsWith('@/')).map(lib => lib.substring(2))
 
-    const stories = localLibs.map(p => `../${p}/**/*.stories.[tj]s`)
+    const stories = localLibs.reduce<ReadonlyArray<string>>((acc, p) => {
+      return acc.concat([
+        `../${p}/**/*.stories.[tj]s`,
+        `../.slicemachine/assets/${p}/**/*.stories.[tj]s`
+      ])
+    }, [])
 
     // TODO: add   "../.slicemachine/assets/slices/**/*.stories.js"
 
