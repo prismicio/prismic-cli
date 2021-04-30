@@ -22,6 +22,8 @@ export default class extends PrismicGenerator {
    * end - Called last, cleanup, say good bye, etc
    */
 
+  slicemachine: boolean | undefined;
+
   async initializing() {
     this.destinationRoot(this.path)
   }
@@ -32,25 +34,32 @@ export default class extends PrismicGenerator {
 
   async prompting() {
     if (!this.pm) await this.promptForPackageManager()
+    this.slicemachine = await this.prompt({
+      name: 'slicemachine',
+      type: 'confirm',
+      default: true,
+      message: 'Slice Machine',
+    }).then(res => res.slicemachine)
   }
 
   async default() {
     const opts = {framework: 'next', domain: this.domain, prismic: this.prismic, path: this.destinationRoot(), pm: this.pm, ...this.options}
-    
-    this.composeWith({
-      Generator: SliceMachineSetup,
-      path: require.resolve('../slicemachine'),
-    }, opts)
-
-    this.composeWith({
-      Generator: CreateSlice,
-      path: require.resolve('../create-slice'),
-    }, opts)
-
-    this.composeWith({
-      Generator: AddStorybook,
-      path: require.resolve('../storybook'),
-    }, opts)
+    if (this.slicemachine) {
+      this.composeWith({
+        Generator: SliceMachineSetup,
+        path: require.resolve('../slicemachine'),
+      }, opts)
+  
+      this.composeWith({
+        Generator: CreateSlice,
+        path: require.resolve('../create-slice'),
+      }, opts)
+  
+      this.composeWith({
+        Generator: AddStorybook,
+        path: require.resolve('../storybook'),
+      }, opts)
+    }
   }
 
   async writing() {
