@@ -3,11 +3,6 @@ import {createEnv, GeneratorMeta} from 'yeoman-environment'
 const env = createEnv()
 
 env.register(
-  require.resolve('../generators/NextJS'),
-  'prismic-next',
-)
-
-env.register(
   require.resolve('../generators/Nuxt'),
   'prismic-nuxt',
 )
