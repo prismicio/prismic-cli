@@ -71,7 +71,6 @@ export default function modifyNuxtConfig(source: string, libraryNames: Array<str
                     }, [])
 
                     libraryNames.forEach(lib => {
-                      console.log({libLoop: lib, values, pathLib: pathString(lib)})
                       if (values.includes(pathString(lib)) === false && t.isArrayExpression(storyBookProps.value)) {
                         storyBookProps.value.elements.push(toCustomSlicePath(lib))
                         storyBookProps.value.elements.push(toGeneratedSlicePath(lib))
