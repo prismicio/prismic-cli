@@ -35,30 +35,15 @@ export default class CreateSlice extends PrismicGenerator {
    */
   answers: Record<string, string> = {}
 
-  framework: 'next' | undefined
-
   constructor(argv: string|string[], opts: TemplateOptions) {
     super(argv, opts)
 
     if (this.destinationRoot().endsWith(this.path) === false) {
       this.destinationRoot(this.path)
     }
-
-    if (opts.framework) {
-      this.config.set('framework', opts.framework)
-      this.framework = opts.framework
-    }
   }
 
   async prompting() {
-    const pkJson = this.readDestinationJSON('package.json', {}) as Record<string, any>
-
-    const deps = pkJson.dependencies || {}
-
-    if (!this.framework && deps.next) {
-      this.framework = 'next'
-      this.config.set('framework', this.framework)
-    }
 
     const {library} = isValidPath(this.options.library) ? this.options : await inquirer.prompt([{
       type: 'text',

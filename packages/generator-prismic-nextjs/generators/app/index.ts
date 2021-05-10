@@ -1,4 +1,4 @@
-import PrismicGenerator from "@prismicio/prismic-yeoman-generator"
+import PrismicGenerator from '@prismicio/prismic-yeoman-generator'
 export default class extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
@@ -25,7 +25,7 @@ export default class extends PrismicGenerator {
   }
 
   async configuring() {
-    this.config.set('framework', 'next')
+    this.config.set('framework', 'nextjs')
   }
 
   async prompting() {
@@ -39,7 +39,7 @@ export default class extends PrismicGenerator {
   }
 
   async default() {
-    const opts = {framework: 'next', domain: this.domain, prismic: this.prismic, path: this.destinationRoot(), pm: this.pm, ...this.options}
+    const opts = {framework: 'nextjs', domain: this.domain, prismic: this.prismic, path: this.destinationRoot(), pm: this.pm, ...this.options}
 
     const subgenerators = [
       require.resolve('../slicemachine'),

@@ -31,7 +31,7 @@ export default class SliceMachine extends PrismicGenerator {
       this.config.set('framework', opts.framework)
       this.framework = opts.framework
     } else {
-      this.framework = this.config.get('framework') || 'next'
+      this.framework = this.config.get('framework') || 'nextjs'
       this.config.set('framework', this.framework)
     }
 
@@ -42,14 +42,7 @@ export default class SliceMachine extends PrismicGenerator {
 
   async prompting() {
     const base = new URL(this.prismic.base)
-    const pkJson = this.readDestinationJSON('package.json', {}) as Record<string, any>
-
-    const deps = pkJson.dependencies || {}
-
-    if (!this.framework && deps.next) {
-      this.framework = 'next'
-    }
-
+    
     if (!this.domain) {
       const validateRepositoryName = this.prismic.validateRepositoryName
       const domainPrompt: Question = {
