@@ -31,12 +31,12 @@ export default class extends Generator {
           message: 'package manager',
           choices: [
             {
-              name: 'Npm',
-              value: 'npm',
-            },
-            {
               name: 'Yarn',
               value: 'yarn',
+            },
+            {
+              name: 'Npm',
+              value: 'npm',
             },
           ],
         },
