@@ -2,11 +2,6 @@ import {createEnv, GeneratorMeta} from 'yeoman-environment'
 
 const env = createEnv()
 
-env.register(
-  require.resolve('../generators/Nuxt'),
-  'prismic-nuxt',
-)
-
 export const all = env.lookup({
   packagePatterns: ['generator-prismic-*'],
 })
@@ -23,3 +18,5 @@ export const apps = Object.entries(meta).reduce<Record<string, GeneratorMeta>>((
 }, {})
 
 export default env
+
+console.log({all, names, meta, apps})
