@@ -1,8 +1,4 @@
-import PrismicGenerator from '@prismicio/prismic-yeoman-generator'
-import SliceMachineSetup from '../slicemachine'
-import CreateSlice from '../create-slice'
-import AddStorybook from '../storybook'
-
+import PrismicGenerator from "@prismicio/prismic-yeoman-generator"
 export default class extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
@@ -44,21 +40,15 @@ export default class extends PrismicGenerator {
 
   async default() {
     const opts = {framework: 'next', domain: this.domain, prismic: this.prismic, path: this.destinationRoot(), pm: this.pm, ...this.options}
+
+    const subgenerators = [
+      require.resolve('../slicemachine'),
+      require.resolve('../create-slice'),
+      require.resolve('../storybook'),
+    ]
+    
     if (this.slicemachine) {
-      this.composeWith({
-        Generator: SliceMachineSetup,
-        path: require.resolve('../slicemachine'),
-      }, opts)
-  
-      this.composeWith({
-        Generator: CreateSlice,
-        path: require.resolve('../create-slice'),
-      }, opts)
-  
-      this.composeWith({
-        Generator: AddStorybook,
-        path: require.resolve('../storybook'),
-      }, opts)
+      this.composeWith(subgenerators, opts)
     }
   }
 
