@@ -38,6 +38,7 @@
     "generator-prismic-react": "^4.0.0",
     "generator-prismic-vue": "^4.0.0",
     "generator-prismic-nextjs": "^4.0.0",
+    "generator-prismic-nuxt": "^4.0.0",
     "inquirer": "^7.3.3",
     "is-valid-path": "^0.1.1",
     "libnpmconfig": "^1.2.1",
