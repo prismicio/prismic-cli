@@ -42,6 +42,11 @@ export default class CreateSlice extends PrismicGenerator {
     if (this.destinationRoot().endsWith(this.path) === false) {
       this.destinationRoot(this.path)
     }
+
+    const framework = this.config.get('framework')
+    if (!framework) {
+      this.config.set('framework', 'nuxt')
+    }
   }
 
   async prompting() {
@@ -77,7 +82,7 @@ export default class CreateSlice extends PrismicGenerator {
     const description = toDescription(this.answers.sliceName)
 
     this.fs.copyTpl(
-      this.templatePath('library/slice/**'), 
+      this.templatePath('library/slice/**'),
       pathToLib,
       {sliceName: this.answers.sliceName, sliceType: this.answers.sliceType, sliceId: sliceId, description},
     )

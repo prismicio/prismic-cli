@@ -86,7 +86,7 @@ export default class Nuxt extends PrismicGenerator {
     const subgenerators = [
       require.resolve('../slicemachine'),
       require.resolve('../create-slice'),
-      require.resolve('../add-storybook'),
+      require.resolve('../storybook'),
     ]
 
     if (this.answers.slicemachine) {
