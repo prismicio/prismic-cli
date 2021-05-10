@@ -56,7 +56,13 @@ export default class Nuxt extends PrismicGenerator {
 
   async prompting() {
     // ask normal nuxt questions from create-nuxt-app/lib/prompts
-    const prompts = [...NuxtPrompts, {
+    const nuxtPrompts = NuxtPrompts.map(p => {
+      if (p.name === 'name') return {...p, default: this.domain}
+      // do the same for github user name
+      if (p.name === 'gitUsername') return {...p, default: this.user.github.username}
+      return p
+    })
+    const prompts = [...nuxtPrompts, {
       name: 'slicemachine',
       type: 'confirm',
       default: true,
