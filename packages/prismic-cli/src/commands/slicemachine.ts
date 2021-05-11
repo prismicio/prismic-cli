@@ -56,7 +56,7 @@ export default class Slicemachine extends Command {
     }),
 
     framework: flags.string({
-      options: ['next', 'nuxt'],
+      options: ['nextjs', 'nuxt'],
     }),
 
     list: flags.boolean({
@@ -97,22 +97,22 @@ export default class Slicemachine extends Command {
 
   private async readGeneratorsFromToRc(folder: string): Promise<Array<string>> {
     const pathToYoRc = path.join(folder, '.yo-rc.json')
-    const hasYoRn = fs.existsSync(pathToYoRc)
-    
-    if (!hasYoRn) return Promise.resolve([])
+    const hasYoRc = fs.existsSync(pathToYoRc)
 
-    const YoRc: Record<string, any> = require(pathToYoRc)
+    if (!hasYoRc) return Promise.resolve([])
+
+    const YoRc: Record<string, any> = JSON.parse(fs.readFileSync(pathToYoRc, 'utf-8'))
     const generatorNames = Object.keys(YoRc)
     .filter(d => d.startsWith('generator-prismic-'))
     .map(d => d.replace(/^generator-/, ''))
-    
+
     return Promise.resolve(generatorNames)
   }
 
   async maybePromptForFrameWork(frameworksInYoRc: Array<string>, subGeneratorName: string): Promise<string> {
     const choices = (frameworksInYoRc.length === 0) ? (
       this.posibleFrameWorksForSubGeneratorAsPromtps(subGeneratorName)
-    ) : frameworksInYoRc.map(d => ({name: d.replace(/^prismic/, ''), value: d}))
+    ) : frameworksInYoRc.map(d => ({name: d.replace(/^prismic-/, ''), value: d}))
 
     return inquirer.prompt<{framework: string}>({
       type: 'list',
@@ -165,7 +165,6 @@ export default class Slicemachine extends Command {
   }
 
   async run() {
-
     const {flags} = this.parse(Slicemachine)
 
     const folder = flags.folder || process.cwd()

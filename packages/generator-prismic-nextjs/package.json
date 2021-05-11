@@ -1,7 +1,7 @@
 {
   "name": "generator-prismic-nextjs",
   "version": "4.0.0",
-  "main": "generators/app/index.js",
+  "main": "generators/app",
   "license": "Apache-2.0",
   "private": false,
   "engines": {
