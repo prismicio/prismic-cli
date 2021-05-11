@@ -11,7 +11,7 @@ describe('theme', () => {
   const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=xyz'
   const tmpDir = os.tmpdir()
 
-  let fakeFolder = path.join(tmpDir, 'test-theme')
+  const fakeFolder = path.join(tmpDir, 'test-theme')
 
   const fakeSource = 'https://github.com/prismicio/fake-theme'
 
@@ -22,7 +22,6 @@ describe('theme', () => {
   beforeEach(async () => {
     if (fs.existsSync(fakeFolder)) {
       await fs.rmdir(fakeFolder, {recursive: true})
-      fakeFolder = path.join(tmpDir, 'test-theme')
     }
   })
 

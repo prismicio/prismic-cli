@@ -38,7 +38,7 @@ export default class NextJS extends PrismicGenerator {
       this.destinationPath(),
       {domain: this.domain},
       undefined,
-      {globOptions: {dot: true}}
+      {globOptions: {dot: true}},
     )
 
     const pkjJson = {

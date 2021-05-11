@@ -45,7 +45,7 @@ export default class CreateSlice extends PrismicGenerator {
 
   async prompting() {
 
-    const {library} = isValidPath(this.options.library) ? this.options : await inquirer.prompt([{
+    const {library} = isValidPath(this.options.library) ? this.options : await inquirer.prompt<{library: string}>([{
       type: 'text',
       name: 'library',
       default: 'slices',
@@ -56,7 +56,7 @@ export default class CreateSlice extends PrismicGenerator {
       },
     }])
 
-    const {sliceName} = validateSliceName(this.options.sliceName) ? this.options : await inquirer.prompt([{
+    const {sliceName} = validateSliceName(this.options.sliceName) ? this.options : await inquirer.prompt<{sliceName: string}>([{
       type: 'text',
       name: 'sliceName',
       message: 'Enter the name of your slice (2 words, PascalCased)',

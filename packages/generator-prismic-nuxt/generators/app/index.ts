@@ -90,7 +90,7 @@ export default class Nuxt extends PrismicGenerator {
     ]
 
     if (this.answers.slicemachine) {
-      this.composeWith(subgenerators, opts)
+      subgenerators.forEach(g => this.composeWith(g, opts))
     }
   }
 

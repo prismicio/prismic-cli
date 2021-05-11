@@ -1,4 +1,5 @@
-import PrismicGenerator from '@prismicio/prismic-yeoman-generator'
+import PrismicGenerator, { TemplateOptions } from '@prismicio/prismic-yeoman-generator'
+import * as inquirer from 'inquirer'
 export default class extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
@@ -18,7 +19,7 @@ export default class extends PrismicGenerator {
    * end - Called last, cleanup, say good bye, etc
    */
 
-  slicemachine: boolean | undefined;
+  // slicemachine: boolean | undefined;
 
   async initializing() {
     this.destinationRoot(this.path)
@@ -30,16 +31,20 @@ export default class extends PrismicGenerator {
 
   async prompting() {
     if (!this.pm) await this.promptForPackageManager()
-    this.slicemachine = await this.prompt({
-      name: 'slicemachine',
-      type: 'confirm',
-      default: true,
-      message: 'Slice Machine',
-    }).then(res => res.slicemachine)
+    if (this.options.slicemachine === undefined) {
+      this.options.slicemachine = await inquirer.prompt<{slicemachine: boolean}>([{
+    
+        name: 'slicemachine',
+        type: 'confirm',
+        default: true,
+        message: 'Slice Machine',
+      }]).then(res => res.slicemachine)
+    }
+
   }
 
   async default() {
-    const opts = {framework: 'nextjs', domain: this.domain, prismic: this.prismic, path: this.destinationRoot(), pm: this.pm, ...this.options}
+    const opts = {framework: 'nextjs', force: this.force, domain: this.domain, prismic: this.prismic, path: this.destinationRoot(), pm: this.pm, ...this.options}
 
     const subgenerators = [
       require.resolve('../slicemachine'),
@@ -47,8 +52,9 @@ export default class extends PrismicGenerator {
       require.resolve('../storybook'),
     ]
     
-    if (this.slicemachine) {
-      this.composeWith(subgenerators, opts)
+    if (this.options.slicemachine) {
+      // this.composeWith(subgenerators, opts)
+      subgenerators.forEach(d => this.composeWith(d, opts))
     }
   }
 

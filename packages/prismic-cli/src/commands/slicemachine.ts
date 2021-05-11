@@ -155,7 +155,7 @@ export default class Slicemachine extends Command {
     return this.runSubGenerator('storybook', folder, opts)
   }
 
-  async envRun(generatorName: string, options = {}): Promise<void> {
+  async envRun(generatorName: string, options: Record<string, any>): Promise<void> {
     return new Promise((resolve, reject) => {
       return env.run(generatorName, options, err => {
         if (err) return reject(err)

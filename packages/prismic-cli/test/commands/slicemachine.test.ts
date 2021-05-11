@@ -37,11 +37,11 @@ describe('slicemachine', () => {
     }
 
     test
-    .stdout()
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(fs, 'existsSync', () => true)
     .stub(lookpath, 'lookpath', async () => false)
+    .stdin('y\n', 1000) // TODO: force flag is being ignored
     .nock(fakeBase, api => {
       return api
       .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
@@ -66,7 +66,6 @@ describe('slicemachine', () => {
     })
 
     test
-    .stdout()
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
     .command(['slicemachine', '--create-slice', '--library', 'slices', '--sliceName', 'MySlice', '--folder', fakeFolder, '--force', '--framework', 'nextjs'])
@@ -79,7 +78,7 @@ describe('slicemachine', () => {
     })
 
     test
-    .stdout()
+    .stdin('y\n', 1000)
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(lookpath, 'lookpath', async () => false)
@@ -94,6 +93,11 @@ describe('slicemachine', () => {
     const appName = 'test-slicemachine-nuxt'
     const fakeFolder = path.join(tmpDir, appName)
 
+    const fakeReadFileSync: any = (args: string): string => {
+      if (args.endsWith('.yo-rc.json')) return JSON.stringify({'generator-prismic-nuxt': {framework: 'nuxt'}})
+      return JSON.stringify({base: fakeBase, cookies: fakeCookies})
+    }
+
     before(async () => {
       if (fs.existsSync(fakeFolder)) {
         await fs.rmdir(fakeFolder, {recursive: true})
@@ -103,9 +107,10 @@ describe('slicemachine', () => {
     })
 
     test
-    .stdout()
-    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(fs, 'existsSync', () => true)
+    .stdin('y\n', 1000) // TODO: Force flag is being ignored
     .stub(lookpath, 'lookpath', async () => false)
     .nock('https://auth.prismic.io', api => {
       api.get('/validate?token=xyz').reply(200, {})
@@ -131,9 +136,10 @@ describe('slicemachine', () => {
     })
 
     test
-    .stdout()
-    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stdin('y\n', 1000) // TODO: force flag doesn't work
+    .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(fs, 'existsSync', () => true)
     .command(['slicemachine', '--create-slice', '--library', 'slices', '--sliceName', 'MySlice', '--folder', fakeFolder, '--force', '--framework', 'nuxt'])
     .it('create-slice', _ => {
       const pathToSlices = path.join(fakeFolder, 'slices')
@@ -144,9 +150,10 @@ describe('slicemachine', () => {
     })
 
     test
-    .stdout()
-    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stdin('y\n', 1000) // TODO: force flag doesn't work
+    .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(fs, 'existsSync', () => true)
     .stub(lookpath, 'lookpath', async () => false)
     .command(['slicemachine', '--add-storybook', '--framework', 'nuxt', '--folder', fakeFolder, '--force', '--skip-install'])
     .it('add-storybook', async _ => {
@@ -159,9 +166,9 @@ describe('slicemachine', () => {
 
   describe('list', () => {
     test
+    .skip()
     .stdout()
     .stderr()
-    .skip()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(fs, 'existsSync', () => true)
@@ -179,7 +186,6 @@ describe('slicemachine', () => {
     const boostrapFakeWriteFile = sinon.fake.resolves(undefined)
 
     const setup = test
-    .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'existsSync', () => true)
     .stub(fs, 'readFile',  async () => JSON.stringify({apiEndpoint: 'https://marc.cdn.prismic.io/api/v2'}))

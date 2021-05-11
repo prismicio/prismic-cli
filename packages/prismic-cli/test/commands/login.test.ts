@@ -66,7 +66,6 @@ describe('login', () => {
   })
 
   test
-  .stdout()
   .stub(cli, 'prompt', () => async (message: string): Promise<string> => {
     if (message.includes('Email')) return Promise.resolve(fakeEmail)
     if (message.includes('Password')) return Promise.resolve(fakePassword)
@@ -80,7 +79,7 @@ describe('login', () => {
     .reply(200, {}, {'set-cookie': [fakeCookie]})
   })
   .command(['login'])
-  .it('prompts for user name and password')
+  .it('prompts for user name and password', _ => _)
 
   test
   .skip()

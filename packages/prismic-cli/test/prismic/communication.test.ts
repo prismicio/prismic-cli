@@ -275,7 +275,7 @@ describe('prismic/communication.ts', () => {
     .add('prismic', () => new Prismic())
     .nock(fakeBase, api => {
       // const query = qs.stringify({domain: repoName, plan: 'personal', isAnnual: 'false'})
-      return api.post('/authentication/newrepository?app=slicemachine', /* query */)
+      return api.post('/authentication/newrepository?app=slicemachine' /* query */)
       .reply(200, repoName)
     })
     .do(async ctx => {
@@ -290,7 +290,7 @@ describe('prismic/communication.ts', () => {
     .stub(fs, 'readFileSync', sinon.fake.returns(configWithOauth))
     .nock('https://api.prismic.io', api => {
       // const query = qs.stringify({domain: repoName, plan: 'personal', isAnnual: 'false', access_token: 'token'})
-      return api.post('/management/repositories?app=slicemachine', /* query */).reply(200, {
+      return api.post('/management/repositories?app=slicemachine' /* query */).reply(200, {
         domain: repoName,
       })
     })
@@ -307,7 +307,7 @@ describe('prismic/communication.ts', () => {
     .stub(fs, 'writeFile', () => Promise.resolve())
     .nock('https://api.prismic.io', api => {
       // const query = qs.stringify({domain: repoName, plan: 'personal', isAnnual: 'false', access_token: 'token'})
-      return api.post('/management/repositories?app=slicemachine', /* query */).reply(303, {
+      return api.post('/management/repositories?app=slicemachine' /* query */).reply(303, {
         domain: repoName,
       })
     })
@@ -326,7 +326,7 @@ describe('prismic/communication.ts', () => {
 
     test
     .nock('https://prismic.io', api => {
-      api.post('/authentication/newrepository?app=slicemachine', /* query */).reply(401)
+      api.post('/authentication/newrepository?app=slicemachine' /* query */).reply(401)
       // api.post('/authentication/newrepository?app=slicemachine', /* query */).reply(200, {domain: repoName})
       return api
     })
@@ -347,7 +347,7 @@ describe('prismic/communication.ts', () => {
 
     test
     .nock('https://prismic.io', api => {
-      api.post('/authentication/newrepository?app=slicemachine', /* query */).reply(303)
+      api.post('/authentication/newrepository?app=slicemachine' /* query */).reply(303)
       // api.post('/authentication/newrepository?app=slicemachine', /* query */).reply(200, {domain: repoName})
       return api
     })

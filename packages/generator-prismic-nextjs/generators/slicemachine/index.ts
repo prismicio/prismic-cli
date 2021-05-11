@@ -101,7 +101,7 @@ export default class SliceMachine extends PrismicGenerator {
       latest: '0.0.43',
     }, undefined, {
       globOptions: {dot: true},
-    })
+    }) 
 
     if (useSrc) {
       this.deleteDestination('pages')

@@ -103,14 +103,14 @@ describe('new', () => {
     })
 
     test
-    .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(lookpath, 'lookpath', async () => false)
     .stub(inquirer, 'prompt', async () => {
       return {
+        slicemachine: true,
         library: 'slices',
-        sliceName: 'MySlice',
+        sliceName: 'TestSlice',
       }
     })
     .nock('https://auth.prismic.io', api => {
@@ -122,8 +122,8 @@ describe('new', () => {
       .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
       .post('/authentication/newrepository?app=slicemachine').reply(200, fakeDomain)
     })
-    .command(['new', '--template', 'Next', '--domain', fakeDomain, '--folder', fakeFolder, '--force', '--skip-install'])
-    .it('should generate a next.js slicemachine project', _ => {
+    .command(['new', '--template', 'NextJS', '--domain', fakeDomain, '--folder', fakeFolder, '--force', '--skip-install'])
+    .it('should generate a next.js slicemachine project', async _ => {
       const pkJsonPath = path.join(fakeFolder, 'package.json')
       const smJsonPath = path.join(fakeFolder, 'sm.json')
       expect(fs.existsSync(pkJsonPath)).to.be.true
@@ -138,7 +138,7 @@ describe('new', () => {
       const pathToSlices = path.join(fakeFolder, 'slices')
       expect(fs.existsSync(pathToSlices)).to.be.true
 
-      const pathToMySlice = path.join(pathToSlices, 'MySlice')
+      const pathToMySlice = path.join(pathToSlices, 'TestSlice')
       expect(fs.existsSync(pathToMySlice)).to.be.true
 
       const pathToStoryBook = path.join(fakeFolder, '.storybook/main.js')
@@ -170,6 +170,7 @@ describe('new', () => {
       devTools: [],
       gitUsername: 'none',
       vcs: 'none',
+      slicemachine: true,
     })
     .onSecondCall()
     .resolves({
@@ -183,7 +184,6 @@ describe('new', () => {
     })
 
     test
-    .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(lookpath, 'lookpath', async () => false)

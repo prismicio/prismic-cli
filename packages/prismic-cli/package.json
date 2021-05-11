@@ -66,7 +66,7 @@
     "@types/semver": "^7.3.5",
     "@types/tmp": "^0.2.0",
     "chai": "^4",
-    "eslint": "^5.13",
+    "eslint": "^7",
     "eslint-config-oclif": "^3.1",
     "eslint-config-oclif-typescript": "^0.1",
     "globby": "^10",
