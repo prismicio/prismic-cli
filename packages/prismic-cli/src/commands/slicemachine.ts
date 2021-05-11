@@ -1,10 +1,11 @@
 import {flags} from '@oclif/command'
-import {createEnv} from 'yeoman-environment'
+import env, {meta, filterMetaFor} from '../prismic/yeoman-env'
 import Command from '../prismic/base-command'
 import * as path from 'path'
 import {fs} from '../utils'
 import {execSync} from 'child_process'
 import {lookpath} from 'lookpath'
+import * as inquirer from 'inquirer'
 
 const globby = require('fast-glob')
 
@@ -94,11 +95,76 @@ export default class Slicemachine extends Command {
     }),
   }
 
+  private async readGeneratorsFromToRc(folder: string): Promise<Array<string>> {
+    const pathToYoRc = path.join(folder, '.yo-rc.json')
+    const hasYoRn = fs.existsSync(pathToYoRc)
+    
+    if (!hasYoRn) return Promise.resolve([])
+
+    const YoRc: Record<string, any> = require(pathToYoRc)
+    const generatorNames = Object.keys(YoRc)
+    .filter(d => d.startsWith('generator-prismic-'))
+    .map(d => d.replace(/^generator-/, ''))
+    
+    return Promise.resolve(generatorNames)
+  }
+
+  async maybePromptForFrameWork(frameworksInYoRc: Array<string>, subGeneratorName: string): Promise<string> {
+    const choices = (frameworksInYoRc.length === 0) ? (
+      this.posibleFrameWorksForSubGeneratorAsPromtps(subGeneratorName)
+    ) : frameworksInYoRc.map(d => ({name: d.replace(/^prismic/, ''), value: d}))
+
+    return inquirer.prompt<{framework: string}>({
+      type: 'list',
+      choices,
+      name: 'framework',
+      message: 'Which framework to use',
+    }).then(res => res.framework)
+  }
+
+  private posibleFrameWorksForSubGeneratorAsPromtps(subGeneratorName: string) {
+    const generatorsWithSubGenerators = filterMetaFor(meta, subGeneratorName)
+    return Object.values(generatorsWithSubGenerators).map(d => {
+      const name = d.namespace.replace(/^prismic-/, '')
+      const value = d.namespace
+      return {name, value}
+    })
+  }
+
+  private async runSubGenerator(name: string, folder: string, opts: Record<string, any>) {
+    return this.readGeneratorsFromToRc(folder)
+    .then(res => {
+      if (res.length === 0 || res.length > 1) return this.maybePromptForFrameWork(res, name)
+      return res[0]
+    })
+    .then(framework => {
+      const setup = `${framework}:${name}`
+      return this.envRun(setup, opts)
+    })
+  }
+
+  private async handleSetup(folder: string, opts: Record<string, any>) {
+    return this.runSubGenerator('slicemachine', folder, opts)
+  }
+
+  private async handleCreateSlice(folder: string, opts: Record<string, any>) {
+    return this.runSubGenerator('create-slice', folder, opts)
+  }
+
+  private async handleStorybook(folder: string, opts: Record<string, any>) {
+    return this.runSubGenerator('storybook', folder, opts)
+  }
+
+  async envRun(generatorName: string, options = {}): Promise<void> {
+    return new Promise((resolve, reject) => {
+      return env.run(generatorName, options, err => {
+        if (err) return reject(err)
+        return resolve()
+      })
+    })
+  }
+
   async run() {
-    const env = createEnv()
-    env.register(require.resolve('../generators/slicemachine/setup'), 'setup')
-    env.register(require.resolve('../generators/slicemachine/create-slice'), 'create-slice')
-    env.register(require.resolve('../generators/slicemachine/storybook'), 'storybook')
 
     const {flags} = this.parse(Slicemachine)
 
@@ -107,21 +173,11 @@ export default class Slicemachine extends Command {
     const opts = {...flags, prismic: this.prismic, path: folder}
 
     if (flags['create-slice']) {
-      return new Promise((resolve, reject) => {
-        env.run('create-slice', opts, (err: Error | null) => {
-          if (err) return reject(err)
-          return resolve(undefined)
-        })
-      })
+      return this.handleCreateSlice(folder, opts)
     }
 
     if (flags['add-storybook']) {
-      return new Promise((resolve, reject) => {
-        env.run('storybook', opts, (err: Error | null) => {
-          if (err) return reject(err)
-          return resolve(undefined)
-        })
-      })
+      return this.handleStorybook(folder, opts)
     }
 
     if (flags.setup) {
@@ -131,12 +187,7 @@ export default class Slicemachine extends Command {
         await this.login()
       }
 
-      return new Promise((resolve, reject) => {
-        env.run('setup', {...opts, domain}, (err: Error | null) => {
-          if (err) return reject(err)
-          return resolve(undefined)
-        })
-      })
+      return this.handleSetup(folder, {...opts, domain})
     }
 
     if (flags.list) {
@@ -191,7 +242,7 @@ export default class Slicemachine extends Command {
       .then(res => {
         const url = new URL(this.prismic.base)
         url.hostname = `${res.data}.${url.hostname}`
-        return this.log(`log('Your SliceMachine repository was successfully created!') ${url.toString()}`)
+        return this.log(`Your SliceMachine repository was successfully created! ${url.toString()}`)
       })
       .then(() => fs.readFile(smFilePath, 'utf-8'))
       .then(str => JSON.parse(str))

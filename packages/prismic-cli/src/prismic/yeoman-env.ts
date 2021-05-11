@@ -10,25 +10,16 @@ export const names = env.getGeneratorNames() // names of the generators
 
 export const meta = env.getGeneratorsMeta() // local first logic
 
-function filterFor(generatorsMeta: Record<string, GeneratorMeta>, end: string): Record<string, GeneratorMeta> {
+export function filterMetaFor(generatorsMeta: Record<string, GeneratorMeta>, subGeneratorName: string): Record<string, GeneratorMeta> {
   return Object.entries(generatorsMeta)
   .reduce<Record<string, GeneratorMeta>>((acc, [key, value]) => {
-    if (key.endsWith(`:${end}`)) {
+    if (key.endsWith(`:${subGeneratorName}`)) {
       return {...acc, [key]: value}
     }
     return acc
   }, {})
 }
 
-export const apps = filterFor(meta, 'app')
-
-export const hasCreateSlice = filterFor(meta, 'create-slice')
-
-export const hasSliceMachine = filterFor(meta, 'slicemachine')
-
-export const hasStorybook = filterFor(meta, 'storybook')
+export const apps = filterMetaFor(meta, 'app')
 
 export default env
-
-// console.log({all, names, meta, apps})
-
