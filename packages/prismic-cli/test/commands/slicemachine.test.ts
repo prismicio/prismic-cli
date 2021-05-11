@@ -23,14 +23,24 @@ describe('slicemachine', () => {
       if (fs.existsSync(fakeFolder)) {
         await fs.rmdir(fakeFolder, {recursive: true})
       }
-      const pathToTemplate = path.resolve(__dirname, '../../src/generators/NextJS/templates')
+      const pathToTemplate = path.resolve(
+        require.resolve('generator-prismic-nextjs'),
+        '..',
+        'templates',
+      )
       return fs.copy(pathToTemplate, fakeFolder)
     })
 
+    const fakeReadFileSync: any = (args: string): string => {
+      if (args.endsWith('.yo-rc.json')) return JSON.stringify({'generator-prismic-nextjs': {framework: 'nextjs'}})
+      return JSON.stringify({base: fakeBase, cookies: fakeCookies})
+    }
+
     test
     .stdout()
-    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(fs, 'existsSync', () => true)
     .stub(lookpath, 'lookpath', async () => false)
     .nock(fakeBase, api => {
       return api
@@ -41,7 +51,7 @@ describe('slicemachine', () => {
       api.get('/validate?token=xyz').reply(200, {})
       api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
     })
-    .command(['slicemachine', '--setup', '--folder', fakeFolder, '--framework', 'next', '--domain', fakeDomain, '--force', '--skip-install'])
+    .command(['slicemachine', '--setup', '--folder', fakeFolder, '--framework', 'nextjs', '--domain', fakeDomain, '--force', '--skip-install'])
     .it('setup creates sm.json', _ => {
       const pkJsonPath = path.join(fakeFolder, 'package.json')
       const smJsonPath = path.join(fakeFolder, 'sm.json')
@@ -57,9 +67,9 @@ describe('slicemachine', () => {
 
     test
     .stdout()
-    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
-    .command(['slicemachine', '--create-slice', '--library', 'slices', '--sliceName', 'MySlice', '--folder', fakeFolder, '--force', '--framework', 'next'])
+    .command(['slicemachine', '--create-slice', '--library', 'slices', '--sliceName', 'MySlice', '--folder', fakeFolder, '--force', '--framework', 'nextjs'])
     .it('create-slice', _ => {
       const pathToSlices = path.join(fakeFolder, 'slices')
       expect(fs.existsSync(pathToSlices)).to.be.true
@@ -70,10 +80,10 @@ describe('slicemachine', () => {
 
     test
     .stdout()
-    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(lookpath, 'lookpath', async () => false)
-    .command(['slicemachine', '--add-storybook', '--framework', 'next', '--folder', fakeFolder, '--force', '--skip-install'])
+    .command(['slicemachine', '--add-storybook', '--framework', 'nextjs', '--folder', fakeFolder, '--force', '--skip-install'])
     .it('add-storybook', _ => {
       const pathToStoryBook = path.join(fakeFolder, '.storybook/main.js')
       expect(fs.existsSync(pathToStoryBook)).to.be.true
