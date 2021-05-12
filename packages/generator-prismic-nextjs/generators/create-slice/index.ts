@@ -44,7 +44,6 @@ export default class CreateSlice extends PrismicGenerator {
   }
 
   async prompting() {
-
     const {library} = isValidPath(this.options.library) ? this.options : await inquirer.prompt<{library: string}>([{
       type: 'text',
       name: 'library',

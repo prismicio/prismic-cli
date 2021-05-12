@@ -36,10 +36,10 @@ export default function modifyNuxtConfig(source: string, libraryNames: Array<str
               t.objectExpression([
                 t.objectProperty(
                   t.identifier('stories'),
-                  t.arrayExpression(pathsToSlices)
+                  t.arrayExpression(pathsToSlices),
                 ),
-              ])
-            )
+              ]),
+            ),
           )
         } else {
           path.node.properties.forEach((prop: t.ObjectMethod | t.ObjectProperty | t.SpreadElement) => {
@@ -50,8 +50,8 @@ export default function modifyNuxtConfig(source: string, libraryNames: Array<str
                 prop.value.properties.push(
                   t.objectProperty(
                     t.identifier('stories'),
-                    t.arrayExpression(pathsToSlices)
-                  )
+                    t.arrayExpression(pathsToSlices),
+                  ),
                 )
               } else {
                 // TODO: how would this handle deletions
@@ -79,8 +79,8 @@ export default function modifyNuxtConfig(source: string, libraryNames: Array<str
               t.identifier('ignore'),
               t.arrayExpression([
                 t.stringLiteral('**/*.stories.js'),
-              ])
-            )
+              ]),
+            ),
           )
         } else {
           path.node.properties.forEach(prop => {

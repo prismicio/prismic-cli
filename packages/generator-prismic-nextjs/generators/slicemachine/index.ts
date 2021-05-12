@@ -42,7 +42,7 @@ export default class SliceMachine extends PrismicGenerator {
 
   async prompting() {
     const base = new URL(this.prismic.base)
-    
+
     if (!this.domain) {
       const validateRepositoryName = this.prismic.validateRepositoryName
       const domainPrompt: Question = {
@@ -92,7 +92,7 @@ export default class SliceMachine extends PrismicGenerator {
 
     // theses files could be removed from this package but would have to come from create-next-app
     const useSrc = existsSync(this.destinationPath('src'))
-    
+
     this.fs.copyTpl(this.templatePath(), this.destinationPath(), {
       smFile: SM_FILE,
       useSrc,
@@ -101,7 +101,7 @@ export default class SliceMachine extends PrismicGenerator {
       latest: '0.0.43',
     }, undefined, {
       globOptions: {dot: true},
-    }) 
+    })
 
     if (useSrc) {
       this.deleteDestination('pages')

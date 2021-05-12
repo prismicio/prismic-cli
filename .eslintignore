@@ -1,6 +1,6 @@
 /lib
 templates
 node_modules
-test/__stubs__/**
+**/test/__stubs__/**
 .env*
 __tmp__

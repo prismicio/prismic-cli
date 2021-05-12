@@ -1,4 +1,4 @@
-import PrismicGenerator, { TemplateOptions } from '@prismicio/prismic-yeoman-generator'
+import PrismicGenerator from '@prismicio/prismic-yeoman-generator'
 import * as inquirer from 'inquirer'
 export default class extends PrismicGenerator {
   /**
@@ -33,14 +33,13 @@ export default class extends PrismicGenerator {
     if (!this.pm) await this.promptForPackageManager()
     if (this.options.slicemachine === undefined) {
       this.options.slicemachine = await inquirer.prompt<{slicemachine: boolean}>([{
-    
+
         name: 'slicemachine',
         type: 'confirm',
         default: true,
         message: 'Slice Machine',
       }]).then(res => res.slicemachine)
     }
-
   }
 
   async default() {
@@ -51,7 +50,7 @@ export default class extends PrismicGenerator {
       require.resolve('../create-slice'),
       require.resolve('../storybook'),
     ]
-    
+
     if (this.options.slicemachine) {
       // this.composeWith(subgenerators, opts)
       subgenerators.forEach(d => this.composeWith(d, opts))
@@ -64,7 +63,7 @@ export default class extends PrismicGenerator {
       this.destinationPath(),
       {domain: this.domain},
       undefined,
-      {globOptions: {dot: true}}
+      {globOptions: {dot: true}},
     )
 
     const pkjJson = {

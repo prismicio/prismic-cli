@@ -12,7 +12,7 @@ export default class StoryBookNext extends Generator {
    * install - Where installations are run (npm, bower)
    * end - Called last, cleanup, say good bye, etc
    */
-  
+
   constructor(argv: string|string[], opts: TemplateOptions) {
     super(argv, opts)
 

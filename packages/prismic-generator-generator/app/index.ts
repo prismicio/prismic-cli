@@ -52,7 +52,7 @@ export default class extends Generator {
     this.fs.copyTpl(
       this.templatePath('**'),
       this.destinationPath(),
-      {name: this.name}
+      {name: this.name},
     )
 
     this.moveDestination('_.gitignore', '.gitignore')

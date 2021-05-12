@@ -24,6 +24,8 @@
     ]
   },
   "scripts": {
-    "prepack": "yarn workspaces run prepack"
+    "prepack": "yarn workspaces run prepack",
+    "test": "yarn workspaces run test",
+    "posttest": "eslint . --ext .ts --config .eslintrc"
   }
 }

@@ -120,9 +120,9 @@ export default class PrismicNuxt extends PrismicGenerator {
 
   async end() {
     const sliceZoneReadmeUrl = 'https://prismic.io/docs/technologies/vue-slicezone-technical-reference'
-    
+
     const quickStartDocsUrl = 'https://prismic.io/docs/technologies/nuxtjs'
-    
+
     const addSlicesDocsUrl = 'https://prismic.io/docs/technologies/generate-model-component-nuxtjs'
 
     const url = new URL(this.prismic.base)

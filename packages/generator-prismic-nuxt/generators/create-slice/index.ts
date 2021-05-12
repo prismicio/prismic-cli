@@ -35,7 +35,6 @@ export default class CreateSlice extends PrismicGenerator {
    */
   answers: Record<string, string> = {}
 
-
   constructor(argv: string|string[], opts: TemplateOptions) {
     super(argv, opts)
 
