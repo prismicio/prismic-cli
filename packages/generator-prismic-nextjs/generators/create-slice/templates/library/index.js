@@ -1,1 +1,1 @@
-export { default as <%= sliceName %> } from './<%= sliceName %>' ..
+export { default as <%= sliceName %> } from './<%= sliceName %>'
