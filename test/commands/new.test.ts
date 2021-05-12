@@ -220,7 +220,7 @@ describe('new', () => {
       const pathToNuxtConfig = path.join(fakeFolder, 'nuxt.config.js')
       expect(fs.existsSync(pathToNuxtConfig)).to.be.true
       const config = await fs.readFile(pathToNuxtConfig, {encoding: 'utf-8'})
-      expect(config).to.include('stories: ["~/slices/**/*.stories.[tj]s"]')
+      expect(config).to.include('stories: ["~/slices/**/*.stories.[tj]s", "~/.slicemachine/assets/slices/**/*.stories.[tj]s"]')
     })
   })
 

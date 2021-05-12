@@ -2,6 +2,5 @@
   "apiEndpoint": "https://<%= domain %>.cdn.prismic.io/api/v2",
   "libraries": [
     "<%= defaultLibrary %>"
-  ],
-  "_latest": "<%= latest %>"
+  ]
 }
