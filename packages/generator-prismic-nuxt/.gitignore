@@ -1,4 +1,5 @@
 node_modules
-*.d.ts
-*.js
-!/**/templates/**/*.js
+*.log
+generators/*/*.d.ts
+generators/*/*.js
+!generators/**/templates

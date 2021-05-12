@@ -1,5 +1,5 @@
-*.log
 node_modules
-*.d.ts
-*.js
-!/**/templates/**/*.js
+*.log
+app/*.d.ts
+app/*.js
+!app/templates
