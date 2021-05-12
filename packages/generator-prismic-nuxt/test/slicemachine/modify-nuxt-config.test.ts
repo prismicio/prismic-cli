@@ -1,5 +1,5 @@
-import {expect} from '@oclif/test'
-import modifyNuxtConfig from '../../src/generators/slicemachine/setup/modify-nuxt-config'
+import {expect} from 'chai'
+import modifyNuxtConfig from '../../generators/slicemachine/modify-nuxt-config'
 
 const input = `export default {
   // Global page headers: https://go.nuxtjs.dev/config-head

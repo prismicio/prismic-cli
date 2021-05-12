@@ -186,6 +186,5 @@ export interface Documents {
 export interface SliceMachineJson {
   apiEndpoint: string;
   libraries: Array<string>;
-  _latest: string;
   storybook?: string;
 }

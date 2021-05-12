@@ -98,7 +98,6 @@ export default class SliceMachine extends PrismicGenerator {
       useSrc,
       defaultLibrary: 'essential-slices',
       domain: this.domain,
-      latest: '0.0.43',
     }, undefined, {
       globOptions: {dot: true},
     })

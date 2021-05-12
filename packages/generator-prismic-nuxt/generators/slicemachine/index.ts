@@ -89,7 +89,6 @@ export default class PrismicNuxt extends PrismicGenerator {
 
     this.fs.copyTpl(this.templatePath(), this.destinationPath(), {
       domain: this.domain,
-      latest: '0.0.43',
       defaultLibrary: 'vue-essential-slices',
     })
 

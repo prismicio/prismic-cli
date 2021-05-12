@@ -18,9 +18,16 @@ function getKeys(properties: Array<t.ObjectMethod | t.ObjectProperty | t.SpreadE
 export default function modifyNuxtConfig(source: string, libraryNames: Array<string>): string {
   const ast = parser.parse(source, {sourceType: 'module'})
 
-  const pathString = (lib: string) => npath.join('~', lib, '**', '*.stories.[tj]s')
-  const toSlicePath = (libName: string) => t.stringLiteral(pathString(libName))
-  const pathsToSlices = libraryNames.map(libraryName => toSlicePath(libraryName))
+  const pathString = (libPath: string) => npath.posix.join('~', libPath, '**', '*.stories.[tj]s')
+
+  const toCustomSlicePath = (libName: string) => t.stringLiteral(pathString(libName))
+  const toGeneratedSlicePath = (libName: string) => t.stringLiteral(pathString(npath.posix.join('.slicemachine', 'assets', libName)))
+  const pathsToSlices = libraryNames.reduce<Array<t.StringLiteral>>((acc, libraryName) => {
+    return acc.concat([
+      toCustomSlicePath(libraryName),
+      toGeneratedSlicePath(libraryName),
+    ])
+  }, [])
 
   traverse(ast, {
     ObjectExpression(path) {
@@ -64,7 +71,8 @@ export default function modifyNuxtConfig(source: string, libraryNames: Array<str
 
                     libraryNames.forEach(lib => {
                       if (values.includes(pathString(lib)) === false && t.isArrayExpression(storyBookProps.value)) {
-                        storyBookProps.value.elements.push(toSlicePath(lib))
+                        storyBookProps.value.elements.push(toCustomSlicePath(lib))
+                        storyBookProps.value.elements.push(toGeneratedSlicePath(lib))
                       }
                     })
                   }

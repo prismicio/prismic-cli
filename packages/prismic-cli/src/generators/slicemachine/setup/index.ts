@@ -4,6 +4,7 @@ import modifyNuxtConfig from './modify-nuxt-config'
 import * as chalk from 'chalk'
 import message from './message'
 import {existsSync} from 'fs'
+import { default as addStoryBookConfig } from '../storybook/modify-nuxt-config'
 
 const {SM_FILE} = require('sm-commons/consts')
 
@@ -148,9 +149,7 @@ export default class SliceMachine extends PrismicGenerator {
 
     if (this.framework === 'nuxt') {
       const config = this.readDestination('nuxt.config.js')
-
       const updatedConfig = modifyNuxtConfig(config, this.domain)
-
       this.writeDestination('nuxt.config.js', updatedConfig)
     }
 
@@ -166,7 +165,6 @@ export default class SliceMachine extends PrismicGenerator {
     }
     this.fs.copyTpl(this.templatePath('default/**'), this.destinationPath(), {
       domain: this.domain,
-      latest: '0.0.43',
       defaultLibrary: defaultLibForFrameWork(this.framework),
     })
 

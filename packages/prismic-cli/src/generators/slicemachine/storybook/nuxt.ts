@@ -2,7 +2,7 @@ import PrismicGenerator, {TemplateOptions, SliceMachineJson} from '../../prismic
 import modifyNuxtConfig from './modify-nuxt-config'
 const {SM_FILE} = require('sm-commons/consts')
 
-export default class StoryBookNext extends PrismicGenerator {
+export default class StoryBookNuxt extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
    * prompting - Where you prompt users for options (where you’d call this.prompt())
@@ -53,7 +53,6 @@ export default class StoryBookNext extends PrismicGenerator {
     // TODO: add   "../.slicemachine/assets/slices/**/*.stories.js" to story book config.
 
     const config = this.readDestination('nuxt.config.js')
-
     const updatedConfig = modifyNuxtConfig(config, localLibs)
 
     this.writeDestination('nuxt.config.js', updatedConfig)

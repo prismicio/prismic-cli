@@ -151,6 +151,5 @@ export default class CreateSlice extends PrismicGenerator {
 
 export interface SliceMachineConfig {
   libraries: Array<string>;
-  _latest: string;
   apiEndpoint: string;
 }

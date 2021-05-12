@@ -1,6 +1,6 @@
-import {expect} from '@oclif/test'
+import {expect} from 'chai'
 
-import modifyNuxtConfig from '../../../src/generators/slicemachine/storybook/modify-nuxt-config'
+import modifyNuxtConfig from '../../generators/storybook/modify-nuxt-config'
 
 describe('storybook#modify-nuxt-config', () => {
   it('should add ignore **/*.stories.js when no ignore field is present', () => {
@@ -25,14 +25,14 @@ describe('storybook#modify-nuxt-config', () => {
 
   it('should add storybook.stories = ["~/slices/**/*.stories.js"] to when no storybook property is found', () => {
     const input = 'export default {}'
-    expect(modifyNuxtConfig(input, ['slices'])).to.contain('stories: ["~/slices/**/*.stories.[tj]s"]')
+    expect(modifyNuxtConfig(input, ['slices'])).to.contain('stories: ["~/slices/**/*.stories.[tj]s", "~/.slicemachine/assets/slices/**/*.stories.[tj]s"]')
   })
 
   it('should add stories: ["~/slices/**/*.stories.js"] to when no storybook', () => {
     const input = `export default {
       storybook: {},
     }`
-    expect(modifyNuxtConfig(input, ['slices'])).to.contain('stories: ["~/slices/**/*.stories.[tj]s"]')
+    expect(modifyNuxtConfig(input, ['slices'])).to.contain('stories: ["~/slices/**/*.stories.[tj]s", "~/.slicemachine/assets/slices/**/*.stories.[tj]s"]')
   })
 
   it('should add "~/slices/**/*.stories.js" to stories field', () => {
@@ -41,17 +41,17 @@ describe('storybook#modify-nuxt-config', () => {
         stories: ["foo"]
       },
     }`
-    expect(modifyNuxtConfig(input, ['slices'])).to.contain('stories: ["foo", "~/slices/**/*.stories.[tj]s"]')
+    expect(modifyNuxtConfig(input, ['slices'])).to.contain('stories: ["foo", "~/slices/**/*.stories.[tj]s", "~/.slicemachine/assets/slices/**/*.stories.[tj]s"]')
   })
 
   it('should not add duplicate entries', () => {
     const input = `export default {
       storybook: {
-        stories: ["~/slices/**/*.stories.[tj]s"]
+        stories: ["~/slices/**/*.stories.[tj]s", "~/.slicemachine/assets/slices/**/*.stories.[tj]s"]
       },
     }`
 
-    expect(modifyNuxtConfig(input, ['slices'])).to.contain('stories: ["~/slices/**/*.stories.[tj]s"]')
+    expect(modifyNuxtConfig(input, ['slices'])).to.contain('stories: ["~/slices/**/*.stories.[tj]s", "~/.slicemachine/assets/slices/**/*.stories.[tj]s"]')
   })
 })
 
