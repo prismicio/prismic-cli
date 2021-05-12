@@ -4,7 +4,7 @@ import Generator, {TemplateOptions, Documents} from '../src'
 import * as path from 'path'
 import * as os from 'os'
 import * as fs from 'fs'
-import type Prismic from 'prismic-cli/lib/prismic/communication'
+import type Prismic from 'prismic-cli/src/prismic/communication'
 import * as lookpath from 'lookpath'
 import * as sinon from 'sinon'
 

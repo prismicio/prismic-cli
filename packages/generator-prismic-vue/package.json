@@ -19,6 +19,7 @@
     "typescript": "^3.3"
   },
   "scripts": {
-    "prepack": "rm -rf lib && tsc -b"
+    "prepack": "rm -rf lib && tsc -b",
+    "test": "echo \"Error: no test specified\" && exit 0"
   }
 }
