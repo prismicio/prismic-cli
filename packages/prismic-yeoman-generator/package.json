@@ -2,11 +2,11 @@
   "name": "@prismicio/prismic-yeoman-generator",
   "version": "4.0.0",
   "description": "custom yeoman generator for building projects with prismic",
-  "main": "lib/index.js",
+  "main": "src",
   "repository": "https://github.com/prismicio/prismic-cli",
   "author": "prismic.io developers",
   "files": [
-    "lib"
+    "src"
   ],
   "contributors": [
     "Marc McIntosh <marcmcintosh1987@gmail.com>"
