@@ -28,7 +28,6 @@ export default function modifyNuxtConfig(source: string, libraryNames: Array<str
       toGeneratedSlicePath(libraryName)
     ])
   }, [])
-  console.log({ pathsToSlices})
 
   traverse(ast, {
     ObjectExpression(path) {
