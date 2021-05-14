@@ -5,7 +5,7 @@ node_js:
 cache: yarn
 
 script:
-  - ./bin/run --version
-  - ./bin/run --help
+  - ./packages/prismic-cli/bin/run --version
+  - ./packages/prismic-cli/bin/run --help
   - yarn run test
 

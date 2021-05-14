@@ -1,0 +1,115 @@
+{
+  "name": "prismic-cli",
+  "description": "Command line to bootstrap prismic projects.",
+  "version": "4.0.0",
+  "author": "prismic.io developers",
+  "bin": {
+    "prismic": "bin/run"
+  },
+  "bugs": "https://github.com/prismicio/prismic-cli/issues",
+  "contributors": [
+    "Marc McIntosh <marcmcintosh1987@gmail.com>"
+  ],
+  "dependencies": {
+    "@babel/generator": "^7.12.11",
+    "@babel/parser": "^7.12.11",
+    "@babel/traverse": "^7.12.12",
+    "@babel/types": "^7.12.12",
+    "@oclif/command": "^1",
+    "@oclif/config": "^1",
+    "@oclif/plugin-help": "^3",
+    "@prismicio/prismic-generator-generator": "^4.0.0",
+    "@types/adm-zip": "^0.4.33",
+    "@types/inquirer": "^7.3.1",
+    "@types/node": "^14.14.10",
+    "@types/qs": "^6.9.5",
+    "@types/yeoman-generator": "^4.11.3",
+    "adm-zip": "^0.5.1",
+    "axios": "^0.21.0",
+    "chalk": "^4.1.1",
+    "cli-ux": "^5.5.1",
+    "cookie": "^0.4.1",
+    "create-nuxt-app": "^3.5.0",
+    "email-validator": "^2.0.4",
+    "fast-glob": "^3.2.5",
+    "fs-extra": "^9.1.0",
+    "generator-prismic-angular2": "^4.0.0",
+    "generator-prismic-nodejs": "^4.0.0",
+    "generator-prismic-react": "^4.0.0",
+    "generator-prismic-vue": "^4.0.0",
+    "generator-prismic-nextjs": "^4.0.0",
+    "generator-prismic-nuxt": "^4.0.0",
+    "inquirer": "^7.3.3",
+    "is-valid-path": "^0.1.1",
+    "libnpmconfig": "^1.2.1",
+    "lookpath": "^1.2.0",
+    "qs": "^6.9.4",
+    "semver": "^7.3.5",
+    "serialize-error": "^8.0.1",
+    "sinon": "^9.2.1",
+    "sm-commons": "^0.0.23",
+    "tmp-promise": "^3.0.2",
+    "tslib": "^1",
+    "yeoman-environment": "^2.10.3",
+    "yeoman-generator": "^4.12.0"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1",
+    "@oclif/test": "^1",
+    "@types/babel__generator": "^7.6.2",
+    "@types/babel__traverse": "^7.11.0",
+    "@types/chai": "^4",
+    "@types/cookie": "^0.4.0",
+    "@types/fs-extra": "^9.0.7",
+    "@types/is-valid-path": "^0.1.0",
+    "@types/mocha": "^5",
+    "@types/semver": "^7.3.5",
+    "@types/tmp": "^0.2.0",
+    "chai": "^4",
+    "eslint": "^7",
+    "eslint-config-oclif": "^3.1",
+    "eslint-config-oclif-typescript": "^0.1",
+    "globby": "^10",
+    "mocha": "^5",
+    "nock": "^13.0.5",
+    "nyc": "^14",
+    "rimraf": "^3.0.2",
+    "ts-node": "^8",
+    "typescript": "^3.3"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json",
+    "/src"
+  ],
+  "homepage": "https://github.com/prismicio/prismic-cli",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "Apache-2.0",
+  "main": "lib/index.js",
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "prismic",
+    "plugins": [
+      "@oclif/plugin-help"
+    ],
+    "hooks": {
+      "postrun": "./lib/hooks/postrun/updates"
+    }
+  },
+  "repository": "prismicio/prismic-cli",
+  "scripts": {
+    "postpack": "rimraf oclif.manifest.json",
+    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "nyc --extension .ts mocha \"test/**/*.test.ts\"",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "types": "lib/index.d.ts"
+}
