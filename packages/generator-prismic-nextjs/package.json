@@ -27,12 +27,13 @@
     "fancy-test": "^1.4.10",
     "mocha": "^5",
     "nyc": "14",
+    "rimraf": "^3.0.2",
     "typescript": "^3.3",
     "yeoman-assert": "^3.1.0",
     "yeoman-test": "^1.7.0"
   },
   "scripts": {
-    "prepack": "tsc -b",
+    "prepack": "rimraf generators/**/*.js generators/**/*.d.ts !generators/**/templates && tsc -b",
     "test": "echo \"Error: no test specified\" && exit 0"
   }
 }

@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "files": ["app"],
   "scripts": {
-    "prepack": "tsc -b",
+    "prepack": "rimraf src/index.js src/index.d.ts && tsc -b",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/yeoman-generator": "^4.11.3",
     "@types/node": "^14.14.10",
+    "rimraf": "^3.0.2",
     "typescript": "^3.3"
   }
 }

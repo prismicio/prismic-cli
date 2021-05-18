@@ -16,10 +16,11 @@
   },
   "devDependencies": {
     "@types/node": "^14.14.10",
+    "rimraf": "^3.0.2",
     "typescript": "^3.3"
   },
   "scripts": {
-    "prepack": "rm -rf lib && tsc -b",
+    "prepack": "rimraf generators/**/*.js generators/**/*.d.ts !generators/**/templates && tsc -b",
     "test": "echo \"Error: no test specified\" && exit 0"
   }
 }

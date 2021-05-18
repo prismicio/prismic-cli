@@ -26,10 +26,11 @@
     "fancy-test": "1.4.10",
     "mocha": "^5",
     "nyc": "^14",
+    "rimraf": "^3.0.2",
     "typescript": "^3.3"
   },
   "scripts": {
-    "prepack": "rm -rf lib && tsc -b",
+    "prepack": "rimraf generators/**/*.js generators/**/*.d.ts !generators/**/templates && tsc -b",
     "test": "nyc --extension .ts mocha \"test/**/*.test.ts\""
   }
 }

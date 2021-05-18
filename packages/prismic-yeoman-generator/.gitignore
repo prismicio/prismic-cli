@@ -32,6 +32,7 @@
 /dist
 /lib
 src/*.js
+src/*.d.ts
 /package-lock.json
 /tmp
 __tmp__
@@ -44,4 +45,5 @@ node_modules
 npm-debug.log*
 pids
 
-#/old
+test/**/*.js
+test/**/*.d.ts
