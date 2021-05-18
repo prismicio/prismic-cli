@@ -1,4 +1,4 @@
-import PrismicGenerator, {TemplateOptions} from './prismic-generator'
+import PrismicGenerator, {TemplateOptions} from '@prismicio/prismic-yeoman-generator'
 import * as path from 'path'
 import {AxiosResponse} from 'axios'
 import cli from 'cli-ux'

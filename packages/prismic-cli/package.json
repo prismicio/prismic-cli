@@ -19,6 +19,7 @@
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^3",
     "@prismicio/prismic-generator-generator": "^4.0.0",
+    "@prismicio/prismic-yeoman-generator": "^4.0.0",
     "@types/adm-zip": "^0.4.33",
     "@types/inquirer": "^7.3.1",
     "@types/node": "^14.14.10",
