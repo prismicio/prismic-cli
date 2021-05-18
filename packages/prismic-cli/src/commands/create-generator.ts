@@ -4,6 +4,8 @@ import {createEnv} from 'yeoman-environment'
 export default class CreateGenerator extends Command {
   static description = 'create a new generator'
 
+  static hidden = true
+
   static flags = {
     help: flags.help({char: 'h'}),
     // flag with a value (-n, --name=VALUE)
