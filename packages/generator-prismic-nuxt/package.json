@@ -30,6 +30,7 @@
     "typescript": "^3.3"
   },
   "scripts": {
+    "clean": "rimraf generators/**/*.js generators/**/*.d.ts !generators/**/templates",
     "prepack": "rimraf generators/**/*.js generators/**/*.d.ts !generators/**/templates && tsc -b",
     "test": "nyc --extension .ts mocha \"test/**/*.test.ts\""
   }

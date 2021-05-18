@@ -106,6 +106,7 @@
   },
   "repository": "prismicio/prismic-cli",
   "scripts": {
+    "clean": "rimraf lib",
     "postpack": "rimraf oclif.manifest.json",
     "posttest": "eslint . --ext .ts --config .eslintrc",
     "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",

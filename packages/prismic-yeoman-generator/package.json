@@ -47,6 +47,7 @@
     "prismic-cli": "^4.0.0"
   },
   "scripts": {
+    "clean": "rimraf src/**/*.js src/**/*.d.ts",
     "prepack": "rimraf src/**/*.js src/**/*.d.ts && tsc -b",
     "posttest": "eslint . --ext .ts --config .eslintrc",
     "test": "nyc --extension .ts mocha \"test/**/*.test.ts\""

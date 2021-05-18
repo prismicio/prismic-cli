@@ -22,6 +22,7 @@
     "typescript": "^3.3"
   },
   "scripts": {
+    "clean": "rimraf generators/**/*.js generators/**/*.d.ts !generators/**/templates",
     "prepack": "rimraf generators/**/*.js generators/**/*.d.ts !generators/**/templates && tsc -b",
     "test": "echo \"Error: no test specified\" && exit 0"
   }
