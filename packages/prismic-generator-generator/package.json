@@ -21,5 +21,6 @@
     "@types/yeoman-generator": "^4.11.3",
     "rimraf": "^3.0.2",
     "typescript": "^3.3"
-  }
+  },
+  "gitHead": "9a57711ab52676e9af876d7a0f2592be97163273"
 }
