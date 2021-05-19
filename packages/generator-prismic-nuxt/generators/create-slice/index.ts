@@ -85,6 +85,11 @@ export default class CreateSlice extends PrismicGenerator {
       pathToLib,
       {sliceName: this.answers.sliceName, sliceType: this.answers.sliceType, sliceId: sliceId, description},
     )
+
+    /* for the slicemachine update */
+    const slicesDirectoryPath = path.join('.slicemachine', 'assets', pathToLib)
+    this.moveDestination(path.join(pathToLib, 'index.stories.js'), path.join(slicesDirectoryPath, 'index.stories.js'))
+    this.moveDestination(path.join(pathToLib, 'mocks.json'), path.join(slicesDirectoryPath, 'mocks.json'))
   }
 
   async writing() {
