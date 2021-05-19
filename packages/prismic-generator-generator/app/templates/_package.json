@@ -20,6 +20,7 @@
     "typescript": "^3.3"
   },
   "scripts": {
-    "prepack": "rimraf generators/**/*.js generators/**/*.d.ts !generators/**/templates && tsc -b"
+    "clean": "rimraf !generators/**/templates generators/**/*.js generators/**/*.d.ts",
+    "prepack": "rimraf !generators/**/templates generators/**/*.js generators/**/*.d.ts && tsc -b"
   }
 }
