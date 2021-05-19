@@ -1,6 +1,6 @@
 {
   "name": "generator-prismic-nextjs",
-  "version": "4.0.1-alpha.0",
+  "version": "4.0.1-alpha.1",
   "main": "generators/app",
   "license": "Apache-2.0",
   "private": false,
@@ -11,7 +11,7 @@
     "generators"
   ],
   "dependencies": {
-    "@prismicio/prismic-yeoman-generator": "^4.0.1-alpha.0",
+    "@prismicio/prismic-yeoman-generator": "^4.0.1-alpha.1",
     "chalk": "^4.1.1",
     "inquirer": "^7.3.3",
     "is-valid-path": "^0.1.1",
