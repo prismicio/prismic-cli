@@ -1,13 +1,17 @@
 import * as Generator from 'yeoman-generator'
+import * as path from 'path'
 
 export default class extends Generator {
   name: string | undefined;
 
   pm: 'npm' | 'yarn' | undefined;
 
+  language: 'javascript'| 'typescript' | undefined;
+
   constructor(argv: string | string[], opts: Generator.GeneratorOptions) {
     super(argv, opts)
     this.name = opts.name
+    this.language = opts.language
   }
 
   async prompting() {
@@ -21,6 +25,21 @@ export default class extends Generator {
           validate: value => value ? true : 'required',
         },
       ]).then(res => `generator-prismic-${res.name}`)
+    }
+
+    if (!this.language) {
+      this.language = await this.prompt([
+        {
+          type: 'list',
+          name: 'lanaguage',
+          default: 'javascript',
+          choices: [
+            {name: 'JavaScript', value: 'javasccript'},
+            {name: 'TypeScript', value: 'typescript'},
+          ],
+          message: 'Language',
+        },
+      ]).then(res => res.lanaguage)
     }
 
     if (!this.pm) {
@@ -49,15 +68,19 @@ export default class extends Generator {
   }
 
   async writing() {
+    const template = path.join(this.language || 'javascript', '**')
+
     this.fs.copyTpl(
-      this.templatePath('**'),
+      this.templatePath(template),
       this.destinationPath(),
       {name: this.name},
     )
 
     this.moveDestination('_.gitignore', '.gitignore')
-    this.moveDestination('_tsconfig.json', 'tsconfig.json')
     this.moveDestination('_package.json', 'package.json')
+    if (this.language === 'typescript') {
+      this.moveDestination('_tsconfig.json', 'tsconfig.json')
+    }
   }
 
   async install() {
