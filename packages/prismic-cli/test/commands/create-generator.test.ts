@@ -4,7 +4,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import * as rimraf from 'rimraf'
 
-describe.only('create-generator', () => {
+describe('create-generator', () => {
   const tmpDir = os.tmpdir()
   const jsDir = path.join(tmpDir, 'js-generator-test')
   const tsDir = path.join(tmpDir, 'ts-generator-test')
