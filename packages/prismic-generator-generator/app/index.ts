@@ -8,10 +8,18 @@ export default class extends Generator {
 
   language: 'javascript'| 'typescript' | undefined;
 
+  path: string | undefined
+
   constructor(argv: string | string[], opts: Generator.GeneratorOptions) {
     super(argv, opts)
+    this.pm = opts.pm
     this.name = opts.name
     this.language = opts.language
+    this.path = opts.path
+  }
+
+  async initializing() {
+    if (this.path) this.destinationRoot(this.path)
   }
 
   async prompting() {
