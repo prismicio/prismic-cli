@@ -8,8 +8,8 @@
     "app"
   ],
   "scripts": {
-    "clean": "rimraf !app/**/templates app/**/*.js app/**/*.d.ts",
-    "prepack": "rimraf !app/**/templates app/**/*.js app/**/*.d.ts && tsc -b",
+    "clean": "rimraf !app/**/templates app/index.js app/index.d.ts",
+    "prepack": "rimraf !app/**/templates app/index.js app/index.d.ts && tsc -b",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
