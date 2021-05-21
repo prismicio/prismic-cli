@@ -42,7 +42,7 @@ export default class extends Generator {
           name: 'lanaguage',
           default: 'javascript',
           choices: [
-            {name: 'JavaScript', value: 'javasccript'},
+            {name: 'JavaScript', value: 'javascript'},
             {name: 'TypeScript', value: 'typescript'},
           ],
           message: 'Language',
