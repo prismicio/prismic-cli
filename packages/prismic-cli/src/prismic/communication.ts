@@ -230,18 +230,18 @@ export default class Prismic {
     })
   }
 
-  private async validateSession(): Promise<AxiosResponse> {
+  async validateSession(): Promise<AxiosResponse> {
     return this.auth('validate')
   }
 
-  private async refreshSession(): Promise<void> {
+  async refreshSession(): Promise<void> {
     return this.auth('refreshtoken').then(res => {
       const token = cookie.serialize('prismic-auth', res.data)
       return this.setCookies([token])
     })
   }
 
-  private async validateAndRefresh(): Promise<void> {
+  async validateAndRefresh(): Promise<void> {
     // TDOD: does this handle oauthAccessTokens?
     return this.validateSession().then(() => this.refreshSession())
   }
