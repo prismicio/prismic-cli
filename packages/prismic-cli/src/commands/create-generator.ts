@@ -16,6 +16,32 @@ export default class CreateGenerator extends Command {
     'skip-install': flags.boolean({
       default: false,
     }),
+
+    pm: flags.string({
+      char: 'p',
+      description: 'package manager',
+      required: false,
+      options: ['npm', 'yarn'],
+    }),
+
+    language: flags.string({
+      char: 'l',
+      description: 'language to write the generator in',
+      required: false,
+      options: ['js', 'ts'],
+      parse: value => {
+        switch (value) {
+        case 'js': return 'javascript'
+        case 'ts': return 'typescript'
+        default: return value
+        }
+      },
+    }),
+
+    path: flags.string({
+      char: 'f',
+      description: 'project where to create the generator',
+    }),
   }
 
   async run() {

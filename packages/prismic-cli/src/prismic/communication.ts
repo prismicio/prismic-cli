@@ -91,6 +91,10 @@ export function toAuthUrl(path: 'validate' | 'refreshtoken', token: string, base
   return url.toString()
 }
 
+/**
+ * Handles communcation logic between the cli and prismic.io, should be treated as a singleton.
+ * @class
+ */
 export default class Prismic {
   public configPath: string;
 
@@ -147,6 +151,11 @@ export default class Prismic {
     return this.updateConfig({base: this.base, cookies: mergedCookie})
   }
 
+  /**
+   * A custom instance of axios for communicating with prismic.io
+   * @param {AxiosInstanceOptions} [options] - options passed to axios.create()
+   * @returns {AxiosInstance} - axios instance.
+   */
   axios(options?: AxiosInstanceOptions): AxiosInstance {
     const headers = {
       'User-Agent': `prismic-cli/${version}`,
@@ -165,6 +174,15 @@ export default class Prismic {
     return Axios.create(opts)
   }
 
+  /**
+   * Handles login logic using email and password or an oauth access token
+   * @param {Object} data - Login data
+   * @param {String} [data.base = https://prismic.io] - where to login
+   * @param {String} [data.email] - users email address
+   * @param {String} [data.password] - users password
+   * @param {String} [data.oauthaccesstoken] - for logingin in with SSO
+   * @returns {Promise} - will either resolve or reject
+   */
   public async login(data: LoginData): Promise<void> {
     const {base, email, password, oauthaccesstoken} = data
     const params = oauthaccesstoken ? {oauthaccesstoken} : {email, password}
@@ -186,6 +204,14 @@ export default class Prismic {
     return this.axios().get(url)
   }
 
+  /**
+   * creates a new prismic account
+   * @param {String} email - the email address to associate with the account
+   * @param {String} password - the password for the account
+   * @param {String} [base = https://prismic.io] - where to make the account
+   * @returns 
+   */
+
   async signUp(email: string, password: string, base?: string): Promise<AxiosResponse> {
     if (base) {
       this.base = base
@@ -204,22 +230,26 @@ export default class Prismic {
     })
   }
 
-  async validateSession(): Promise<AxiosResponse> {
+  private async validateSession(): Promise<AxiosResponse> {
     return this.auth('validate')
   }
 
-  async refreshSession(): Promise<void> {
+  private async refreshSession(): Promise<void> {
     return this.auth('refreshtoken').then(res => {
       const token = cookie.serialize('prismic-auth', res.data)
       return this.setCookies([token])
     })
   }
 
-  async validateAndRefresh(): Promise<void> {
+  private async validateAndRefresh(): Promise<void> {
     // TDOD: does this handle oauthAccessTokens?
     return this.validateSession().then(() => this.refreshSession())
   }
 
+  /**
+   * Checks if the user is authenticated
+   * @returns {Promise} - resolves if the user is authenticated
+   */
   public async isAuthenticated(): Promise<boolean> {
     // TODO: find out if / how the authh server handles oauth tokens
     // if (this.oauthAccessToken) return Promise.resolve(true)
@@ -240,6 +270,11 @@ export default class Prismic {
     })
   }
 
+  /**
+   * Promtps the user to reauthenticate
+   * @returns {Promise} - resolves if successful
+   */
+
   public async reAuthenticate(): Promise<void> {
     // TODO: this will eventually have to be moved.
     const email =  await cli.prompt('Email')
@@ -251,6 +286,12 @@ export default class Prismic {
       throw error
     })
   }
+
+  /**
+   * Validates a repository name and checks availability
+   * @param name - repository name
+   * @returns {Promise} - rejects with errors if any, else resolves with the repository name
+   */
 
   public async validateRepositoryName(name?: string): Promise<string> {
     if (!name) return Promise.reject(new Error('repository name is required'))
@@ -286,6 +327,12 @@ export default class Prismic {
       return domain
     })
   }
+
+  /**
+   * creates a prismic repository
+   * @param args
+   * @returns {Promise<AxiosResponse<string>>} - AxiosResponse containing the repository name
+   */
 
   public async createRepository(args: CreateRepositoryArgs): Promise<AxiosResponse<string>> {
     /*

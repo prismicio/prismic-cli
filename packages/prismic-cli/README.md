@@ -36,7 +36,7 @@ USAGE
 * [`prismic new`](#prismic-new)
 * [`prismic signup`](#prismic-signup)
 * [`prismic slicemachine`](#prismic-slicemachine)
-* [`prismic theme [FILE]`](#prismic-theme-file)
+* [`prismic theme [SOURCE]`](#prismic-theme-source)
 * [`prismic whoami`](#prismic-whoami)
 
 ## `prismic help [COMMAND]`
@@ -166,13 +166,16 @@ ALIASES
 
 _See code: [src/commands/slicemachine.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.3/src/commands/slicemachine.ts)_
 
-## `prismic theme [FILE]`
+## `prismic theme [SOURCE]`
 
 Create a project from a zip file or github repository with a new prismic repository.
 
 ```
 USAGE
-  $ prismic theme [FILE]
+  $ prismic theme [SOURCE]
+
+ARGUMENTS
+  SOURCE  path or url to a zip file, or a github Repository for the theme
 
 OPTIONS
   -d, --domain=domain        name of the prismic repository ie: example, becomes https://example.prismic.io

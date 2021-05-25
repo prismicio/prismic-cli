@@ -45,7 +45,11 @@ export default class Theme extends Command {
 
   }
 
-  static args = [{name: 'file'}]
+  static args = [{
+    name: 'source',
+    description: 'path or url to a zip file, or a github Repository for the theme',
+    required: false,
+  }]
 
   async run() {
     const isAuthenticated = await this.prismic.isAuthenticated()
@@ -57,7 +61,7 @@ export default class Theme extends Command {
 
     const domain = await this.validateDomain(flags.domain)
     const folder = await this.validateFolder(flags.folder, domain, flags.force)
-    const theme = await this.validateTheme(flags['theme-url'] || args.file)
+    const theme = await this.validateTheme(flags['theme-url'] || args.source)
 
     generator.register(
       require.resolve('../generators/theme'),
