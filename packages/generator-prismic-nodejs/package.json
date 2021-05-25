@@ -26,5 +26,5 @@
     "prepack": "rimraf generators/**/*.js generators/**/*.d.ts !generators/**/templates && tsc -b",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
-  "gitHead": "9a57711ab52676e9af876d7a0f2592be97163273"
+  "gitHead": "46964e54febf713e995cf465a6fbfc613064b1c4"
 }
