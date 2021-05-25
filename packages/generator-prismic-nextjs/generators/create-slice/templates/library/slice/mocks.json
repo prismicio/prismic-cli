@@ -1,5 +1,5 @@
 [{
-  "id": "<%= sliceId %>",
+  "variation": "<%= sliceId %>",
   "name": "<%= sliceName %>", 
   "docURL": "...",
   "version": "sktwi1xtmkfgx8626",
@@ -15,6 +15,5 @@
       "text": "start by editing this slice from inside the SliceMachine builder!",
       "spans": []
     }]
-  },
-  "slice_type": "<%= sliceType %>"
+  }
 }]

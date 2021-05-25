@@ -83,7 +83,7 @@ export default class CreateSlice extends PrismicGenerator {
     this.fs.copyTpl(
       this.templatePath('library/slice/**'),
       pathToLib,
-      {sliceName: this.answers.sliceName, sliceType: this.answers.sliceType, sliceId: sliceId, description},
+      {sliceName: this.answers.sliceName, sliceId: sliceId, description},
     )
 
     /* for the slicemachine update */
