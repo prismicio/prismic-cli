@@ -75,7 +75,7 @@ export default class PrismicNuxt extends PrismicGenerator {
       devDependencies: {
         'node-sass': '^5.0.0',
         'sass-loader': '^10.1.1',
-        'slice-machine-ui': '0.1.0-alpha.0',
+        'slice-machine-ui': 'alpha',
       },
     }
 
