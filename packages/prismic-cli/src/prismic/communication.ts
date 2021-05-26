@@ -209,7 +209,7 @@ export default class Prismic {
    * @param {String} email - the email address to associate with the account
    * @param {String} password - the password for the account
    * @param {String} [base = https://prismic.io] - where to make the account
-   * @returns 
+   * @returns
    */
 
   async signUp(email: string, password: string, base?: string): Promise<AxiosResponse> {
