@@ -1,6 +1,6 @@
 {
   "name": "generator-prismic-angular2",
-  "version": "4.0.1-aplha.4",
+  "version": "4.0.1-aplha.5",
   "main": "generators/app/index.js",
   "license": "Apache-2.0",
   "private": false,
@@ -11,7 +11,7 @@
     "generators"
   ],
   "dependencies": {
-    "@prismicio/prismic-yeoman-generator": "^4.0.1-aplha.4",
+    "@prismicio/prismic-yeoman-generator": "^4.0.1-aplha.5",
     "tslib": "^1"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 {
   "name": "@prismicio/prismic-generator-generator",
-  "version": "4.0.1-aplha.4",
+  "version": "4.0.1-aplha.5",
   "main": "app/index.js",
   "author": "MarcMcIntosh",
   "license": "Apache-2.0",
