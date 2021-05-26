@@ -112,7 +112,10 @@ export default class Slicemachine extends Command {
   async maybePromptForFrameWork(frameworksInYoRc: Array<string>, subGeneratorName: string): Promise<string> {
     const choices = (frameworksInYoRc.length === 0) ? (
       this.posibleFrameWorksForSubGeneratorAsPromtps(subGeneratorName)
-    ) : frameworksInYoRc.map(d => ({name: d.replace(/^prismic-/, ''), value: d}))
+    ) : frameworksInYoRc.map(d => ({
+      name: d.replace(/^prismic-/, '').replace(/:.+/, ''),
+      value: d.replace(/:.+/, ''),
+    }))
 
     return inquirer.prompt<{framework: string}>({
       type: 'list',
@@ -125,8 +128,8 @@ export default class Slicemachine extends Command {
   private posibleFrameWorksForSubGeneratorAsPromtps(subGeneratorName: string) {
     const generatorsWithSubGenerators = filterMetaFor(meta, subGeneratorName)
     return Object.values(generatorsWithSubGenerators).map(d => {
-      const name = d.namespace.replace(/^prismic-/, '')
-      const value = d.namespace
+      const name = d.namespace.replace(/^prismic-/, '').replace(/:.+/, '')
+      const value = d.namespace.replace(/:.+/, '')
       return {name, value}
     })
   }
