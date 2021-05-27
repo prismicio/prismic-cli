@@ -4,8 +4,8 @@
   "name": "<%= sliceName %>",
   "description": "<%= description %>",
   "variations": [{
-    "id": "default-slice",
-    "name": "Default slice",
+    "id": "default",
+    "name": "Default Slice",
     "docURL": "...",
     "version": "sktwi1xtmkfgx8626",
     "description": "<%= description %>",

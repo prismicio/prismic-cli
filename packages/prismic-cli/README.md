@@ -20,7 +20,7 @@ $ npm install -g prismic-cli
 $ prismic COMMAND
 running command...
 $ prismic (-v|--version|version)
-prismic-cli/4.0.1-alpha.1 darwin-x64 node-v16.0.0
+prismic-cli/4.0.1-aplha.5 darwin-x64 node-v16.0.0
 $ prismic --help [COMMAND]
 USAGE
   $ prismic COMMAND
@@ -68,7 +68,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/list.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.1/src/commands/list.ts)_
+_See code: [src/commands/list.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-aplha.5/src/commands/list.ts)_
 
 ## `prismic login`
 
@@ -85,7 +85,7 @@ OPTIONS
   --password=password                  password
 ```
 
-_See code: [src/commands/login.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.1/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-aplha.5/src/commands/login.ts)_
 
 ## `prismic logout`
 
@@ -99,7 +99,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.1/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-aplha.5/src/commands/logout.ts)_
 
 ## `prismic new`
 
@@ -118,7 +118,7 @@ OPTIONS
   --skip-install           prevent running install command after generating project
 ```
 
-_See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.1/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-aplha.5/src/commands/new.ts)_
 
 ## `prismic signup`
 
@@ -134,7 +134,7 @@ OPTIONS
   --password=password  password
 ```
 
-_See code: [src/commands/signup.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.1/src/commands/signup.ts)_
+_See code: [src/commands/signup.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-aplha.5/src/commands/signup.ts)_
 
 ## `prismic slicemachine`
 
@@ -164,7 +164,7 @@ ALIASES
   $ prismic sm
 ```
 
-_See code: [src/commands/slicemachine.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.1/src/commands/slicemachine.ts)_
+_See code: [src/commands/slicemachine.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-aplha.5/src/commands/slicemachine.ts)_
 
 ## `prismic theme [SOURCE]`
 
@@ -188,7 +188,7 @@ OPTIONS
   --force                    over-write local files
 ```
 
-_See code: [src/commands/theme.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.1/src/commands/theme.ts)_
+_See code: [src/commands/theme.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-aplha.5/src/commands/theme.ts)_
 
 ## `prismic whoami`
 
@@ -202,7 +202,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/whoami.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.1/src/commands/whoami.ts)_
+_See code: [src/commands/whoami.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-aplha.5/src/commands/whoami.ts)_
 <!-- commandsstop -->
 
 # Development
