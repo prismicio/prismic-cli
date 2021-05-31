@@ -83,14 +83,10 @@ export default class Nuxt extends PrismicGenerator {
       ...this.options,
     }
 
-    const subgenerators = [
-      require.resolve('../slicemachine'),
-      require.resolve('../create-slice'),
-      require.resolve('../storybook'),
-    ]
-
     if (this.answers.slicemachine) {
-      subgenerators.forEach(g => this.composeWith(g, opts))
+      this.composeWith('prismic-nuxt:slicemachine', opts)
+      this.composeWith('prismic-nuxt:create-slice', opts)
+      this.composeWith('prismic-nuxt:storybook', opts)
     }
   }
 
