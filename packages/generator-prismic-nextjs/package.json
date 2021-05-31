@@ -33,9 +33,9 @@
     "yeoman-test": "^1.7.0"
   },
   "scripts": {
-    "clean": "rimraf !generators/**/templates generators/**/*.js generators/**/*.d.ts",
-    "prepack": "rimraf !generators/**/templates generators/**/*.js generators/**/*.d.ts && tsc -b",
+    "clean": "rimraf !generators/**/templates/**/*.js generators/**/*.js generators/**/*.d.ts",
+    "prepack": "rimraf !generators/**/templates/**/*.js generators/**/*.js generators/**/*.d.ts && tsc -b",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
-  "gitHead": "46964e54febf713e995cf465a6fbfc613064b1c4"
+  "gitHead": "16f1264b23a11e54023a58ac97f4221a434ac670"
 }

@@ -52,5 +52,5 @@
     "posttest": "eslint . --ext .ts --config .eslintrc",
     "test": "nyc --extension .ts mocha \"test/**/*.test.ts\""
   },
-  "gitHead": "46964e54febf713e995cf465a6fbfc613064b1c4"
+  "gitHead": "16f1264b23a11e54023a58ac97f4221a434ac670"
 }
