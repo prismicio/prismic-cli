@@ -2,7 +2,7 @@
   "packages": [
     "packages/*"
   ],
-  "version": "4.0.1-aplha.5",
+  "version": "4.0.1-aplha.6",
   "useWorkspaces": true,
   "npmClient": "yarn"
 }

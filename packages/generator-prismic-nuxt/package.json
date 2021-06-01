@@ -1,6 +1,6 @@
 {
   "name": "generator-prismic-nuxt",
-  "version": "4.0.1-aplha.5",
+  "version": "4.0.1-aplha.6",
   "main": "generators/app",
   "license": "Apache-2.0",
   "private": false,
@@ -11,7 +11,7 @@
     "generators"
   ],
   "dependencies": {
-    "@prismicio/prismic-yeoman-generator": "^4.0.1-aplha.5",
+    "@prismicio/prismic-yeoman-generator": "^4.0.1-aplha.6",
     "chalk": "^4.1.1",
     "create-nuxt-app": "^3.5.0",
     "inquirer": "^7.3.3",
@@ -30,9 +30,9 @@
     "typescript": "^3.3"
   },
   "scripts": {
-    "clean": "rimraf !generators/**/templates generators/**/*.js generators/**/*.d.ts",
-    "prepack": "rimraf !generators/**/templates generators/**/*.js generators/**/*.d.ts && tsc -b",
+    "clean": "rimraf !generators/**/templates/**/*.js generators/**/*.js generators/**/*.d.ts",
+    "prepack": "rimraf !generators/**/templates/**/*.js generators/**/*.js generators/**/*.d.ts && tsc -b",
     "test": "nyc --extension .ts mocha \"test/**/*.test.ts\""
   },
-  "gitHead": "46964e54febf713e995cf465a6fbfc613064b1c4"
+  "gitHead": "16f1264b23a11e54023a58ac97f4221a434ac670"
 }
