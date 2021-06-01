@@ -24,7 +24,8 @@ export default class Theme extends Command {
       description: 'Url or path to the theme',
     }),
 
-    config: flags.string({
+    conf: flags.string({
+      char: 'c',
       description: 'path to prismic configuration file',
       default: 'prismic-configuration.js',
     }),
@@ -41,6 +42,11 @@ export default class Theme extends Command {
 
     force: flags.boolean({
       description: 'over-write local files',
+    }),
+
+    'skip-install': flags.boolean({
+      description: 'prevent running install command after generating project',
+      default: false,
     }),
 
   }
@@ -74,8 +80,8 @@ export default class Theme extends Command {
         source: theme,
         path: folder,
         prismic: this.prismic,
-        configPath: flags.config,
-        force: flags.force,
+        configPath: flags.conf,
+        ...flags,
       }, ((err: Error, results: any) => {
         if (err) reject(err)
         else resolve(results)
