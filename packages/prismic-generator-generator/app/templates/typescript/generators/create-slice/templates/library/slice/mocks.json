@@ -1,9 +1,9 @@
 [{
-  "variation": "<%= sliceId %>",
-  "name": "<%= sliceName %>", 
+  "variation": "<%%= sliceId %>",
+  "name": "<%%= sliceName %>", 
   "docURL": "...",
   "version": "sktwi1xtmkfgx8626",
-  "description": "<%= description %>",
+  "description": "<%%= description %>",
   "primary": {
     "title": [{
       "type": "heading1",

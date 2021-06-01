@@ -1,14 +1,14 @@
 {
-  "id": "<%= sliceId %>",
+  "id": "<%%= sliceId %>",
   "type": "SharedSlice",
-  "name": "<%= sliceName %>",
-  "description": "<%= description %>",
+  "name": "<%%= sliceName %>",
+  "description": "<%%= description %>",
   "variations": [{
     "id": "default",
     "name": "Default Slice",
     "docURL": "...",
     "version": "sktwi1xtmkfgx8626",
-    "description": "<%= description %>",
+    "description": "<%%= description %>",
     "primary": {
       "title": {
         "type": "StructuredText",
