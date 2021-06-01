@@ -24,10 +24,10 @@
     "@types/mocha": "^5",
     "@types/node": "^14.14.10",
     "chai": "^4",
+    "del-cli": "^3.0.1",
     "fancy-test": "^1.4.10",
     "mocha": "^5",
     "nyc": "14",
-    "del-cli": "^3.0.1",
     "typescript": "^3.3",
     "yeoman-assert": "^3.1.0",
     "yeoman-test": "^1.7.0"
@@ -37,5 +37,5 @@
     "prepack": "del-cli generators/**/*.js generators/**/*.d.ts !generators/**/templates/**/*.js && tsc -b",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
-  "gitHead": "95dbd97cde53ef4d9932dd73ec06763a182ebb8b"
+  "gitHead": "c989865ffc2f200cf1d8a3673bb2568e7c6d6085"
 }
