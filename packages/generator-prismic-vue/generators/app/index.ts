@@ -21,6 +21,7 @@ export default class extends PrismicGenerator {
    */
 
   async initializing() {
+    this.destinationRoot(this.path)
     return this.downloadAndExtractZipFrom('https://github.com/prismicio/vuejs-starter/archive/master.zip', 'vuejs-starter-master')
   }
 

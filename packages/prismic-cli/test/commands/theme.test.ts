@@ -4,6 +4,7 @@ import * as os from 'os'
 import {fs} from '../../src/utils'
 import {Theme as ThemeZip} from '../__stubs__/template'
 import Theme from '../../src/commands/theme'
+import * as lookpath from 'lookpath'
 
 describe('theme', () => {
   const fakeDomain = 'fake-theme-domain'
@@ -26,6 +27,7 @@ describe('theme', () => {
   })
 
   test
+  .stub(lookpath, 'lookpath', async () => false)
   .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
   .stub(fs, 'writeFile', () => Promise.resolve())
   .nock(fakeBase, api => {
@@ -46,7 +48,7 @@ describe('theme', () => {
       'content-length': zip.length.toString(),
     })
   })
-  .command(['theme', fakeSource, '--domain', fakeDomain, '--folder', fakeFolder, '--config', configFile])
+  .command(['theme', fakeSource, '--domain', fakeDomain, '--folder', fakeFolder, '--conf', configFile, '--skip-install'])
   .it('creates a prismic project from a github url', () => {
     const configPath = path.join(fakeFolder, configFile)
     expect(fs.existsSync(fakeFolder)).to.be.true
@@ -58,7 +60,7 @@ describe('theme', () => {
   .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
   .stub(fs, 'writeFile', () => Promise.resolve())
   .do(() => {
-    expect(Theme.flags.config).to.exist
+    expect(Theme.flags.conf).to.exist
     expect(Theme.flags.customTypes).to.exist
     expect(Theme.flags.documents).to.exist
     expect(Theme.flags.domain).to.exist
@@ -66,6 +68,7 @@ describe('theme', () => {
     expect(Theme.flags.force).to.exist
     expect(Theme.flags.help).to.exist
     expect(Theme.flags['theme-url']).to.exist
+    expect(Theme.flags['skip-install']).to.exist
   })
   .it('theme flags')
 })

@@ -52,7 +52,6 @@ export default class extends PrismicGenerator {
     }
   }
 
-
   async writing() {
     this.fs.copyTpl(
       this.templatePath('**'),

@@ -1,6 +1,6 @@
 {
   "name": "generator-prismic-angular2",
-  "version": "4.0.1-aplha.6",
+  "version": "4.0.1-alpha.7",
   "main": "generators/app/index.js",
   "license": "Apache-2.0",
   "private": false,
@@ -11,7 +11,7 @@
     "generators"
   ],
   "dependencies": {
-    "@prismicio/prismic-yeoman-generator": "^4.0.1-aplha.6",
+    "@prismicio/prismic-yeoman-generator": "^4.0.1-alpha.7",
     "tslib": "^1"
   },
   "devDependencies": {
@@ -24,5 +24,5 @@
     "test": "echo \"Error: no test specified\" && exit 0",
     "prepack": "rimraf generators/**/*.js generators/**/*.d.ts !generators/**/templates && tsc -b"
   },
-  "gitHead": "16f1264b23a11e54023a58ac97f4221a434ac670"
+  "gitHead": "c989865ffc2f200cf1d8a3673bb2568e7c6d6085"
 }

@@ -26,8 +26,13 @@ export default class PrismicTheme extends PrismicGenerator {
   }
 
   async initializing() {
+    this.destinationRoot(this.path)
     const innerFolder = this.innerFolderFromGitRepo(this.source)
     return this.downloadAndExtractZipFrom(this.source, innerFolder)
+  }
+
+  async prompting() {
+    this.pm = await this.promptForPackageManager()
   }
 
   async configuring() {
@@ -58,5 +63,13 @@ export default class PrismicTheme extends PrismicGenerator {
         })
       }
     })
+  }
+
+  async install() {
+    if (this.pm === 'yarn') {
+      this.yarnInstall()
+    } else {
+      this.npmInstall()
+    }
   }
 }
