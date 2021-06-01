@@ -21,6 +21,7 @@ export default class extends PrismicGenerator {
    */
 
   async initializing() {
+    this.destinationRoot(this.path)
     return this.downloadAndExtractZipFrom('https://github.com/prismicio/angular2-starter/archive/master.zip', 'angular2-starter-master')
   }
 

@@ -21,6 +21,7 @@ export default class PrismicNodeJS extends PrismicGenerator {
    */
 
   async initializing() {
+    this.destinationRoot(this.path)
     return this.downloadAndExtractZipFrom('https://github.com/prismicio/nodejs-sdk/archive/master.zip', 'nodejs-sdk-master')
   }
 

@@ -15,7 +15,7 @@ describe('create-generator', () => {
 
   test
   .command(['create-generator', '--pm', 'npm', '--language', 'js', '--name', 'js-test', '--path', jsDir, '--skip-install', '--force'])
-  .do(() => {
+  .do(async () => {
     const outDir = path.join(jsDir, 'js-test')
     expect(fs.existsSync(path.join(outDir, 'package.json'))).to.be.true
   })
@@ -23,7 +23,7 @@ describe('create-generator', () => {
 
   test
   .command(['create-generator', '--pm', 'npm', '--language', 'js', '--name', 'ts-test', '--path', tsDir, '--skip-install', '--force'])
-  .do(() => {
+  .do(async () => {
     const outDir = path.join(tsDir, 'ts-test')
     expect(fs.existsSync(outDir)).to.be.true
   })
