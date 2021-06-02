@@ -12,6 +12,7 @@
   ],
   "dependencies": {
     "@prismicio/prismic-yeoman-generator": "^4.0.0",
+    "sm-commons": "^0.0.23",
     "tslib": "^1"
   },
   "devDependencies": {

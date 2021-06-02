@@ -26,7 +26,7 @@ export default class extends Generator {
 
   async prompting() {
     if (!this.name) {
-      this.name = await this.prompt<{name: string}>([
+      this.name = await this.prompt([
         {
           type: 'input',
           name: 'name',
@@ -34,14 +34,14 @@ export default class extends Generator {
           transformer: value => `generator-prismic-${value}`,
           validate: value => value ? true : 'required',
         },
-      ]).then(res => res.name.trim())
+      ]).then(res => `generator-prismic-${res.name}`)
     }
 
     if (!this.language) {
-      this.language = await this.prompt<{language: 'javascript' | 'typescript'}>([
+      this.language = await this.prompt([
         {
           type: 'list',
-          name: 'language',
+          name: 'lanaguage',
           default: 'javascript',
           choices: [
             {name: 'JavaScript', value: 'javascript'},
@@ -49,11 +49,11 @@ export default class extends Generator {
           ],
           message: 'Language',
         },
-      ]).then(res => res.language)
+      ]).then(res => res.lanaguage)
     }
 
     if (!this.pm) {
-      this.pm = await this.prompt<{pm: 'npm' | 'yarn'}>([
+      this.pm = await this.prompt([
         {
           type: 'list',
           name: 'pm',
@@ -73,43 +73,67 @@ export default class extends Generator {
     }
 
     if (!this.slicemachine) {
-      this.slicemachine = await this.prompt<{slicemachine: boolean}>([{
+      this.slicemachine = await this.prompt({
         type: 'confirm',
         name: 'slicemachine',
-        message: 'Support SliceMachine',
+        message: 'SliceMachine',
         default: true,
-      }]).then(res => res.slicemachine)
+      }).then(res => res.slicemachine)
     }
   }
 
   async configuring() {
-    this.destinationRoot(`generator-prismic-${this.name}`)
+    this.destinationRoot(this.name)
   }
 
   async writing() {
-    const template = path.join(this.language || 'javascript', '**')
-    const opts = {
-      name: this.name,
-      packageName: `generator-prismic-${this.name}`,
-      slicemachine: this.slicemachine,
-    }
+    const template = this.language || 'javascript'
+
+    const appPath = path.join(template, 'generators', 'app')
+    const opts = {name: this.name, slicemachine: this.slicemachine, shortName: this.name?.replace('generator-prismic-', '')}
 
     this.fs.copyTpl(
-      this.templatePath(template),
-      this.destinationPath(),
+      this.templatePath(appPath),
+      this.destinationPath(path.join('generators', 'app')),
       opts,
     )
 
-    this.moveDestination('_.gitignore', '.gitignore')
-    this.moveDestination('_package.json', 'package.json')
+    this.fs.copyTpl(
+      this.templatePath('_.gitignore'),
+      this.destinationPath('.gitignore'),
+      opts,
+    )
+
+    this.fs.copyTpl(
+      this.templatePath('_package.json'),
+      this.destinationPath('package.json'),
+      opts,
+    )
+
     if (this.language === 'typescript') {
-      this.moveDestination('_tsconfig.json', 'tsconfig.json')
+      this.fs.copyTpl(
+        this.templatePath('_tsconfig.json'),
+        this.destinationPath('tsconfig.json'),
+        opts,
+      )
     }
 
-    if (!this.slicemachine) {
-      this.deleteDestination(path.join('generators', 'slicemachine'))
-      this.deleteDestination(path.join('generators', 'create-slice'))
-      this.deleteDestination(path.join('generators', 'storybook'))
+    if (this.slicemachine) {
+      const createSlicePath = path.join(template, 'create-slice')
+      const slicemachinePath = path.join(template, 'slicemachhine')
+      const storybook = path.join(template, 'storybook')
+
+    }
+
+
+    if (this.language === 'typescript' && this.slicemachine) {
+      const dependencies = {
+        chalk: '^4.1.1',
+        inquirer: '^7.3.3',
+        'is-valid-path': '^0.1.1',
+        'sm-commons': '^0.0.23',
+      }
+      this.fs.extendJSON(this.destinationPath('package.json'), {dependencies})
     }
   }
 
