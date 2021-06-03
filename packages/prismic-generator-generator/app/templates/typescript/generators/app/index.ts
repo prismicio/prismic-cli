@@ -40,7 +40,7 @@ export default class extends PrismicGenerator {
       }]).then(res => res.slicemachine)
     }
     <% } %> 
-  }
+  } 
 
 <% if (slicemachine) { %>
   async default() {
