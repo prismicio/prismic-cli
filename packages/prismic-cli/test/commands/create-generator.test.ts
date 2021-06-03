@@ -23,9 +23,7 @@ describe('create-generator', () => {
   })
 
   test
-  .stub(inquirer, 'prompt', () => Promise.resolve({
-    slicemachine: true,
-  }))
+  .stub(inquirer, 'prompt', () => Promise.resolve({slicemachine: true}))
   .command(['create-generator', '--pm', 'npm', '--language', 'js', '--name', 'ts-test', '--path', tsDir, '--skip-install', '--force'])
   .it('setups a TypeScript based generator', () => {
     const outDir = path.join(tsDir, 'generator-prismic-ts-test')
