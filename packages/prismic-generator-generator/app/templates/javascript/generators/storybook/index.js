@@ -28,43 +28,29 @@ export default class StoryBookNext extends Generator {
   async writing() {
     const pkJson = {
       devDependencies: {
-        '@storybook/react': '^6.2.8',
-        'babel-loader': '^8.2.2',
-        'babel-plugin-react-require': '^3.1.3',
       },
       scripts: {
-        storybook: 'start-storybook -p 8888',
+        storybook: 'start-storybook -p 8888', // Or how ever story is to be started
         'build-storybook': 'build-storybook',
       },
     }
 
     this.fs.extendJSON(this.destinationPath('package.json'), pkJson)
 
-    const babelrc = {
-      presets: [
-        ['next/babel'],
-      ],
-      plugins: ['react-require'],
-    }
-
-    this.fs.extendJSON(this.destinationPath('.babelrc'), babelrc)
-
     const smJson = {
-      storybook: 'http://localhost:8888',
+      storybook: 'http://localhost:8888', // remember to change the port as needed
     }
 
     this.fs.extendJSON(this.destinationPath(SM_FILE), smJson)
 
-    // the default next teamplte doesn't contain a bablerc
 
-    const smfile = this.readDestinationJSON(SM_FILE) as unknown as SliceMachineJson
-
+    const smfile = this.readDestinationJSON(SM_FILE)
     const libraries = smfile.libraries || []
 
     // read sm file for local libraries.
     const localLibs = libraries.filter(lib => lib.startsWith('@/')).map(lib => lib.substring(2))
 
-    const stories = localLibs.reduce<ReadonlyArray<string>>((acc, p) => {
+    const stories = localLibs.reduce((acc, p) => {
       return acc.concat([
         `../${p}/**/*.stories.[tj]s`,
         `../.slicemachine/assets/${p}/**/*.stories.[tj]s`,
@@ -78,14 +64,14 @@ module.exports = {
   stories: ${storiesString}
 }
 `
-    // TODO: what to do if main.js already axists?
-    this.writeDestination('.storybook/main.js',  storyBookEntry)
+    // Update storybook configuration 
+    // this.writeDestination('.storybook/main.js',  storyBookEntry)
   }
 
   async install() {
     if (this.pm === 'yarn') {
       return this.yarnInstall()
     }
-    return this.npmInstall(undefined, {'legacy-peer-deps': true}) // TODO: remove once storybook installs with out peer-dep related errors
+    return this.npmInstall()
   }
 }

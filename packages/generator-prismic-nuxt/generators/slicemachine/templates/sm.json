@@ -1,6 +1,6 @@
 {
   "apiEndpoint": "https://<%= domain %>.cdn.prismic.io/api/v2",
   "libraries": [
-    "<%= defaultLibrary %>"
+    <% if (typeof defaultLibrary != 'undefined' && defaultLibrary) { %>"<%= defaultLibrary %>"<% } %>
   ]
 }

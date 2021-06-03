@@ -1,5 +1,4 @@
 import PrismicGenerator, {TemplateOptions} from '@prismicio/prismic-yeoman-generator'
-import * as path from 'path'
 import {AxiosResponse} from 'axios'
 import cli from 'cli-ux'
 
@@ -51,7 +50,7 @@ export default class PrismicTheme extends PrismicGenerator {
       url.host = `${res.data || this.domain}.${url.host}`
       this.log(`A new repsitory has been created at: ${url.toString()}`)
 
-      const location = path.join(this.path, this.configPath)
+      const location = this.destinationPath(this.configPath)
       if (this.fs.exists(location)) {
         const oldConfig = this.fs.read(location)
         const newConfig = oldConfig.replace(/your-repo-name/g, res.data || this.domain)

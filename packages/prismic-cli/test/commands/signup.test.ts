@@ -109,7 +109,7 @@ describe('signup', () => {
     })
   })
   .command(['signup', '--email', email, '--password', password, '--base', base])
-  .it('handle error response from prismic.io', async ctx => {
+  .it('handle error response from prismic.io', ctx => {
     expect(ctx.stderr).to.contain('email: This field is required').and.to.contain('password: This field is required')
   })
 
@@ -123,7 +123,7 @@ describe('signup', () => {
     .reply(400)
   })
   .command(['signup', '--email', email, '--password', password, '--base', base])
-  .it('should handle errors', async ctx => {
+  .it('should handle errors', ctx => {
     expect(ctx.stderr).to.exist
   })
 })

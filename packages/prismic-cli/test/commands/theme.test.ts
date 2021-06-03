@@ -22,8 +22,9 @@ describe('theme', () => {
 
   beforeEach(async () => {
     if (fs.existsSync(fakeFolder)) {
-      await fs.rmdir(fakeFolder, {recursive: true})
+      return fs.rmdir(fakeFolder, {recursive: true})
     }
+    return Promise.resolve()
   })
 
   test

@@ -23,8 +23,33 @@ module.exports = class extends PrismicGenerator {
   async initializing() {
     // return this.downloadAndExtractZipFrom('https://github.com/prismicio/nodejs-sdk/archive/master.zip', 'nodejs-sdk-master')
   }
+  async prompting() {
+    if (!this.pm) await this.promptForPackageManager()
+    <% if (slicemachine) { %>
+    if (this.options.slicemachine === undefined) {
+      this.options.slicemachine = await this.prompt<{slicemachine: boolean}>([{  
+        name: 'slicemachine',
+        type: 'confirm',
+        default: true,
+        message: 'Slice Machine',
+      }]).then(res => res.slicemachine)
+    }
+    <% } %> 
+  } 
 
-  async configuring() {
+<% if (slicemachine) { %>
+  async default() {
+    const opts = {framework: '<%= name %>', force: this.force, domain: this.domain, prismic: this.prismic, path: this.destinationRoot(), pm: this.pm, ...this.options}
+
+    if (this.options.slicemachine) {
+      this.composeWith('prismic-<%= name %>:slicemachine', opts)
+      this.composeWith('prismic-<%= name %>:create-slice', opts)
+      this.composeWith('prismic-<%= name %>:storybook', opts)
+    }
+  }
+<% } %>
+
+  async writing() {
     const customTypes = this.readCustomTypesFrom('custom_types')
     return this.prismic.createRepository({
       domain: this.domain,
@@ -44,6 +69,10 @@ module.exports = class extends PrismicGenerator {
   }
 
   async install() {
-    return this.npmInstall()
+    if (this.pm === 'yarn') {
+      this.yarnInstall()
+    } else {
+      this.npmInstall(undefined, {'legacy-peer-deps': true})
+    }
   }
 }

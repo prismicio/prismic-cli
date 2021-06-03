@@ -156,11 +156,12 @@ describe('slicemachine', () => {
     .stub(fs, 'existsSync', () => true)
     .stub(lookpath, 'lookpath', async () => false)
     .command(['slicemachine', '--add-storybook', '--framework', 'nuxt', '--folder', fakeFolder, '--force', '--skip-install'])
-    .it('add-storybook', async _ => {
+    .it('add-storybook', async (_, done) => {
       const pathToNuxtConfig = path.join(fakeFolder, 'nuxt.config.js')
       expect(fs.existsSync(pathToNuxtConfig)).to.be.true
       const config = await fs.readFile(pathToNuxtConfig, {encoding: 'utf-8'})
       expect(config).to.include('stories: ["~/slices/**/*.stories.[tj]s", "~/.slicemachine/assets/slices/**/*.stories.[tj]s"]')
+      done()
     })
   })
 
@@ -202,20 +203,18 @@ describe('slicemachine', () => {
       .post('/authentication/newrepository?app=slicemachine').reply(200, fakeDomain)
     })
     .command(['slicemachine', '--bootstrap', '--domain', fakeDomain])
-    .do(() => {
+    .it('should reconfigure a projects sm.json file', () => {
       expect(boostrapFakeWriteFile.called).to.be.true
       const lastWriteArgs = boostrapFakeWriteFile.lastCall.args
       const data = lastWriteArgs[lastWriteArgs.length - 1]
       expect(data).to.contain(`https://${fakeDomain}.cdn.prismic.io/api/v2`)
     })
-    .it('should reconfigure a projects sm.json file')
 
     setup
     .stderr()
     .stub(fs, 'existsSync', () => false)
     .command(['slicemachine', '--bootstrap', '--domain', fakeDomain])
-    .do(ctx => expect(ctx.stderr).to.contain('sm.json file not found'))
-    .it('Should fail if no sm.json file is found')
+    .it('Should fail if no sm.json file is found', ctx => expect(ctx.stderr).to.contain('sm.json file not found'))
   })
 
   describe('develop', () => {
@@ -241,10 +240,9 @@ describe('slicemachine', () => {
     .stub(fs, 'existsSync', () => true)
     .stub(child_process, 'execSync', fakeExecSync)
     .command(['slicemachine', '--develop'])
-    .do(() => {
+    .it('when authenticated and inside of a nodejs project it should call yarn slicemachine', () => {
       expect(fakeExecSync.firstCall.args[0]).to.equal('yarn slicemachine')
     })
-    .it('when authenticated and inside of a nodejs project it should call yarn slicemachine')
 
     test
     .stub(fs, 'readFileSync', fakeReadFileSync)
@@ -254,9 +252,8 @@ describe('slicemachine', () => {
     .stub(fs, 'existsSync', () => true)
     .stub(child_process, 'execSync', fakeExecSync)
     .command(['slicemachine', '--develop'])
-    .do(() => {
+    .it('when authenticated and inside of a nodejs project it should call npm run slicemachine', () => {
       expect(fakeExecSync.secondCall.args[0]).to.equal('npm run slicemachine')
     })
-    .it('when authenticated and inside of a nodejs project it should call npm run slicemachine')
   })
 })

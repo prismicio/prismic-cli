@@ -17,10 +17,9 @@ describe('whoami', () => {
     })
   })
   .command('whoami')
-  .do(ctx => {
+  .it('When logged in it should show the user their user name', ctx => {
     expect(ctx.stdout).to.contain('fake.user@prismic.io')
   })
-  .it('When logged in it should show the user their user name')
 
   test
   .stdout()
@@ -30,8 +29,7 @@ describe('whoami', () => {
     api.get('/validate?token=xyz').reply(401, 'One or more parameter values are not valid. The AttributeValue for a key attribute cannot contain an empty string value. Key: token')
   })
   .command('whoami')
-  .do(ctx => {
+  .it('Should tell the user they are not logged in', ctx => {
     expect(ctx.stdout).to.contain('Not logged in')
   })
-  .it('Should tell the user they are not logged in')
 })
