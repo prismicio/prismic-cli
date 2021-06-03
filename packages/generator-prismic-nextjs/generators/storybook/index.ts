@@ -78,7 +78,6 @@ module.exports = {
   stories: ${storiesString}
 }
 `
-
     // TODO: what to do if main.js already axists?
     this.writeDestination('.storybook/main.js',  storyBookEntry)
   }
