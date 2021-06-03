@@ -79,7 +79,7 @@ describe('login', () => {
     .reply(200, {}, {'set-cookie': [fakeCookie]})
   })
   .command(['login'])
-  .it('prompts for user name and password', _ => _)
+  .it('prompts for user name and password')
 
   test
   .skip()
