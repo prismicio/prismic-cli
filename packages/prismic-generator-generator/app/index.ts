@@ -1,6 +1,6 @@
 import * as Generator from 'yeoman-generator'
 import * as path from 'path'
-
+import * as inquirer from 'inquirer'
 export default class extends Generator {
   name: string | undefined;
 
@@ -26,7 +26,7 @@ export default class extends Generator {
 
   async prompting() {
     if (!this.name) {
-      this.name = await this.prompt<{name: string}>([
+      this.name = await inquirer.prompt<{name: string}>([
         {
           type: 'input',
           name: 'name',
@@ -38,7 +38,7 @@ export default class extends Generator {
     }
 
     if (!this.language) {
-      this.language = await this.prompt<{language: 'javascript' | 'typescript'}>([
+      this.language = await inquirer.prompt<{language: 'javascript' | 'typescript'}>([
         {
           type: 'list',
           name: 'language',
@@ -53,7 +53,7 @@ export default class extends Generator {
     }
 
     if (!this.pm) {
-      this.pm = await this.prompt<{pm: 'npm' | 'yarn'}>([
+      this.pm = await inquirer.prompt<{pm: 'npm' | 'yarn'}>([
         {
           type: 'list',
           name: 'pm',
@@ -73,7 +73,7 @@ export default class extends Generator {
     }
 
     if (!this.slicemachine) {
-      this.slicemachine = await this.prompt<{slicemachine: boolean}>([{
+      this.slicemachine = await inquirer.prompt<{slicemachine: boolean}>([{
         type: 'confirm',
         name: 'slicemachine',
         message: 'Support SliceMachine',
