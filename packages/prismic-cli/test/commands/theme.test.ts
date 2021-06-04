@@ -20,7 +20,7 @@ describe('theme', () => {
 
   const zip = ThemeZip.toBuffer()
 
-  beforeEach(async () => {
+  before(async () => {
     if (fs.existsSync(fakeFolder)) {
       return fs.rmdir(fakeFolder, {recursive: true})
     }
@@ -60,7 +60,7 @@ describe('theme', () => {
   test
   .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
   .stub(fs, 'writeFile', () => Promise.resolve())
-  .do(() => {
+  .it('theme flags', () => {
     expect(Theme.flags.conf).to.exist
     expect(Theme.flags.customTypes).to.exist
     expect(Theme.flags.documents).to.exist
@@ -71,5 +71,4 @@ describe('theme', () => {
     expect(Theme.flags['theme-url']).to.exist
     expect(Theme.flags['skip-install']).to.exist
   })
-  .it('theme flags')
 })
