@@ -8,7 +8,10 @@ node_js:
   - node
   - 14
 
-cache: yarn
+env:
+  - YARN_GPG=no
+
+# cache: yarn
 
 script:
   - ./packages/prismic-cli/bin/run --version
