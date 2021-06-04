@@ -165,7 +165,7 @@ export default abstract class PrismicGenerator extends Generator {
       if (file.isNew && file.path.startsWith(pathToFolder) && file.basename === 'index.json' && file.path !== toIgnore) {
         const ct = this.readDestinationJSON(file.path) as unknown as SliceMachineCustomType
         const {json, ...meta} = ct
-        customTypes.push({...meta, value: json})
+        customTypes.push({value: json, ...meta})
       }
     })
 
