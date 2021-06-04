@@ -26,18 +26,21 @@ export interface LocalDB {
 
 export type Apps = 'slicemachine' | '' | null | undefined
 
-export interface CustomTypeMetaData {
+interface CustomTypeBase {
   id: string;
   name: string;
   repeatable: string;
+}
+export interface CustomTypeMetaData extends CustomTypeBase {
   value: string;
 }
 
-export interface CustomType {
-  id: string;
-  name: string;
-  repeatable: string;
+export interface CustomType extends CustomTypeBase {
   value: any;
+}
+
+export interface SliceMachineCustomType extends CustomTypeBase {
+  json: any;
 }
 
 export interface CreateRepositoryArgs {

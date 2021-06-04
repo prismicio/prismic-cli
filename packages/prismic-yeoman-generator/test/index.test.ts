@@ -107,11 +107,27 @@ describe('prismic-yeoman-generator', () => {
     .it('should read the singnature and documents from a theme')
   })
 
-  describe('readCustomTypesFrom', () => {
+  describe('readCustomTypesFrom old layout', () => {
     fancy
     .add('generator', () => {
       const g = generator()
       const project =  path.resolve(__dirname, './__stubs__/fake-theme-master')
+      g.destinationRoot(g.path)
+      g.fs.copy(project, g.path)
+      return g
+    })
+    .do(ctx => {
+      const result = ctx.generator.readCustomTypesFrom()
+      expect(result.length).to.be.greaterThan(0)
+    })
+    .it('should read the custom-types from a theme')
+  })
+
+  describe('readCustomTypesFrom new layout', () => {
+    fancy
+    .add('generator', () => {
+      const g = generator()
+      const project =  path.resolve(__dirname, './__stubs__/fake-theme-new-custom-types')
       g.destinationRoot(g.path)
       g.fs.copy(project, g.path)
       return g

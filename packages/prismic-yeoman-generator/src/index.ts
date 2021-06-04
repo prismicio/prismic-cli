@@ -9,7 +9,7 @@ import * as fs from 'fs'
 import {lookpath} from 'lookpath'
 
 import type Prismic from 'prismic-cli/src/prismic/communication'
-import type {CustomType, CustomTypeMetaData} from 'prismic-cli/src/prismic/communication'
+import type {CustomType, CustomTypeMetaData, SliceMachineCustomType} from 'prismic-cli/src/prismic/communication'
 
 export interface TemplateOptions extends Generator.GeneratorOptions {
   // branch: string;
@@ -139,6 +139,39 @@ export default abstract class PrismicGenerator extends Generator {
     })
   }
 
+  private handleOldCustomTypes(customTypesDirectory: string): Array<CustomType> {
+    const pathToCustomTypesMetaInfo = this.destinationPath(customTypesDirectory, 'index.json')
+
+    const customTypesMetaInfoAsString: string = this.fs.read(pathToCustomTypesMetaInfo, {defaults: '[]'})
+
+    const customTypesMetaInfo: Array<CustomTypeMetaData> = JSON.parse(customTypesMetaInfoAsString)
+
+    const customTypes: Array<CustomType> = customTypesMetaInfo.map((ct: CustomTypeMetaData) => {
+      const location = this.destinationPath('custom_types', ct.value)
+      const value = this.fs.readJSON(location)
+      return {...ct, value}
+    })
+
+    return customTypes
+  }
+
+  private handleNewCustomTypes(customTypesDirectory: string): Array<CustomType> {
+    const pathToFolder = this.destinationPath(customTypesDirectory)
+    const toIgnore = path.join(pathToFolder, 'index.json')
+
+    const customTypes: Array<CustomType> = []
+
+    this.env.sharedFs.each(file => {
+      if (file.isNew && file.path.startsWith(pathToFolder) && file.basename === 'index.json' && file.path !== toIgnore) {
+        const ct = this.readDestinationJSON(file.path) as unknown as SliceMachineCustomType
+        const {json, ...meta} = ct
+        customTypes.push({...meta, value: json})
+      }
+    })
+
+    return customTypes
+  }
+
   /**
    * Read custom-types from mem-fs. This is used to send custom types during repo creation
    *
@@ -153,19 +186,15 @@ export default abstract class PrismicGenerator extends Generator {
    * ```
    */
   readCustomTypesFrom(customTypesDirectory = 'custom_types'): Array<CustomType> {
-    const pathToCustomTypesMetaInfo = this.destinationPath(customTypesDirectory, 'index.json')
-
-    const customTypesMetaInfoAsString: string = this.fs.read(pathToCustomTypesMetaInfo, {defaults: '[]'})
-
-    const customTypesMetaInfo: Array<CustomTypeMetaData> = JSON.parse(customTypesMetaInfoAsString)
-
-    const customTypes: Array<CustomType> = customTypesMetaInfo.map((ct: CustomTypeMetaData) => {
-      const location = this.destinationPath('custom_types', ct.value)
-      const value = this.fs.readJSON(location)
-      return {...ct, value}
-    })
-
-    return customTypes
+    const maybeNewFormat = this.handleNewCustomTypes(customTypesDirectory)
+    const maybeOldFormat = this.handleOldCustomTypes(customTypesDirectory)
+    /*
+    * we could merge to two together.
+    * const customTypes = new Set([...maybeNewFormat, ...maybeOldFormat])
+    * return [...customTypes]
+    */
+    if (maybeNewFormat.length > 0) return maybeNewFormat
+    return maybeOldFormat
   }
 
   /**
