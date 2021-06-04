@@ -146,10 +146,10 @@ export default abstract class PrismicGenerator extends Generator {
 
     const customTypesMetaInfo: Array<CustomTypeMetaData> = JSON.parse(customTypesMetaInfoAsString)
 
-    const customTypes: Array<CustomType> = customTypesMetaInfo.map((ct: CustomTypeMetaData) => {
-      const location = this.destinationPath('custom_types', ct.value)
-      const value = this.fs.readJSON(location)
-      return {...ct, value}
+    const customTypes: Array<CustomType> = customTypesMetaInfo.map((meta: CustomTypeMetaData) => {
+      const location = this.destinationPath('custom_types', meta.value)
+      const json = this.fs.readJSON(location) as unknown as object
+      return {...meta, value: json}
     })
 
     return customTypes
@@ -165,7 +165,7 @@ export default abstract class PrismicGenerator extends Generator {
       if (file.isNew && file.path.startsWith(pathToFolder) && file.basename === 'index.json' && file.path !== toIgnore) {
         const ct = this.readDestinationJSON(file.path) as unknown as SliceMachineCustomType
         const {json, ...meta} = ct
-        customTypes.push({value: json, ...meta})
+        customTypes.push({...meta, value: json})
       }
     })
 

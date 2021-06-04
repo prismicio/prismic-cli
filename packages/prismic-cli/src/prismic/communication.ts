@@ -36,11 +36,11 @@ export interface CustomTypeMetaData extends CustomTypeBase {
 }
 
 export interface CustomType extends CustomTypeBase {
-  value: any;
+  value: object;
 }
 
 export interface SliceMachineCustomType extends CustomTypeBase {
-  json: any;
+  json: object;
 }
 
 export interface CreateRepositoryArgs {
@@ -385,6 +385,7 @@ export default class Prismic {
       cli.action.stop()
       const status: number = Math.floor((error?.response?.status || 100) / 100)
       if (status === 4 || status === 3) {
+        if (error.response.data) console.error(error.response.data)
         return this.reAuthenticate().then(retry)
       }
       throw error
