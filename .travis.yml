@@ -8,9 +8,8 @@ node_js:
   - node
   - 14
 
-jobs: 
-  if: os = windows
-  - YARN_GPG=no
+env: 
+  - YARN_GPG=no # this is so windows correctly hangs up
   
 cache: yarn
 
