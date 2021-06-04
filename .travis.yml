@@ -2,14 +2,20 @@ language: node_js
 os:
   - linux
   - osx
-  - windows
 
 node_js:
   - node
   - 14
 
-env: 
-  - YARN_GPG=no # this is so windows correctly hangs up
+jobs:
+  include:
+    - os: windows
+      env: YARN_GPG=no # so windows exits
+
+    - os: windows
+      node_js: 14
+      env: YARN_GPG=no # so windows exits
+
   
 cache: yarn
 
