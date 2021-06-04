@@ -1,6 +1,7 @@
 import PrismicGenerator, {TemplateOptions, SliceMachineJson} from '@prismicio/prismic-yeoman-generator'
 import modifyNuxtConfig from './modify-nuxt-config'
 const {SM_FILE} = require('sm-commons/consts')
+import * as path from 'path'
 
 export default class StoryBookNuxt extends PrismicGenerator {
   /**
@@ -54,7 +55,7 @@ export default class StoryBookNuxt extends PrismicGenerator {
     const libraries: Array<string> = smfile.libraries || []
 
     // read sm file for local libraries.
-    const localLibs = libraries.filter(lib => lib.startsWith('@/')).map(lib => lib.substring(2))
+    const localLibs = libraries.filter(lib => lib.startsWith('@' + path.sep)).map(lib => lib.substring(2))
 
     const config = this.readDestination('nuxt.config.js')
 
