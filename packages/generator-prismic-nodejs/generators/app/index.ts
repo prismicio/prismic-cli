@@ -1,6 +1,4 @@
 import PrismicGenerator from '@prismicio/prismic-yeoman-generator'
-import * as path from 'path'
-
 export default class PrismicNodeJS extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
