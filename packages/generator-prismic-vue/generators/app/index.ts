@@ -38,10 +38,10 @@ export default class extends PrismicGenerator {
       return res
     })
     .then(res => {
-      const location = path.join(this.path, 'public/index.html')
-      const oldConfig = this.fs.read(location)
+      const location = path.join('public', 'index.html')
+      const oldConfig = this.readDestination(location)
       const newConfig = oldConfig.replace(/your-repo-name/g, res.data || this.domain)
-      this.fs.write(location, newConfig)
+      this.writeDestination(location, newConfig)
     })
   }
 
