@@ -279,7 +279,7 @@ describe('prismic/communication.ts', () => {
       .reply(200, repoName)
     })
     .do(async ctx => {
-      const result = await ctx.prismic.createRepository({domain: repoName})
+      const result = await ctx.prismic.createRepository({domain: repoName, framework: ''})
       expect(result.data).to.equal(repoName)
     })
     .it('create a repo using the cookie for auth')
@@ -296,7 +296,7 @@ describe('prismic/communication.ts', () => {
     })
     .add('prismic', () => new Prismic())
     .do(async ctx => {
-      const result = await ctx.prismic.createRepository({domain: repoName})
+      const result = await ctx.prismic.createRepository({domain: repoName, framework: ''})
       expect(result.data).to.equal(repoName)
     })
     .it('should create a repo using an oauth access token')
@@ -317,7 +317,7 @@ describe('prismic/communication.ts', () => {
       return p
     })
     .do(async ctx => {
-      await ctx.prismic.createRepository({domain: repoName}).catch(() => ({}))
+      await ctx.prismic.createRepository({domain: repoName, framework: ''}).catch(() => ({}))
       const reAuthenticate = ctx.prismic.reAuthenticate as sinon.SinonSpy<any, any>
       // sinon.assert.called(reAuthenticate)
       expect(reAuthenticate.called).to.be.true
@@ -338,7 +338,7 @@ describe('prismic/communication.ts', () => {
       return p
     })
     .do(async ctx => {
-      await ctx.prismic.createRepository({domain: repoName}).catch(() => ({}))
+      await ctx.prismic.createRepository({domain: repoName, framework: ''}).catch(() => ({}))
       const reAuthenticate = ctx.prismic.reAuthenticate as sinon.SinonSpy<any, any>
       // sinon.assert.called(reAuthenticate)
       expect(reAuthenticate.called).to.be.true
@@ -359,7 +359,7 @@ describe('prismic/communication.ts', () => {
       return p
     })
     .do(async ctx => {
-      await ctx.prismic.createRepository({domain: repoName}).catch(() => ({}))
+      await ctx.prismic.createRepository({domain: repoName, framework: ''}).catch(() => ({}))
       const reAuthenticate = ctx.prismic.reAuthenticate as sinon.SinonSpy<any, any>
       // sinon.assert.called(reAuthenticate)
       expect(reAuthenticate.called).to.be.true

@@ -29,6 +29,7 @@ export default class PrismicNodeJS extends PrismicGenerator {
     const customTypes = this.readCustomTypesFrom('custom_types')
     return this.prismic.createRepository({
       domain: this.domain,
+      framework: 'node',
       customTypes,
     }).then(res => {
       const url = new URL(this.prismic.base)
