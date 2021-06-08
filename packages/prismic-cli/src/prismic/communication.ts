@@ -94,14 +94,13 @@ export function toAuthUrl(path: 'validate' | 'refreshtoken', token: string, base
   return url.toString()
 }
 
-type Modify<T, R> = Omit<T, keyof R> & R;
-export type CommunicationConfig = Modify<IConfig, {
-  debug: (...args: any[]) => void;
-}>
 /**
  * Handles communcation logic between the cli and prismic.io, should be treated as a singleton.
  * @class
  */
+
+const noop = () => null
+
 export default class Prismic {
   public configPath: string;
 
@@ -113,7 +112,7 @@ export default class Prismic {
 
   public debug: (...args: any[]) => void;
 
-  constructor(config: CommunicationConfig) {
+  constructor(config?: IConfig, debug?: (...args: any[]) => void) {
     const home = config && config.home ? config.home : os.homedir()
     this.configPath = path.join(home, '.prismic')
     const {base, cookies, oauthAccessToken} = getOrCreateConfig(this.configPath)
@@ -122,7 +121,7 @@ export default class Prismic {
     this.oauthAccessToken = oauthAccessToken
     this.validateRepositoryName = this.validateRepositoryName.bind(this)
 
-    this.debug = config.debug
+    this.debug = debug || noop
   }
 
   private getConfig(): LocalDB {
