@@ -1,13 +1,9 @@
 # Prismic Generator Generator.
-
 Used for generating prismic projects for use with the prismic-cli. It creates a customized [yeoman-generator](https://yeoman.io/authoring/) with some additional methods added by [prismic-yeoman-generator](../prismic-yeoman-generator/README.md).
 
 ## Usage
-
 First install the latest version of the prismic cli
-`npm install -g prismic-cli@alpha`
-
-Then run the `create-generator` command.
+`npm install -g prismic-cli@alpha` then run the `create-generator` command.
 
 #### Prompts
 
@@ -22,7 +18,6 @@ Use yarn or npm, yarn tends to work better with mono-repositories, but it's real
 
 ##### Slicemachine
 This adds the file and folder structure for the sm commands.
-
 
 #### Folder structure
 After prompting the cli will generate a `yeoman-generator` following file and folder structure.
