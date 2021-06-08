@@ -205,10 +205,10 @@ export default class Prismic {
     .then((res: AxiosResponse) => {
       return this.setCookies(res.headers['set-cookie'])
     }).catch((error: AxiosError) => {
-      this.debug(error.request)
+      this.debug('communication.login', error.message)
       if (error.response) {
-        console.error(`[${error.response?.status}]: ${error.response?.statusText}`)
-        console.error(error.response.data)
+        this.debug(`[${error.response?.status}]: ${error.response?.statusText}`)
+        this.debug(error.response.data)
       }
       throw error
     })
@@ -281,14 +281,14 @@ export default class Prismic {
     return this.validateAndRefresh()
     .then(() => true)
     .catch((error: AxiosError) => {
-      this.debug(error.request)
+      this.debug('communication.isAuthenticated', error.message)
       const status = error?.response?.status || 100
       if (Math.floor(status / 100) === 4) {
         return false
       }
       if (error.response) {
-        console.error(`[${error.response?.status}]: ${error.response?.statusText}`)
-        console.error(error.response.data)
+        this.debug(`[${error.response?.status}]: ${error.response?.statusText}`)
+        this.debug(error.response.data)
       }
       throw error
     })
