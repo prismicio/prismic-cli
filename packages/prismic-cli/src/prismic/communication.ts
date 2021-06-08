@@ -1,7 +1,7 @@
 import {fs} from '../utils'
 import * as path from 'path'
 import * as cookie from '../utils/cookie'
-import Axios, {AxiosInstance, AxiosResponse, AxiosRequestConfig} from 'axios'
+import Axios, {AxiosInstance, AxiosResponse, AxiosRequestConfig, AxiosError} from 'axios'
 import * as qs from 'qs'
 import * as os from 'os'
 import {IConfig} from '@oclif/config'
@@ -94,6 +94,10 @@ export function toAuthUrl(path: 'validate' | 'refreshtoken', token: string, base
   return url.toString()
 }
 
+type Modify<T, R> = Omit<T, keyof R> & R;
+export type CommunicationConfig = Modify<IConfig, {
+  debug: (...args: any[]) => void;
+}>
 /**
  * Handles communcation logic between the cli and prismic.io, should be treated as a singleton.
  * @class
@@ -107,15 +111,18 @@ export default class Prismic {
 
   public oauthAccessToken?: string;
 
-  constructor(config?: IConfig) {
+  public debug: (...args: any[]) => void;
+
+  constructor(config: CommunicationConfig) {
     const home = config && config.home ? config.home : os.homedir()
     this.configPath = path.join(home, '.prismic')
     const {base, cookies, oauthAccessToken} = getOrCreateConfig(this.configPath)
     this.base = base
     this.cookies = cookies
     this.oauthAccessToken = oauthAccessToken
-
     this.validateRepositoryName = this.validateRepositoryName.bind(this)
+
+    this.debug = config.debug
   }
 
   private getConfig(): LocalDB {
@@ -198,13 +205,23 @@ export default class Prismic {
     })
     .then((res: AxiosResponse) => {
       return this.setCookies(res.headers['set-cookie'])
+    }).catch((error: AxiosError) => {
+      this.debug(error.request)
+      if (error.response) {
+        console.error(`[${error.response?.status}]: ${error.response?.statusText}`)
+        console.error(error.response.data)
+      }
+      throw error
     })
   }
 
   private async auth(path: 'validate' | 'refreshtoken'): Promise<AxiosResponse> {
     const token = cookie.parse(this.cookies)['prismic-auth'] || ''
     const url = toAuthUrl(path, token, this.base)
-    return this.axios().get(url)
+    return this.axios().get(url).catch((error: AxiosError) => {
+      this.debug(error)
+      throw error
+    })
   }
 
   /**
@@ -264,10 +281,15 @@ export default class Prismic {
 
     return this.validateAndRefresh()
     .then(() => true)
-    .catch(error => {
+    .catch((error: AxiosError) => {
+      this.debug(error.request)
       const status = error?.response?.status || 100
       if (Math.floor(status / 100) === 4) {
         return false
+      }
+      if (error.response) {
+        console.error(`[${error.response?.status}]: ${error.response?.statusText}`)
+        console.error(error.response.data)
       }
       throw error
     })
@@ -282,7 +304,7 @@ export default class Prismic {
     // TODO: this will eventually have to be moved.
     const email =  await cli.prompt('Email')
     const password =  await cli.prompt('Password', {type: 'hide'})
-    return this.login({email, password}).catch(error => {
+    return this.login({email, password}).catch((error: AxiosError) => {
       if (error?.response?.status === 401) {
         return this.reAuthenticate()
       }
