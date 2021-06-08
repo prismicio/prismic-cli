@@ -47,8 +47,7 @@ module.exports = class extends PrismicGenerator {
       this.composeWith('prismic-<%= name %>:storybook', opts)
     }
   }
-<% } %>
-
+<% } else { %>
   async writing() {
     const customTypes = this.readCustomTypesFrom('custom_types')
     return this.prismic.createRepository({
@@ -67,6 +66,7 @@ module.exports = class extends PrismicGenerator {
       this.fs.write(location, newConfig)
     })
   }
+<% } %>
 
   async install() {
     if (this.pm === 'yarn') {

@@ -52,8 +52,7 @@ export default class extends PrismicGenerator {
       this.composeWith('prismic-<%= name %>:storybook', opts)
     }
   }
-<% } %>
-
+<% } else { %>
   async writing() {
 
     const customTypes = this.readCustomTypesFrom('custom_types')
@@ -73,6 +72,7 @@ export default class extends PrismicGenerator {
       this.fs.write(location, newConfig)
     })
   }
+<% } %>
 
   async install() {
     if (this.pm === 'yarn') {
