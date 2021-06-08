@@ -217,10 +217,7 @@ export default class Prismic {
   private async auth(path: 'validate' | 'refreshtoken'): Promise<AxiosResponse> {
     const token = cookie.parse(this.cookies)['prismic-auth'] || ''
     const url = toAuthUrl(path, token, this.base)
-    return this.axios().get(url).catch((error: AxiosError) => {
-      this.debug(error)
-      throw error
-    })
+    return this.axios().get(url)
   }
 
   /**
