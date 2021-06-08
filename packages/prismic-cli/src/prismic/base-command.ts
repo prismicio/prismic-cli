@@ -21,6 +21,7 @@ export default abstract class PrismicCommand extends Command {
   }
 
   async catch(err: any): Promise<any> {
+    this.debug(err)
     await datadog(err, this).catch(() => this.warn('Failed to send error to datadog'))
     return super.catch(err)
   }
