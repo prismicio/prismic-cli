@@ -72,7 +72,7 @@ module.exports = class extends PrismicGenerator {
     if (this.pm === 'yarn') {
       this.yarnInstall()
     } else {
-      this.npmInstall(undefined, {'legacy-peer-deps': true})
+      this.npmInstall()
     }
   }
 }
