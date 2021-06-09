@@ -1,4 +1,4 @@
-const {default: PrismicGenerator, TemplateOptions} = require('@prismicio/prismic-yeoman-generator')
+const PrismicGenerator = require('@prismicio/prismic-yeoman-generator').defaults
 const isValidPath = require('is-valid-path')
 const path = require('path')
 const fs = require('fs')

@@ -27,7 +27,7 @@ module.exports = class extends PrismicGenerator {
     if (!this.pm) await this.promptForPackageManager()
     <% if (slicemachine) { %>
     if (this.options.slicemachine === undefined) {
-      this.options.slicemachine = await this.prompt<{slicemachine: boolean}>([{  
+      this.options.slicemachine = await this.prompt([{  
         name: 'slicemachine',
         type: 'confirm',
         default: true,
