@@ -83,7 +83,7 @@ export default abstract class PrismicCommand extends Command {
       this.warn(`Folder: ${folder} exists. use --force to overwrite`)
       return this.exit()
     }
-    const isValid = isValidPath(name)
+    const isValid = isValidPath(folder)
     if (isValid === false) {
       this.warn(`Invalid path: ${folder}`)
       return this.validateFolder('', fallback, force)
