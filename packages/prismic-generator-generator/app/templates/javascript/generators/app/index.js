@@ -21,8 +21,9 @@ module.exports = class extends PrismicGenerator {
    */
 
   async initializing() {
-    // return this.downloadAndExtractZipFrom('https://github.com/prismicio/nodejs-sdk/archive/master.zip', 'nodejs-sdk-master')
+    this.destinationRoot(this.path)
   }
+
   async prompting() {
     if (!this.pm) await this.promptForPackageManager()
     <% if (slicemachine) { %>

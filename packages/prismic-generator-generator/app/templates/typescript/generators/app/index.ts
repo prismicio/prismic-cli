@@ -20,7 +20,7 @@ export default class extends PrismicGenerator {
    * end - Called last, cleanup, say good bye, etc
    */
 
-   async initializing() {
+  async initializing() {
     this.destinationRoot(this.path)
   }
 
