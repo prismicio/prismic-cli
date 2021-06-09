@@ -50,6 +50,17 @@ export default class extends PrismicGenerator {
       this.composeWith('prismic-<%= name %>:slicemachine', opts)
       this.composeWith('prismic-<%= name %>:create-slice', opts)
       this.composeWith('prismic-<%= name %>:storybook', opts)
+    } else {
+      const customTypes = this.readCustomTypesFrom('custom_types')
+      return this.prismic.createRepository({
+        domain: this.domain,
+        customTypes,
+      }).then(res => {
+        const url = new URL(this.prismic.base)
+        url.host = `${res.data || this.domain}.${url.host}`
+        this.log(`A new repository has been created at: ${url.toString()}`)
+        return res
+      })
     }
   }
 <% } else { %>
