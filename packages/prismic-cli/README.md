@@ -210,31 +210,25 @@ _See code: [src/commands/whoami.ts](https://github.com/prismicio/prismic-cli/blo
 
 ## Running Locally
 + Clone this repository `git clone https://github.com/prismic.io/prismic-cli`
-+ Enter the newly cloned repository and install the dependencies with `npm install` or `yarn`
-+ Commands can be executed from the **bin/run** file i.e: `./bin/run --help`
++ go to the root folder `cd prismic-cli`
++ install and/or link the dependencies with or `yarn` (uses workspaces)
++ Commands can be executed from the **packages/prismic-cli/bin/run** file i.e: `./bin/run --help`
 
 ## Testing
 Run tests with `npm test` or `yarn test`
-The main testing libary used is [@oclif/test](https://github.com/oclif/test) the documentation on how to use the testing library can be found here https://github.com/oclif/fancy-test
+The main testing libary used is [@oclif/test](https://github.com/oclif/test) the documentation on how to use the testing library can be found here https://github.com/oclif/fancy-test.
+Mocking/stubbing dependencies can be tricky due package versions for nested dependencies, and native modules being used else where.
 
 ## Linting
-[eslint](https://eslint.org/) is automatically run after the `test` script, but it can also be invoked by running `npm run posttest` or `yarn posttest`, optionally with a `--fix` flag. 
+[eslint](https://eslint.org/) is automatically run after the `test` script, but it can also be invoked by running `npm run posttest` or `yarn posttest`, optionally with a `--fix` flag.
+
+## Deployment
+[leran](https://lerna.js.org/) is used for managing versions and publishing.
+update versions with `lerna version [semantic-version] --exact`
+Publish with `lerna publish [--dist-tag alpha]`
 
 ## Built With
 + [Oclif](https://oclif.io/)
 + [Yeoman](https://yeoman.io/)
 
 
-## Files and Folders
-_This should change in later releases._
-
-[src/prismic/communication.ts](src/prismic/communication.ts) Handles communication and sessions with prismic. This class is injected in to commnads as `this.prismic`. 
-
-[src/prismic/base-command.ts](src/prismic/base-command.ts) Customized command class used in [src/commands](src/commands) that provides an instance of `this.prismic` and a few utility methods shared across commands.
-
-[src/prismic/generator.ts](src/prismic/generator.ts) Sets up a [yeoman-environment](https://github.com/yeoman/environment) used by the `new` and `theme` commands.
-
-[src/generators](src/generators) Yeoman generators for source code generation.
-[src/generators/base](src/generators/base.ts) A customized base yeoman generator that provided utility methods for generating a prismic project.
-
-[src/utils](src/utils) utility functions, library configuration and a proxy for `fs` modules so the modules can be used and mocked during the tests while leaving other uses in different libraries un-mocked.
