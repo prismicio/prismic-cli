@@ -147,7 +147,7 @@ export default abstract class PrismicGenerator extends Generator {
     const customTypesMetaInfo: Array<CustomTypeMetaData> = JSON.parse(customTypesMetaInfoAsString)
 
     const customTypes: Array<CustomType> = customTypesMetaInfo.map((meta: CustomTypeMetaData) => {
-      const location = this.destinationPath('custom_types', meta.value)
+      const location = this.destinationPath(customTypesDirectory, meta.value)
       const json = this.fs.readJSON(location) as unknown as object
       return {...meta, value: json}
     })
