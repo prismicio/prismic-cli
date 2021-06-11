@@ -43,6 +43,8 @@ export default class StoryBookNext extends Generator {
 
     this.fs.extendJSON(this.destinationPath(SM_FILE), smJson)
 
+    // TODO: this part maybe Redundant if .storybook/main.js can resolve "../.slicemachine/**/*.stories.@(js|jsx|ts|tsx|svelte)",
+
 
     const smfile = this.readDestinationJSON(SM_FILE) as unknown as SliceMachineJson
 

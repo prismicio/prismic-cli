@@ -1,7 +1,7 @@
 const PrismicGenerator = require('@prismicio/prismic-yeoman-generator').default
 const path = require('path')
 
-module.exports = class extends PrismicGenerator {
+class App extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
    * 
@@ -89,3 +89,5 @@ module.exports = class extends PrismicGenerator {
     }
   }
 }
+
+module.exports = App

@@ -18,7 +18,7 @@ function pascalCaseToSnakeCase(str) { return snakelize(str) }
 
 function toDescription(str) { return str.split(/(?=[A-Z0-9])/).join(' ') }
 
-module.exports = class CreateSlice extends PrismicGenerator {
+class CreateSlice extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
    * prompting - Where you prompt users for options (where you’d call this.prompt())
@@ -106,3 +106,5 @@ module.exports = class CreateSlice extends PrismicGenerator {
     }
   }
 }
+
+module.exports = CreateSlice
