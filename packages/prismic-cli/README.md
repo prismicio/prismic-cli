@@ -20,7 +20,7 @@ $ npm install -g prismic-cli
 $ prismic COMMAND
 running command...
 $ prismic (-v|--version|version)
-prismic-cli/4.0.1-alpha.8 darwin-x64 node-v16.0.0
+prismic-cli/4.0.1-alpha.10 darwin-x64 node-v16.0.0
 $ prismic --help [COMMAND]
 USAGE
   $ prismic COMMAND
@@ -68,7 +68,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/list.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.8/src/commands/list.ts)_
+_See code: [src/commands/list.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.10/src/commands/list.ts)_
 
 ## `prismic login`
 
@@ -85,7 +85,7 @@ OPTIONS
   --password=password                  password
 ```
 
-_See code: [src/commands/login.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.8/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.10/src/commands/login.ts)_
 
 ## `prismic logout`
 
@@ -99,7 +99,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.8/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.10/src/commands/logout.ts)_
 
 ## `prismic new`
 
@@ -118,7 +118,7 @@ OPTIONS
   --skip-install           prevent running install command after generating project
 ```
 
-_See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.8/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.10/src/commands/new.ts)_
 
 ## `prismic signup`
 
@@ -134,7 +134,7 @@ OPTIONS
   --password=password  password
 ```
 
-_See code: [src/commands/signup.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.8/src/commands/signup.ts)_
+_See code: [src/commands/signup.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.10/src/commands/signup.ts)_
 
 ## `prismic slicemachine`
 
@@ -164,7 +164,7 @@ ALIASES
   $ prismic sm
 ```
 
-_See code: [src/commands/slicemachine.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.8/src/commands/slicemachine.ts)_
+_See code: [src/commands/slicemachine.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.10/src/commands/slicemachine.ts)_
 
 ## `prismic theme [SOURCE]`
 
@@ -189,7 +189,7 @@ OPTIONS
   --skip-install             prevent running install command after generating project
 ```
 
-_See code: [src/commands/theme.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.8/src/commands/theme.ts)_
+_See code: [src/commands/theme.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.10/src/commands/theme.ts)_
 
 ## `prismic whoami`
 
@@ -203,38 +203,32 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/whoami.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.8/src/commands/whoami.ts)_
+_See code: [src/commands/whoami.ts](https://github.com/prismicio/prismic-cli/blob/v4.0.1-alpha.10/src/commands/whoami.ts)_
 <!-- commandsstop -->
 
 # Development
 
 ## Running Locally
 + Clone this repository `git clone https://github.com/prismic.io/prismic-cli`
-+ Enter the newly cloned repository and install the dependencies with `npm install` or `yarn`
-+ Commands can be executed from the **bin/run** file i.e: `./bin/run --help`
++ go to the root folder `cd prismic-cli`
++ install and/or link the dependencies with or `yarn` (uses workspaces)
++ Commands can be executed from the **packages/prismic-cli/bin/run** file i.e: `./bin/run --help`
 
 ## Testing
 Run tests with `npm test` or `yarn test`
-The main testing libary used is [@oclif/test](https://github.com/oclif/test) the documentation on how to use the testing library can be found here https://github.com/oclif/fancy-test
+The main testing libary used is [@oclif/test](https://github.com/oclif/test) the documentation on how to use the testing library can be found here https://github.com/oclif/fancy-test.
+Mocking/stubbing dependencies can be tricky due package versions for nested dependencies, and native modules being used else where.
 
 ## Linting
-[eslint](https://eslint.org/) is automatically run after the `test` script, but it can also be invoked by running `npm run posttest` or `yarn posttest`, optionally with a `--fix` flag. 
+[eslint](https://eslint.org/) is automatically run after the `test` script, but it can also be invoked by running `npm run posttest` or `yarn posttest`, optionally with a `--fix` flag.
+
+## Deployment
+[leran](https://lerna.js.org/) is used for managing versions and publishing.
+update versions with `lerna version [semantic-version] --exact`
+Publish with `lerna publish [--dist-tag alpha]`
 
 ## Built With
 + [Oclif](https://oclif.io/)
 + [Yeoman](https://yeoman.io/)
 
 
-## Files and Folders
-_This should change in later releases._
-
-[src/prismic/communication.ts](src/prismic/communication.ts) Handles communication and sessions with prismic. This class is injected in to commnads as `this.prismic`. 
-
-[src/prismic/base-command.ts](src/prismic/base-command.ts) Customized command class used in [src/commands](src/commands) that provides an instance of `this.prismic` and a few utility methods shared across commands.
-
-[src/prismic/generator.ts](src/prismic/generator.ts) Sets up a [yeoman-environment](https://github.com/yeoman/environment) used by the `new` and `theme` commands.
-
-[src/generators](src/generators) Yeoman generators for source code generation.
-[src/generators/base](src/generators/base.ts) A customized base yeoman generator that provided utility methods for generating a prismic project.
-
-[src/utils](src/utils) utility functions, library configuration and a proxy for `fs` modules so the modules can be used and mocked during the tests while leaving other uses in different libraries un-mocked.

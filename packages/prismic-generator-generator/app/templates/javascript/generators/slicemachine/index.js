@@ -1,7 +1,7 @@
-import PrismicGenerator, {TemplateOptions} from '@prismicio/prismic-yeoman-generator'
+const PrismicGenerator = require('@prismicio/prismic-yeoman-generator').default
 const {SM_FILE} = require('sm-commons/consts')
 
-export default class SliceMachine extends PrismicGenerator {
+class SliceMachine extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
    * prompting - Where you prompt users for options (where you’d call this.prompt())
@@ -101,3 +101,4 @@ $> npx prismic-cli sm --develop
   }
 }
 
+module.exports = SliceMachine

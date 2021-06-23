@@ -11,6 +11,8 @@ import datadog from '../utils/data-dog'
 
 import * as chalk from 'chalk'
 
+const isValidPath = require('is-valid-path')
+
 export default abstract class PrismicCommand extends Command {
   prismic: Prismic;
 
@@ -81,6 +83,12 @@ export default abstract class PrismicCommand extends Command {
       this.warn(`Folder: ${folder} exists. use --force to overwrite`)
       return this.exit()
     }
+    const isValid = isValidPath(folder)
+    if (isValid === false) {
+      this.warn(`Invalid path: ${folder}`)
+      return this.validateFolder('', fallback, force)
+    }
+
     return Promise.resolve(folder)
   }
 

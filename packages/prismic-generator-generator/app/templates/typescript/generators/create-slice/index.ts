@@ -81,6 +81,7 @@ export default class CreateSlice extends PrismicGenerator {
       {sliceName: this.answers.sliceName, sliceId: sliceId, description},
     )
     /* for the slicemachine update */
+    // TODO: update the story with the paths to the component and model
     const slicesDirectoryPath = path.join('.slicemachine', 'assets', this.answers.library, this.answers.sliceName)
     this.moveDestination(path.join(pathToLib, 'index.stories.js'), path.join(slicesDirectoryPath, 'index.stories.js'))
     this.moveDestination(path.join(pathToLib, 'mocks.json'), path.join(slicesDirectoryPath, 'mocks.json'))

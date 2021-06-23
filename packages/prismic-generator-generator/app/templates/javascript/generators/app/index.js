@@ -1,7 +1,7 @@
 const PrismicGenerator = require('@prismicio/prismic-yeoman-generator').default
 const path = require('path')
 
-module.exports = class extends PrismicGenerator {
+class App extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
    * 
@@ -21,13 +21,14 @@ module.exports = class extends PrismicGenerator {
    */
 
   async initializing() {
-    // return this.downloadAndExtractZipFrom('https://github.com/prismicio/nodejs-sdk/archive/master.zip', 'nodejs-sdk-master')
+    this.destinationRoot(this.path)
   }
+
   async prompting() {
     if (!this.pm) await this.promptForPackageManager()
     <% if (slicemachine) { %>
     if (this.options.slicemachine === undefined) {
-      this.options.slicemachine = await this.prompt<{slicemachine: boolean}>([{  
+      this.options.slicemachine = await this.prompt([{  
         name: 'slicemachine',
         type: 'confirm',
         default: true,
@@ -45,10 +46,21 @@ module.exports = class extends PrismicGenerator {
       this.composeWith('prismic-<%= name %>:slicemachine', opts)
       this.composeWith('prismic-<%= name %>:create-slice', opts)
       this.composeWith('prismic-<%= name %>:storybook', opts)
+    } else {
+      const customTypes = this.readCustomTypesFrom('custom_types')
+
+      return this.prismic.createRepository({
+        domain: this.domain,
+        customTypes,
+      }).then(res => {
+        const url = new URL(this.prismic.base)
+        url.host = `${res.data || this.domain}.${url.host}`
+        this.log(`A new repository has been created at: ${url.toString()}`)
+        return res
+      })
     }
   }
-<% } %>
-
+<% } else { %>
   async writing() {
     const customTypes = this.readCustomTypesFrom('custom_types')
     return this.prismic.createRepository({
@@ -67,12 +79,15 @@ module.exports = class extends PrismicGenerator {
       this.fs.write(location, newConfig)
     })
   }
+<% } %>
 
   async install() {
     if (this.pm === 'yarn') {
       this.yarnInstall()
     } else {
-      this.npmInstall(undefined, {'legacy-peer-deps': true})
+      this.npmInstall()
     }
   }
 }
+
+module.exports = App

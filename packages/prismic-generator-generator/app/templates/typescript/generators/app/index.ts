@@ -20,7 +20,7 @@ export default class extends PrismicGenerator {
    * end - Called last, cleanup, say good bye, etc
    */
 
-   async initializing() {
+  async initializing() {
     this.destinationRoot(this.path)
   }
 
@@ -50,10 +50,20 @@ export default class extends PrismicGenerator {
       this.composeWith('prismic-<%= name %>:slicemachine', opts)
       this.composeWith('prismic-<%= name %>:create-slice', opts)
       this.composeWith('prismic-<%= name %>:storybook', opts)
+    } else {
+      const customTypes = this.readCustomTypesFrom('custom_types')
+      return this.prismic.createRepository({
+        domain: this.domain,
+        customTypes,
+      }).then(res => {
+        const url = new URL(this.prismic.base)
+        url.host = `${res.data || this.domain}.${url.host}`
+        this.log(`A new repository has been created at: ${url.toString()}`)
+        return res
+      })
     }
   }
-<% } %>
-
+<% } else { %>
   async writing() {
 
     const customTypes = this.readCustomTypesFrom('custom_types')
@@ -73,12 +83,13 @@ export default class extends PrismicGenerator {
       this.fs.write(location, newConfig)
     })
   }
+<% } %>
 
   async install() {
     if (this.pm === 'yarn') {
       this.yarnInstall()
     } else {
-      this.npmInstall(undefined, {'legacy-peer-deps': true})
+      this.npmInstall()
     }
   }
 }

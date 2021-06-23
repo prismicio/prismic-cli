@@ -1,7 +1,7 @@
-import Generator, {SliceMachineJson, TemplateOptions} from '@prismicio/prismic-yeoman-generator'
+const Generator = require('@prismicio/prismic-yeoman-generator').default
 const {SM_FILE} = require('sm-commons/consts')
 
-export default class StoryBookNext extends Generator {
+class StoryBook extends Generator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
    * prompting - Where you prompt users for options (where you’d call this.prompt())
@@ -13,7 +13,7 @@ export default class StoryBookNext extends Generator {
    * end - Called last, cleanup, say good bye, etc
    */
 
-  constructor(argv: string|string[], opts: TemplateOptions) {
+  constructor(argv, opts) {
     super(argv, opts)
 
     if (this.destinationRoot().endsWith(this.path) === false) {
@@ -43,6 +43,7 @@ export default class StoryBookNext extends Generator {
 
     this.fs.extendJSON(this.destinationPath(SM_FILE), smJson)
 
+    // TODO: this part maybe Redundant if .storybook/main.js can resolve "../.slicemachine/**/*.stories.@(js|jsx|ts|tsx|svelte)",
 
     const smfile = this.readDestinationJSON(SM_FILE)
     const libraries = smfile.libraries || []
@@ -75,3 +76,5 @@ module.exports = {
     return this.npmInstall()
   }
 }
+
+module.exports = StoryBook

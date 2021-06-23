@@ -179,10 +179,7 @@ export default class Prismic {
   private async auth(path: 'validate' | 'refreshtoken'): Promise<AxiosResponse> {
     const token = cookie.parse(this.cookies)['prismic-auth'] || ''
     const url = toAuthUrl(path, token, this.base)
-    return this.axios().get(url).catch((error: AxiosError) => {
-      this.debug(error)
-      throw error
-    })
+    return this.axios().get(url)
   }
 
   /**
@@ -321,17 +318,15 @@ export default class Prismic {
    */
 
   public async createRepository(args: CreateRepositoryArgs): Promise<AxiosResponse<string>> {
-    /*
-    const hasAuth = await this.isAuthenticated()
-
-    if (!hasAuth) {
-      await this.reAuthenticate()
-    }
-    */
-
-    return (
-      this.oauthAccessToken ? this.createRepositoryWithToken(args) : this.createRepositoryWithCookie(args)
-    )
+    this.debug('createRepository', JSON.stringify(args))
+    const p = this.oauthAccessToken ? this.createRepositoryWithToken(args) : this.createRepositoryWithCookie(args)
+    return p.then(res => {
+      this.debug('createRepository:', res.status, res.statusText)
+      return res
+    }).catch((error: AxiosError) => {
+      this.debug('ERROR: createRepository', error.message, error.response?.status, error.response?.statusText)
+      throw error
+    })
   }
 
   private async createRepositoryWithCookie({
