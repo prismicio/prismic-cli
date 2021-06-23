@@ -38,7 +38,7 @@ TODO: show example for svelt
 
 ##### /generators/storybook
 This installs and configures storybook.
-Storybook does have a cli to handle this, but I've not been able to reverse engineer it to be compatible with yeoman. yeoman's `this.spawnCommand` might be te easiest way to install storybook, but this won't work until after the files have been writen out so try and put it in the `end` part of the yeoman life cycle. Or run it and find what modifications where done and emulate those.
+Storybook does have a cli to handle this, but I've not been able to reverse engineer it to be compatible with yeoman. yeoman's `this.spawnCommand` might be te easiest way to install storybook, but this won't work until after the files have been written out so try and put it in the `end` part of the yeoman life cycle. Or run it and find what modifications where done and emulate those.
 
 
 #### Running the generator locally.
