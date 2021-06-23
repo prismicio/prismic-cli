@@ -1,8 +1,15 @@
 import {flags} from '@oclif/command'
-import {Command, LoginData} from '../prismic'
+import {Command} from '../prismic'
 import cli from 'cli-ux'
-import {AxiosError} from 'axios'
-// import {CLIError} from '@oclif/errors'
+import * as Koa from 'koa';
+import { Server } from '../utils/server';
+import Prismic from '../prismic/communication';
+
+const DEFAULT_PORT = 5555;
+type LoginResponse = {
+  email: string,
+  cookies: Array<string>
+}
 
 export default class Login extends Command {
   static description = 'Login to prismic'
@@ -10,53 +17,60 @@ export default class Login extends Command {
   static flags = {
     ...Command.flags,
     help: flags.help({char: 'h'}),
-    email: flags.string({
-      name: 'email',
-      description: 'email address',
-    }),
-    password: flags.string({
-      name: 'password',
-      description: 'password',
-    }),
     base: flags.string({
       name: 'base',
       hidden: true,
       description: 'base url to authenticate with',
       default: 'https://prismic.io',
     }),
-    oauthaccesstoken: flags.string({
-      name: 'oauthaccesstoken',
-      description: 'oauth access token for sso',
-      exclusive: ['email', 'password'],
-    }),
+    port: flags.integer({
+      name: 'port',
+      hidden: false,
+      description: 'port to start the local login server',
+      default: DEFAULT_PORT
+    })
   }
 
   static args = []
 
-  private async handleLogin(data: Partial<LoginData>): Promise<void> {
-    return this.prismic.login(data)
-    .then(() => this.log(`Successfully logged in to ${data.base || this.prismic.base}`))
-    .catch((error: AxiosError) => {
-      if (error.response && (error.response.status === 400 || error.response.status === 401)) {
-        this.log(`Login error, check your credentials. If you forgot your password, visit ${data.base || this.prismic.base} to reset it`)
-        return new Login([], this.config).run() // for asking repeatedly
-      // throw new CLIError(error.message)
+  private handleLogin(prismic: Prismic): (ctx: Koa.Context) => Promise<void> {
+    return (ctx: Koa.Context): Promise<void> => {
+      // Stop the server
+      Server.stop();
+      cli.action.start('Logging in', 'Analyzing the browser response');
+
+      const { email, cookies }: { email: string, cookies: Array<string> } = ctx.request.body as LoginResponse
+      if (!email || !cookies) {
+        cli.action.stop("It seems the server didn't respond properly, please contact us.")
+        return ctx.throw(400);
       }
-      throw error
-    })
+
+      return prismic.setCookies(cookies)
+        .then(() => {
+          cli.log(`Logged in as ${email}`)
+        })
+        .catch(() => cli.log(`It seems an error happened while setting your cookies.`))
+        .finally(() => cli.action.stop())
+      }
   }
 
   async run() {
-    const {flags}  = this.parse(Login)
-    const {oauthaccesstoken, base} = flags
+    const {flags} = this.parse(Login)
+    const {base, port} = flags
 
-    if (oauthaccesstoken) {
-      return this.handleLogin({oauthaccesstoken, base})
-    }
+    // ask confirmation
+    const confirmationKey: string = await cli.prompt('Press any key to open up the browser to login or q to exist', { type: 'single', required: true })
+    if (confirmationKey === 'q') return
 
-    const email = flags.email ?? await cli.prompt('Email')
-    const password = flags.password ?? await cli.prompt('Password', {type: 'hide'})
+    const loginUrl: string = `${base}/dashboard/cli/login${ port != DEFAULT_PORT ? `?port=${port}` : '' }`
 
-    return this.handleLogin({email, password, base})
+    // Start the server
+    Server.start(port, this.handleLogin(this.prismic));
+
+    // Opening browser
+    this.log(`Opening browser to -> ${loginUrl}`);
+    cli.action.start('Logging in', 'waiting for the browser response')
+
+    await cli.open(loginUrl);
   }
 }

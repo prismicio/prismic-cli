@@ -2,7 +2,6 @@ import {fs} from '../utils'
 import * as path from 'path'
 import * as cookie from '../utils/cookie'
 import Axios, {AxiosInstance, AxiosResponse, AxiosRequestConfig, AxiosError} from 'axios'
-import * as qs from 'qs'
 import * as os from 'os'
 import {IConfig} from '@oclif/config'
 import {parseJsonSync} from '../utils'
@@ -11,12 +10,6 @@ import cli from 'cli-ux'
 
 const version: string = require('../../package.json').version
 
-export interface LoginData {
-  email?: string;
-  password?: string;
-  oauthaccesstoken?: string;
-  base?: string;
-}
 
 export interface LocalDB {
   base: string;
@@ -108,7 +101,7 @@ export default class Prismic {
 
   public cookies: string;
 
-  public oauthAccessToken?: string;
+  public oauthAccessToken: string | undefined;
 
   public debug: (...args: any[]) => void;
 
@@ -146,7 +139,7 @@ export default class Prismic {
     return this.removeConfig()
   }
 
-  private async setCookies(arr: Array<string> = []): Promise<void> {
+  public async setCookies(arr: Array<string> = []): Promise<void> {
     const oldCookies = cookie.parse(this.cookies || '')
 
     const newCookies = arr.map(str => cookie.parse(str)).reduce((acc, curr) => {
@@ -181,37 +174,6 @@ export default class Prismic {
     }
     // TODO: optionaly add the x_xsrf (_) parmeter to the query ie: ?_=my_x_xsrf_token
     return Axios.create(opts)
-  }
-
-  /**
-   * Handles login logic using email and password or an oauth access token
-   * @param {Object} data - Login data
-   * @param {String} [data.base = https://prismic.io] - where to login
-   * @param {String} [data.email] - users email address
-   * @param {String} [data.password] - users password
-   * @param {String} [data.oauthaccesstoken] - for logingin in with SSO
-   * @returns {Promise} - will either resolve or reject
-   */
-  public async login(data: LoginData): Promise<void> {
-    const {base, email, password, oauthaccesstoken} = data
-    const params = oauthaccesstoken ? {oauthaccesstoken} : {email, password}
-    if (base) {
-      this.base = base
-    }
-
-    return this.axios().post('/authentication/signin', qs.stringify(params), {
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    })
-    .then((res: AxiosResponse) => {
-      return this.setCookies(res.headers['set-cookie'])
-    }).catch((error: AxiosError) => {
-      this.debug('communication.login', error.message)
-      if (error.response) {
-        this.debug(`[${error.response?.status}]: ${error.response?.statusText}`)
-        this.debug(error.response.data)
-      }
-      throw error
-    })
   }
 
   private async auth(path: 'validate' | 'refreshtoken'): Promise<AxiosResponse> {
