@@ -28,18 +28,20 @@ export type Apps = 'slicemachine' | '' | null | undefined
 
 interface CustomTypeBase {
   id: string;
-  name: string;
   repeatable: string;
 }
 export interface CustomTypeMetaData extends CustomTypeBase {
+  name: string;
   value: string;
 }
 
 export interface CustomType extends CustomTypeBase {
+  name: string;
   value: object;
 }
 
 export interface SliceMachineCustomType extends CustomTypeBase {
+  label: string;
   json: object;
 }
 
@@ -259,6 +261,8 @@ export default class Prismic {
 
   async validateAndRefresh(): Promise<void> {
     // TDOD: does this handle oauthAccessTokens?
+    this.debug('communication.validateAndRefresh')
+    // return Promise.resolve()
     return this.validateSession().then(() => this.refreshSession())
   }
 

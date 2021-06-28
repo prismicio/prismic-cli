@@ -164,8 +164,9 @@ export default abstract class PrismicGenerator extends Generator {
     this.env.sharedFs.each(file => {
       if (file.isNew && file.path.startsWith(pathToFolder) && file.basename === 'index.json' && file.path !== toIgnore) {
         const ct = this.readDestinationJSON(file.path) as unknown as SliceMachineCustomType
-        const {json, ...meta} = ct
-        customTypes.push({...meta, value: json})
+        const {json, label, ...meta} = ct
+        // renaming these properties for now
+        customTypes.push({name: label, ...meta, value: json})
       }
     })
 
