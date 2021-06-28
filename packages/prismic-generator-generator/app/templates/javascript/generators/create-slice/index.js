@@ -70,14 +70,20 @@ class CreateSlice extends PrismicGenerator {
 
     const description = toDescription(this.answers.sliceName)
 
+    const slicesDirectoryPath = path.join('.slicemachine', 'assets', this.answers.library, this.answers.sliceName)
+    const pathToComponentFromStory = path.relative(this.destinationPath(slicesDirectoryPath), pathToLib)
+    const pathToModelFromStory = path.join(pathToComponentFromStory, 'model.json')
+
+    const mock = require('./templates/library/slice/mocks.json')
+
     this.fs.copyTpl(
       this.templatePath('library/slice/**'),
       pathToLib,
-      {sliceName: this.answers.sliceName, sliceId: sliceId, description},
+      {sliceName: this.answers.sliceName, sliceId: sliceId, description, pathToComponentFromStory, pathToModelFromStory, mock, componentTitle: `${this.answers.library}/${this.answers.sliceName}}`},
     )
     /* for the slicemachine update */
-    const slicesDirectoryPath = path.join('.slicemachine', 'assets', this.answers.library, this.answers.sliceName)
-    this.moveDestination(path.join(pathToLib, 'index.stories.js'), path.join(slicesDirectoryPath, 'index.stories.js'))
+
+    this.moveDestination(path.join(pathToLib, 'index.stories.*'), path.join(slicesDirectoryPath))
     this.moveDestination(path.join(pathToLib, 'mocks.json'), path.join(slicesDirectoryPath, 'mocks.json'))
   }
 
