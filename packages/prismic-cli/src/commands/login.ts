@@ -39,7 +39,8 @@ export default class Login extends Command {
     .catch((error: AxiosError) => {
       if (error.response && (error.response.status === 400 || error.response.status === 401)) {
         this.log(`Login error, check your credentials. If you forgot your password, visit ${data.base || this.prismic.base} to reset it`)
-        return new Login([], this.config).run() // for asking repeatedly
+        // return new Login([], this.config).run() // for asking repeatedly
+        return this.login()
       // throw new CLIError(error.message)
       }
       throw error
