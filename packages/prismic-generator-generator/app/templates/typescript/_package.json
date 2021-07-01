@@ -11,10 +11,12 @@
     "generators"
   ],
   "dependencies": {
-    "@prismicio/prismic-yeoman-generator": "^4.0.0",
-    "ejs": "^3.1.6", <% if(slicemachine) { %>
+    "@prismicio/prismic-yeoman-generator": "^4.0.0", <% if(slicemachine) { %>
+    "ejs": "^3.1.6",
     "inquirer": "^7.3.3",
     "is-valid-path": "^0.1.1",
+    "lodash.camelcase": "^4.3.0",
+    "@types/lodash.camelcase": "^4.3.6",
     "sm-commons": "^0.0.23",<% } %>
     "tslib": "^1"
   },

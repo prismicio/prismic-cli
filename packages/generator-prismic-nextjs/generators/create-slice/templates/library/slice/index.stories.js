@@ -8,3 +8,4 @@ export default {
 export const <%- variation.id %> = () => <MyComponent slice={<%- JSON.stringify(variation) %>} />
 <%- variation.id %>.storyName = '<%- variation.name %>'
 <% }) %>
+ 

@@ -4,6 +4,7 @@ const isValidPath = require('is-valid-path')
 import * as path from 'path'
 import * as fs from 'fs'
 import * as inquirer from 'inquirer' // this is easier to mock
+import { camelCase } from 'lodash'
 
 const {snakelize} = require('sm-commons/utils/str')
 const {SM_FILE} = require('sm-commons/consts')
@@ -21,6 +22,11 @@ function pascalCaseToSnakeCase(str: string): string {
 
 function toDescription(str: string) {
   return str.split(/(?=[A-Z0-9])/).join(' ')
+}
+
+function createStorybookId(str: string): string {
+  const camel = camelCase(str)
+  return `_${camel[0].toUpperCase()}${camel.slice(1)}`
 }
 
 export default class CreateSlice extends PrismicGenerator {
@@ -84,7 +90,7 @@ export default class CreateSlice extends PrismicGenerator {
 
     const mocksAsString = ejs.render(mocksTemplate, {sliceId, sliceName: this.answers.sliceName, description})
 
-    const mocks = JSON.parse(mocksAsString)
+    const mocks = JSON.parse(mocksAsString).map((d: {variation?: string; name: string; [key: string]: any}) => ({id: createStorybookId(d.variation || d.name), ...d}))
 
     this.fs.copyTpl(
       this.templatePath('library/slice/**'),

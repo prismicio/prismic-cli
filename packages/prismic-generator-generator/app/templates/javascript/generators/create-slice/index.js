@@ -7,6 +7,7 @@ const inquirer = require('inquirer') // this is easier to mock
 
 const {snakelize} = require('sm-commons/utils/str')
 const {SM_FILE} = require('sm-commons/consts')
+const {camelCase} = require('lodash')
 
 function validateSliceName(name) {
   // PascalCase
@@ -18,6 +19,11 @@ function validateSliceName(name) {
 function pascalCaseToSnakeCase(str) { return snakelize(str) }
 
 function toDescription(str) { return str.split(/(?=[A-Z0-9])/).join(' ') }
+
+function createStorybookId(str) {
+  const camel = camelCase(str)
+  return `_${camel[0].toUpperCase()}${camel.slice(1)}`
+}
 
 class CreateSlice extends PrismicGenerator {
   /**
@@ -83,7 +89,7 @@ class CreateSlice extends PrismicGenerator {
 
     const mocksAsString = ejs.render(mocksTemplate, {sliceId, sliceName: this.answers.sliceName, description})
 
-    const mocks = JSON.parse(mocksAsString)
+    const mocks = JSON.parse(mocksAsString).map((d) => ({id: createStorybookId(d.variation || d.name), ...d}))
 
     this.fs.copyTpl(
       this.templatePath('library/slice/**'),
