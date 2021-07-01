@@ -4,7 +4,7 @@ const isValidPath = require('is-valid-path')
 import * as path from 'path'
 import * as fs from 'fs'
 import * as inquirer from 'inquirer' // this is easier to mock
-import { camelCase } from 'lodash'
+import {camelCase} from 'lodash'
 
 const {snakelize} = require('sm-commons/utils/str')
 const {SM_FILE} = require('sm-commons/consts')
