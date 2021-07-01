@@ -1,6 +1,6 @@
 {
   "name": "generator-prismic-vue",
-  "version": "4.0.1-alpha.11",
+  "version": "4.0.1-alpha.12",
   "main": "generators/app/index.js",
   "license": "Apache-2.0",
   "private": false,
@@ -11,7 +11,7 @@
     "generators"
   ],
   "dependencies": {
-    "@prismicio/prismic-yeoman-generator": "4.0.1-alpha.11",
+    "@prismicio/prismic-yeoman-generator": "4.0.1-alpha.12",
     "tslib": "^1"
   },
   "devDependencies": {
