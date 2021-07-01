@@ -1,6 +1,7 @@
 const PrismicGenerator = require('@prismicio/prismic-yeoman-generator').default
 const isValidPath = require('is-valid-path')
 const path = require('path')
+const ejs = require('ejs')
 const fs = require('fs')
 const inquirer = require('inquirer') // this is easier to mock
 
@@ -74,7 +75,15 @@ class CreateSlice extends PrismicGenerator {
     const pathToComponentFromStory = path.relative(this.destinationPath(slicesDirectoryPath), pathToLib)
     const pathToModelFromStory = path.join(pathToComponentFromStory, 'model.json')
 
-    const mocks = require('./templates/library/slice/mocks.json')
+    const mocksTemplate = fs.readFileSync(this.templatePath('library/slice/mocks.json'), 'utf-8')
+
+    const mocksAsString = ejs.render(mocksTemplate, {sliceId, sliceName: this.answers.sliceName, description})
+
+    const mocksTemplate = fs.readFileSync(this.templatePath('library/slice/mocks.json'), 'utf-8')
+
+    const mocksAsString = ejs.render(mocksTemplate, {sliceId, sliceName: this.answers.sliceName, description})
+
+    const mocks = JSON.parse(mocksAsString)
 
     this.fs.copyTpl(
       this.templatePath('library/slice/**'),
