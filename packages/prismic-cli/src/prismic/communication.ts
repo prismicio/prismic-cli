@@ -401,11 +401,10 @@ export default class Prismic {
       cli.action.stop()
       return res
     })
-    .catch(error => {
-      cli.action.stop()
+    .catch((error: AxiosError) => {
+      cli.action.stop(error.response?.data || error.message)
       const status: number = Math.floor((error?.response?.status || 100) / 100)
       if (status === 4 || status === 3) {
-        if (error.response.data) console.error(error.response.data)
         return this.reAuthenticate().then(retry)
       }
       throw error
