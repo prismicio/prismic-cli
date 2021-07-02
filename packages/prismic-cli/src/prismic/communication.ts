@@ -305,6 +305,13 @@ export default class Prismic {
     const email =  await cli.prompt('Email')
     const password =  await cli.prompt('Password', {type: 'hide'})
     return this.login({email, password}).catch((error: AxiosError) => {
+      if (error.response?.data) {
+        console.log(`[Error]: ${error.response.data}`)
+      } else if (error.response?.statusText) {
+        console.log(`[Error]: ${error.response.statusText}`)
+      } else {
+        console.log(`[Error]: ${error.message}`)
+      }
       if (error?.response?.status === 401) {
         return this.reAuthenticate()
       }
