@@ -85,10 +85,6 @@ class CreateSlice extends PrismicGenerator {
 
     const mocksAsString = ejs.render(mocksTemplate, {sliceId, sliceName: this.answers.sliceName, description})
 
-    const mocksTemplate = fs.readFileSync(this.templatePath('library/slice/mocks.json'), 'utf-8')
-
-    const mocksAsString = ejs.render(mocksTemplate, {sliceId, sliceName: this.answers.sliceName, description})
-
     const mocks = JSON.parse(mocksAsString).map((d) => ({id: createStorybookId(d.variation || d.name), ...d}))
 
     this.fs.copyTpl(
