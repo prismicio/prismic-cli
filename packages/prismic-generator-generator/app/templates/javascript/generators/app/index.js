@@ -54,7 +54,7 @@ module.exports = class extends PrismicGenerator {
     return this.prismic.createRepository({
       domain: this.domain,
       customTypes,
-      framework: ''
+      framework: '<%= name %>'
     }).then(res => {
       const url = new URL(this.prismic.base)
       url.host = `${res.data || this.domain}.${url.host}`
