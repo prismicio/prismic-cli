@@ -45,6 +45,7 @@ export interface SliceMachineCustomType extends CustomTypeBase {
 
 export interface CreateRepositoryArgs {
   domain: string;
+  framework: string;
   app?: Apps;
   customTypes?: Array<CustomType>;
   signedDocuments?: Documents;
@@ -372,6 +373,7 @@ export default class Prismic {
     // app, TODO: add app
     customTypes,
     signedDocuments,
+    framework,
   }: CreateRepositoryArgs): Promise<AxiosResponse<string>> {
     const signature = signedDocuments?.signature
     const documents = signedDocuments?.documents ? JSON.stringify(signedDocuments.documents) : undefined
@@ -382,9 +384,11 @@ export default class Prismic {
       ...(customTypes?.length ? {'custom-types': JSON.stringify(customTypes)} : {}),
       signature,
       documents,
+      role: 'developer',
+      framework,
     }
 
-    const retry = () => this.createRepositoryWithCookie({domain, customTypes, signedDocuments})
+    const retry = () => this.createRepositoryWithCookie({domain, framework, customTypes, signedDocuments})
 
     const url = new URL(this.base)
     url.pathname = '/authentication/newrepository'
@@ -413,6 +417,7 @@ export default class Prismic {
     // app,
     customTypes,
     signedDocuments,
+    framework,
   }: CreateRepositoryArgs): Promise<AxiosResponse<string>> {
     const signature = signedDocuments?.signature
     const documents = signedDocuments?.documents ? JSON.stringify(signedDocuments.documents) : undefined
@@ -424,13 +429,15 @@ export default class Prismic {
       ...(customTypes?.length ? {'custom-types': JSON.stringify(customTypes)} : {}),
       signature,
       documents,
+      role: 'developer',
+      framework,
     }
     const url = new URL(this.base)
     url.hostname = `api.${url.hostname}`
     url.pathname = '/management/repositories'
     url.searchParams.append('app', 'slicemachine')
 
-    const retry = () => this.createRepositoryWithToken({domain, customTypes, signedDocuments})
+    const retry = () => this.createRepositoryWithToken({domain, framework, customTypes, signedDocuments})
 
     const address = url.toString()
     cli.action.start('creating prismic repository')

@@ -100,6 +100,7 @@ export default class PrismicNuxt extends PrismicGenerator {
 
     return this.prismic.createRepository({
       domain: this.domain,
+      framework: 'nuxt',
       customTypes,
     }).then(res => {
       const url = new URL(this.prismic.base)
