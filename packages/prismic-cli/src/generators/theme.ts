@@ -1,7 +1,6 @@
 import PrismicGenerator, {TemplateOptions} from '@prismicio/prismic-yeoman-generator'
 import {AxiosResponse} from 'axios'
 import cli from 'cli-ux'
-import {readFileSync} from '../utils/fs'
 import * as Framework from '../utils/framework'
 
 export interface ThemeOptions extends TemplateOptions {
@@ -47,8 +46,8 @@ export default class PrismicTheme extends PrismicGenerator {
       }
       return this.fs.readJSON(pkgPath) as Framework.PkgJson
     })()
-    
-    if(!pkg) console.error("NO PKG FOUND")
+
+    if (!pkg) console.error('NO PKG FOUND')
 
     const maybeFramework = pkg && Framework.detect(pkg)
 
