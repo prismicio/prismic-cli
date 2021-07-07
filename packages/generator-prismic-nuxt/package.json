@@ -1,6 +1,6 @@
 {
   "name": "generator-prismic-nuxt",
-  "version": "4.0.1-alpha.12",
+  "version": "4.0.1-alpha.13",
   "main": "generators/app",
   "license": "Apache-2.0",
   "private": false,
@@ -11,7 +11,7 @@
     "generators"
   ],
   "dependencies": {
-    "@prismicio/prismic-yeoman-generator": "4.0.1-alpha.12",
+    "@prismicio/prismic-yeoman-generator": "4.0.1-alpha.13",
     "@types/lodash.camelcase": "^4.3.6",
     "chalk": "^4.1.1",
     "create-nuxt-app": "^3.5.0",
