@@ -1,6 +1,6 @@
 const PrismicGenerator = require('@prismicio/prismic-yeoman-generator').default
 const isValidPath = require('is-valid-path')
-const path = require('path')
+const path = require('path').posix
 const ejs = require('ejs')
 const fs = require('fs')
 const inquirer = require('inquirer') // this is easier to mock

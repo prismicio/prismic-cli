@@ -237,7 +237,6 @@ export default class Prismic {
     }
     return this.axios().post('/authentication/signup', undefined, {
       params: {
-        ml: true, // TODO: what's this for?
         email,
         password,
       },

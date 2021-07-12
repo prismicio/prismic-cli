@@ -1,10 +1,12 @@
 import PrismicGenerator, {TemplateOptions} from '@prismicio/prismic-yeoman-generator'
 import * as ejs from 'ejs'
 const isValidPath = require('is-valid-path')
-import * as path from 'path'
+import * as nodePath from 'path'
 import * as fs from 'fs'
 import * as inquirer from 'inquirer' // this is easier to mock
 import {camelCase} from 'lodash'
+
+const path = nodePath.posix
 
 const {snakelize} = require('sm-commons/utils/str')
 const {SM_FILE} = require('sm-commons/consts')
@@ -87,7 +89,7 @@ export default class CreateSlice extends PrismicGenerator {
     const pathToModelFromStory = path.join(pathToComponentFromStory, 'model.json')
 
     const mocksTemplate = fs.readFileSync(this.templatePath('library/slice/mocks.json'), 'utf-8')
-
+ 
     const mocksAsString = ejs.render(mocksTemplate, {sliceId, sliceName: this.answers.sliceName, description})
 
     const mocks = JSON.parse(mocksAsString).map((d: {variation?: string; name: string; [key: string]: any}) => ({id: createStorybookId(d.variation || d.name), ...d}))

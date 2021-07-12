@@ -3,7 +3,7 @@
   "name": "Default slice",
   "docURL": "...",
   "version": "sktwi1xtmkfgx8626",
-  "description": "<%%= description %>",
+  "description": "<%= description %>",
   "primary": {
     "title": [{
       "type": "heading1",
