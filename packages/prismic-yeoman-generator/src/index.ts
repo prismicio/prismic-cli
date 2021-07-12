@@ -3,14 +3,32 @@ import * as Generator from 'yeoman-generator'
 import axios from 'axios'
 import * as tmp from 'tmp-promise'
 import * as AdmZip from 'adm-zip'
-import * as path from 'path'
+import * as npath from 'path'
 import cli from 'cli-ux'
 import * as fs from 'fs'
 import {lookpath} from 'lookpath'
+import * as ejs from 'ejs'
+import {camelCase} from 'lodash'
+
+const {snakelize} = require('sm-commons/utils/str')
+
+const path = npath.posix
 
 import type Prismic from 'prismic-cli/src/prismic/communication'
 import type {CustomType, CustomTypeMetaData, SliceMachineCustomType} from 'prismic-cli/src/prismic/communication'
 
+function pascalCaseToSnakeCase(str: string): string {
+  return snakelize(str)
+}
+
+function toDescription(str: string) {
+  return str.split(/(?=[A-Z0-9])/).join(' ')
+}
+
+function createStorybookId(str: string): string {
+  const camel = camelCase(str)
+  return `_${camel[0].toUpperCase()}${camel.slice(1)}`
+}
 export interface TemplateOptions extends Generator.GeneratorOptions {
   // branch: string;
   // source: string;
@@ -270,6 +288,34 @@ export default abstract class PrismicGenerator extends Generator {
     const branch = this.branchFromUrl(source)
     const repo = this.gitRepoFromUrl(source)
     return `${repo}-${branch}`
+  }
+
+  copySliceTemplate(library: string, sliceName: string) {
+    const pathToLib = this.destinationPath(path.join(library, sliceName))
+
+    const sliceId = pascalCaseToSnakeCase(sliceName)
+
+    const description = toDescription(sliceName)
+
+    const slicesDirectoryPath = path.join('.slicemachine', 'assets', library, sliceName)
+    const pathToComponentFromStory = path.relative(this.destinationPath(slicesDirectoryPath), pathToLib)
+    const pathToModelFromStory = path.join(pathToComponentFromStory, 'model.json')
+
+    const mocksTemplate = fs.readFileSync(this.templatePath('library/slice/mocks.json'), 'utf-8')
+
+    const mocksAsString = ejs.render(mocksTemplate, {sliceId, sliceName, description})
+
+    const mocks = JSON.parse(mocksAsString).map((d: {variation?: string; name: string; [key: string]: any}) => ({id: createStorybookId(d.variation || d.name), ...d}))
+
+    this.fs.copyTpl(
+      this.templatePath('library/slice/**'),
+      pathToLib,
+      {sliceName, sliceId: sliceId, description, pathToComponentFromStory, pathToModelFromStory, mocks, componentTitle: `${library}/${sliceName}`},
+    )
+    /* for the slicemachine update */
+
+    this.moveDestination(path.join(pathToLib, 'index.stories.*'), slicesDirectoryPath)
+    this.moveDestination(path.join(pathToLib, 'mocks.json'), path.join(slicesDirectoryPath, 'mocks.json'))
   }
 }
 

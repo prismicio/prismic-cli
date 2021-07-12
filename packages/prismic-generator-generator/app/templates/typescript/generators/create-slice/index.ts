@@ -1,11 +1,9 @@
 import PrismicGenerator, {TemplateOptions} from '@prismicio/prismic-yeoman-generator'
 const isValidPath = require('is-valid-path')
-import * as ejs from 'ejs'
 import * as nodePath from 'path'
 import * as fs from 'fs'
 import * as inquirer from 'inquirer' // this is easier to mock
-import {camelCase} from 'lodash'
-const {snakelize} = require('sm-commons/utils/str')
+
 const {SM_FILE} = require('sm-commons/consts')
 
 const path = nodePath.posix
@@ -15,19 +13,6 @@ function validateSliceName(name: string): boolean {
   const regexp = /^([A-Z][a-z]+){2,}$/
   if (!name) return false
   return regexp.test(name)
-}
-
-function pascalCaseToSnakeCase(str: string): string {
-  return snakelize(str)
-}
-
-function toDescription(str: string) {
-  return str.split(/(?=[A-Z0-9])/).join(' ')
-}
-
-function createStorybookId(str: string): string {
-  const camel = camelCase(str)
-  return `_${camel[0].toUpperCase()}${camel.slice(1)}`
 }
 
 export default class CreateSlice extends PrismicGenerator {
@@ -74,34 +59,10 @@ export default class CreateSlice extends PrismicGenerator {
     }])
 
     Object.assign(this.answers, {sliceName, library})
-  }
+  } 
 
   async configuring() {
-    const pathToLib = this.destinationPath(path.join(this.answers.library, this.answers.sliceName))
-
-    const sliceId = pascalCaseToSnakeCase(this.answers.sliceName)
-
-    const description = toDescription(this.answers.sliceName)
-
-    const slicesDirectoryPath = path.join('.slicemachine', 'assets', this.answers.library, this.answers.sliceName)
-    const pathToComponentFromStory = path.relative(this.destinationPath(slicesDirectoryPath), pathToLib)
-    const pathToModelFromStory = path.join(pathToComponentFromStory, 'model.json')
-
-    const mocksTemplate = fs.readFileSync(this.templatePath('library/slice/mocks.json'), 'utf-8')
-
-    const mocksAsString = ejs.render(mocksTemplate, {sliceId, sliceName: this.answers.sliceName, description})
-
-    const mocks = JSON.parse(mocksAsString).map((d: {variation?: string; name: string; [key: string]: any}) => ({id: createStorybookId(d.variation || d.name), ...d}))
-
-    this.fs.copyTpl(
-      this.templatePath('library/slice/**'),
-      pathToLib,
-      {sliceName: this.answers.sliceName, sliceId: sliceId, description, pathToComponentFromStory, pathToModelFromStory, mocks, componentTitle: `${this.answers.library}/${this.answers.sliceName}`},
-    )
-    /* for the slicemachine update */
-
-    this.moveDestination(path.join(pathToLib, 'index.stories.*'), path.join(slicesDirectoryPath))
-    this.moveDestination(path.join(pathToLib, 'mocks.json'), path.join(slicesDirectoryPath, 'mocks.json'))
+    this.copySliceTemplate(this.answers.library, this.answers.sliceName)
   }
 
   async writing() {
