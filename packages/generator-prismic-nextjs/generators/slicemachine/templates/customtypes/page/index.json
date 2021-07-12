@@ -57,10 +57,7 @@
                 "image_side": {
                   "type": "Select",
                   "config": {
-                    "options": [
-                      "left",
-                      "right"
-                    ],
+                    "options": ["left", "right"],
                     "default_value": "left",
                     "label": "Image side"
                   }
@@ -711,3 +708,4 @@
     }
   }
 }
+
