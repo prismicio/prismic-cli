@@ -25,7 +25,7 @@ describe('signup', () => {
     'prismic-auth=auth-token; Path=/; Domain=.prismic.io; Secure; SameSite=None',
   ]
 
-  const query = querystring.stringify({ml: true, email, password})
+  const query = querystring.stringify({email, password})
 
   test
   .stdout()
