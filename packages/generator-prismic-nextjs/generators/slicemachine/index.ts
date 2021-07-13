@@ -84,7 +84,7 @@ export default class SliceMachine extends PrismicGenerator {
       },
       devDependencies: {
         '@babel/core': '^7.12.10',
-        'slice-machine-ui': 'alpha',
+        'slice-machine-ui': 'beta',
       },
     }
 
