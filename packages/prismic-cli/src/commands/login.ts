@@ -33,24 +33,26 @@ export default class Login extends Command {
 
   static args = []
 
-  private handleLogin(prismic: Prismic): (ctx: Koa.Context) => Promise<void> {
-    return (ctx: Koa.Context): Promise<void> => {
-      // Stop the server
-      Server.stop();
-      cli.action.start('Logging in', 'Analyzing the browser response');
+  private handleLogin(prismic: Prismic): (ctx: Koa.Context) => Promise<any> {
+    return async (ctx: Koa.Context): Promise<any> => {
+      cli.action.start('Logging in', 'Receiving authentication information');
 
-      const { email, cookies }: { email: string, cookies: Array<string> } = ctx.request.body as LoginResponse
+      const { email, cookies } = ctx.request.body as LoginResponse
       if (!email || !cookies) {
         cli.action.stop("It seems the server didn't respond properly, please contact us.")
-        return ctx.throw(400);
-      }
+        ctx.status = 400;
+        return cli.exit();
+      };
 
       return prismic.setCookies(cookies)
         .then(() => {
-          cli.log(`Logged in as ${email}`)
+          cli.action.stop(`Logged in as ${email}`)
+          return ctx.status = 200
         })
-        .catch(() => cli.log(`It seems an error happened while setting your cookies.`))
-        .finally(() => cli.action.stop())
+        .catch(() => {
+          cli.action.stop(`It seems an error happened while setting your cookies.`)
+          return ctx.throw(400);
+        })
       }
   }
 
@@ -62,15 +64,15 @@ export default class Login extends Command {
     const confirmationKey: string = await cli.prompt('Press any key to open up the browser to login or q to exist', { type: 'single', required: true })
     if (confirmationKey === 'q') return
 
-    const loginUrl: string = `${base}/dashboard/cli/login${ port != DEFAULT_PORT ? `?port=${port}` : '' }`
+    const loginUrl: string = `${base}/dashboard/cli/login?port=${port}`
 
     // Start the server
-    Server.start(port, this.handleLogin(this.prismic));
+    Server.start(base, port, this.handleLogin(this.prismic));
 
     // Opening browser
-    this.log(`Opening browser to -> ${loginUrl}`);
+    cli.log(`\nOpening browser to -> ${loginUrl}`);
     cli.action.start('Logging in', 'waiting for the browser response')
 
-    await cli.open(loginUrl);
+    cli.open(loginUrl);
   }
 }

@@ -108,6 +108,13 @@
     "minimatch" "^3.0.4"
     "strip-json-comments" "^3.1.1"
 
+"@koa/cors@^3.1.0":
+  "integrity" "sha512-7ulRC1da/rBa6kj6P4g2aJfnET3z8Uf3SWu60cjbtxTA5g8lxRdX/Bd2P92EagGwwAhANeNw8T8if99rJliR6Q=="
+  "resolved" "https://registry.npmjs.org/@koa/cors/-/cors-3.1.0.tgz"
+  "version" "3.1.0"
+  dependencies:
+    "vary" "^1.1.2"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   "integrity" "sha512-bPHp6Ji8b41szTOcaP63VlnbbO5Ny6dwAATtY6JTjh5N2OLrb5Qk/Th5cRkRQhkWCt+EJsYrNB0MiL+Gpn6e3g=="
   "resolved" "https://registry.npmjs.org/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz"
@@ -237,49 +244,26 @@
   dependencies:
     "fancy-test" "^1.4.3"
 
-"@prismicio/prismic-generator-generator@^4.0.1-aplha.6":
-  "integrity" "sha512-pqj86EhLL7s2WZXhwYFJnuQ3msmCdfbQvKCzBCoBrClqKtdBzJe1+yOn9sZ+c3LhRGt/r1gZazyM/+FizOyMTw=="
-  "resolved" "https://registry.npmjs.org/@prismicio/prismic-generator-generator/-/prismic-generator-generator-4.0.1-aplha.6.tgz"
-  "version" "4.0.1-aplha.6"
-  dependencies:
-    "tslib" "^1"
-    "yeoman-generator" "^4.11.3"
-
-"@prismicio/prismic-generator-generator@4.0.1-alpha.8":
-  "integrity" "sha512-tLJ3TWXSXrxDbIFYU1pdEL35xO769JBVzwT4nBNuG+y2Vwq4u5IPmOsCJUdt1Zw1YcOGUFCxIG1Al/bHB8AO1Q=="
-  "resolved" "https://registry.npmjs.org/@prismicio/prismic-generator-generator/-/prismic-generator-generator-4.0.1-alpha.8.tgz"
-  "version" "4.0.1-alpha.8"
+"@prismicio/prismic-generator-generator@4.0.1-alpha.10":
+  "integrity" "sha512-XN5IL2URmebDKPunrQ5RGd7JntJG+9Z0zGkLklPXHC3STIKZjfboa9AjO8m4GsvzFBs03cRLViLlVkwQSlPu5g=="
+  "resolved" "https://registry.npmjs.org/@prismicio/prismic-generator-generator/-/prismic-generator-generator-4.0.1-alpha.10.tgz"
+  "version" "4.0.1-alpha.10"
   dependencies:
     "inquirer" "^7.3.3"
     "tslib" "^1"
     "yeoman-generator" "^4.11.3"
 
-"@prismicio/prismic-yeoman-generator@^4.0.1-alpha.8", "@prismicio/prismic-yeoman-generator@4.0.1-alpha.8":
-  "integrity" "sha512-0OUbfsDiWs8q4EnMWtmXXA/IgsaNt9HHgwXn2Jnf4uwioEanSIB6rkjYoJjuvBeT0YreKJUSN/ZyTMWkAS6FhQ=="
-  "resolved" "https://registry.npmjs.org/@prismicio/prismic-yeoman-generator/-/prismic-yeoman-generator-4.0.1-alpha.8.tgz"
-  "version" "4.0.1-alpha.8"
+"@prismicio/prismic-yeoman-generator@4.0.1-alpha.10":
+  "integrity" "sha512-8zH2gJOVuEymuCdBXdTyyHF+5DKd8NSwXp37mUXCad9Y9AWDPIL7jyf3KGXcEyX3TQZGU7k6Fa82b+YDOhcFvA=="
+  "resolved" "https://registry.npmjs.org/@prismicio/prismic-yeoman-generator/-/prismic-yeoman-generator-4.0.1-alpha.10.tgz"
+  "version" "4.0.1-alpha.10"
   dependencies:
     "@types/yeoman-generator" "^4.11.3"
     "adm-zip" "^0.5.1"
     "axios" "^0.21.0"
     "cli-ux" "^5.5.1"
     "lookpath" "^1.2.0"
-    "prismic-cli" "^4.0.1-alpha.8"
-    "tmp-promise" "^3.0.2"
-    "tslib" "^1"
-    "yeoman-generator" "^4.12.0"
-
-"@prismicio/prismic-yeoman-generator@^4.0.1-aplha.6":
-  "integrity" "sha512-BWNCY/5iwaFHG+g+li/SaQ26/hQpw1sQJa6L/lobMm8i7vJqMkODh14Ab0cdpdv+vSzRBVz7ohm2PuZ0w0buHw=="
-  "resolved" "https://registry.npmjs.org/@prismicio/prismic-yeoman-generator/-/prismic-yeoman-generator-4.0.1-aplha.6.tgz"
-  "version" "4.0.1-aplha.6"
-  dependencies:
-    "@types/yeoman-generator" "^4.11.3"
-    "adm-zip" "^0.5.1"
-    "axios" "^0.21.0"
-    "cli-ux" "^5.5.1"
-    "lookpath" "^1.2.0"
-    "prismic-cli" "^4.0.1-aplha.6"
+    "prismic-cli" "4.0.1-alpha.10"
     "tmp-promise" "^3.0.2"
     "tslib" "^1"
     "yeoman-generator" "^4.12.0"
@@ -2839,28 +2823,20 @@
   "resolved" "https://registry.npmjs.org/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz"
   "version" "1.0.1"
 
-"generator-prismic-angular2@^4.0.1-aplha.6":
-  "integrity" "sha512-MW+utHVxE46W9i5gSO+2NggBxvxslmhzf8zTNT08HQCyLnz3gdkHZSOwu2lU3VRqDDeNDU13hSJBgBtCFVoRug=="
-  "resolved" "https://registry.npmjs.org/generator-prismic-angular2/-/generator-prismic-angular2-4.0.1-aplha.6.tgz"
-  "version" "4.0.1-aplha.6"
+"generator-prismic-angular2@4.0.1-alpha.10":
+  "integrity" "sha512-S+kOSF1xzGQ6ZBwAbw7M3xR6Z4qDKISLxvHlavlxPcEX3zKqVfjsIboPbNVBzEuBKIs5uf0LO/Kz0OJkoUpwAg=="
+  "resolved" "https://registry.npmjs.org/generator-prismic-angular2/-/generator-prismic-angular2-4.0.1-alpha.10.tgz"
+  "version" "4.0.1-alpha.10"
   dependencies:
-    "@prismicio/prismic-yeoman-generator" "^4.0.1-aplha.6"
+    "@prismicio/prismic-yeoman-generator" "4.0.1-alpha.10"
     "tslib" "^1"
 
-"generator-prismic-angular2@4.0.1-alpha.8":
-  "integrity" "sha512-K1+e2Qd7i0VcriciAzw2+7w6fgIBe/8krxEK23ZCfo6j4NHsDYsDqTvW+vp6Q+rT11+O1jhbwF/TUoiERKzg0A=="
-  "resolved" "https://registry.npmjs.org/generator-prismic-angular2/-/generator-prismic-angular2-4.0.1-alpha.8.tgz"
-  "version" "4.0.1-alpha.8"
+"generator-prismic-nextjs@4.0.1-alpha.10":
+  "integrity" "sha512-rmaOoH6saIUK7N1GUYLHAM6ZxKQmZPU0AViaGOwn99pPMzU2bVTIEX9UTbqXgfL4GvgCdMZCTwxyz+X0gm5mNg=="
+  "resolved" "https://registry.npmjs.org/generator-prismic-nextjs/-/generator-prismic-nextjs-4.0.1-alpha.10.tgz"
+  "version" "4.0.1-alpha.10"
   dependencies:
-    "@prismicio/prismic-yeoman-generator" "^4.0.1-alpha.8"
-    "tslib" "^1"
-
-"generator-prismic-nextjs@^4.0.1-aplha.6":
-  "integrity" "sha512-B94t3AbDfpx6FIKQ/Wm02FqYTlIOQnVpT1iSkE2VX0jnVdtjRGmNcEKDx2E1q6TD/xT2adGwx9omU71SHUOO0g=="
-  "resolved" "https://registry.npmjs.org/generator-prismic-nextjs/-/generator-prismic-nextjs-4.0.1-aplha.6.tgz"
-  "version" "4.0.1-aplha.6"
-  dependencies:
-    "@prismicio/prismic-yeoman-generator" "^4.0.1-aplha.6"
+    "@prismicio/prismic-yeoman-generator" "4.0.1-alpha.10"
     "chalk" "^4.1.1"
     "inquirer" "^7.3.3"
     "is-valid-path" "^0.1.1"
@@ -2868,41 +2844,20 @@
     "tslib" "^1"
     "yeoman-generator" "^4.12.0"
 
-"generator-prismic-nextjs@4.0.1-alpha.8":
-  "integrity" "sha512-jI3+98PUbEsIVJ7Z0UmK44/66ts/k16fNeJnno1EvKLk2SotPW273OvAgdmVfLS3Olub2KRnzkADXGyX0bnEMg=="
-  "resolved" "https://registry.npmjs.org/generator-prismic-nextjs/-/generator-prismic-nextjs-4.0.1-alpha.8.tgz"
-  "version" "4.0.1-alpha.8"
+"generator-prismic-nodejs@4.0.1-alpha.10":
+  "integrity" "sha512-0lmCGkgaJPdxzyMMf9b0WFZjROeqKxosY8Dc7BCG4uHOptv29ri6MpyNJMp04oeoIfpP40V+mu9PD+C6rlr2ig=="
+  "resolved" "https://registry.npmjs.org/generator-prismic-nodejs/-/generator-prismic-nodejs-4.0.1-alpha.10.tgz"
+  "version" "4.0.1-alpha.10"
   dependencies:
-    "@prismicio/prismic-yeoman-generator" "^4.0.1-alpha.8"
-    "chalk" "^4.1.1"
-    "inquirer" "^7.3.3"
-    "is-valid-path" "^0.1.1"
-    "sm-commons" "^0.0.23"
-    "tslib" "^1"
-    "yeoman-generator" "^4.12.0"
-
-"generator-prismic-nodejs@^4.0.1-aplha.6":
-  "integrity" "sha512-FqUxjXr6Vlv5G1eMbg8wlVCQ3f16yUpWtuhbJAlR1C1TH4CrYIrVXMRUWgV3uuhja5NEAdTdxiLXRt0GvKVRTA=="
-  "resolved" "https://registry.npmjs.org/generator-prismic-nodejs/-/generator-prismic-nodejs-4.0.1-aplha.6.tgz"
-  "version" "4.0.1-aplha.6"
-  dependencies:
-    "@prismicio/prismic-yeoman-generator" "^4.0.1-aplha.6"
+    "@prismicio/prismic-yeoman-generator" "4.0.1-alpha.10"
     "tslib" "^1"
 
-"generator-prismic-nodejs@4.0.1-alpha.8":
-  "integrity" "sha512-zhUnlyFinkxxQALECYuQnsxxq/Phf/hqDwfwi97dF7qeZ+5Auv4zjgwYl/zPmhgzi/eMJOZurF8lOvWyT+F4rw=="
-  "resolved" "https://registry.npmjs.org/generator-prismic-nodejs/-/generator-prismic-nodejs-4.0.1-alpha.8.tgz"
-  "version" "4.0.1-alpha.8"
+"generator-prismic-nuxt@4.0.1-alpha.10":
+  "integrity" "sha512-Az9jO1sqGP0IRswne7aBJev0Q0LEDCzTZw6DEr5hM1lwOARxe1R2JFyg9BvdQErT/A0XRS6zqzgZcioHO6IIcw=="
+  "resolved" "https://registry.npmjs.org/generator-prismic-nuxt/-/generator-prismic-nuxt-4.0.1-alpha.10.tgz"
+  "version" "4.0.1-alpha.10"
   dependencies:
-    "@prismicio/prismic-yeoman-generator" "^4.0.1-alpha.8"
-    "tslib" "^1"
-
-"generator-prismic-nuxt@^4.0.1-aplha.6":
-  "integrity" "sha512-jbCeLR2LzaA4wQLsluZvfxonYZ6yzUdK666fdtDQSHbOel/wjTDXPMLtDZyrKnaOq8FHJ8+CdF1aBF9oMv7ZtQ=="
-  "resolved" "https://registry.npmjs.org/generator-prismic-nuxt/-/generator-prismic-nuxt-4.0.1-aplha.6.tgz"
-  "version" "4.0.1-aplha.6"
-  dependencies:
-    "@prismicio/prismic-yeoman-generator" "^4.0.1-aplha.6"
+    "@prismicio/prismic-yeoman-generator" "4.0.1-alpha.10"
     "chalk" "^4.1.1"
     "create-nuxt-app" "^3.5.0"
     "inquirer" "^7.3.3"
@@ -2910,49 +2865,20 @@
     "sm-commons" "^0.0.23"
     "tslib" "^1"
 
-"generator-prismic-nuxt@4.0.1-alpha.8":
-  "integrity" "sha512-4h8znKIm/5N9d2PFlvNjkgsJd/QFC376LjaSYHl8wu86gClcDEIBXYyetWBYxgatUpuICHzzq/mdQsbHQSwJ8A=="
-  "resolved" "https://registry.npmjs.org/generator-prismic-nuxt/-/generator-prismic-nuxt-4.0.1-alpha.8.tgz"
-  "version" "4.0.1-alpha.8"
+"generator-prismic-react@4.0.1-alpha.10":
+  "integrity" "sha512-0XSYZ6Vbr8s60rJh3w+mgtGFzzsTwaUBCSzVi8Ro794BgU04xeKEzL49NBLCfiSqE0npx3l8osmmqkauXALfLg=="
+  "resolved" "https://registry.npmjs.org/generator-prismic-react/-/generator-prismic-react-4.0.1-alpha.10.tgz"
+  "version" "4.0.1-alpha.10"
   dependencies:
-    "@prismicio/prismic-yeoman-generator" "^4.0.1-alpha.8"
-    "chalk" "^4.1.1"
-    "create-nuxt-app" "^3.5.0"
-    "inquirer" "^7.3.3"
-    "is-valid-path" "^0.1.1"
-    "sm-commons" "^0.0.23"
+    "@prismicio/prismic-yeoman-generator" "4.0.1-alpha.10"
     "tslib" "^1"
 
-"generator-prismic-react@^4.0.1-aplha.6":
-  "integrity" "sha512-1zfAeOguid/okS9q0Bfu9P3tbKl4hJpN+b4j1zvl9j1EsYVHfCFVsE1k9Vc5unkQSIK8Y6VXb3o1ksHVpihhJQ=="
-  "resolved" "https://registry.npmjs.org/generator-prismic-react/-/generator-prismic-react-4.0.1-aplha.6.tgz"
-  "version" "4.0.1-aplha.6"
+"generator-prismic-vue@4.0.1-alpha.10":
+  "integrity" "sha512-lY8nObjb4dP72MgcP8OXG/pwwoxnEPkzbBHKMg8vzmEZsi1H2temqliPW1/TJbSEzTlSVXoIqjJ7hHX3h9QU/w=="
+  "resolved" "https://registry.npmjs.org/generator-prismic-vue/-/generator-prismic-vue-4.0.1-alpha.10.tgz"
+  "version" "4.0.1-alpha.10"
   dependencies:
-    "@prismicio/prismic-yeoman-generator" "^4.0.1-aplha.6"
-    "tslib" "^1"
-
-"generator-prismic-react@4.0.1-alpha.8":
-  "integrity" "sha512-api2QeKoSu9faXk3+1EJsCirdiZbWD6HpS8RMVjDe78DFh5IwiPBeUDsBj9IBRQZChLgfFTTr8d+vnI6SkBHQg=="
-  "resolved" "https://registry.npmjs.org/generator-prismic-react/-/generator-prismic-react-4.0.1-alpha.8.tgz"
-  "version" "4.0.1-alpha.8"
-  dependencies:
-    "@prismicio/prismic-yeoman-generator" "^4.0.1-alpha.8"
-    "tslib" "^1"
-
-"generator-prismic-vue@^4.0.1-aplha.6":
-  "integrity" "sha512-qVHQhCtrCCAA6UI/ixH19nAPCuusoPVlRFCDgqKVmJQ3wWp6N79b/YDDv0OGQHdGa1PeMbd5y4M0MpyqP+fEQg=="
-  "resolved" "https://registry.npmjs.org/generator-prismic-vue/-/generator-prismic-vue-4.0.1-aplha.6.tgz"
-  "version" "4.0.1-aplha.6"
-  dependencies:
-    "@prismicio/prismic-yeoman-generator" "^4.0.1-aplha.6"
-    "tslib" "^1"
-
-"generator-prismic-vue@4.0.1-alpha.8":
-  "integrity" "sha512-bjwQulftDY1jr/NsH/G1sv4n1YHKK10hyQjwQ/2s4JeNSNdOAxFQKqNy4ADvjyaVLGf27cW3d5xAcUdkGDclyQ=="
-  "resolved" "https://registry.npmjs.org/generator-prismic-vue/-/generator-prismic-vue-4.0.1-alpha.8.tgz"
-  "version" "4.0.1-alpha.8"
-  dependencies:
-    "@prismicio/prismic-yeoman-generator" "^4.0.1-alpha.8"
+    "@prismicio/prismic-yeoman-generator" "4.0.1-alpha.10"
     "tslib" "^1"
 
 "get-caller-file@^2.0.1":
@@ -5225,10 +5151,10 @@
   "resolved" "https://registry.npmjs.org/pretty-bytes/-/pretty-bytes-5.4.1.tgz"
   "version" "5.4.1"
 
-"prismic-cli@^4.0.1-alpha.8", "prismic-cli@^4.0.1-aplha.6":
-  "integrity" "sha512-D5NzNJo4VXBr4hlxgI8RirGNZHBDsJBuug1K7Dn9jB8hVAUzV7QA/xLyeD4MNS/1IzKAiKFB603eepiuO4nRnA=="
-  "resolved" "https://registry.npmjs.org/prismic-cli/-/prismic-cli-4.0.1-aplha.6.tgz"
-  "version" "4.0.1-aplha.6"
+"prismic-cli@4.0.1-alpha.10":
+  "integrity" "sha512-8ntUve3bm4OEC6L52RhD66q9g8JJIRH2dgh1HNCoibpRgC+OS0viyweWLrC2GadDCMrhWwHyocXn/Tmv9zBtXw=="
+  "resolved" "https://registry.npmjs.org/prismic-cli/-/prismic-cli-4.0.1-alpha.10.tgz"
+  "version" "4.0.1-alpha.10"
   dependencies:
     "@babel/generator" "^7.12.11"
     "@babel/parser" "^7.12.11"
@@ -5237,8 +5163,8 @@
     "@oclif/command" "^1"
     "@oclif/config" "^1"
     "@oclif/plugin-help" "^3"
-    "@prismicio/prismic-generator-generator" "^4.0.1-aplha.6"
-    "@prismicio/prismic-yeoman-generator" "^4.0.1-aplha.6"
+    "@prismicio/prismic-generator-generator" "4.0.1-alpha.10"
+    "@prismicio/prismic-yeoman-generator" "4.0.1-alpha.10"
     "@types/adm-zip" "^0.4.33"
     "@types/inquirer" "^7.3.1"
     "@types/node" "^14.14.10"
@@ -5253,12 +5179,12 @@
     "email-validator" "^2.0.4"
     "fast-glob" "^3.2.5"
     "fs-extra" "^9.1.0"
-    "generator-prismic-angular2" "^4.0.1-aplha.6"
-    "generator-prismic-nextjs" "^4.0.1-aplha.6"
-    "generator-prismic-nodejs" "^4.0.1-aplha.6"
-    "generator-prismic-nuxt" "^4.0.1-aplha.6"
-    "generator-prismic-react" "^4.0.1-aplha.6"
-    "generator-prismic-vue" "^4.0.1-aplha.6"
+    "generator-prismic-angular2" "4.0.1-alpha.10"
+    "generator-prismic-nextjs" "4.0.1-alpha.10"
+    "generator-prismic-nodejs" "4.0.1-alpha.10"
+    "generator-prismic-nuxt" "4.0.1-alpha.10"
+    "generator-prismic-react" "4.0.1-alpha.10"
+    "generator-prismic-vue" "4.0.1-alpha.10"
     "inquirer" "^7.3.3"
     "is-valid-path" "^0.1.1"
     "libnpmconfig" "^1.2.1"

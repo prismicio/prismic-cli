@@ -1,26 +1,17 @@
-import { Server as ServerType } from 'http';
 import * as Koa from 'koa';
+const cors = require('@koa/cors');
 const bodyParser = require('koa-bodyparser');
 
-
-let _server: ServerType | null = null
-
+// The server will be shutdown automatically when the current Command is finished.
 export const Server = {
-  start: (port: number, handler: (ctx: Koa.Context) => void) => {
-    if (_server) return
-
+  start: (base: string, port: number, handler: (ctx: Koa.Context) => void) => {
     // Construct the APP
     const app = new Koa();
-    app.use(bodyParser())
+    app.use(cors({ origin: base }));
+    app.use(bodyParser());
     app.use(async (ctx: Koa.Context) => handler(ctx));
 
     // Listen
-    _server = app.listen(port)
-  },
-  stop: () => {
-    if (_server) {
-      _server.close()
-      _server = null;
-    }
+    app.listen(port)
   }
 }

@@ -15,6 +15,7 @@
     "@babel/parser": "^7.12.11",
     "@babel/traverse": "^7.12.12",
     "@babel/types": "^7.12.12",
+    "@koa/cors": "^3.1.0",
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^3",
