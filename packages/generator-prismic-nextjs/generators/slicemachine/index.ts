@@ -110,7 +110,7 @@ export default class SliceMachine extends PrismicGenerator {
       this.moveDestination('sm.json', SM_FILE)
     }
 
-    const customTypes = this.readCustomTypesFrom('custom_types')
+    const customTypes = this.readCustomTypesFrom('customtypes')
 
     return this.prismic.createRepository({
       domain: this.domain,

@@ -97,7 +97,7 @@ export default class PrismicNuxt extends PrismicGenerator {
     if (this.existsDestination('sm.json') && SM_FILE !== 'sm.json') {
       this.moveDestination('sm.json', SM_FILE)
     }
-    const customTypes = this.readCustomTypesFrom('custom_types')
+    const customTypes = this.readCustomTypesFrom('customtypes')
 
     return this.prismic.createRepository({
       domain: this.domain,
