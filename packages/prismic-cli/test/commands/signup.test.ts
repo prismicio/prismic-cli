@@ -70,11 +70,10 @@ describe('signup', () => {
     return Promise.resolve('')
   })
   .command(['signup', '--email', 'fails', '--password', 'fails'])
-  .do(ctx => {
+  .it('should validate password an email inputs', ctx => {
     expect(ctx.stderr).to.contain('Enter a valid email address')
     expect(ctx.stderr).to.contain('Enter a longer password (minimum 6 characters)')
   })
-  .it('should validate password an email inputs')
 
   // Error cases
   test
