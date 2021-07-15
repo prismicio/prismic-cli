@@ -29,6 +29,13 @@ export default class Login extends Command {
       description: 'oauth access token for sso',
       exclusive: ['email', 'password'],
     }),
+
+    'auth-url': flags.string({
+      name: 'auth url',
+      hidden: true,
+      description: 'url to validate and refresh tokens',
+      required: false,
+    }),
   }
 
   static args = []
@@ -49,15 +56,15 @@ export default class Login extends Command {
 
   async run() {
     const {flags}  = this.parse(Login)
-    const {oauthaccesstoken, base} = flags
+    const {oauthaccesstoken, base, 'auth-url': authUrl} = flags
 
     if (oauthaccesstoken) {
-      return this.handleLogin({oauthaccesstoken, base})
+      return this.handleLogin({oauthaccesstoken, base, authUrl})
     }
 
     const email = flags.email ?? await cli.prompt('Email')
     const password = flags.password ?? await cli.prompt('Password', {type: 'hide'})
 
-    return this.handleLogin({email, password, base})
+    return this.handleLogin({email, password, base, authUrl})
   }
 }
