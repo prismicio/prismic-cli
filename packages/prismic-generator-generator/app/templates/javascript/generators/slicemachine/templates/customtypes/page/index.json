@@ -2,8 +2,6 @@
   "id": "page",
   "label": "Page",
   "repeatable": true,
-  "status": true,
-  "description": "",
   "json": {
     "Page": {
       "uid": {
