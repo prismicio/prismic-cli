@@ -1,8 +1,9 @@
 import PrismicGenerator, {TemplateOptions, SliceMachineJson} from '@prismicio/prismic-yeoman-generator'
 import modifyNuxtConfig from './modify-nuxt-config'
 const {SM_FILE} = require('sm-commons/consts')
-import * as path from 'path'
+import * as npath from 'path'
 
+const path = npath.posix
 export default class StoryBookNuxt extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
