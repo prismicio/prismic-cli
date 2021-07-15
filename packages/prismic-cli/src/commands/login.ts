@@ -1,12 +1,12 @@
 import {flags} from '@oclif/command'
 import {Command} from '../prismic'
 import cli from 'cli-ux'
-import * as Koa from 'koa';
-import { Server } from '../utils/server';
-import Prismic from '../prismic/communication';
+import * as Koa from 'koa'
+import { Server } from '../utils/server'
+import Prismic from '../prismic/communication'
 import { LogDecorations, PRISMIC_LOG_HEADER } from '../utils/logDecoration'
 
-const DEFAULT_PORT = 5555;
+const DEFAULT_PORT = 5555
 type LoginResponse = {
   email: string,
   cookies: Array<string>
@@ -38,14 +38,14 @@ export default class Login extends Command {
 
   private handleLogin(prismic: Prismic): (ctx: Koa.Context) => Promise<any> {
     return async (ctx: Koa.Context): Promise<any> => {
-      cli.action.start(logAction, 'Receiving authentication information');
+      cli.action.start(logAction, 'Receiving authentication information')
+      Server.stop()
 
       const { email, cookies } = ctx.request.body as LoginResponse
       if (!email || !cookies) {
         cli.action.stop('It seems the server didn\'t respond properly, please contact us.')
-        ctx.status = 400;
-        return cli.exit();
-      };
+        return ctx.throw(400)
+      }
 
       return prismic.setCookies(cookies)
         .then(() => {
@@ -54,7 +54,7 @@ export default class Login extends Command {
         })
         .catch(() => {
           cli.action.stop(`It seems an error happened while setting your cookies.`)
-          return ctx.throw(400);
+          return ctx.throw(400)
         })
       }
   }
@@ -71,12 +71,12 @@ export default class Login extends Command {
     const loginUrl: string = `${base}/dashboard/cli/login?port=${port}`
 
     // Start the server
-    Server.start(base, port, this.handleLogin(this.prismic));
+    Server.start(base, port, this.handleLogin(this.prismic))
 
     // Opening browser
-    cli.log('\nOpening browser to ' + LogDecorations.Underscore + loginUrl + LogDecorations.Reset);
+    cli.log('\nOpening browser to ' + LogDecorations.Underscore + loginUrl + LogDecorations.Reset)
     cli.action.start(logAction, 'Waiting for the browser response')
 
-    cli.open(loginUrl);
+    cli.open(loginUrl)
   }
 }

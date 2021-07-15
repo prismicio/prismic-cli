@@ -1,6 +1,9 @@
+import { Server as ServerHttp } from 'http'
 import * as Koa from 'koa';
 const cors = require('@koa/cors');
 const bodyParser = require('koa-bodyparser');
+
+var server: ServerHttp | null = null;
 
 // The server will be shutdown automatically when the current Command is finished.
 export const Server = {
@@ -12,6 +15,9 @@ export const Server = {
     app.use(async (ctx: Koa.Context) => handler(ctx));
 
     // Listen
-    app.listen(port)
-  }
+    server = app.listen(port);
+  },
+  stop: () => server?.close((error) => {
+    if (error) console.log(`Error shuting down the local server: ${error}`)
+  })
 }
