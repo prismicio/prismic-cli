@@ -75,8 +75,6 @@ export default class SliceMachine extends PrismicGenerator {
         slicemachine: 'start-slicemachine --port 9999',
       },
       dependencies: {
-        'prismic-javascript': '^3.0.2',
-        'prismic-reactjs': '^1.3.3',
         'next-slicezone': '^0.0.14',
         'next-transpile-modules': '^6.4.0',
         'theme-ui': '^0.6.2',
