@@ -4,12 +4,15 @@ import cli from 'cli-ux'
 import * as Koa from 'koa';
 import { Server } from '../utils/server';
 import Prismic from '../prismic/communication';
+import { LogDecorations, PRISMIC_LOG_HEADER } from '../utils/logDecoration'
 
 const DEFAULT_PORT = 5555;
 type LoginResponse = {
   email: string,
   cookies: Array<string>
 }
+
+const logAction: string = PRISMIC_LOG_HEADER + 'Logging in'
 
 export default class Login extends Command {
   static description = 'Login to prismic'
@@ -35,11 +38,11 @@ export default class Login extends Command {
 
   private handleLogin(prismic: Prismic): (ctx: Koa.Context) => Promise<any> {
     return async (ctx: Koa.Context): Promise<any> => {
-      cli.action.start('Logging in', 'Receiving authentication information');
+      cli.action.start(logAction, 'Receiving authentication information');
 
       const { email, cookies } = ctx.request.body as LoginResponse
       if (!email || !cookies) {
-        cli.action.stop("It seems the server didn't respond properly, please contact us.")
+        cli.action.stop('It seems the server didn\'t respond properly, please contact us.')
         ctx.status = 400;
         return cli.exit();
       };
@@ -61,7 +64,8 @@ export default class Login extends Command {
     const {base, port} = flags
 
     // ask confirmation
-    const confirmationKey: string = await cli.prompt('Press any key to open up the browser to login or q to exist', { type: 'single', required: true })
+    const confirmationMessage = PRISMIC_LOG_HEADER + 'Press any key to open up the browser to login or ' + LogDecorations.FgRed + 'q' + LogDecorations.Reset + ' to exist'
+    const confirmationKey: string = await cli.prompt(confirmationMessage, { type: 'single', required: true })
     if (confirmationKey === 'q') return
 
     const loginUrl: string = `${base}/dashboard/cli/login?port=${port}`
@@ -70,8 +74,8 @@ export default class Login extends Command {
     Server.start(base, port, this.handleLogin(this.prismic));
 
     // Opening browser
-    cli.log(`\nOpening browser to -> ${loginUrl}`);
-    cli.action.start('Logging in', 'waiting for the browser response')
+    cli.log('\nOpening browser to ' + LogDecorations.Underscore + loginUrl + LogDecorations.Reset);
+    cli.action.start(logAction, 'Waiting for the browser response')
 
     cli.open(loginUrl);
   }

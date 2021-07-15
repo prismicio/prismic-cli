@@ -131,7 +131,6 @@ export default class Prismic {
     this.base = newConfig.base // || 'https://prismic.io'
     this.cookies = newConfig.cookies
     this.oauthAccessToken = newConfig.oauthAccessToken
-
     return fs.writeFile(this.configPath, JSON.stringify(newConfig, null, '\t'), 'utf-8')
   }
 
