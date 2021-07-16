@@ -79,6 +79,8 @@ export default class SliceMachine extends PrismicGenerator {
         'next-transpile-modules': '^6.4.0',
         'theme-ui': '^0.6.2',
         'essential-slices': '^1.0.3',
+        '@prismicio/client': '^5',
+        'prismic-reactjs': '^1.3.3',
       },
       devDependencies: {
         '@babel/core': '^7.12.10',
