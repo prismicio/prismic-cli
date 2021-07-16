@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 
-// HERE: auto generated content. This will be updated
+// HERE: auto generated content.
 import * as EssentialSlices from 'essential-slices/src/slices'
 
 const __allSlices = {  ...EssentialSlices, }

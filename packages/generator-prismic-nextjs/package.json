@@ -36,7 +36,7 @@
   "scripts": {
     "clean": "del-cli generators/**/*.js generators/**/*.d.ts !generators/**/templates/**/*.js",
     "prepack": "del-cli generators/**/*.js generators/**/*.d.ts !generators/**/templates/**/*.js && tsc -b",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "nyc --extension .ts mocha \"test/**/*.test.ts\""
   },
   "gitHead": "c989865ffc2f200cf1d8a3673bb2568e7c6d6085"
 }
