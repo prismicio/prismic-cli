@@ -240,7 +240,7 @@ export default class Slicemachine extends Command {
 
       const domain = await this.validateDomain(flags.domain)
 
-      return this.prismic.createRepository({domain})
+      return this.prismic.createRepository({domain, framework: ''}) /* the framework is already registered on intercom, default value is '' for wroom */
       .then(res => {
         const url = new URL(this.prismic.base)
         url.hostname = `${res.data}.${url.hostname}`

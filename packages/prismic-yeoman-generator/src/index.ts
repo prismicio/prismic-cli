@@ -185,7 +185,9 @@ export default abstract class PrismicGenerator extends Generator {
    * this.prismic.createRepository({ domain: this.domain, customTypes })
    * ```
    */
-  readCustomTypesFrom(customTypesDirectory = 'custom_types'): Array<CustomType> {
+  readCustomTypesFrom(maybeCustomTypesDirectory?: string): Array<CustomType> {
+    const hasRenamedDirectory = this.existsDestination('customtypes')
+    const customTypesDirectory = maybeCustomTypesDirectory || hasRenamedDirectory ? 'customtypes' : 'custom_types'
     const maybeNewFormat = this.handleNewCustomTypes(customTypesDirectory)
     const maybeOldFormat = this.handleOldCustomTypes(customTypesDirectory)
     /*

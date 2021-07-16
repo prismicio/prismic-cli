@@ -94,7 +94,7 @@ export default class CreateSlice extends PrismicGenerator {
 
     if (hasLibIndex) {
       this.fs.copy(libIndex, libIndex)
-      const content = `export { default as ${this.answers.sliceName} } from './${this.answers.sliceName}`
+      const content = `export { default as ${this.answers.sliceName} } from './${this.answers.sliceName}'`
       this.fs.append(libIndex, content)
     } else {
       this.fs.copyTpl(
