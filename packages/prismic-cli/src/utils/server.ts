@@ -3,6 +3,14 @@ import * as Koa from 'koa';
 const cors = require('@koa/cors');
 const bodyParser = require('koa-bodyparser');
 
+
+export const DEFAULT_PORT = 5555
+type LoginResponse = {
+  email: string,
+  cookies: Array<string>
+}
+
+
 var server: ServerHttp | null = null;
 
 // The server will be shutdown automatically when the current Command is finished.

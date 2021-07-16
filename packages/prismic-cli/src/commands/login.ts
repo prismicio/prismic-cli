@@ -2,15 +2,9 @@ import {flags} from '@oclif/command'
 import {Command} from '../prismic'
 import cli from 'cli-ux'
 import * as Koa from 'koa'
-import { Server } from '../utils/server'
+import { DEFAULT_PORT, Server } from '../utils/server'
 import Prismic from '../prismic/communication'
 import { LogDecorations, PRISMIC_LOG_HEADER } from '../utils/logDecoration'
-
-const DEFAULT_PORT = 5555
-type LoginResponse = {
-  email: string,
-  cookies: Array<string>
-}
 
 const logAction: string = PRISMIC_LOG_HEADER + 'Logging in'
 
@@ -19,13 +13,16 @@ export default class Login extends Command {
 
   static flags = {
     ...Command.flags,
+
     help: flags.help({char: 'h'}),
+
     base: flags.string({
       name: 'base',
       hidden: true,
       description: 'base url to authenticate with',
       default: 'https://prismic.io',
     }),
+
     port: flags.integer({
       name: 'port',
       hidden: false,
@@ -41,7 +38,7 @@ export default class Login extends Command {
       cli.action.start(logAction, 'Receiving authentication information')
       Server.stop()
 
-      const { email, cookies } = ctx.request.body as LoginResponse
+      const { email, cookies } = ctx.request.body as { email?: string, cookies?: Array<string> }
       if (!email || !cookies) {
         cli.action.stop('It seems the server didn\'t respond properly, please contact us.')
         return ctx.throw(400)
