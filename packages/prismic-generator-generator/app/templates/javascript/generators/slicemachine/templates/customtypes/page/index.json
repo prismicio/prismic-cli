@@ -1,6 +1,6 @@
 {
   "id": "page",
-  "name": "Page",
+  "label": "Page",
   "repeatable": true,
   "json": {
     "Page": {
@@ -11,7 +11,7 @@
           "placeholder": "unique-identifier-eg-homepage"
         }
       },
-      "body": {
+      "slices": {
         "type": "Slices",
         "fieldset": "Slice zone",
         "config": {

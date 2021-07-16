@@ -9,7 +9,6 @@ import New from '../../src/commands/new'
 import cli from 'cli-ux'
 import * as lookpath from 'lookpath'
 
-// TODO: this breaks other tests?
 describe('new', () => {
   test.it('flags', () => {
     expect(New.flags.domain).to.exist

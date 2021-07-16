@@ -35,7 +35,7 @@ export default class SliceMachine extends PrismicGenerator {
       },
       dependencies: {},
       devDependencies: {
-        'slice-machine-ui': 'alpha',
+        'slice-machine-ui': 'beta',
       },
     }
 

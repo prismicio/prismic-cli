@@ -16,30 +16,34 @@ export interface LoginData {
   password?: string;
   oauthaccesstoken?: string;
   base?: string;
+  authUrl?: string;
 }
 
 export interface LocalDB {
   base: string;
   cookies: string;
   oauthAccessToken?: string;
+  authUrl?: string;
 }
 
 export type Apps = 'slicemachine' | '' | null | undefined
 
 interface CustomTypeBase {
   id: string;
-  name: string;
   repeatable: string;
 }
 export interface CustomTypeMetaData extends CustomTypeBase {
+  name: string;
   value: string;
 }
 
 export interface CustomType extends CustomTypeBase {
+  name: string;
   value: object;
 }
 
 export interface SliceMachineCustomType extends CustomTypeBase {
+  label: string;
   json: object;
 }
 
@@ -87,7 +91,13 @@ export interface AxiosInstanceOptions extends AxiosRequestConfig {
   secure?: boolean;
 }
 
-export function toAuthUrl(path: 'validate' | 'refreshtoken', token: string, base = 'https://prismic.io') {
+export function toAuthUrl(path: 'validate' | 'refreshtoken', token: string, base = 'https://prismic.io', authUrl?: string) {
+  if (authUrl) {
+    const addr = new URL(authUrl)
+    addr.pathname = path
+    addr.searchParams.set('token', token)
+    return addr.toString()
+  }
   const url = new URL(base)
   url.hostname = `auth.${url.hostname}`
   url.pathname = path
@@ -111,15 +121,18 @@ export default class Prismic {
 
   public oauthAccessToken?: string;
 
+  private authUrl?: string;
+
   public debug: (...args: any[]) => void;
 
   constructor(config?: IConfig, debug?: (...args: any[]) => void) {
     const home = config && config.home ? config.home : os.homedir()
     this.configPath = path.join(home, '.prismic')
-    const {base, cookies, oauthAccessToken} = getOrCreateConfig(this.configPath)
+    const {base, cookies, oauthAccessToken, authUrl} = getOrCreateConfig(this.configPath)
     this.base = base
     this.cookies = cookies
     this.oauthAccessToken = oauthAccessToken
+    this.authUrl = authUrl
     this.validateRepositoryName = this.validateRepositoryName.bind(this)
 
     this.debug = debug || noop
@@ -139,6 +152,7 @@ export default class Prismic {
     this.base = newConfig.base // || 'https://prismic.io'
     this.cookies = newConfig.cookies
     this.oauthAccessToken = newConfig.oauthAccessToken
+    this.authUrl = newConfig.authUrl
 
     return fs.writeFile(this.configPath, JSON.stringify(newConfig, null, '\t'), 'utf-8')
   }
@@ -158,7 +172,7 @@ export default class Prismic {
       return cookie.serialize(key, value)
     }).join('; ')
 
-    return this.updateConfig({base: this.base, cookies: mergedCookie})
+    return this.updateConfig({base: this.base, cookies: mergedCookie, authUrl: this.authUrl})
   }
 
   /**
@@ -194,10 +208,13 @@ export default class Prismic {
    * @returns {Promise} - will either resolve or reject
    */
   public async login(data: LoginData): Promise<void> {
-    const {base, email, password, oauthaccesstoken} = data
+    const {base, email, password, oauthaccesstoken, authUrl} = data
     const params = oauthaccesstoken ? {oauthaccesstoken} : {email, password}
     if (base) {
       this.base = base
+    }
+    if (authUrl) {
+      this.authUrl = authUrl
     }
 
     return this.axios().post('/authentication/signin', qs.stringify(params), {
@@ -217,7 +234,7 @@ export default class Prismic {
 
   private async auth(path: 'validate' | 'refreshtoken'): Promise<AxiosResponse> {
     const token = cookie.parse(this.cookies)['prismic-auth'] || ''
-    const url = toAuthUrl(path, token, this.base)
+    const url = toAuthUrl(path, token, this.base, this.authUrl)
     return this.axios().get(url)
   }
 
@@ -235,7 +252,6 @@ export default class Prismic {
     }
     return this.axios().post('/authentication/signup', undefined, {
       params: {
-        ml: true, // TODO: what's this for?
         email,
         password,
       },
@@ -260,6 +276,8 @@ export default class Prismic {
 
   async validateAndRefresh(): Promise<void> {
     // TDOD: does this handle oauthAccessTokens?
+    this.debug('communication.validateAndRefresh')
+    // return Promise.resolve()
     return this.validateSession().then(() => this.refreshSession())
   }
 
@@ -302,6 +320,13 @@ export default class Prismic {
     const email =  await cli.prompt('Email')
     const password =  await cli.prompt('Password', {type: 'hide'})
     return this.login({email, password}).catch((error: AxiosError) => {
+      if (error.response?.data) {
+        console.log(`[Error]: ${error.response.data}`)
+      } else if (error.response?.statusText) {
+        console.log(`[Error]: ${error.response.statusText}`)
+      } else {
+        console.log(`[Error]: ${error.message}`)
+      }
       if (error?.response?.status === 401) {
         return this.reAuthenticate()
       }
@@ -401,11 +426,10 @@ export default class Prismic {
       cli.action.stop()
       return res
     })
-    .catch(error => {
-      cli.action.stop()
+    .catch((error: AxiosError) => {
+      cli.action.stop(error.response?.data || error.message)
       const status: number = Math.floor((error?.response?.status || 100) / 100)
       if (status === 4 || status === 3) {
-        if (error.response.data) console.error(error.response.data)
         return this.reAuthenticate().then(retry)
       }
       throw error

@@ -1,27 +1,27 @@
+import MyComponent from './<%- pathToComponentFromStory %>';
 import SliceZone from 'vue-slicezone'
-import model from './model'
-import mocks from './mocks.json'
-import Slice from '.'
 
 export default {
-  title: model.name,
+  title: '<%- componentTitle %>'
 }
 
-// TODO: Update to loop over mocks.json
-export const DefaultSlice = () => ({
+<% mocks.forEach((variation) => { %>
+export const <%- variation.id %> = () => ({
   components: {
-    Slice,
-    SliceZone,
+    MyComponent,
+    SliceZone
+  },
+  methods: {
+    resolve() {
+      return MyComponent
+    }
   },
   data() {
     return {
-      mock: mocks[0],
-      resolver() {
-        return Slice
-      },
+      mock: <%- JSON.stringify(variation) %>
     }
   },
-  template: '<slice-zone :slices="[ mock ]" :resolver="resolver" />',
+  template: '<SliceZone :slices="[mock]" :resolver="resolve" />'
 })
-
-DefaultSlice.storyName = mocks[0].name
+<%- variation.id %>.storyName = '<%- variation.name %>'
+<% }) %>

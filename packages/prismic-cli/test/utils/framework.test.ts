@@ -2,7 +2,7 @@ import {test, expect} from '@oclif/test'
 import {detect, parse, PkgJson} from '../../src/utils/framework'
 import {ProjectType} from '../../src/utils/framework/project-types'
 
-describe.only('utils/framework', () => {
+describe('utils/framework', () => {
   test.it('#parse', () => {
     expect(parse('NUXT')).equal('nuxt')
     expect(parse('Next')).equal('next')

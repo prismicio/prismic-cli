@@ -75,16 +75,16 @@ export default class SliceMachine extends PrismicGenerator {
         slicemachine: 'start-slicemachine --port 9999',
       },
       dependencies: {
-        'prismic-javascript': '^3.0.2',
-        'prismic-reactjs': '^1.3.3',
         'next-slicezone': '^0.0.14',
         'next-transpile-modules': '^6.4.0',
         'theme-ui': '^0.6.2',
         'essential-slices': '^1.0.3',
+        '@prismicio/client': '^5',
+        'prismic-reactjs': '^1.3.3',
       },
       devDependencies: {
         '@babel/core': '^7.12.10',
-        'slice-machine-ui': 'alpha',
+        'slice-machine-ui': 'beta',
       },
     }
 
@@ -112,7 +112,7 @@ export default class SliceMachine extends PrismicGenerator {
       this.moveDestination('sm.json', SM_FILE)
     }
 
-    const customTypes = this.readCustomTypesFrom('custom_types')
+    const customTypes = this.readCustomTypesFrom('customtypes')
 
     return this.prismic.createRepository({
       domain: this.domain,

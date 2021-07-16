@@ -18,10 +18,14 @@ class App extends PrismicGenerator {
    * install - Where installations are run (npm, bower)
    * 
    * end - Called last, cleanup, say good bye, etc
-   */
+   */ 
 
   async initializing() {
     this.destinationRoot(this.path)
+  }
+
+  async configuring() {
+    this.config.set('framework', '<%= name %>')
   }
 
   async prompting() {

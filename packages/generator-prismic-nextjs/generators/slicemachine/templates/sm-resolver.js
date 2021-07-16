@@ -1,7 +1,12 @@
 import { Fragment } from 'react'
-import * as EssentialSlices from 'essential-slices/src/slices'
 
-const __allSlices = {  ...EssentialSlices, }
+import {libraries} from './sm.json'
+
+const __allSlices = libraries.reduce((acc, lib) => {
+  const location = lib.replace(/^@\//, './')
+  const slices = import(location)
+  return {...acc, ...slices}
+},{})
 
 const NotFound = ({ sliceName, slice, i }) => {
   console.error(`[sm-resolver] component "${sliceName}" not found at index ${i}.`)

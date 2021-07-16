@@ -75,6 +75,8 @@ export default class extends PrismicGenerator {
         next: '^10.1.3',
         react: '^17.0.2',
         'react-dom': '^17.0.2',
+        '@prismicio/client': '^5',
+        'prismic-reactjs': '^1.3.3',
       },
     }
 
