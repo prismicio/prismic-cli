@@ -81,7 +81,6 @@ export default class CreateSlice extends PrismicGenerator {
       )
     }
 
-
     const libName = path.join('@', this.answers.library)
     const {libraries} = this.readDestinationJSON(SM_FILE, {libraries: []}) as unknown as SliceMachineConfig
 
