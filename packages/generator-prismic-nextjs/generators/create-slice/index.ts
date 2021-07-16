@@ -3,11 +3,9 @@ const isValidPath = require('is-valid-path')
 import * as nodePath from 'path'
 import * as fs from 'fs'
 import * as inquirer from 'inquirer' // this is easier to mock
-import processSmResolver from './process-sm-resolver'
 const path = nodePath.posix
 
 const {SM_FILE} = require('sm-commons/consts')
-const {pascalize} = require('sm-commons/utils/str');
 
 function validateSliceName(name: string): boolean {
   // PascalCase
@@ -71,7 +69,6 @@ export default class CreateSlice extends PrismicGenerator {
     const libIndex = this.destinationPath(path.join(this.answers.library, 'index.js'))
     const hasLibIndex = fs.existsSync(libIndex)
 
-
     if (hasLibIndex) {
       this.fs.copy(libIndex, libIndex)
       const content = `export { default as ${this.answers.sliceName} } from './${this.answers.sliceName}'`
@@ -89,24 +86,8 @@ export default class CreateSlice extends PrismicGenerator {
     const {libraries} = this.readDestinationJSON(SM_FILE, {libraries: []}) as unknown as SliceMachineConfig
 
     if (libraries.includes(libName) === false) {
-      // update sm.json and sm-resolver.json
+      // update sm.json
       this.fs.extendJSON(this.destinationPath(SM_FILE), {libraries: [...libraries, libName]})
-
-      const hasSmResolver = fs.existsSync(this.destinationPath('sm-resolver.js'))
-      const resolverSource = hasSmResolver ? this.destinationPath('sm-resolver.js') : this.templatePath('sm-resolver.js')
-      const libNamesAndPaths = [...libraries, libName].map((str: string) => {
-        const saneChars = str.replace(/[^a-zA-Z_$][^0-9a-zA-Z_$]*/, '')
-        return {
-          name: pascalize(saneChars),
-          path: str.replace(/^@\//, './'),
-        }
-      })
-
-      this.fs.copy(
-        resolverSource,
-        this.destinationPath('sm-resolver.js'),
-        {process: buf => processSmResolver(buf.toString(), libNamesAndPaths)},
-      )
     }
   }
 }
