@@ -7,10 +7,8 @@ import Login from '../../src/commands/login'
 describe('login', () => {
   test
   .it('login flags', () => {
-    expect(Login.flags.email).exist
-    expect(Login.flags.password).exist
     expect(Login.flags.base).exist
-    expect(Login.flags.oauthaccesstoken).exist
+    expect(Login.flags.port).exist
   })
 
   const fakeEmail = 'prismic@example.com'
