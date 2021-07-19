@@ -62,6 +62,8 @@ export default class Login extends Command {
       return this.handleLogin({oauthaccesstoken, base, authUrl})
     }
 
+    this.warn('Email and password login will be deprecated in favour of a browser based login in the major version')
+
     const email = flags.email ?? await cli.prompt('Email')
     const password = flags.password ?? await cli.prompt('Password', {type: 'hide'})
 
