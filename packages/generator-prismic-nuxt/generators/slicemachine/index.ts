@@ -73,9 +73,10 @@ export default class PrismicNuxt extends PrismicGenerator {
         'vue-slicezone': '^0.0.30',
       },
       devDependencies: {
-        'node-sass': '^5.0.0',
+        sass: '^1.35.1',
+        'css-loader': '^5.2.6',
         'sass-loader': '^10.1.1',
-        'slice-machine-ui': 'alpha',
+        'slice-machine-ui': 'beta',
       },
     }
 
@@ -96,7 +97,7 @@ export default class PrismicNuxt extends PrismicGenerator {
     if (this.existsDestination('sm.json') && SM_FILE !== 'sm.json') {
       this.moveDestination('sm.json', SM_FILE)
     }
-    const customTypes = this.readCustomTypesFrom('custom_types')
+    const customTypes = this.readCustomTypesFrom('customtypes')
 
     return this.prismic.createRepository({
       domain: this.domain,
