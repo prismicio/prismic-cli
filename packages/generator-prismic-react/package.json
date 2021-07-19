@@ -1,0 +1,28 @@
+{
+  "name": "generator-prismic-react",
+  "version": "4.0.1-alpha.13",
+  "main": "generators/app/index.js",
+  "license": "Apache-2.0",
+  "private": false,
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "generators"
+  ],
+  "dependencies": {
+    "@prismicio/prismic-yeoman-generator": "4.0.1-alpha.13",
+    "tslib": "^1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.10",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.3"
+  },
+  "scripts": {
+    "clean": "rimraf generators/**/*.js generators/**/*.d.ts !generators/**/templates",
+    "prepack": "rimraf generators/**/*.js generators/**/*.d.ts !generators/**/templates && tsc -b",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "gitHead": "c989865ffc2f200cf1d8a3673bb2568e7c6d6085"
+}

@@ -1,0 +1,7 @@
+node_modules
+*.log
+generators/*/*.d.ts
+generators/*/*.js
+!generators/**/templates
+test/**/*.js
+test/**/*.d.ts

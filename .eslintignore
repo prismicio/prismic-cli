@@ -1,2 +1,7 @@
-lib/commands/slicemachine/storybook-templates/
-lib/commands/slicemachine/templates/
+/lib
+templates
+node_modules
+**/test/__stubs__/**
+.env*
+__tmp__
+*.d.ts

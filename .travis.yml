@@ -1,18 +1,26 @@
 language: node_js
-node_js:
-# - 12
-# - 14
-- node
 os:
   - linux
-  - osx
-#  - windows
-addons:
-  apt:
-    - build-essential
-    - python2.7
+#  - osx
+
+node_js:
+  - node
+  - 14
+
+jobs:
+  include:
+    - os: windows
+      env: YARN_GPG=no # so windows exits
+
+    - os: windows
+      node_js: 14
+      env: YARN_GPG=no # so windows exits
+
+  
+cache: yarn
+
 script:
-  - npm run lint
-  - npm run build
-#  - npm test ## some error in travis?
-  - npm run test:e2e:slow
+  - ./packages/prismic-cli/bin/run --version
+  - ./packages/prismic-cli/bin/run --help
+  - yarn run test
+
