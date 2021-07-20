@@ -1,6 +1,6 @@
 {
   "name": "generator-prismic-nuxt",
-  "version": "4.0.1-alpha.13",
+  "version": "4.0.1",
   "main": "generators/app",
   "license": "Apache-2.0",
   "private": false,
@@ -11,7 +11,7 @@
     "generators"
   ],
   "dependencies": {
-    "@prismicio/prismic-yeoman-generator": "4.0.1-alpha.13",
+    "@prismicio/prismic-yeoman-generator": "4.0.1",
     "chalk": "^4.1.1",
     "create-nuxt-app": "^3.5.0",
     "inquirer": "^7.3.3",
@@ -35,5 +35,5 @@
     "prepack": "del-cli generators/**/*.js generators/**/*.d.tsm !generators/**/templates/**/*.js && tsc -b",
     "test": "nyc --extension .ts mocha \"test/**/*.test.ts\""
   },
-  "gitHead": "c989865ffc2f200cf1d8a3673bb2568e7c6d6085"
+  "gitHead": "a36c058ffb375807bed3d47981f699af42346aad"
 }
