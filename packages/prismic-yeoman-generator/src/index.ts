@@ -205,16 +205,11 @@ export default abstract class PrismicGenerator extends Generator {
    * ```
    */
   readCustomTypesFrom(maybeCustomTypesDirectory?: string): Array<CustomType> {
-    const hasRenamedDirectory = this.existsDestination('customtypes')
-    const customTypesDirectory = maybeCustomTypesDirectory || hasRenamedDirectory ? 'customtypes' : 'custom_types'
+    const customTypesDirectory = maybeCustomTypesDirectory || 'customtypes'
     const maybeNewFormat = this.handleNewCustomTypes(customTypesDirectory)
-    /*
-    * we could merge to two together.
-    * const customTypes = new Set([...maybeNewFormat, ...maybeOldFormat])
-    * return [...customTypes]
-    */
+
     if (maybeNewFormat.length > 0) return maybeNewFormat
-    return this.handleOldCustomTypes(customTypesDirectory)
+    return this.handleOldCustomTypes(maybeCustomTypesDirectory || 'custom_types')
   }
 
   /**

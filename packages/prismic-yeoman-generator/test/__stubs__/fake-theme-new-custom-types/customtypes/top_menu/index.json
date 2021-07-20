@@ -1,6 +1,6 @@
 {
   "id": "top_menu",
-  "name": "Top Menu",
+  "label": "Top Menu",
   "repeatable": false,
   "json": {
     "Main": {

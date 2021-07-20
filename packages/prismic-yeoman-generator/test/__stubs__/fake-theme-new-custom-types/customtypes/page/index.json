@@ -1,7 +1,7 @@
 {
-  "id": "homepage",
-  "name": "Homepage",
-  "repeatable": false,
+  "id": "page",
+  "label": "Page",
+  "repeatable": true,
   "json": {
     "Main": {
       "display_title": {
@@ -9,6 +9,12 @@
         "config": {
           "single": "heading1",
           "label": "display_title"
+        }
+      },
+      "uid": {
+        "type": "UID",
+        "config": {
+          "label": "uid"
         }
       },
       "body": {
