@@ -4,7 +4,7 @@ import {libraries} from './sm.json'
 
 const __allSlices = libraries.reduce((acc, lib) => {
   const location = lib.replace(/^@\//, './')
-  const slices = import(location)
+  const slices = require(location)
   return {...acc, ...slices}
 },{})
 

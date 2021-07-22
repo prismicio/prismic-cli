@@ -141,12 +141,20 @@ describe('slicemachine', () => {
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(fs, 'existsSync', () => true)
     .command(['slicemachine', '--create-slice', '--library', 'slices', '--sliceName', 'MySlice', '--folder', fakeFolder, '--force', '--framework', 'nuxt'])
-    .it('create-slice', _ => {
+    .it('create-slice', async _ => {
       const pathToSlices = path.join(fakeFolder, 'slices')
       expect(fs.existsSync(pathToSlices)).to.be.true
 
       const pathToMySlice = path.join(pathToSlices, 'MySlice')
       expect(fs.existsSync(pathToMySlice)).to.be.true
+
+      const smJsonPath = path.join(fakeFolder, 'sm.json')
+      const smJson = await fs.readFile(smJsonPath, 'utf-8')
+      expect(smJson).to.include('@/slices')
+
+      const pathToStory = path.join(fakeFolder, '.slicemachine', 'assets', 'slices', 'MySlice', 'index.stories.js')
+      const storyFile = await fs.readFile(pathToStory, 'utf-8')
+      expect(storyFile).to.include('./../../../../slices/MySlice')
     })
 
     test
