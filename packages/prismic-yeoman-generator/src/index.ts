@@ -292,7 +292,7 @@ export default abstract class PrismicGenerator extends Generator {
     const description = toDescription(sliceName)
 
     const slicesDirectoryPath = path.join('.slicemachine', 'assets', library, sliceName)
-    const pathToComponentFromStory = path.relative(this.destinationPath(slicesDirectoryPath), pathToLib)
+    const pathToComponentFromStory = path.relative(this.destinationPath(slicesDirectoryPath), this.destinationPath(pathToLib))
     const pathToModelFromStory = path.join(pathToComponentFromStory, 'model.json')
 
     const mocksTemplate = fs.readFileSync(this.templatePath('library/slice/mocks.json'), 'utf-8')
