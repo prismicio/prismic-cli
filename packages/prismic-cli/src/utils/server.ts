@@ -44,6 +44,7 @@ export async function startServerAndOpenBrowser(
   setCookies: (cookies?: Array<string>) => Promise<void>,
 ): Promise<void> {
   return new Promise((resolve, reject) => {
+    // TODO: the error,user callabck is very difficult to reach in a test scenario, maybe this should be hoisted to the caller, or the callback should be extracted
     const server = http.createServer(handleRequest(base, logAction, (error, user) => {
       if (error || !user || !user.cookies) reject(error)
 
