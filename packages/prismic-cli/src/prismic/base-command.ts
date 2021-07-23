@@ -8,6 +8,7 @@ import {posix} from 'path'
 import axios, {AxiosError} from 'axios'
 import * as inquirer from 'inquirer'
 import datadog from '../utils/data-dog'
+import {LogDecorations, PRISMIC_LOG_HEADER} from '../utils/logDecoration'
 
 import * as chalk from 'chalk'
 
@@ -28,22 +29,19 @@ export default abstract class PrismicCommand extends Command {
     return super.catch(err)
   }
 
-  async login(): Promise<void> {
+  async login(maybePort?: number,  maybeBase?: string, maybeAuthUrl?: string): Promise<void> {
     // used when sa session in fails
     if (this.prismic.base !== 'https://prismic.io') {
       this.warn(`current base is set to ${this.prismic.base}`)
     }
-    const email =  await cli.prompt('Email')
-    const password =  await cli.prompt('Password', {type: 'hide'})
-    return this.prismic.login({email, password})
-    .then(() => this.log(`Successfully logged in to ${this.prismic.base}`))
-    .catch((error: AxiosError) => {
-      if (error.response && (error.response.status === 400 || error.response.status === 401)) {
-        this.log(`Login error, check your credentials. If you forgot your password, visit ${this.prismic.base} to reset it`)
-        return this.login()
-      }
-      throw error
-    })
+
+    const confirmationMessage = PRISMIC_LOG_HEADER + 'Press any key to open up the browser to login or ' + LogDecorations.FgRed + 'q' + LogDecorations.Reset + ' to exit'
+
+    const confirmationKey: string = await cli.prompt(confirmationMessage, {type: 'single', required: false})
+
+    if (confirmationKey === 'q' || confirmationKey === '\u0003') return Promise.resolve()
+
+    return this.prismic.login(maybePort, maybeBase, maybeAuthUrl)
   }
 
   async validateDomain(name: string | undefined): Promise<string> {

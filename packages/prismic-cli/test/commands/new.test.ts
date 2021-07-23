@@ -25,7 +25,7 @@ describe('new', () => {
   const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=xyz'
   const tmpDir = os.tmpdir()
 
-  describe('checking for auth', () => {
+  describe.skip('checking for auth', () => {
     const fakeFolder = path.join(tmpDir, 'test-new-login')
 
     beforeEach(async () => {
@@ -156,9 +156,7 @@ describe('new', () => {
       }
     })
 
-    const stubResp = sinon.stub()
-    .onFirstCall()
-    .resolves({
+    const stubResp = sinon.fake.resolves({
       name: fakeDomain,
       language: 'js',
       pm: 'yarn',
@@ -172,14 +170,6 @@ describe('new', () => {
       gitUsername: 'none',
       vcs: 'none',
       slicemachine: true,
-    })
-    .onSecondCall()
-    .resolves({
-      library: 'slices',
-      sliceName: 'MySlice',
-    })
-    .onThirdCall()
-    .resolves({
       library: 'slices',
       sliceName: 'MySlice',
     })
@@ -202,25 +192,25 @@ describe('new', () => {
     .it('should generate a nuxt slicemachine project', async (_, done) => {
       const pkJsonPath = path.join(fakeFolder, 'package.json')
       const smJsonPath = path.join(fakeFolder, 'sm.json')
-      expect(fs.existsSync(pkJsonPath)).to.be.true
-      expect(fs.existsSync(smJsonPath)).to.be.true
+      expect(fs.existsSync(pkJsonPath), 'package.json').to.be.true
+      expect(fs.existsSync(smJsonPath), 'sm.json should be created').to.be.true
 
       const smJson = require(smJsonPath)
       const pkJson = require(pkJsonPath)
 
-      expect(smJson.apiEndpoint).to.contain(fakeDomain)
+      expect(smJson.apiEndpoint, 'sm.json should contain the domain').to.contain(fakeDomain)
       expect(pkJson.scripts.slicemachine).to.equal('start-slicemachine --port 9999')
 
       const pathToSlices = path.join(fakeFolder, 'slices')
-      expect(fs.existsSync(pathToSlices)).to.be.true
+      expect(fs.existsSync(pathToSlices), 'should create slices directory').to.be.true
 
       const pathToMySlice = path.join(pathToSlices, 'MySlice')
-      expect(fs.existsSync(pathToMySlice)).to.be.true
+      expect(fs.existsSync(pathToMySlice), 'should add slice to slices directory').to.be.true
 
       const pathToNuxtConfig = path.join(fakeFolder, 'nuxt.config.js')
-      expect(fs.existsSync(pathToNuxtConfig)).to.be.true
+      expect(fs.existsSync(pathToNuxtConfig), 'should create nuxt.config.js').to.be.true
       const config = await fs.readFile(pathToNuxtConfig, {encoding: 'utf-8'})
-      expect(config).to.include('stories: ["~/slices/**/*.stories.[tj]s", "~/.slicemachine/assets/slices/**/*.stories.[tj]s"]')
+      expect(config, 'should add stories to nuxt config').to.include('stories: ["~/slices/**/*.stories.[tj]s", "~/.slicemachine/assets/slices/**/*.stories.[tj]s"]')
       done()
     })
   })

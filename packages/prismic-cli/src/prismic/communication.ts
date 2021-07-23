@@ -8,8 +8,10 @@ import {parseJsonSync} from '../utils'
 import cli from 'cli-ux'
 // Note to self it's easier to mock fs sync methods.
 
-const version: string = require('../../package.json').version
+import {startServerAndOpenBrowser, DEFAULT_PORT} from '../utils/server'
+import {LogDecorations, PRISMIC_LOG_HEADER} from '../utils/logDecoration'
 
+const version: string = require('../../package.json').version
 
 export interface LocalDB {
   base: string;
@@ -104,6 +106,8 @@ export default class Prismic {
 
   public oauthAccessToken: string | undefined;
 
+  public authUrl: string | undefined
+
   public debug: (...args: any[]) => void;
 
   constructor(config?: IConfig, debug?: (...args: any[]) => void) {
@@ -114,6 +118,8 @@ export default class Prismic {
     this.cookies = cookies
     this.oauthAccessToken = oauthAccessToken
     this.validateRepositoryName = this.validateRepositoryName.bind(this)
+
+    this.setCookies = this.setCookies.bind(this)
 
     this.debug = debug || noop
   }
@@ -176,6 +182,31 @@ export default class Prismic {
     return Axios.create(opts)
   }
 
+  private async startServerAndOpenBrowser(url: string, base: string, port: number, logAction: string): Promise<void> {
+    // tbh setCookies could be another callback if you wanted.
+    return startServerAndOpenBrowser(url, base, port, logAction, this.setCookies)
+  }
+
+  /**
+   * login in to a prismic account
+   * @param {Number} [port = 5555] - the port to listen on
+   * @param {String} [base = https://prismic.io] - where to make the account
+   * @param {String} [maybeAuthUrl = https://auth.prismic.io] - address to call for validating and refreshing tokens
+   * @returns
+   */
+  public async login(maybePort: number = DEFAULT_PORT, maybeBase?: string, maybeAuthUrl?: string): Promise<void> {
+    if (maybeBase) this.base = maybeBase
+    if (maybeAuthUrl) this.authUrl = maybeAuthUrl // TODO: will be added upstream
+    const base = maybeBase || this.base
+
+    const loginUrl = new URL(this.base)
+    loginUrl.pathname = 'dashboard/cli/login'
+    loginUrl.searchParams.append('port', maybePort.toString())
+    const logAction = PRISMIC_LOG_HEADER + 'Logging in'
+
+    return this.startServerAndOpenBrowser(loginUrl.toString(), base, maybePort, logAction)
+  }
+
   private async auth(path: 'validate' | 'refreshtoken'): Promise<AxiosResponse> {
     const token = cookie.parse(this.cookies)['prismic-auth'] || ''
     const url = toAuthUrl(path, token, this.base)
@@ -184,28 +215,22 @@ export default class Prismic {
 
   /**
    * creates a new prismic account
-   * @param {String} email - the email address to associate with the account
-   * @param {String} password - the password for the account
+   * @param {Number} [port = 5555] - the port to listen on
    * @param {String} [base = https://prismic.io] - where to make the account
+   * @param {String} [maybeAuthUrl = https://auth.prismic.io] - address to call for validating and refreshing tokens
    * @returns
    */
+  async signUp(maybePort: number = DEFAULT_PORT, maybeBase?: string, maybeAuthUrl?: string): Promise<void> {
+    if (maybeBase) this.base = maybeBase
+    if (maybeAuthUrl) this.authUrl = maybeBase
+    const base = maybeBase || this.base
+    const signUpUrl = new URL(this.base)
+    signUpUrl.pathname = 'dashboard/cli/signup'
+    signUpUrl.searchParams.append('port', maybePort.toString())
 
-  async signUp(email: string, password: string, base?: string): Promise<AxiosResponse> {
-    if (base) {
-      this.base = base
-    }
-    return this.axios().post('/authentication/signup', undefined, {
-      params: {
-        ml: true, // TODO: what's this for?
-        email,
-        password,
-      },
-    }).then((res: AxiosResponse) => {
-      this.setCookies(res.headers['set-cookie'])
-      return res
-    }).catch(error => {
-      throw error
-    })
+    const logAction: string = PRISMIC_LOG_HEADER + 'Signing in'
+
+    return this.startServerAndOpenBrowser(signUpUrl.toString(), base, maybePort, logAction)
   }
 
   async validateSession(): Promise<AxiosResponse> {
@@ -258,13 +283,18 @@ export default class Prismic {
    * @returns {Promise} - resolves if successful
    */
 
-  public async reAuthenticate(): Promise<void> {
-    // TODO: this will eventually have to be moved.
-    const email =  await cli.prompt('Email')
-    const password =  await cli.prompt('Password', {type: 'hide'})
-    return this.login({email, password}).catch((error: AxiosError) => {
+  public async reAuthenticate(retries = 0): Promise<void> {
+    if (retries === 0) {
+      const confirmationMessage = PRISMIC_LOG_HEADER + 'Press any key to open up the browser to login or ' + LogDecorations.FgRed + 'q' + LogDecorations.Reset + ' to exit'
+
+      const confirmationKey: string = await cli.prompt(confirmationMessage, {type: 'single', required: false})
+
+      if (confirmationKey === 'q' || confirmationKey === '\u0003') return process.exit() // eslint-disable-line no-process-exit, unicorn/no-process-exit
+    }
+
+    return this.login().catch((error: AxiosError) => {
       if (error?.response?.status === 401) {
-        return this.reAuthenticate()
+        return this.reAuthenticate(retries + 1)
       }
       throw error
     })

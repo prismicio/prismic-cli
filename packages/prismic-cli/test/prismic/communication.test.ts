@@ -3,12 +3,15 @@ import {fs} from '../../src/utils'
 import * as sinon from 'sinon'
 import * as os from 'os'
 import * as path from 'path'
+import cli from 'cli-ux'
 import {IConfig} from '@oclif/config'
 import Prismic, {
   createDefaultConfig,
   getOrCreateConfig,
   DEFAULT_CONFIG,
 } from '../../src/prismic/communication'
+
+import * as server from '../../src/utils/server'
 
 const fileNotFound = new Error()
 Object.assign(fileNotFound, {code: 'ENOENT'})
@@ -122,29 +125,64 @@ describe('prismic/communication.ts', () => {
       expect(prismic.cookies).to.equal('')
       expect(prismic.base).to.equal('https://prismic.io')
     })
+  })
 
-    const email = 'prismic@example.com'
-    const password = 'guest'
+  describe('login', () => {
     const fakeBase = 'https://prismic.io'
     const fakeWriteFile = sinon.fake.resolves(null)
+    const fakeWriteFileSync = sinon.fake.resolves(null)
+    const fakeOpen = sinon.fake.resolves(null)
+    const fakeActionStart = sinon.fake()
+    const fakeActionStop = sinon.fake()
+    const fakeServer = sinon.fake.resolves('fake server called')
 
     test
     .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({base: fakeBase, cookies: ''})))
     .stub(fs, 'writeFileSync', fakeWriteFileSync)
     .stub(fs, 'writeFile', fakeWriteFile)
-    .nock(fakeBase, api => {
-      return api.post('/authentication/signin', `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
-      .reply(200, {}, {'set-cookie': ['SESSION=tea; DOMAIN=.prismic.io', 'X_XSFR=biscuits']})
-    })
-    .it('Prismic.login should update .prismic with cookies', async () => {
+    .stub(cli.action, 'start', fakeActionStart)
+    .stub(cli.action, 'stop', fakeActionStop)
+    .stub(cli, 'open', fakeOpen)
+    .stub(server, 'startServerAndOpenBrowser', fakeServer)
+    .it('Prismic.login should call startServerAndOpenBrowser', async () => {
       const prismic = new Prismic()
-      expect(prismic.base).to.equal(fakeBase)
-      expect(prismic.cookies).to.equal('')
+      await prismic.login(5555, fakeBase)
 
-      await prismic.login({email, password})
-      expect(prismic.cookies).to.include('biscuits').and.to.include('tea')
-      expect(fakeWriteFile.getCall(0).args[0]).to.equal(prismic.configPath)
-      expect(fakeWriteFile.getCall(0).args[1]).to.contain('tea').and.to.include('biscuits')
+      expect(fakeServer.called).to.be.true
+      const [url, base, port, logAction] = fakeServer.firstCall.args
+      expect(url).to.be.equal('https://prismic.io/dashboard/cli/login?port=5555')
+      expect(base).to.equal(fakeBase)
+      expect(port).to.equal(5555)
+      expect(logAction).to.include('Logging in')
+    })
+  })
+
+  describe('signup', () => {
+    const fakeBase = 'https://prismic.io'
+    const fakeWriteFile = sinon.fake.resolves(null)
+    const fakeWriteFileSync = sinon.fake.resolves(null)
+    const fakeOpen = sinon.fake.resolves(null)
+    const fakeActionStart = sinon.fake()
+    const fakeActionStop = sinon.fake()
+    const fakeServer = sinon.fake.resolves(null)
+
+    test
+    .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({base: fakeBase, cookies: ''})))
+    .stub(fs, 'writeFileSync', fakeWriteFileSync)
+    .stub(fs, 'writeFile', fakeWriteFile)
+    .stub(cli.action, 'start', fakeActionStart)
+    .stub(cli.action, 'stop', fakeActionStop)
+    .stub(cli, 'open', fakeOpen)
+    .stub(server, 'startServerAndOpenBrowser', fakeServer)
+    .it('signup should call startServerAndOpenBrowser', async () => {
+      const prismic = new Prismic()
+      await prismic.signUp()
+      expect(fakeServer.calledOnce).to.be.true
+      const [url, base, port, logAction] = fakeServer.firstCall.args
+      expect(url).to.be.equal('https://prismic.io/dashboard/cli/signup?port=5555')
+      expect(base).to.equal(fakeBase)
+      expect(port).to.equal(5555)
+      expect(logAction).to.include('Signing in')
     })
   })
 

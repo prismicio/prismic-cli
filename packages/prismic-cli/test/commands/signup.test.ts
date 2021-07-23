@@ -3,127 +3,70 @@ import {
   test,
 } from '@oclif/test'
 import {fs} from '../../src/utils'
-import * as querystring from 'querystring'
 import cli from 'cli-ux'
 import Signup from '../../src/commands/signup'
+import * as server from '../../src/utils/server'
+import * as sinon from 'sinon'
 
 describe('signup', () => {
+  beforeEach(() => {
+    sinon.reset()
+  })
+
   test.it('accepted flags', () => {
+    expect(Signup.flags.port).exist
     expect(Signup.flags.base).to.exist
     expect(Signup.flags.base.hidden).to.be.true
-    expect(Signup.flags.email).to.exist
-    expect(Signup.flags.password).to.exist
+    expect(Signup.flags['auth-url']).exist
+    expect(Signup.flags['auth-url'].hidden).to.be.true
   })
 
-  const email = 'test@prismic.io'
-  const password = 'password'
-  const base = 'https://prismic.io'
-  const config = JSON.stringify({base, cookies: ''})
+  const config = JSON.stringify({})
 
-  const fakeCookies = [
-    'SESSION=session-token',
-    'prismic-auth=auth-token; Path=/; Domain=.prismic.io; Secure; SameSite=None',
-  ]
-
-  const query = querystring.stringify({ml: true, email, password})
+  const fakeServer = sinon.fake.resolves(null)
 
   test
   .stdout()
+  .stub(cli, 'prompt', () => async () => Promise.resolve(''))
   .stub(fs, 'readFileSync', () => config)
   .stub(fs, 'writeFile', () => Promise.resolve())
-  .nock(base, api => {
-    return api.post('/authentication/signup?' + query)
-    .reply(200, {}, {
-      'set-cookie': fakeCookies,
-    })
-  })
-  .command(['signup', '--email', email, '--password', password, '--base', base])
-  .it('should create an new prismic account')
-
-  test
-  .stdout()
-  .stub(fs, 'readFileSync', () => config)
-  .stub(fs, 'writeFile', () => Promise.resolve())
-  .stub(cli, 'prompt', () => async (message: string): Promise<string> => {
-    if (message.includes('Email')) return Promise.resolve(email)
-    if (message.includes('Password')) return Promise.resolve(password)
-    return Promise.resolve('')
-  })
-  .nock(base, api => {
-    return api.post('/authentication/signup?' + query)
-    .reply(200, {}, {
-      'set-cookie': fakeCookies,
-    })
-  })
+  .stub(server, 'startServerAndOpenBrowser', fakeServer)
   .command(['signup'])
-  .it('prompts for email and password')
-
-  // validators
-  test
-  .stderr()
-  .stdout()
-  .stub(fs, 'readFileSync', () => config)
-  .stub(fs, 'writeFile', () => Promise.resolve())
-  .stub(cli, 'prompt', () => async (message: string): Promise<string> => {
-    if (message.includes('Email')) return Promise.resolve(email)
-    if (message.includes('Password')) return Promise.resolve(password)
-    return Promise.resolve('')
-  })
-  .command(['signup', '--email', 'fails', '--password', 'fails'])
-  .do(ctx => {
-    expect(ctx.stderr).to.contain('Enter a valid email address')
-    expect(ctx.stderr).to.contain('Enter a longer password (minimum 6 characters)')
-  })
-  .it('should validate password an email inputs')
-
-  // Error cases
-  test
-  .stdout()
-  .stderr()
-  .stub(fs, 'readFileSync', () => config)
-  .stub(fs, 'writeFile', () => Promise.resolve())
-  .nock(base, api => {
-    return api.post('/authentication/signup?' + query)
-    .reply(400, {
-      errors: [`User ${email} already exists`],
-    }, {
-    })
-  })
-  .command(['signup', '--email', email, '--password', password, '--base', base])
-  .it('should handle errors', ctx => {
-    expect(ctx.stderr).to.contain(`User ${email} already exists`)
+  .it('should call startServerAndOpenBrowser with default arguments', () => {
+    expect(fakeServer.calledOnce).to.be.true
+    expect(fakeServer.called).to.be.true
+    const [url, base, port, logAction] = fakeServer.firstCall.args
+    expect(url).to.be.equal(`${base}/dashboard/cli/signup?port=${server.DEFAULT_PORT}`)
+    expect(base).to.equal(base)
+    expect(port).to.equal(server.DEFAULT_PORT)
+    expect(logAction).to.include('Signing in')
   })
 
   test
   .stdout()
-  .stderr()
+  .stub(cli, 'prompt', () => async () => Promise.resolve('q'))
   .stub(fs, 'readFileSync', () => config)
   .stub(fs, 'writeFile', () => Promise.resolve())
-  .nock(base, api => {
-    return api.post('/authentication/signup?' + query)
-    .reply(400, {
-      errors: {
-        password: ['This field is required'],
-        email: ['This field is required'],
-      },
-    })
-  })
-  .command(['signup', '--email', email, '--password', password, '--base', base])
-  .it('handle error response from prismic.io', ctx => {
-    expect(ctx.stderr).to.contain('email: This field is required').and.to.contain('password: This field is required')
+  .stub(server, 'startServerAndOpenBrowser', fakeServer)
+  .command(['signup'])
+  .it('when user abourts it should not call startServerAndOpenBrowser', () => {
+    expect(fakeServer.called).to.be.false
   })
 
   test
   .stdout()
-  .stderr()
+  .stub(cli, 'prompt', () => async () => Promise.resolve(''))
   .stub(fs, 'readFileSync', () => config)
   .stub(fs, 'writeFile', () => Promise.resolve())
-  .nock(base, api => {
-    return api.post('/authentication/signup?' + query)
-    .reply(400)
-  })
-  .command(['signup', '--email', email, '--password', password, '--base', base])
-  .it('should handle errors', ctx => {
-    expect(ctx.stderr).to.exist
+  .stub(server, 'startServerAndOpenBrowser', fakeServer)
+  .command(['signup', '--port', '8080'])
+  .it('should call startServerAndOpenBrowser with custom arguments', () => {
+    expect(fakeServer.calledOnce).to.be.true
+    expect(fakeServer.called).to.be.true
+    const [url, base, port, logAction] = fakeServer.firstCall.args
+    expect(url).to.be.equal(`${base}/dashboard/cli/signup?port=8080`)
+    expect(base).to.equal(base)
+    expect(Number(port)).to.equal(8080)
+    expect(logAction).to.include('Signing in')
   })
 })

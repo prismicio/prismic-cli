@@ -1,13 +1,6 @@
 import {flags} from '@oclif/command'
 import {Command} from '../prismic'
-import cli from 'cli-ux'
-import * as Koa from 'koa'
-import { DEFAULT_PORT, Server } from '../utils/server'
-import Prismic from '../prismic/communication'
-import { LogDecorations, PRISMIC_LOG_HEADER } from '../utils/logDecoration'
-
-const logAction: string = PRISMIC_LOG_HEADER + 'Logging in'
-
+import {DEFAULT_PORT} from '../utils/server'
 export default class Login extends Command {
   static description = 'Login to prismic'
 
@@ -27,53 +20,22 @@ export default class Login extends Command {
       name: 'port',
       hidden: false,
       description: 'port to start the local login server',
-      default: DEFAULT_PORT
-    })
+      default: DEFAULT_PORT,
+    }),
+
+    'auth-url': flags.string({
+      hidden: true,
+      name: 'auth-url',
+      description: 'url to use when validating and refreshing sessions',
+    }),
   }
 
   static args = []
 
-  private handleLogin(prismic: Prismic): (ctx: Koa.Context) => Promise<any> {
-    return async (ctx: Koa.Context): Promise<any> => {
-      cli.action.start(logAction, 'Receiving authentication information')
-      Server.stop()
-
-      const { email, cookies } = ctx.request.body as { email?: string, cookies?: Array<string> }
-      if (!email || !cookies) {
-        cli.action.stop('It seems the server didn\'t respond properly, please contact us.')
-        return ctx.throw(400)
-      }
-
-      return prismic.setCookies(cookies)
-        .then(() => {
-          cli.action.stop(`Logged in as ${email}`)
-          return ctx.status = 200
-        })
-        .catch(() => {
-          cli.action.stop(`It seems an error happened while setting your cookies.`)
-          return ctx.throw(400)
-        })
-      }
-  }
-
   async run() {
     const {flags} = this.parse(Login)
-    const {base, port} = flags
+    const {base, port, 'auth-url': authUrl} = flags
 
-    // ask confirmation
-    const confirmationMessage = PRISMIC_LOG_HEADER + 'Press any key to open up the browser to login or ' + LogDecorations.FgRed + 'q' + LogDecorations.Reset + ' to exist'
-    const confirmationKey: string = await cli.prompt(confirmationMessage, { type: 'single', required: true })
-    if (confirmationKey === 'q') return
-
-    const loginUrl: string = `${base}/dashboard/cli/login?port=${port}`
-
-    // Start the server
-    Server.start(base, port, this.handleLogin(this.prismic))
-
-    // Opening browser
-    cli.log('\nOpening browser to ' + LogDecorations.Underscore + loginUrl + LogDecorations.Reset)
-    cli.action.start(logAction, 'Waiting for the browser response')
-
-    cli.open(loginUrl)
+    return this.login(port, base, authUrl)
   }
 }
