@@ -15,7 +15,7 @@ class Req extends EventEmitter {
   }
 }
 
-describe('server.handleRequest', () => {
+describe.only('server.handleRequest', () => {
   it('handles OPTIONS', () => {
     const req = new Req('OPTIONS') as IncomingMessage
     const setHeader = sinon.fake()
@@ -56,7 +56,7 @@ describe('server.handleRequest', () => {
 
   it('handles valid POST request', () => {
     const setHeader = sinon.fake()
-    const end = sinon.fake()
+    const end = sinon.fake.yields()
     const fakeStart = sinon.fake()
     const fakeStop = sinon.fake()
     const res = {setHeader, end} as unknown as ServerResponse
@@ -75,12 +75,12 @@ describe('server.handleRequest', () => {
     handleRequest(base, logAction, fakeCallBack)(req, res)
     req.emit('data', JSON.stringify({cookies: fakeCookie, email: fakeEmail}))
     req.emit('end')
-    expect(fakeStart.called).to.be.true
-    expect(fakeStop.called).to.be.true
-    expect(end.called).to.be.true
+    expect(fakeStart.called, 'cli.action.start should be called').to.be.true
+    //  expect(fakeStop.called, 'cli.action.stop should be called').to.be.true
+    expect(end.called, 'res.end should be called').to.be.true
     expect(res.statusCode).to.equal(200)
-    expect(fakeCallBack.called).to.be.true
-    expect(fakeCallBack.args[0]).to.deep.equal([fakeCookie, fakeEmail])
+    expect(fakeCallBack.called, 'callback should be called').to.be.true
+    expect(fakeCallBack.args[0], 'callback should be called with correct args').to.deep.equal([null, {cookies: fakeCookie, email: fakeEmail}])
 
     startStub.reset()
     stopStub.reset()

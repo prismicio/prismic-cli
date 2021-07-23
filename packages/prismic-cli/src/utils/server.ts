@@ -4,10 +4,9 @@ import {LogDecorations} from './logDecoration'
 
 export const DEFAULT_PORT = 5555
 
-export const handleRequest = (base: string, logAction: string, cb: (err?: null | Error, d?: {cookies: Array<string>, email?: string}) => any) => (req: http.IncomingMessage, res: http.ServerResponse) => {
+export const handleRequest = (base: string, logAction: string, cb: (err?: null | Error, d?: {cookies: Array<string>; email?: string}) => any) => (req: http.IncomingMessage, res: http.ServerResponse) => {
   res.setHeader('Access-Control-Allow-Origin', base)
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-  console.log(`${[req.method]}`)
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Request-Method', 'POST')
     res.end()
@@ -20,7 +19,6 @@ export const handleRequest = (base: string, logAction: string, cb: (err?: null |
     })
 
     req.on('end', () => {
-      console.log({data})
       const {email, cookies} = JSON.parse(data) as { email?: string; cookies?: Array<string> }
       if (!email || !cookies) {
         cli.action.stop('It seems the server didn\'t respond properly, please contact us.')
@@ -28,7 +26,7 @@ export const handleRequest = (base: string, logAction: string, cb: (err?: null |
         res.end(() => cb(new Error('Error with cookies')))
       } else {
         res.statusCode = 200
-        res.end(() =>cb(null, {cookies, email}))
+        res.end(() => cb(null, {cookies, email}))
       }
       // cli.action.stop(`Logged in as ${email}`)
     })
@@ -47,25 +45,26 @@ export async function startServerAndOpenBrowser(
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     const server = http.createServer(handleRequest(base, logAction, (error, user) => {
-      if(error || !user || !user.cookies) reject(error)
+      if (error || !user || !user.cookies) reject(error)
 
       return setCookies(user?.cookies)
       .then(() => {
         cli.action.stop(`Logged in as ${user?.email}`)
-        server.close((error) => {
-          if(error) return reject(error)
+        server.close(error2 => {
+          if (error) return reject(error2)
           resolve()
         })
       })
-      .catch((err) => {
+      .catch(error2 => {
         cli.action.stop('It seems an error happened while setting your cookies.')
+        console.error(error2)
       })
     }))
 
-    server.on('error', error => {
-      console.error(error)
+    server.on('error', error2 => {
+      console.error(error2)
       cli.action.stop()
-      server.close(() => reject(error))
+      server.close(() => reject(error2))
     })
 
     server.keepAliveTimeout = 1

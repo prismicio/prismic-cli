@@ -24,12 +24,6 @@ export default class Login extends Command {
     }),
 
     'auth-url': flags.string({
-      hidden: true,
-      name: 'auth-url',
-      description: 'url to use when validating and refreshing sessions',
-    }),
-
-    'auth-url': flags.string({
       name: 'auth url',
       hidden: true,
       description: 'url to validate and refresh tokens',
