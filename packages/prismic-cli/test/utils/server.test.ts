@@ -15,7 +15,7 @@ class Req extends EventEmitter {
   }
 }
 
-describe.only('server.handleRequest', () => {
+describe('server.handleRequest', () => {
   it('handles OPTIONS', () => {
     const req = new Req('OPTIONS') as IncomingMessage
     const setHeader = sinon.fake()
