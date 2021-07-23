@@ -1,6 +1,6 @@
 {
   "name": "generator-prismic-nextjs",
-  "version": "4.0.1-alpha.11",
+  "version": "4.0.3",
   "main": "generators/app",
   "license": "Apache-2.0",
   "private": false,
@@ -11,10 +11,11 @@
     "generators"
   ],
   "dependencies": {
-    "@prismicio/prismic-yeoman-generator": "4.0.1-alpha.11",
+    "@prismicio/prismic-yeoman-generator": "4.0.3",
     "chalk": "^4.1.1",
     "inquirer": "^7.3.3",
     "is-valid-path": "^0.1.1",
+    "lodash.camelcase": "^4.3.0",
     "sm-commons": "^0.0.23",
     "tslib": "^1",
     "yeoman-generator": "^4.12.0"
@@ -37,5 +38,5 @@
     "prepack": "del-cli generators/**/*.js generators/**/*.d.ts !generators/**/templates/**/*.js && tsc -b",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
-  "gitHead": "c989865ffc2f200cf1d8a3673bb2568e7c6d6085"
+  "gitHead": "a36c058ffb375807bed3d47981f699af42346aad"
 }

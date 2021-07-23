@@ -1,10 +1,10 @@
 const PrismicGenerator = require('@prismicio/prismic-yeoman-generator').default
 const isValidPath = require('is-valid-path')
-const path = require('path')
+const path = require('path').posix
+
 const fs = require('fs')
 const inquirer = require('inquirer') // this is easier to mock
 
-const {snakelize} = require('sm-commons/utils/str')
 const {SM_FILE} = require('sm-commons/consts')
 
 function validateSliceName(name) {
@@ -13,10 +13,6 @@ function validateSliceName(name) {
   if (!name) return false
   return regexp.test(name)
 }
-
-function pascalCaseToSnakeCase(str) { return snakelize(str) }
-
-function toDescription(str) { return str.split(/(?=[A-Z0-9])/).join(' ') }
 
 class CreateSlice extends PrismicGenerator {
   /**
@@ -64,21 +60,7 @@ class CreateSlice extends PrismicGenerator {
   }
 
   async configuring() {
-    const pathToLib = this.destinationPath(path.join(this.answers.library, this.answers.sliceName))
-
-    const sliceId = pascalCaseToSnakeCase(this.answers.sliceName)
-
-    const description = toDescription(this.answers.sliceName)
-
-    this.fs.copyTpl(
-      this.templatePath('library/slice/**'),
-      pathToLib,
-      {sliceName: this.answers.sliceName, sliceId: sliceId, description},
-    )
-    /* for the slicemachine update */
-    const slicesDirectoryPath = path.join('.slicemachine', 'assets', this.answers.library, this.answers.sliceName)
-    this.moveDestination(path.join(pathToLib, 'index.stories.js'), path.join(slicesDirectoryPath, 'index.stories.js'))
-    this.moveDestination(path.join(pathToLib, 'mocks.json'), path.join(slicesDirectoryPath, 'mocks.json'))
+    this.copySliceTemplate(this.answers.library, this.answers.sliceName)
   }
 
   async writing() {

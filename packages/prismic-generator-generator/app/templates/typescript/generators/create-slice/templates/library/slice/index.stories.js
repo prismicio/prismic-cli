@@ -1,8 +1,10 @@
-import Component from './';
-import model from './model';
-import mocks from './mocks.json';
-import { storiesOf } from '@storybook/react';
+import MyComponent from './<%%- pathToComponentFromStory %>';
 
-mocks.forEach((variation) => {
-  storiesOf(model.name, Component).add(variation.name, () => <Component slice={variation} />);
-});
+export default {
+  title: '<%%- componentTitle %>'
+}
+
+<%% mocks.forEach((variation) => { %>
+export const <%%- variation.id %> = () => <MyComponent slice={<%%- JSON.stringify(variation) %>} />
+<%%- variation.id %>.storyName = '<%%- variation.name %>'
+<%% }) %>

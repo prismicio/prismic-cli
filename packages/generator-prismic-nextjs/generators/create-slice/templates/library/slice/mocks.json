@@ -1,6 +1,6 @@
 [{
-  "variation": "<%= sliceId %>",
-  "name": "<%= sliceName %>", 
+  "variation": "default-slice",
+  "name": "Default slice",
   "docURL": "...",
   "version": "sktwi1xtmkfgx8626",
   "description": "<%= description %>",
