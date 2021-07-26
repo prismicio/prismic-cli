@@ -234,7 +234,7 @@ export default class Prismic {
    */
   async signUp(maybePort: number = DEFAULT_PORT, maybeBase?: string, maybeAuthUrl?: string): Promise<void> {
     if (maybeBase) this.base = maybeBase
-    if (maybeAuthUrl) this.authUrl = maybeBase
+    if (maybeAuthUrl) this.authUrl = maybeAuthUrl
     const base = maybeBase || this.base
     const signUpUrl = new URL(this.base)
     signUpUrl.pathname = 'dashboard/cli/signup'
