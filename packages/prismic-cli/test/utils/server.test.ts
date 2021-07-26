@@ -3,7 +3,7 @@ import server, {handleRequest} from '../../src/utils/server'
 import * as sinon from 'sinon'
 import {IncomingMessage, ServerResponse} from 'http'
 import cli from 'cli-ux'
-import * as EventEmitter from 'node:events'
+import * as EventEmitter from 'events'
 import * as http from 'http'
 
 class Req extends EventEmitter {
