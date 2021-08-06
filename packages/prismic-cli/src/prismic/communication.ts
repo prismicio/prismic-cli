@@ -91,7 +91,12 @@ export function toAuthUrl(path: 'validate' | 'refreshtoken', token: string, base
     addr.pathname = path
     addr.searchParams.set('token', token)
     return addr.toString()
-  }
+  } /* else if(base.includes('wroom.test')) { // TODO: remove and add param for custom auth server URL
+    const url = new URL('https://<LAMBDA_DEV_ID>.execute-api.us-east-1.amazonaws.com/')
+    url.pathname = `/dev/${path}`
+    url.searchParams.set('token', token)
+    return url.toString()
+  } */
   const url = new URL(base)
   url.hostname = `auth.${url.hostname}`
   url.pathname = path
