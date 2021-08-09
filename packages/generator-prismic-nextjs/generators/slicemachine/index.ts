@@ -103,8 +103,7 @@ export default class SliceMachine extends PrismicGenerator {
     })
 
     if (useSrc) {
-      this.deleteDestination('pages')
-      this.fs.copyTpl(this.templatePath('next/pages'), this.destinationPath('src/pages'), {smFile: SM_FILE, useSrc}, undefined, {globOptions: {dot: true}})
+      this.moveDestination('pages', 'src')
     }
 
     // maybe rename sm file
