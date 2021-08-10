@@ -1,16 +1,15 @@
 import {test, expect} from '@oclif/test'
 import {Server, Routes} from '../../src/utils/server'
 import * as sinon from 'sinon'
-// import cli from 'cli-ux'
 
 describe('server', () => {
   const server = Server.build('https://prismic.io', 5555, 'localhost')
-  const fakeOnSuccess = sinon.fake()
-  const fakeOnFailure = sinon.fake()
-  server.route([Routes.authentication(server)(fakeOnSuccess, fakeOnFailure), Routes.notFound])
+  const fakeCallback = sinon.fake()
+  server.route([Routes.authentication(server)(fakeCallback), Routes.notFound])
 
   beforeEach(async () => {
     await server.initialize()
+    fakeCallback.resetHistory()
   })
 
   afterEach(async () => {
@@ -26,7 +25,7 @@ describe('server', () => {
   })
 
   test.it('Valid authentication POST request', async () => {
-    const fakeCookie = 'SESSION=session-token; prismic-auth=auth-token; Path=/; Domain=.prismic.io; Secure; SameSite=None'
+    const fakeCookie = ['SESSION=session-token', 'prismic-auth=auth-token']
     const fakeEmail = 'batman@example.com'
 
     const res = await server.inject({
@@ -39,9 +38,33 @@ describe('server', () => {
     })
 
     expect(res.statusCode).to.equal(200)
-    expect(fakeOnSuccess.called, 'onSuccess should be called').to.be.true
-    expect(fakeOnFailure.called, 'onFailure should not be called').to.be.false
-    expect(fakeOnSuccess.args[0], 'callback should be called with correct args').to.deep.equal([{cookies: fakeCookie, email: fakeEmail}, `Logged in as ${fakeEmail}`])
+    expect(fakeCallback.called, 'onSuccess should be called').to.be.true
+    expect(fakeCallback.args[0], 'callback should be called with correct args').to.deep.equal([{cookies: fakeCookie, email: fakeEmail}])
+  })
+
+  test.it('handles invalid POST request - empty payload', async () => {
+    const res = await server.inject({
+      method: 'POST',
+      url: '/',
+      payload: {},
+    })
+
+    expect(res.statusCode).to.equal(400)
+    expect(fakeCallback.called, 'onSuccess should be called').to.be.false
+  })
+
+  test.it('handles invalid POST request - invalid cookies format', async () => {
+    const res = await server.inject({
+      method: 'POST',
+      url: '/',
+      payload: {
+        email: 'fake',
+        cookies: true,
+      },
+    })
+
+    expect(res.statusCode).to.equal(400)
+    expect(fakeCallback.called, 'onSuccess should be called').to.be.false
   })
 })
 

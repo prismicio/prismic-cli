@@ -6,29 +6,26 @@ export const DEFAULT_PORT = 5555
 
 type HandlerData = { email: unknown; cookies: ReadonlyArray<string> }
 
-const authenticationHandler = (server: hapi.Server) => (onSuccess: (data: HandlerData, msg: string) => Promise<void>, onFailure: (error: Error, msg: string) => void) => {
+function validatePayload(payload: any): HandlerData | null {
+  if (!payload) return null
+  if (!payload.email || !payload.cookies) return null
+  if (!(Array.isArray(payload.cookies))) return null
+  if (payload.cookies.some((c: any) => typeof c !== 'string')) return null
+
+  return payload as HandlerData
+}
+
+const authenticationHandler = (server: hapi.Server) => (cb: (data: HandlerData) => Promise<void>) => {
   return async (request: hapi.Request, h: hapi.ResponseToolkit) => {
     try {
-      const data: HandlerData | null = (() => {
-        const payload = request.payload as any
-        if (payload.email && payload.cookies) return payload as { email: unknown; cookies: ReadonlyArray<string> }
-        return null
-      })()
+      const data: HandlerData | null = validatePayload(request.payload)
 
       if (!data) {
         cli.action.stop('It seems the server didn\'t respond properly, please contact us.')
         return h.response('Error with cookies').code(400)
       }
-      try {
-        await onSuccess(data, `Logged in as ${data.email}`)
-        return h.response(data).code(200)
-      } catch (error) {
-        onFailure(error, 'It seems an error happened while setting your cookies.')
-        return h.response('Oops! Something wrong happened while logging.').code(500)
-      }
-    } catch (error) {
-      onFailure(error, 'It seems an error happened while setting your cookies.')
-      return h.response('Oops! Something wrong happened while logging.').code(500)
+      await cb(data)
+      return h.response(data).code(200)
     } finally {
       await server.stop({timeout: 10000})
     }
@@ -36,10 +33,10 @@ const authenticationHandler = (server: hapi.Server) => (onSuccess: (data: Handle
 }
 
 export const Routes = {
-  authentication: (server: hapi.Server) => (onSuccess: (data: HandlerData, msg: string) => Promise<void>, onFailure: (error: Error, msg: string) => void) => ({
+  authentication: (server: hapi.Server) => (cb: (data: HandlerData) => Promise<void>) => ({
     method: 'POST',
     path: '/',
-    handler: authenticationHandler(server)(onSuccess, onFailure),
+    handler: authenticationHandler(server)(cb),
   }),
 
   notFound: {
@@ -74,20 +71,15 @@ export async function startServerAndOpenBrowser(
   logAction: string,
   setCookies: (cookies: ReadonlyArray<string>) => Promise<void>,
 ):  Promise<void> {
-  return new Promise((resolve, reject) => {
-    async function onSuccess(data: HandlerData, msg: string) {
+  return new Promise(resolve => {
+    async function callback(data: HandlerData) {
       await setCookies(data.cookies)
-      cli.action.stop(msg)
+      cli.action.stop(`Logged in as ${data.email}`)
       resolve()
     }
 
-    function onFailure(error: Error, msg: string) {
-      cli.action.stop(msg)
-      reject(error)
-    }
-
     const server = Server.build(base, port, 'localhost')
-    server.route([Routes.authentication(server)(onSuccess, onFailure), Routes.notFound])
+    server.route([Routes.authentication(server)(callback), Routes.notFound])
 
     server.start()
     .then(() => {
