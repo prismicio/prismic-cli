@@ -1,4 +1,3 @@
-import * as http from 'http'
 import cli from 'cli-ux'
 import {LogDecorations} from './logDecoration'
 import * as hapi from '@hapi/hapi'
