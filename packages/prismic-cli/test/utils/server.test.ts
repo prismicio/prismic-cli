@@ -1,5 +1,5 @@
 import {test, expect} from '@oclif/test'
-import server, {handleRequest} from '../../src/utils/server'
+import server from '../../src/utils/server'
 import * as sinon from 'sinon'
 import {IncomingMessage, ServerResponse} from 'http'
 import cli from 'cli-ux'
@@ -17,25 +17,6 @@ class Req extends EventEmitter {
 
 describe('server', () => {
   describe('handleRequest', () => {
-    it('handles OPTIONS', () => {
-      const req = new Req('OPTIONS') as IncomingMessage
-      const setHeader = sinon.fake()
-      const end = sinon.fake()
-      const res = {setHeader, end} as unknown as ServerResponse
-
-      const fakeCallBack = sinon.fake()
-      const base = 'https://prismic.io'
-      const logAction = 'test'
-
-      handleRequest(base, logAction, fakeCallBack)(req, res)
-
-      expect(setHeader.callCount).to.equal(3)
-      expect(setHeader.firstCall.args).to.deep.equal(['Access-Control-Allow-Origin', base])
-      expect(setHeader.lastCall.args).to.deep.equal(['Access-Control-Request-Method', 'POST'])
-      expect(end.called).to.be.true
-      expect(fakeCallBack.called).to.be.false
-    })
-
     it('returns a 404 for all other methods', () => {
       const setHeader = sinon.fake()
       const end = sinon.fake()
