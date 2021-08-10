@@ -162,7 +162,7 @@ export default class Prismic {
     return this.removeConfig()
   }
 
-  public async setCookies(arr: Array<string> = []): Promise<void> {
+  public async setCookies(arr: ReadonlyArray<string> = []): Promise<void> {
     const oldCookies = cookie.parse(this.cookies || '')
 
     const newCookies = arr.map(str => cookie.parse(str)).reduce((acc, curr) => {
