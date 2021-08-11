@@ -82,6 +82,12 @@ describe('prismic/communication.ts', () => {
   describe('new Prismic()', () => {
     const fakeReadFail = sinon.fake.throws(fileNotFound)
     const fakeWriteFileSync = sinon.fake.resolves(null)
+    const fakeWriteFileAsync = sinon.fake.resolves(null)
+
+    beforeEach(() => {
+      fakeWriteFileSync.resetHistory()
+    })
+
     test
     .stub(fs, 'readFileSync', fakeReadFail)
     .stub(fs, 'writeFileSync', fakeWriteFileSync)
@@ -123,6 +129,27 @@ describe('prismic/communication.ts', () => {
       await prismic.logout()
       expect(fakeUnlink.getCall(0).args[0]).to.equal(prismic.configPath)
       expect(prismic.cookies).to.equal('')
+      expect(prismic.base).to.equal('https://prismic.io')
+    })
+
+    test
+    .stub(fs, 'readFileSync', fakeReadFail)
+    .stub(fs, 'writeFileSync', fakeWriteFileSync)
+    .stub(fs, 'writeFile', fakeWriteFileAsync)
+    .it('Prismic.setCookie should modify the config file from file system and set the internal value', async () => {
+      const prismic = new Prismic()
+      const fakeCookies = ['SESSION=session-token', 'prismic-auth=auth-token']
+      await prismic.setCookies(fakeCookies)
+
+      expect(fakeWriteFileAsync.getCall(0).args).to.deep.equal([
+        prismic.configPath,
+        JSON.stringify({
+          base: 'https://prismic.io',
+          cookies: fakeCookies.join('; '),
+        }, null, '\t'),
+        'utf-8',
+      ])
+      expect(prismic.cookies).to.equal(fakeCookies.join('; '))
       expect(prismic.base).to.equal('https://prismic.io')
     })
   })
