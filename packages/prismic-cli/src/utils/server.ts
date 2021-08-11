@@ -27,7 +27,7 @@ const authenticationHandler = (server: hapi.Server) => (cb: (data: HandlerData) 
       await cb(data)
       return h.response(data).code(200)
     } finally {
-      await server.stop({timeout: 10000})
+      server.stop({timeout: 10000})
     }
   }
 }
