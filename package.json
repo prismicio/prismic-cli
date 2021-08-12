@@ -4,7 +4,6 @@
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
-    "@types/hapi__hapi": "^20.0.9",
     "eslint": "^7",
     "eslint-config-oclif": "^3.1",
     "eslint-config-oclif-typescript": "^0.1",
@@ -29,8 +28,5 @@
     "prepack": "yarn workspaces run prepack",
     "test": "yarn workspaces run test",
     "posttest": "eslint . --ext .ts --config .eslintrc"
-  },
-  "dependencies": {
-    "@hapi/hapi": "^20.1.5"
   }
 }
