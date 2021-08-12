@@ -20,7 +20,7 @@ $ npm install -g prismic-cli
 $ prismic COMMAND
 running command...
 $ prismic (-v|--version|version)
-prismic-cli/4.1.0 darwin-arm64 node-v16.6.1
+prismic-cli/4.1.1 darwin-arm64 node-v16.6.1
 $ prismic --help [COMMAND]
 USAGE
   $ prismic COMMAND
@@ -68,7 +68,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/list.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.0/src/commands/list.ts)_
+_See code: [src/commands/list.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/list.ts)_
 
 ## `prismic login`
 
@@ -83,7 +83,7 @@ OPTIONS
   --port=port  [default: 5555] port to start the local login server
 ```
 
-_See code: [src/commands/login.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.0/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/login.ts)_
 
 ## `prismic logout`
 
@@ -97,7 +97,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.0/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/logout.ts)_
 
 ## `prismic new`
 
@@ -116,7 +116,7 @@ OPTIONS
   --skip-install           prevent running install command after generating project
 ```
 
-_See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.0/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/new.ts)_
 
 ## `prismic signup`
 
@@ -131,7 +131,7 @@ OPTIONS
   --port=port  [default: 5555] port to start the local login server
 ```
 
-_See code: [src/commands/signup.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.0/src/commands/signup.ts)_
+_See code: [src/commands/signup.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/signup.ts)_
 
 ## `prismic slicemachine`
 
@@ -161,7 +161,7 @@ ALIASES
   $ prismic sm
 ```
 
-_See code: [src/commands/slicemachine.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.0/src/commands/slicemachine.ts)_
+_See code: [src/commands/slicemachine.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/slicemachine.ts)_
 
 ## `prismic theme [SOURCE]`
 
@@ -186,7 +186,7 @@ OPTIONS
   --skip-install             prevent running install command after generating project
 ```
 
-_See code: [src/commands/theme.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.0/src/commands/theme.ts)_
+_See code: [src/commands/theme.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/theme.ts)_
 
 ## `prismic whoami`
 
@@ -200,7 +200,7 @@ OPTIONS
   -h, --help  show CLI help
 ```
 
-_See code: [src/commands/whoami.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.0/src/commands/whoami.ts)_
+_See code: [src/commands/whoami.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/whoami.ts)_
 <!-- commandsstop -->
 
 # Development
