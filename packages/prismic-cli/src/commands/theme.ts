@@ -53,7 +53,7 @@ export default class Theme extends Command {
 
   static args = [{
     name: 'source',
-    description: 'Path or URL to a ZIP file, or a GitHub repository for the theme',
+    description: 'Path or URL to a ZIP file, or a GitHub repository for the theme.',
     required: false,
   }]
 
