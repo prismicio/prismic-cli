@@ -13,7 +13,7 @@ export default class Signup extends Command {
     base: flags.string({
       name: 'base',
       hidden: true,
-      description: 'Base url to sig nup with.',
+      description: 'Base URL to sign up with.',
       default: 'https://prismic.io',
     }),
 
