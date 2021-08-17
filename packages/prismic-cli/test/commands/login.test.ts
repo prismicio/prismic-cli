@@ -3,111 +3,74 @@ import * as sinon from 'sinon'
 import {fs} from '../../src/utils'
 import cli from 'cli-ux'
 import Login from '../../src/commands/login'
+import * as server from '../../src/utils/server'
 
 describe('login', () => {
+  beforeEach(() => {
+    sinon.reset()
+  })
+
   test
   .it('login flags', () => {
-    expect(Login.flags.email).exist
-    expect(Login.flags.password).exist
+    expect(Login.flags.port).exist
     expect(Login.flags.base).exist
-    expect(Login.flags.oauthaccesstoken).exist
+    expect(Login.flags.base.hidden).to.be.true
+    expect(Login.flags['auth-url']).exist
+    expect(Login.flags['auth-url'].hidden).to.be.true
   })
 
-  const fakeEmail = 'prismic@example.com'
-  const fakePassword = 'guest'
-  const fakeBase = 'https://example.com'
   const prismicBase = 'https://prismic.io'
-  const fakeOuath = 'token'
   const fakeErrorFileNotFound = new Error()
   Object.assign(fakeErrorFileNotFound, {code: 'ENOENT'})
-
-  const fakeReadFail = sinon.fake.throws(fakeErrorFileNotFound)
-  const fakeReadFileSync = sinon.fake.returns(JSON.stringify({base: fakeBase, cookies: ''}))
-  const fakeCookie = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=foo'
-
+  const fakeReadFileSync = sinon.fake.returns(JSON.stringify({}))
   const fakeWriteFile = sinon.fake.resolves(null)
-  const fakeWriteFileSync = sinon.fake.returns(null)
+
+  const fakeServer = sinon.fake.resolves(null)
 
   test
-  .stdout()
-  .nock(fakeBase, api => {
-    return api
-    .post('/authentication/signin', `email=${encodeURIComponent(fakeEmail)}&password=${encodeURIComponent(fakePassword)}`)
-    .reply(200, {}, {'set-cookie': [fakeCookie]})
-  })
+  // .stdout()
+  .stub(cli, 'prompt', () => async () => Promise.resolve(''))
   .stub(fs, 'readFileSync', fakeReadFileSync)
   .stub(fs, 'writeFile', fakeWriteFile)
-  .command(['login', '--email', fakeEmail, '--password', fakePassword, '--base', fakeBase])
-  .it('login with email and password', ctx => {
-    expect(fakeWriteFile.getCall(0).args[1]).to.contain('tea').and.to.include('biscuits')
-    expect(ctx.stdout).to.contain(fakeBase)
-  })
-
-  test
-  .stdout()
-  .nock(prismicBase, api => {
-    return api
-    .post('/authentication/signin', `oauthaccesstoken=${encodeURIComponent(fakeOuath)}`)
-    .reply(200, {}, {'set-cookie': [fakeCookie]})
-  })
-  .stub(fs, 'readFileSync', fakeReadFail)
-  .stub(fs, 'writeFileSync', fakeWriteFileSync)
-  .stub(fs, 'writeFile', fakeWriteFile)
-
-  .command(['login', '--oauthaccesstoken', fakeOuath])
-  .it('login with oauthaccesstoken', ctx => {
-    expect(fakeReadFail.called).to.be.true
-    const fakeWriteFileSyncArgs = fakeWriteFileSync.getCall(0).args
-    expect(fakeWriteFileSyncArgs[0]).to.contain('.prismic')
-    expect(fakeWriteFileSyncArgs[1]).to.contain(prismicBase)
-    expect(fakeWriteFile.getCall(1).args[1]).to.contain('.prismic')
-    expect(fakeWriteFile.getCall(1).args[1]).to.contain('tea').and.to.include('biscuits')
-    expect(ctx.stdout).to.contain(prismicBase)
-  })
-
-  test
-  .stub(cli, 'prompt', () => async (message: string): Promise<string> => {
-    if (message.includes('Email')) return Promise.resolve(fakeEmail)
-    if (message.includes('Password')) return Promise.resolve(fakePassword)
-    return Promise.resolve('')
-  })
-  .stub(fs, 'readFileSync', fakeReadFileSync)
-  .stub(fs, 'writeFile', fakeWriteFile)
-  .nock(prismicBase, api => {
-    return api
-    .post('/authentication/signin', `email=${encodeURIComponent(fakeEmail)}&password=${encodeURIComponent(fakePassword)}`)
-    .reply(200, {}, {'set-cookie': [fakeCookie]})
-  })
+  .stub(server, 'startServerAndOpenBrowser', fakeServer)
   .command(['login'])
-  .it('prompts for user name and password')
+  .it('login should call startServerAndOpenBrowser with default parameters', _ => {
+    expect(fakeServer.called).to.be.true
+    const [url, base, port, logAction] = fakeServer.firstCall.args
+    expect(url).to.be.equal(`${prismicBase}/dashboard/cli/login?port=${server.DEFAULT_PORT}`)
+    expect(base).to.equal(prismicBase)
+    expect(port).to.equal(server.DEFAULT_PORT)
+    expect(logAction).to.include('Logging in')
+  })
+
+  const fakeBase = 'https://example.com'
 
   test
-  .skip()
   .stderr()
   .stdout()
+  .stub(cli, 'prompt', () => async () => Promise.resolve(''))
   .stub(fs, 'readFileSync', fakeReadFileSync)
-  .nock(prismicBase, api => {
-    return api
-    .post('/authentication/signin', `email=${encodeURIComponent(fakeEmail)}&password=${encodeURIComponent(fakePassword)}`)
-    .reply(500)
-  })
-  .command(['login', '--email', fakeEmail, '--password', fakePassword])
-  .it('when login fails it should notify the user', ctx => {
-    expect(ctx.stderr).to.exist
+  .stub(fs, 'writeFile', fakeWriteFile)
+  .stub(server, 'startServerAndOpenBrowser', fakeServer)
+  .command(['login', '--base', fakeBase, '--port', '8080'])
+  .it('login with base and auth-url parameters', _ => {
+    expect(fakeServer.called).to.be.true
+    const [url, base, port, logAction] = fakeServer.firstCall.args
+    expect(url).to.be.equal(`${fakeBase}/dashboard/cli/login?port=8080`)
+    expect(base).to.equal(fakeBase)
+    expect(port).to.equal(8080)
+    expect(logAction).to.include('Logging in')
   })
 
   test
+  .stderr()
   .stdout()
-  .nock(fakeBase, api => {
-    return api
-    .post('/authentication/signin', `email=${encodeURIComponent(fakeEmail)}&password=${encodeURIComponent(fakePassword)}`)
-    .reply(200, {})
-  })
+  .stub(cli, 'prompt', () => async () => Promise.resolve('q'))
   .stub(fs, 'readFileSync', fakeReadFileSync)
   .stub(fs, 'writeFile', fakeWriteFile)
-  .command(['login', '--email', fakeEmail, '--password', fakePassword, '--base', fakeBase])
-  .it('login with no set-cookie response', ctx => {
-    expect(fakeWriteFile.getCall(0).args[1]).to.contain('tea').and.to.include('biscuits')
-    expect(ctx.stdout).to.contain(fakeBase)
+  .stub(server, 'startServerAndOpenBrowser', fakeServer)
+  .command(['login'])
+  .it('user can quit login process', _ => {
+    expect(fakeServer.called).to.be.false
   })
 })

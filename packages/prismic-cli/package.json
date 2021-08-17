@@ -1,7 +1,7 @@
 {
   "name": "prismic-cli",
   "description": "Command line to bootstrap prismic projects.",
-  "version": "4.0.7",
+  "version": "4.1.1",
   "author": "prismic.io developers",
   "bin": {
     "prismic": "bin/run"
@@ -15,6 +15,8 @@
     "@babel/parser": "^7.12.11",
     "@babel/traverse": "^7.12.12",
     "@babel/types": "^7.12.12",
+    "@hapi/hapi": "^20.1.5",
+    "@koa/cors": "^3.1.0",
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^3",
@@ -42,6 +44,8 @@
     "generator-prismic-vue": "^4.0.4",
     "inquirer": "^7.3.3",
     "is-valid-path": "^0.1.1",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
     "libnpmconfig": "^1.2.1",
     "lookpath": "^1.2.0",
     "qs": "^6.9.4",
@@ -55,6 +59,7 @@
     "yeoman-generator": "^4.12.0"
   },
   "devDependencies": {
+    "@types/hapi__hapi": "^20.0.9",
     "@oclif/dev-cli": "^1",
     "@oclif/test": "^1",
     "@types/babel__generator": "^7.6.2",
@@ -63,6 +68,8 @@
     "@types/cookie": "^0.4.0",
     "@types/fs-extra": "^9.0.7",
     "@types/is-valid-path": "^0.1.0",
+    "@types/koa": "^2.13.3",
+    "@types/koa-bodyparser": "^4.3.1",
     "@types/mocha": "^5",
     "@types/rimraf": "^3.0.0",
     "@types/semver": "^7.3.5",

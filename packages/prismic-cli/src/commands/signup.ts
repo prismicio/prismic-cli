@@ -1,8 +1,8 @@
 import {flags} from '@oclif/command'
 import {Command} from '../prismic'
 import cli from 'cli-ux'
-import * as EmailValidator from 'email-validator'
-import {IConfig} from '@oclif/config'
+import {DEFAULT_PORT} from '../utils/server'
+import {LogDecorations, PRISMIC_LOG_HEADER} from '../utils/logDecoration'
 
 export default class Signup extends Command {
   static description = 'Create a prismic account'
@@ -10,77 +10,37 @@ export default class Signup extends Command {
   static flags = {
     help: flags.help({char: 'h'}),
 
-    email: flags.string({
-      description: 'email address',
-    }),
-
-    password: flags.string({
-      description: 'password',
-    }),
-
     base: flags.string({
-      description: 'change the base url to sign-up to',
+      name: 'base',
       hidden: true,
+      description: 'base url to signup with',
+      default: 'https://prismic.io',
     }),
-  }
 
-  constructor(argv: string[], config: IConfig) {
-    super(argv, config)
-    this.emailPrompt = this.emailPrompt.bind(this)
-    this.passwordPrompt = this.passwordPrompt.bind(this)
-  }
+    port: flags.integer({
+      name: 'port',
+      hidden: false,
+      description: 'port to start the local login server',
+      default: DEFAULT_PORT,
+    }),
 
-  async emailPrompt(email?: string): Promise<string> {
-    const retry = async (): Promise<string> => cli.prompt('Email', {required: true}).then(this.emailPrompt)
-
-    if (!email) return retry()
-
-    if (EmailValidator.validate(email)) return email
-
-    this.warn('Enter a valid email address')
-    return retry()
-  }
-
-  async passwordPrompt(password?: string): Promise<string> {
-    const retry = async (): Promise<string> => cli.prompt('Password', {type: 'hide', required: true}).then(this.passwordPrompt)
-    if (!password) return retry()
-
-    if (password.length < 6) {
-      this.warn('Enter a longer password (minimum 6 characters)')
-      return retry()
-    }
-
-    if (password.trim().length !== password.length) {
-      this.warn('No leading or trailing spaces')
-      return retry()
-    }
-
-    return password
+    'auth-url': flags.string({
+      hidden: true,
+      name: 'auth-url',
+      description: 'url to use when validating and refreshing sessions',
+    }),
   }
 
   async run() {
     const {flags} = this.parse(Signup)
+    const {base, port, 'auth-url': authUrl} = flags
 
-    const email = await this.emailPrompt(flags.email)
-    const password = await this.passwordPrompt(flags.password)
+    // ask confirmation
+    const confirmationMessage = PRISMIC_LOG_HEADER + 'Press any key to open up the browser to signup or ' + LogDecorations.FgRed + 'q' + LogDecorations.Reset + ' to exist'
+    const confirmationKey: string = await cli.prompt(confirmationMessage, {type: 'single', required: false})
 
-    return this.prismic.signUp(email, password, flags.base)
-    .then(() => this.log(`Succesfully signed up to ${this.prismic.base}`))
-    .catch(error => {
-      if (error?.response?.data?.errors) {
-        this.log('Oops, received some errors')
+    if (confirmationKey === 'q' || confirmationKey === '\u0003') return Promise.resolve()
 
-        if (Array.isArray(error.response.data.errors)) {
-          return [].concat(error.response.data.errors).forEach(e => this.warn(e))
-        }
-
-        const errors: Record<string, string[]> = error.response.data.errors
-        return Object.entries(errors).forEach(([name, errs]) => errs.forEach(e => this.warn(`${name}: ${e}`)))
-      }
-      if (error?.response) {
-        return this.log(`Error: [${error.response.statusCode}]: ${error.response.statusText}`)
-      }
-      return this.error(error)
-    })
+    return this.prismic.signUp(port, base, authUrl)
   }
 }

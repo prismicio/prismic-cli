@@ -2,22 +2,16 @@ import {fs} from '../utils'
 import * as path from 'path'
 import * as cookie from '../utils/cookie'
 import Axios, {AxiosInstance, AxiosResponse, AxiosRequestConfig, AxiosError} from 'axios'
-import * as qs from 'qs'
 import * as os from 'os'
 import {IConfig} from '@oclif/config'
 import {parseJsonSync} from '../utils'
 import cli from 'cli-ux'
 // Note to self it's easier to mock fs sync methods.
 
-const version: string = require('../../package.json').version
+import {startServerAndOpenBrowser, DEFAULT_PORT} from '../utils/server'
+import {LogDecorations, PRISMIC_LOG_HEADER} from '../utils/logDecoration'
 
-export interface LoginData {
-  email?: string;
-  password?: string;
-  oauthaccesstoken?: string;
-  base?: string;
-  authUrl?: string;
-}
+const version: string = require('../../package.json').version
 
 export interface LocalDB {
   base: string;
@@ -97,7 +91,12 @@ export function toAuthUrl(path: 'validate' | 'refreshtoken', token: string, base
     addr.pathname = path
     addr.searchParams.set('token', token)
     return addr.toString()
-  }
+  } /* else if(base.includes('wroom.test')) { // TODO: remove and add param for custom auth server URL
+    const url = new URL('https://<LAMBDA_DEV_ID>.execute-api.us-east-1.amazonaws.com/')
+    url.pathname = `/dev/${path}`
+    url.searchParams.set('token', token)
+    return url.toString()
+  } */
   const url = new URL(base)
   url.hostname = `auth.${url.hostname}`
   url.pathname = path
@@ -119,7 +118,7 @@ export default class Prismic {
 
   public cookies: string;
 
-  public oauthAccessToken?: string;
+  public oauthAccessToken: string | undefined;
 
   private authUrl?: string;
 
@@ -134,6 +133,8 @@ export default class Prismic {
     this.oauthAccessToken = oauthAccessToken
     this.authUrl = authUrl
     this.validateRepositoryName = this.validateRepositoryName.bind(this)
+
+    this.setCookies = this.setCookies.bind(this)
 
     this.debug = debug || noop
   }
@@ -161,7 +162,7 @@ export default class Prismic {
     return this.removeConfig()
   }
 
-  private async setCookies(arr: Array<string> = []): Promise<void> {
+  public async setCookies(arr: ReadonlyArray<string> = []): Promise<void> {
     const oldCookies = cookie.parse(this.cookies || '')
 
     const newCookies = arr.map(str => cookie.parse(str)).reduce((acc, curr) => {
@@ -198,38 +199,29 @@ export default class Prismic {
     return Axios.create(opts)
   }
 
-  /**
-   * Handles login logic using email and password or an oauth access token
-   * @param {Object} data - Login data
-   * @param {String} [data.base = https://prismic.io] - where to login
-   * @param {String} [data.email] - users email address
-   * @param {String} [data.password] - users password
-   * @param {String} [data.oauthaccesstoken] - for logingin in with SSO
-   * @returns {Promise} - will either resolve or reject
-   */
-  public async login(data: LoginData): Promise<void> {
-    const {base, email, password, oauthaccesstoken, authUrl} = data
-    const params = oauthaccesstoken ? {oauthaccesstoken} : {email, password}
-    if (base) {
-      this.base = base
-    }
-    if (authUrl) {
-      this.authUrl = authUrl
-    }
+  private async startServerAndOpenBrowser(url: string, base: string, port: number, logAction: string): Promise<void> {
+    // tbh setCookies could be another callback if you wanted.
+    return startServerAndOpenBrowser(url, base, port, logAction, this.setCookies)
+  }
 
-    return this.axios().post('/authentication/signin', qs.stringify(params), {
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    })
-    .then((res: AxiosResponse) => {
-      return this.setCookies(res.headers['set-cookie'])
-    }).catch((error: AxiosError) => {
-      this.debug('communication.login', error.message)
-      if (error.response) {
-        this.debug(`[${error.response?.status}]: ${error.response?.statusText}`)
-        this.debug(error.response.data)
-      }
-      throw error
-    })
+  /**
+   * login in to a prismic account
+   * @param {Number} [port = 5555] - the port to listen on
+   * @param {String} [base = https://prismic.io] - where to make the account
+   * @param {String} [maybeAuthUrl = https://auth.prismic.io] - address to call for validating and refreshing tokens
+   * @returns
+   */
+  public async login(maybePort: number = DEFAULT_PORT, maybeBase?: string, maybeAuthUrl?: string): Promise<void> {
+    if (maybeBase) this.base = maybeBase
+    if (maybeAuthUrl) this.authUrl = maybeAuthUrl // TODO: will be added upstream
+    const base = maybeBase || this.base
+
+    const loginUrl = new URL(this.base)
+    loginUrl.pathname = 'dashboard/cli/login'
+    loginUrl.searchParams.append('port', maybePort.toString())
+    const logAction = PRISMIC_LOG_HEADER + 'Logging in'
+
+    return this.startServerAndOpenBrowser(loginUrl.toString(), base, maybePort, logAction)
   }
 
   private async auth(path: 'validate' | 'refreshtoken'): Promise<AxiosResponse> {
@@ -240,27 +232,22 @@ export default class Prismic {
 
   /**
    * creates a new prismic account
-   * @param {String} email - the email address to associate with the account
-   * @param {String} password - the password for the account
+   * @param {Number} [port = 5555] - the port to listen on
    * @param {String} [base = https://prismic.io] - where to make the account
+   * @param {String} [maybeAuthUrl = https://auth.prismic.io] - address to call for validating and refreshing tokens
    * @returns
    */
+  async signUp(maybePort: number = DEFAULT_PORT, maybeBase?: string, maybeAuthUrl?: string): Promise<void> {
+    if (maybeBase) this.base = maybeBase
+    if (maybeAuthUrl) this.authUrl = maybeAuthUrl
+    const base = maybeBase || this.base
+    const signUpUrl = new URL(this.base)
+    signUpUrl.pathname = 'dashboard/cli/signup'
+    signUpUrl.searchParams.append('port', maybePort.toString())
 
-  async signUp(email: string, password: string, base?: string): Promise<AxiosResponse> {
-    if (base) {
-      this.base = base
-    }
-    return this.axios().post('/authentication/signup', undefined, {
-      params: {
-        email,
-        password,
-      },
-    }).then((res: AxiosResponse) => {
-      this.setCookies(res.headers['set-cookie'])
-      return res
-    }).catch(error => {
-      throw error
-    })
+    const logAction: string = PRISMIC_LOG_HEADER + 'Signing in'
+
+    return this.startServerAndOpenBrowser(signUpUrl.toString(), base, maybePort, logAction)
   }
 
   async validateSession(): Promise<AxiosResponse> {
@@ -315,11 +302,16 @@ export default class Prismic {
    * @returns {Promise} - resolves if successful
    */
 
-  public async reAuthenticate(): Promise<void> {
-    // TODO: this will eventually have to be moved.
-    const email =  await cli.prompt('Email')
-    const password =  await cli.prompt('Password', {type: 'hide'})
-    return this.login({email, password}).catch((error: AxiosError) => {
+  public async reAuthenticate(retries = 0): Promise<void> {
+    if (retries === 0) {
+      const confirmationMessage = PRISMIC_LOG_HEADER + 'Press any key to open up the browser to login or ' + LogDecorations.FgRed + 'q' + LogDecorations.Reset + ' to exit'
+
+      const confirmationKey: string = await cli.prompt(confirmationMessage, {type: 'single', required: false})
+
+      if (confirmationKey === 'q' || confirmationKey === '\u0003') return process.exit() // eslint-disable-line no-process-exit, unicorn/no-process-exit
+    }
+
+    return this.login().catch((error: AxiosError) => {
       if (error.response?.data) {
         console.log(`[Error]: ${error.response.data}`)
       } else if (error.response?.statusText) {
@@ -328,7 +320,7 @@ export default class Prismic {
         console.log(`[Error]: ${error.message}`)
       }
       if (error?.response?.status === 401) {
-        return this.reAuthenticate()
+        return this.reAuthenticate(retries + 1)
       }
       throw error
     })

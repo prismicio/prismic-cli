@@ -55,14 +55,14 @@ describe('slicemachine', () => {
     .it('setup creates sm.json', _ => {
       const pkJsonPath = path.join(fakeFolder, 'package.json')
       const smJsonPath = path.join(fakeFolder, 'sm.json')
-      expect(fs.existsSync(pkJsonPath)).to.be.true
-      expect(fs.existsSync(smJsonPath)).to.be.true
+      expect(fs.existsSync(pkJsonPath), 'should create package.json').to.be.true
+      expect(fs.existsSync(smJsonPath), 'should create sm.json').to.be.true
 
       const smJson = require(smJsonPath)
       const pkJson = require(pkJsonPath)
 
-      expect(smJson.apiEndpoint).to.contain(fakeDomain)
-      expect(pkJson.scripts.slicemachine).to.equal('start-slicemachine --port 9999')
+      expect(smJson.apiEndpoint, 'sm.json should contain api endpoint').to.contain(fakeDomain)
+      expect(pkJson.scripts.slicemachine, 'package.json should contain slicemachine script').to.equal('start-slicemachine --port 9999')
     })
 
     test
@@ -71,10 +71,10 @@ describe('slicemachine', () => {
     .command(['slicemachine', '--create-slice', '--library', 'slices', '--sliceName', 'MySlice', '--folder', fakeFolder, '--force', '--framework', 'nextjs'])
     .it('create-slice', _ => {
       const pathToSlices = path.join(fakeFolder, 'slices')
-      expect(fs.existsSync(pathToSlices)).to.be.true
+      expect(fs.existsSync(pathToSlices), 'should create library').to.be.true
 
       const pathToMySlice = path.join(pathToSlices, 'MySlice')
-      expect(fs.existsSync(pathToMySlice)).to.be.true
+      expect(fs.existsSync(pathToMySlice), 'should create slice in library').to.be.true
     })
 
     test
@@ -85,7 +85,7 @@ describe('slicemachine', () => {
     .command(['slicemachine', '--add-storybook', '--framework', 'nextjs', '--folder', fakeFolder, '--force', '--skip-install'])
     .it('add-storybook', _ => {
       const pathToStoryBook = path.join(fakeFolder, '.storybook/main.js')
-      expect(fs.existsSync(pathToStoryBook)).to.be.true
+      expect(fs.existsSync(pathToStoryBook), 'should add main.js to storybook').to.be.true
     })
   })
 
@@ -125,14 +125,14 @@ describe('slicemachine', () => {
     .it('setup creates sm.json', _ => {
       const pkJsonPath = path.join(fakeFolder, 'package.json')
       const smJsonPath = path.join(fakeFolder, 'sm.json')
-      expect(fs.existsSync(pkJsonPath)).to.be.true
-      expect(fs.existsSync(smJsonPath)).to.be.true
+      expect(fs.existsSync(pkJsonPath), 'should create package.json').to.be.true
+      expect(fs.existsSync(smJsonPath), 'should crete sm.json').to.be.true
 
       const smJson = require(smJsonPath)
       const pkJson = require(pkJsonPath)
 
-      expect(smJson.apiEndpoint).to.contain(fakeDomain)
-      expect(pkJson.scripts.slicemachine).to.equal('start-slicemachine --port 9999')
+      expect(smJson.apiEndpoint, 'sm.json should contain apiEndpoint').to.contain(fakeDomain)
+      expect(pkJson.scripts.slicemachine, 'should add slicemachine to package.json scripts').to.equal('start-slicemachine --port 9999')
     })
 
     test
@@ -143,7 +143,7 @@ describe('slicemachine', () => {
     .command(['slicemachine', '--create-slice', '--library', 'slices', '--sliceName', 'MySlice', '--folder', fakeFolder, '--force', '--framework', 'nuxt'])
     .it('create-slice', async _ => {
       const pathToSlices = path.join(fakeFolder, 'slices')
-      expect(fs.existsSync(pathToSlices)).to.be.true
+      expect(fs.existsSync(pathToSlices), 'should create slices library').to.be.true
 
       const pathToMySlice = path.join(pathToSlices, 'MySlice')
       expect(fs.existsSync(pathToMySlice)).to.be.true
