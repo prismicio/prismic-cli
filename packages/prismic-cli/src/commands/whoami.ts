@@ -2,7 +2,7 @@ import {flags} from '@oclif/command'
 import {Command} from '../prismic'
 
 export default class Whoami extends Command {
-  static description = 'Shows the user name of the current user'
+  static description = 'Shows the email of the current user.'
 
   static flags = {
     help: flags.help({char: 'h'}),
