@@ -3,7 +3,7 @@ import {Command} from './../prismic'
 import {names} from '../prismic/yeoman-env'
 
 export default class List extends Command {
-  static description = 'Lists available project templates.'
+  static description = 'List all the available project template generators.'
 
   static flags = {
     help: flags.help({char: 'h'}),
