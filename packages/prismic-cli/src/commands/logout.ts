@@ -2,7 +2,7 @@ import {flags} from '@oclif/command'
 import {Command} from '../prismic'
 
 export default class Logout extends Command {
-  static description = 'logout of prismic'
+  static description = 'Logout of Prismic.'
 
   static flags = {
     help: flags.help({char: 'h'}), // -h causes errors?
