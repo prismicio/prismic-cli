@@ -12,7 +12,7 @@ const globby = require('fast-glob')
 const {SM_FILE} = require('sm-commons/consts')
 
 export default class Slicemachine extends Command {
-  static description = 'Slice Machine Commands'
+  static description = 'Slice Machine commands'
 
   static aliases = ['sm']
 
@@ -22,35 +22,35 @@ export default class Slicemachine extends Command {
     force: flags.boolean({char: 'f'}),
 
     setup: flags.boolean({
-      description: 'setup slice machine in an already existing project',
+      description: 'Setup Slice Machine in an already existing project.',
       exclusive: ['create-slice', 'add-storybook', 'list', 'bootstrap', 'develop'],
       default: false,
     }),
 
     domain: flags.string({
       char: 'd',
-      description: 'prismic repo to to create',
+      description: 'Prismic repo to create.',
       exclusive: ['add-storybook', 'create-slice', 'sliceName', 'library', 'list', 'develop'],
     }),
 
     'create-slice': flags.boolean({
-      description: 'add a slice to a slicemachine project',
+      description: 'Add a Slice to a Slice Machine project.',
       exclusive: ['setup', 'add-storybook', 'list', 'bootstrap', 'develop'],
       default: false,
     }),
 
     sliceName: flags.string({
-      description: 'name of the slice',
+      description: 'Name of the Slice.',
       dependsOn: ['create-slice'],
     }),
 
     library: flags.string({
-      description: 'name of the slice library',
+      description: 'Name of the Slice library.',
       dependsOn: ['create-slice'],
     }),
 
     'add-storybook': flags.boolean({
-      description: 'add storybook to a slicemachine project',
+      description: 'Add Storybook to a Slice Machine project.',
       exclusive: ['setup', 'create-slice', 'list', 'bootstrap', 'develop'],
       default: false,
     }),
@@ -60,35 +60,35 @@ export default class Slicemachine extends Command {
     }),
 
     list: flags.boolean({
-      description: 'list local slices',
+      description: 'List local Slices.',
       exclusive: ['add-storybook', 'setup', 'create-slice', 'bootstrap', 'sliceName', 'domain', 'library', 'framework', 'folder', 'skip-install', 'develop'],
       default: false,
     }),
 
     folder: flags.string({
-      description: 'output directory',
+      description: 'Output directory.',
     }),
 
     'skip-install': flags.boolean({
-      description: 'prevent npm install from running',
+      description: 'Prevent npm install from running.',
       exclusive: ['create-slice', 'list', 'bootstrap'],
       default: false,
     }),
 
     bootstrap: flags.boolean({
-      description: 'reconfigure a slicemachine project',
+      description: 'Reconfigure a Slice Machine project.',
       exclusive: ['setup', 'create-slice', 'list', 'develop'],
       default: false,
     }),
 
     develop: flags.boolean({
-      description: 'run slice machine',
+      description: 'Run Slice Machine.',
       exclusive: ['setup', 'create-slice', 'list', 'bootstrap'],
       default: false,
     }),
 
     customTypeEndpoint: flags.string({
-      description: 'use a different custom-type endpoint',
+      description: 'Use a different custom-type endpoint.',
       hidden: true,
       dependsOn: ['develop'],
       // default: 'https://silo2hqf53.execute-api.us-east-1.amazonaws.com/prod/slices',
@@ -244,7 +244,7 @@ export default class Slicemachine extends Command {
       .then(res => {
         const url = new URL(this.prismic.base)
         url.hostname = `${res.data}.${url.hostname}`
-        return this.log(`Your SliceMachine repository was successfully created! ${url.toString()}`)
+        return this.log(`Your Slice Machine repository was successfully created! ${url.toString()}`)
       })
       .then(() => fs.readFile(smFilePath, 'utf-8'))
       .then(str => JSON.parse(str))
