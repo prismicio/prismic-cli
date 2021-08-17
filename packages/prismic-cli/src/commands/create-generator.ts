@@ -2,14 +2,14 @@ import {Command, flags} from '@oclif/command'
 import {createEnv} from 'yeoman-environment'
 
 export default class CreateGenerator extends Command {
-  static description = 'create a new generator'
+  static description = 'Create a new generator.'
 
   static hidden = true
 
   static flags = {
     help: flags.help({char: 'h'}),
     // flag with a value (-n, --name=VALUE)
-    name: flags.string({char: 'n', description: 'name for the generator'}),
+    name: flags.string({char: 'n', description: 'Name for the generator.'}),
     // flag with no value (-f, --force)
     force: flags.boolean({char: 'f'}),
 
@@ -19,14 +19,14 @@ export default class CreateGenerator extends Command {
 
     pm: flags.string({
       char: 'p',
-      description: 'package manager',
+      description: 'Package manager.',
       required: false,
       options: ['npm', 'yarn'],
     }),
 
     language: flags.string({
       char: 'l',
-      description: 'language to write the generator in',
+      description: 'Language to write the generator in.',
       required: false,
       options: ['js', 'ts'],
       parse: value => {
@@ -40,7 +40,7 @@ export default class CreateGenerator extends Command {
 
     path: flags.string({
       char: 'f',
-      description: 'project where to create the generator',
+      description: 'Project where to create the generator.',
     }),
   }
 
