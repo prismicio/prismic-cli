@@ -5,34 +5,34 @@ import {Command} from '../prismic'
 import prismicGenerators, {names} from '../prismic/yeoman-env'
 
 export default class New extends Command {
-  static description = 'Create a project with a new prismic repository.'
+  static description = 'Create a project with a new Prismic repository.'
 
   static flags = {
     help: flags.help({char: 'h'}),
 
     domain: flags.string({
       char: 'd',
-      description: 'name of the prismic repository ie: example, becomes https://example.prismic.io',
+      description: 'Name of the Prismic repository. For example: repo-name, becomes https://repo-name.prismic.io.',
       parse: (input: string) => input.toLowerCase().trim(),
     }),
 
     folder: flags.string({
       char: 'f',
-      description: 'name of project folder',
+      description: 'Name of the project folder.',
     }),
 
     template: flags.string({
       char: 't',
-      description: 'Prismic template for the project',
+      description: 'Prismic template for the project.',
     }),
 
     force: flags.boolean({
-      description: 'over write local files',
+      description: 'Over write local files.',
       default: false,
     }),
 
     'skip-install': flags.boolean({
-      description: 'prevent running install command after generating project',
+      description: 'Prevent running install command after generating project.',
       default: false,
     }),
   }
