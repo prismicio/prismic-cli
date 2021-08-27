@@ -1,7 +1,7 @@
 import {test} from '@oclif/test'
 import {fs} from '../../src/utils'
 
-describe.only('create-repo', () => {
+describe('create-repo', () => {
   const fakeDomain = 'fake-domain'
   const fakeBase = 'https://prismic.io'
   const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=xyz'
