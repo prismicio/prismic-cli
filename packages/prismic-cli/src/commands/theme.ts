@@ -3,40 +3,40 @@ import {Command} from '../prismic'
 import generator from '../prismic/yeoman-env'
 
 export default class Theme extends Command {
-  static description = 'Create a project from a zip file or github repository with a new prismic repository.'
+  static description = 'Create a project from a ZIP file or a GitHub repository URL and a new Prismic repository.'
 
   static flags = {
     help: flags.help({char: 'h'}),
 
     domain: flags.string({
       char: 'd',
-      description: 'name of the prismic repository ie: example, becomes https://example.prismic.io',
+      description: 'Name of the new Prismic repository. For example, repo-name becomes https://repo-name.prismic.io.',
       parse: input => input.toLowerCase().trim(),
     }),
 
     folder: flags.string({
       char: 'f',
-      description: 'name of project folder',
+      description: 'Name of the project folder.',
     }),
 
     'theme-url': flags.string({
       char: 't',
-      description: 'Url or path to the theme',
+      description: 'GitHub URL or path to the theme file.',
     }),
 
     conf: flags.string({
       char: 'c',
-      description: 'path to prismic configuration file',
+      description: 'Path to Prismic configuration file.',
       default: 'prismic-configuration.js',
     }),
 
     documents: flags.string({
-      description: 'path to documents in the theme',
+      description: 'Path to the documents in the theme.',
       default: 'documents',
     }),
 
     customTypes: flags.string({
-      description: 'path to custom types directory in the theme',
+      description: 'Path to the Custom Types directory in the theme.',
       default: 'custom_types',
     }),
 
@@ -45,7 +45,7 @@ export default class Theme extends Command {
     }),
 
     'skip-install': flags.boolean({
-      description: 'prevent running install command after generating project',
+      description: 'Prevent running install command after generating project.',
       default: false,
     }),
 
@@ -53,7 +53,7 @@ export default class Theme extends Command {
 
   static args = [{
     name: 'source',
-    description: 'path or url to a zip file, or a github Repository for the theme',
+    description: 'Path or URL to a ZIP file, or a GitHub repository for the theme.',
     required: false,
   }]
 

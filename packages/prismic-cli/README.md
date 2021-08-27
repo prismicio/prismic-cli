@@ -1,7 +1,7 @@
 prismic-cli
 ===========
 
-Command line tool to bootstrap prismic projects.
+Command line tool to bootstrap Prismic projects.
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/prismic-cli.svg)](https://npmjs.org/package/prismic-cli)
@@ -17,19 +17,19 @@ Command line tool to bootstrap prismic projects.
 <!-- usage -->
 ```sh-session
 $ npm install -g prismic-cli
-$ prismic COMMAND
+$ prismic [command]
 running command...
 $ prismic (-v|--version|version)
 prismic-cli/4.1.1 darwin-arm64 node-v16.6.1
-$ prismic --help [COMMAND]
+$ prismic --help [command]
 USAGE
-  $ prismic COMMAND
+  $ prismic [command]
 ...
 ```
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`prismic help [COMMAND]`](#prismic-help-command)
+* [`prismic help [command]`](#prismic-help-command)
 * [`prismic list`](#prismic-list)
 * [`prismic login`](#prismic-login)
 * [`prismic logout`](#prismic-logout)
@@ -39,168 +39,165 @@ USAGE
 * [`prismic theme [SOURCE]`](#prismic-theme-source)
 * [`prismic whoami`](#prismic-whoami)
 
-## `prismic help [COMMAND]`
+## `prismic help [command]`
 
-display help for prismic
+Show the available command options.
 
 ```
 USAGE
-  $ prismic help [COMMAND]
+  $ prismic help [command]
 
 ARGUMENTS
-  COMMAND  command to show help for
+  [command]  Command to show help for.
 
 OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
-
 ## `prismic list`
 
-Lists available project templates.
+List all the available project template generators.
 
 ```
 USAGE
   $ prismic list
 
 OPTIONS
-  -h, --help  show CLI help
+  -h, --help Show the available command options.
 ```
 
-_See code: [src/commands/list.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/list.ts)_
-
-## `prismic login`
-
-Login to prismic
-
-```
-USAGE
-  $ prismic login
-
-OPTIONS
-  -h, --help   show CLI help
-  --port=port  [default: 5555] port to start the local login server
-```
-
-_See code: [src/commands/login.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/login.ts)_
-
-## `prismic logout`
-
-logout of prismic
-
-```
-USAGE
-  $ prismic logout
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src/commands/logout.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/logout.ts)_
-
-## `prismic new`
-
-Create a project with a new prismic repository.
-
-```
-USAGE
-  $ prismic new
-
-OPTIONS
-  -d, --domain=domain      name of the prismic repository ie: example, becomes https://example.prismic.io
-  -f, --folder=folder      name of project folder
-  -h, --help               show CLI help
-  -t, --template=template  Prismic template for the project
-  --force                  over write local files
-  --skip-install           prevent running install command after generating project
-```
-
-_See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/new.ts)_
+_See code: [src/commands/list.ts](https://github.com/prismicio/prismic-cli/blob/master/packages/prismic-cli/src/commands/list.ts)_
 
 ## `prismic signup`
 
-Create a prismic account
+Create a new Prismic account.
 
 ```
 USAGE
   $ prismic signup
 
 OPTIONS
-  -h, --help   show CLI help
-  --port=port  [default: 5555] port to start the local login server
+  -h, --help     Show the available command options.
+  --port [port]  Port to start the local login server. Default: [5555]
 ```
 
-_See code: [src/commands/signup.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/signup.ts)_
+_See code: [src/commands/signup.ts](https://github.com/prismicio/prismic-cli/blob/master/packages/prismic-cli/src/commands/signup.ts)_
+
+## `prismic login`
+
+Log in to Prismic.
+
+```
+USAGE
+  $ prismic login
+
+OPTIONS
+  -h, --help          Show the available command options.
+  --port [port-name]  Port to start the local login server. Default: [5555]
+```
+
+_See code: [src/commands/login.ts](https://github.com/prismicio/prismic-cli/blob/master/packages/prismic-cli/src/commands/login.ts)_
+
+## `prismic logout`
+
+Log out of Prismic.
+
+```
+USAGE
+  $ prismic logout
+
+OPTIONS
+  -h, --help  Show the available command options.
+```
+
+_See code: [src/commands/logout.ts](https://github.com/prismicio/prismic-cli/blob/master/packages/prismic-cli/src/commands/logout.ts)_
+
+## `prismic new`
+
+Create a project with a new Prismic repository.
+
+```
+USAGE
+  $ prismic new
+
+OPTIONS
+  -h, --help                     Show the available command options.
+  -d, --domain [repo-name]       Create a new Prismic repository. For example, your-repo-name creates the URL https://your-repo-name.prismic.io.
+  -f, --folder [folder-name]     Name a new local project folder. Use it to create a new Prismic repository and select a technology.
+  -t, --template [template-url]  Install a project from a Prismic template.
+  --force                        Over write local files.
+  --skip-install                 Prevent running install command after generating project.
+```
+
+_See code: [src/commands/new.ts](https://github.com/prismicio/prismic-cli/blob/master/packages/prismic-cli/src/commands/new.ts)_
 
 ## `prismic slicemachine`
 
-Slice Machine Commands
+Slice Machine commands.
 
 ```
 USAGE
   $ prismic slicemachine
 
 OPTIONS
-  -d, --domain=domain      prismic repo to to create
-  -f, --force
-  -h, --help               show CLI help
-  --add-storybook          add storybook to a slicemachine project
-  --bootstrap              reconfigure a slicemachine project
-  --create-slice           add a slice to a slicemachine project
-  --develop                run slice machine
-  --folder=folder          output directory
-  --framework=nextjs|nuxt
-  --library=library        name of the slice library
-  --list                   list local slices
-  --setup                  setup slice machine in an already existing project
-  --skip-install           prevent npm install from running
-  --sliceName=sliceName    name of the slice
+  -h, --help                Show the available command options.
+  -d, --domain [repo-name]  Create a new Prismic repository. For example, your-repo-name creates the URL https://your-repo-name.prismic.io.
+  -f, --force               Overwrite local files.
+  --add-storybook           Install Storybook at the root of your Slice Machine project. It will configure it automatically to display your local Slices.
+  --bootstrap               Bootstrap a project with Slice Machine from an existing configuration.
+  --create-slice            Create a new Slice component in your file system and a corresponding Slice in your Prismic repository.
+  --develop                 Launch the Slice Builder locally. Storybook must already be running.
+  --folder [folder-name]    Name a new local project folder. Use it to create a new Prismic repository and select a technology.
+  --framework [next||nuxt]  Select any of the supported frameworks (Nuxt.js and Next.js as of January, 2021).
+  --library [library]       The name of the Slice Library.
+  --list                    List all the Slices from libraries and the local files. 
+  --setup                   Set up a Slice Machine environment in an already existing project. In the root folder of a supported framework (Nuxt.js and Next.js as of January, 2021), it will add dependencies for Slice Machine and the Slice Builder. Then, it creates a repo in Prismic.
+  --skip-install            Prevent running install command after generating project.
+  --sliceName [slice-name]  The name of the Slice in the library.
 
 ALIASES
   $ prismic sm
 ```
 
-_See code: [src/commands/slicemachine.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/slicemachine.ts)_
+_See code: [src/commands/slicemachine.ts](https://github.com/prismicio/prismic-cli/blob/master/packages/prismic-cli/src/commands/slicemachine.ts)_
 
-## `prismic theme [SOURCE]`
+## `prismic theme [source]`
 
-Create a project from a zip file or github repository with a new prismic repository.
+Create a project from a zip file or GitHub repository and a new Prismic repository. Add a [theme-url], a path, or URL to a zip file or a GitHub Repository.
 
 ```
 USAGE
-  $ prismic theme [SOURCE]
+  $ prismic theme [theme-url]
 
 ARGUMENTS
-  SOURCE  path or url to a zip file, or a github Repository for the theme
+  [theme-url]  Path to a zip file or a GitHub repository.
 
 OPTIONS
-  -c, --conf=conf            [default: prismic-configuration.js] path to prismic configuration file
-  -d, --domain=domain        name of the prismic repository ie: example, becomes https://example.prismic.io
-  -f, --folder=folder        name of project folder
-  -h, --help                 show CLI help
-  -t, --theme-url=theme-url  Url or path to the theme
-  --customTypes=customTypes  [default: custom_types] path to custom types directory in the theme
-  --documents=documents      [default: documents] path to documents in the theme
-  --force                    over-write local files
-  --skip-install             prevent running install command after generating project
+  -h, --help                      Show the available command options.
+  -c, --conf [configuration-path] Path to prismic configuration file. Default: prismic-configuration.js.
+  -d, --domain [domain]           Create a new Prismic repository. For example, your-repo-name creates the URL https://your-repo-name.prismic.io.
+  -f, --folder [folder]           Name a new local project folder. Use it to create a new Prismic repository and select a technology.
+  -t, --theme-url [theme-url]     Url or path to the theme
+  --customTypes [custom-types]    Path to the custom types directory in the project. Default: custom_types.
+  --force                         Overwrite local files.
+  --skip-install                  Prevent running install command after generating project.
 ```
 
-_See code: [src/commands/theme.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/theme.ts)_
+_See code: [src/commands/theme.ts](https://github.com/prismicio/prismic-cli/blob/master/packages/prismic-cli/src/commands/theme.ts)_
 
 ## `prismic whoami`
 
-Shows the user name of the current user
+Shows the email of the current user.
 
 ```
 USAGE
   $ prismic whoami
 
 OPTIONS
-  -h, --help  show CLI help
+  -h, --help  Show the available command options.
 ```
 
-_See code: [src/commands/whoami.ts](https://github.com/prismicio/prismic-cli/blob/v4.1.1/src/commands/whoami.ts)_
+_See code: [src/commands/whoami.ts](https://github.com/prismicio/prismic-cli/blob/master/packages/prismic-cli/src/commands/whoami.ts)_
 <!-- commandsstop -->
 
 # Development

@@ -5,7 +5,7 @@ import {DEFAULT_PORT} from '../utils/server'
 import {LogDecorations, PRISMIC_LOG_HEADER} from '../utils/logDecoration'
 
 export default class Signup extends Command {
-  static description = 'Create a prismic account'
+  static description = 'Create a Prismic account.'
 
   static flags = {
     help: flags.help({char: 'h'}),
@@ -13,21 +13,21 @@ export default class Signup extends Command {
     base: flags.string({
       name: 'base',
       hidden: true,
-      description: 'base url to signup with',
+      description: 'Base URL to sign up with.',
       default: 'https://prismic.io',
     }),
 
     port: flags.integer({
       name: 'port',
       hidden: false,
-      description: 'port to start the local login server',
+      description: 'Port to start the local login server.',
       default: DEFAULT_PORT,
     }),
 
     'auth-url': flags.string({
       hidden: true,
       name: 'auth-url',
-      description: 'url to use when validating and refreshing sessions',
+      description: 'URL to use when validating and refreshing sessions.',
     }),
   }
 
