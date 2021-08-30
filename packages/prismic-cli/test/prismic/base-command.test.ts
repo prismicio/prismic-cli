@@ -18,6 +18,8 @@ describe('prismic/base-command', () => {
     const repoName = 'fake-repo'
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', sinon.fake.returns(config))
     .nock(fakeBase, api => {
       return api

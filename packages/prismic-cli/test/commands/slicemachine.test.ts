@@ -59,6 +59,7 @@ describe('slicemachine', () => {
     }
 
     test
+    .stdout()
     .stderr()
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
@@ -89,6 +90,7 @@ describe('slicemachine', () => {
     })
 
     test
+    .stdout()
     .stderr()
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
@@ -102,6 +104,7 @@ describe('slicemachine', () => {
     })
 
     test
+    .stdout()
     .stderr()
     .stdin('y\n', 1000)
     .stub(fs, 'readFileSync', fakeReadFileSync)
@@ -114,6 +117,7 @@ describe('slicemachine', () => {
     })
 
     test
+    .stdout()
     .stderr()
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
@@ -163,6 +167,7 @@ describe('slicemachine', () => {
     })
 
     test
+    .stdout()
     .stderr()
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
@@ -193,6 +198,7 @@ describe('slicemachine', () => {
     })
 
     test
+    .stdout()
     .stderr()
     .stdin('y\n', 1000) // TODO: force flag doesn't work
     .stub(fs, 'readFileSync', fakeReadFileSync)
@@ -216,6 +222,7 @@ describe('slicemachine', () => {
     })
 
     test
+    .stdout()
     .stderr()
     .stdin('y\n', 1000) // TODO: force flag doesn't work
     .stub(fs, 'readFileSync', fakeReadFileSync)
@@ -232,6 +239,7 @@ describe('slicemachine', () => {
     })
 
     test
+    .stdout()
     .stderr()
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
@@ -289,6 +297,8 @@ describe('slicemachine', () => {
     .stub(fs, 'writeFile', boostrapFakeWriteFile)
 
     setup
+    .stdout()
+    .stderr()
     .nock('https://auth.prismic.io', api => {
       api.get('/validate?token=xyz').reply(200, {})
       api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
@@ -307,12 +317,15 @@ describe('slicemachine', () => {
     })
 
     setup
+    .stdout()
     .stderr()
     .stub(fs, 'existsSync', () => false)
     .command(['slicemachine', '--bootstrap', '--domain', fakeDomain])
     .it('Should fail if no sm.json file is found', ctx => expect(ctx.stderr).to.contain('sm.json file not found'))
 
     setup
+    .stdout()
+    .stderr()
     .nock('https://auth.prismic.io', api => {
       api.get('/validate?token=xyz').reply(200, {})
       api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
@@ -331,6 +344,8 @@ describe('slicemachine', () => {
     })
 
     setup
+    .stdout()
+    .stderr()
     .nock('https://auth.prismic.io', api => {
       api.get('/validate?token=xyz').reply(200, {})
       api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
@@ -364,6 +379,8 @@ describe('slicemachine', () => {
     }
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
     .nock('https://auth.prismic.io', fakeAuth)
@@ -376,6 +393,8 @@ describe('slicemachine', () => {
     })
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
     .nock('https://auth.prismic.io', fakeAuth)

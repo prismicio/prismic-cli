@@ -15,6 +15,7 @@ describe('create-generator', () => {
   })
 
   test
+  .stderr()
   .stub(inquirer, 'prompt', () => Promise.resolve({slicemachine: true}))
   .command(['create-generator', '--pm', 'npm', '--language', 'js', '--name', 'js-test', '--path', jsDir, '--skip-install', '--force'])
   .it('setups a JavaSript based generator', () => {
@@ -23,6 +24,7 @@ describe('create-generator', () => {
   })
 
   test
+  .stderr()
   .stub(inquirer, 'prompt', () => Promise.resolve({slicemachine: true}))
   .command(['create-generator', '--pm', 'npm', '--language', 'js', '--name', 'ts-test', '--path', tsDir, '--skip-install', '--force'])
   .it('setups a TypeScript based generator', () => {

@@ -70,6 +70,7 @@ describe('new', () => {
 
     test
     .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
     .nock('https://auth.prismic.io', api => {
@@ -94,6 +95,8 @@ describe('new', () => {
     })
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
     .nock('https://auth.prismic.io', api => {
@@ -127,6 +130,8 @@ describe('new', () => {
     })
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(lookpath, 'lookpath', async () => false)
@@ -198,6 +203,8 @@ describe('new', () => {
     })
 
     test
+    .stderr()
+    .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(lookpath, 'lookpath', async () => false)
