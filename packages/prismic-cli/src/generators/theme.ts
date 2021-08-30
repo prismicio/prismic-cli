@@ -1,5 +1,4 @@
 import PrismicGenerator, {TemplateOptions} from '@prismicio/prismic-yeoman-generator'
-import cli from 'cli-ux'
 import * as Framework from '../utils/framework'
 
 export interface ThemeOptions extends TemplateOptions {
@@ -56,18 +55,22 @@ export default class PrismicTheme extends PrismicGenerator {
       signedDocuments: documents,
       framework: maybeFramework || 'other',
     }, this.existingRepo).then(res => {
-      const location = this.destinationPath(this.configPath)
-      if (this.fs.exists(location)) {
-        const oldConfig = this.fs.read(location)
-        const newConfig = oldConfig.replace(/your-repo-name/g, res.data || this.domain)
-        this.fs.write(location, newConfig)
-      } else {
-        const url = new URL(this.prismic.base)
-        url.host = `${res.data || this.domain}.${url.host}`
-        url.pathname = '/api/v2'
-        this.fs.writeJSON(location, {apiEndpoint: url.toString()})
-      }
+      if (res.data) this.domain = res.data
     })
+  }
+
+  async writing() {
+    const location = this.destinationPath(this.configPath)
+    if (this.existsDestination(this.configPath)) {
+      const oldConfig = this.readDestination(this.configPath)
+      const newConfig = oldConfig.replace(/your-repo-name/g, this.domain)
+      this.writeDestination(this.configPath, newConfig)
+    } else {
+      const url = new URL(this.prismic.base)
+      url.host = `${this.domain}.${url.host}`
+      url.pathname = '/api/v2'
+      this.fs.writeJSON(location, {apiEndpoint: url.toString()})
+    }
   }
 
   async install() {
