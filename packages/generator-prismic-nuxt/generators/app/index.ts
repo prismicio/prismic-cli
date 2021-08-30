@@ -177,16 +177,8 @@ export default class Nuxt extends PrismicGenerator {
     // doing the modifications see here: https://sao.vercel.app/saofile.html#actions
     // add: convert filters to https://github.com/mrmlnc/fast-glob#options-1 filters become ingore in the globOptions
 
-    if (!this.answers.slicemachine && !this.existingRepo) {
-      this.prismic.createRepository({
-        domain: this.domain,
-        framework: 'nuxt',
-      }).then(res => {
-        const url = new URL(this.prismic.base)
-        url.host = `${res.data || this.domain}.${url.host}`
-        this.log(`A new repository has been created at: ${url.toString()}`)
-        return res
-      })
+    if (!this.answers.slicemachine) {
+      this.maybeCreatePrismicRepository({domain: this.domain, framework: 'nuxt'}, this.existingRepo)
     }
   }
 

@@ -99,17 +99,10 @@ export default class PrismicNuxt extends PrismicGenerator {
     }
     const customTypes = this.readCustomTypesFrom('customtypes')
 
-    if (this.existingRepo) return Promise.resolve()
-
-    return this.prismic.createRepository({
+    return this.maybeCreatePrismicRepository({
       domain: this.domain,
       framework: 'nuxt',
       customTypes,
-    }).then(res => {
-      const url = new URL(this.prismic.base)
-      url.host = `${res.data || this.domain}.${url.host}`
-      this.log(`A new repository has been created at: ${url.toString()}`)
-      return res
     })
   }
 

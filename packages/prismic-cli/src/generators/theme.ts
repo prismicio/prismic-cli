@@ -50,26 +50,12 @@ export default class PrismicTheme extends PrismicGenerator {
 
     const maybeFramework = pkg && Framework.detect(pkg)
 
-    const createRepo = () => {
-      cli.action.start('Creating Prismic repository')
-      return this.prismic.createRepository({
-        domain: this.domain,
-        customTypes,
-        signedDocuments: documents,
-        framework: maybeFramework || 'other',
-      })
-      .then(res => {
-        cli.action.stop()
-        const url = new URL(this.prismic.base)
-        url.host = `${res.data || this.domain}.${url.host}`
-        this.log(`A new repository has been created at: ${url.toString()}`)
-        return res
-      })
-    }
-
-    const maybeCreateRepo = this.existingRepo ? Promise.resolve({data: this.domain}) : createRepo()
-
-    return maybeCreateRepo.then(res => {
+    this.maybeCreatePrismicRepository({
+      domain: this.domain,
+      customTypes,
+      signedDocuments: documents,
+      framework: maybeFramework || 'other',
+    }, this.existingRepo).then(res => {
       const location = this.destinationPath(this.configPath)
       if (this.fs.exists(location)) {
         const oldConfig = this.fs.read(location)

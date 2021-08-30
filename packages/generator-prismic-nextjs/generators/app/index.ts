@@ -82,16 +82,8 @@ export default class extends PrismicGenerator {
 
     this.fs.extendJSON(this.destinationPath('package.json'), pkjJson)
 
-    if (!this.options.slicemachine && !this.existingRepo) {
-      this.prismic.createRepository({
-        domain: this.domain,
-        framework: 'next',
-      }).then(res => {
-        const url = new URL(this.prismic.base)
-        url.host = `${res.data || this.domain}.${url.host}`
-        this.log(`A new repository has been created at: ${url.toString()}`)
-        return res
-      })
+    if (!this.options.slicemachine) {
+      this.maybeCreatePrismicRepository({domain: this.domain, framework: 'next'}, this.existingRepo)
     }
   }
 
