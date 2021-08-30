@@ -33,16 +33,15 @@ describe('theme', () => {
 
   const zip = ThemeZip.toBuffer()
 
-  before(async () => {
+  beforeEach(async () => {
     if (fs.existsSync(fakeFolder)) {
       return fs.rmdir(fakeFolder, {recursive: true})
     }
     return Promise.resolve()
   })
 
-  const withGithubFolder = path.join(fakeFolder, 'github')
-
   test
+  .stderr()
   .stub(lookpath, 'lookpath', async () => false)
   .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
   .stub(fs, 'writeFile', () => Promise.resolve())
@@ -64,17 +63,16 @@ describe('theme', () => {
       'content-length': zip.length.toString(),
     })
   })
-  .command(['theme', fakeSource, '--domain', fakeDomain, '--folder', withGithubFolder, '--conf', configFile, '--skip-install'])
+  .command(['theme', fakeSource, '--domain', fakeDomain, '--folder', fakeFolder, '--conf', configFile, '--skip-install'])
   .it('creates a prismic project from a github url', () => {
-    const configPath = path.join(withGithubFolder, configFile)
-    expect(fs.existsSync(withGithubFolder)).to.be.true
+    const configPath = path.join(fakeFolder, configFile)
+    expect(fs.existsSync(fakeFolder)).to.be.true
     const conf = require(configPath)
     expect(conf.prismicRepo).to.include(fakeDomain)
   })
 
-  const folderForExistinRepo = path.join(fakeFolder, 'existing-repo')
-
   test
+  .stderr()
   .stub(lookpath, 'lookpath', async () => false)
   .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
   .stub(fs, 'writeFile', () => Promise.resolve())
@@ -95,10 +93,10 @@ describe('theme', () => {
       'content-length': zip.length.toString(),
     })
   })
-  .command(['theme', fakeSource, '--domain', fakeDomain, '--folder', folderForExistinRepo, '--conf', configFile, '--skip-install', '--existing-repo'])
+  .command(['theme', fakeSource, '--domain', fakeDomain, '--folder', fakeFolder, '--conf', configFile, '--skip-install', '--existing-repo'])
   .it('when passed existing repo it should not try to create a repository', () => {
-    const configPath = path.join(folderForExistinRepo, configFile)
-    expect(fs.existsSync(folderForExistinRepo)).to.be.true
+    const configPath = path.join(fakeFolder, configFile)
+    expect(fs.existsSync(fakeFolder)).to.be.true
     const conf = require(configPath)
     expect(conf.prismicRepo).to.include(fakeDomain)
   })
