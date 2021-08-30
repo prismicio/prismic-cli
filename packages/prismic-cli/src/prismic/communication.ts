@@ -328,11 +328,12 @@ export default class Prismic {
 
   /**
    * Validates a repository name and checks availability
-   * @param name - repository name
+   * @param {String} name - repository name
+   * @param {Boolean} [existingRepo = false] expect the repository to exist
    * @returns {Promise} - rejects with errors if any, else resolves with the repository name
    */
 
-  public async validateRepositoryName(name?: string): Promise<string> {
+  public async validateRepositoryName(name?: string, existingRepo = false): Promise<string> {
     if (!name) return Promise.reject(new Error('repository name is required'))
 
     const domain = name.toLocaleLowerCase().trim()
@@ -362,7 +363,7 @@ export default class Prismic {
 
     const url = `/app/dashboard/repositories/${domain}/exists`
     return this.axios().get<boolean>(url).then(res => {
-      if (!res.data) return Promise.reject(new Error(`${domain} is already in use`))
+      if (!res.data && !existingRepo) return Promise.reject(new Error(`${domain} is already in use`))
       return domain
     })
   }

@@ -26,7 +26,7 @@ export default class extends PrismicGenerator {
   }
 
   async configuring() {
-    return this.prismic.createRepository({
+    const maybeRepoCreateRepo = this.existingRepo ? Promise.resolve({data: this.domain}) : this.prismic.createRepository({
       domain: this.domain,
       framework: 'angular2',
     }).then(res => {
@@ -35,6 +35,8 @@ export default class extends PrismicGenerator {
       this.log(`A new repository has been created at: ${url.toString()}`)
       return res
     })
+
+    return maybeRepoCreateRepo
     .then(res => {
       const location = path.join('src', 'prismic-configuration.ts')
       const oldConfig = this.readDestination(location)

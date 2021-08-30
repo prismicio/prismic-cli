@@ -82,7 +82,7 @@ export default class extends PrismicGenerator {
 
     this.fs.extendJSON(this.destinationPath('package.json'), pkjJson)
 
-    if (!this.options.slicemachine) {
+    if (!this.options.slicemachine && !this.existingRepo) {
       this.prismic.createRepository({
         domain: this.domain,
         framework: 'next',

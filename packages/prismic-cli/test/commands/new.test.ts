@@ -17,6 +17,7 @@ describe('new', () => {
     expect(New.flags.help).to.exist
     expect(New.flags['skip-install']).to.exist
     expect(New.flags.template).to.exist
+    expect(New.flags['existing-repo']).to.exist
   })
 
   const fakeDomain = 'fake-domain'
@@ -86,6 +87,29 @@ describe('new', () => {
     })
     .command(['new', '--domain', fakeDomain, '--folder', fakeFolder, '--template', 'NodeJS', '--force', '--skip-install'])
     .it('creates a new repository from a given template in: ' + fakeFolder, () => {
+      const configPath = path.join(fakeFolder, 'prismic-configuration.js')
+      expect(fs.existsSync(fakeFolder)).to.be.true
+      const conf = require(configPath)
+      expect(conf.apiEndpoint).to.include(fakeDomain)
+    })
+
+    test
+    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+    })
+    .nock(fakeBase, api => {
+      return api
+      .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => false)
+    })
+    .nock('https://github.com', api => {
+      api.get('/prismicio/nodejs-sdk/archive/master.zip')
+      .reply(200, StubNodeJSZip.toBuffer(), {'Content-Type': 'application/zip'})
+    })
+    .command(['new', '--domain', fakeDomain, '--folder', fakeFolder, '--template', 'NodeJS', '--force', '--skip-install', '--existing-repo'])
+    .it('should not create a repo with called with --existing-repo', () => {
       const configPath = path.join(fakeFolder, 'prismic-configuration.js')
       expect(fs.existsSync(fakeFolder)).to.be.true
       const conf = require(configPath)

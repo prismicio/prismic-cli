@@ -44,9 +44,9 @@ export default abstract class PrismicCommand extends Command {
     return this.prismic.login(maybePort, maybeBase, maybeAuthUrl)
   }
 
-  async validateDomain(name: string | undefined): Promise<string> {
+  async validateDomain(name: string | undefined, existingRepo = false): Promise<string> {
     const base = new URL(this.prismic.base)
-    const validate = this.prismic.validateRepositoryName
+    const validate = (domain: string) => this.prismic.validateRepositoryName(domain, existingRepo)
     const isValid = (name) ? validate(name) : Promise.reject(new Error(''))
 
     return isValid.catch(_ => {

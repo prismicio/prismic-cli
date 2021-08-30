@@ -44,7 +44,8 @@ export default class SliceMachine extends PrismicGenerator {
     const base = new URL(this.prismic.base)
 
     if (!this.domain) {
-      const validateRepositoryName = this.prismic.validateRepositoryName
+      const validateRepositoryName = (domain: string) => this.prismic.validateRepositoryName(domain, this.existingRepo)
+
       const domainPrompt: Question = {
         type: 'input',
         name: 'domain',
@@ -112,6 +113,8 @@ export default class SliceMachine extends PrismicGenerator {
     }
 
     const customTypes = this.readCustomTypesFrom('customtypes')
+
+    if (this.existingRepo) return Promise.resolve()
 
     return this.prismic.createRepository({
       domain: this.domain,

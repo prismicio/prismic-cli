@@ -1,5 +1,4 @@
 import PrismicGenerator, {TemplateOptions} from '@prismicio/prismic-yeoman-generator'
-import {AxiosResponse} from 'axios'
 import cli from 'cli-ux'
 import * as Framework from '../utils/framework'
 
@@ -51,29 +50,36 @@ export default class PrismicTheme extends PrismicGenerator {
 
     const maybeFramework = pkg && Framework.detect(pkg)
 
-    cli.action.start('Creating prismic repository')
-    return this.prismic.createRepository({
-      domain: this.domain,
-      customTypes,
-      signedDocuments: documents,
-      framework: maybeFramework || 'other',
-    })
-    .then((res: AxiosResponse<any>) => {
-      cli.action.stop()
-      const url = new URL(this.prismic.base)
-      url.host = `${res.data || this.domain}.${url.host}`
-      this.log(`A new repository has been created at: ${url.toString()}`)
+    const createRepo = () => {
+      cli.action.start('Creating Prismic repository')
+      return this.prismic.createRepository({
+        domain: this.domain,
+        customTypes,
+        signedDocuments: documents,
+        framework: maybeFramework || 'other',
+      })
+      .then(res => {
+        cli.action.stop()
+        const url = new URL(this.prismic.base)
+        url.host = `${res.data || this.domain}.${url.host}`
+        this.log(`A new repository has been created at: ${url.toString()}`)
+        return res
+      })
+    }
 
+    const maybeCreateRepo = this.existingRepo ? Promise.resolve({data: this.domain}) : createRepo()
+
+    return maybeCreateRepo.then(res => {
       const location = this.destinationPath(this.configPath)
       if (this.fs.exists(location)) {
         const oldConfig = this.fs.read(location)
         const newConfig = oldConfig.replace(/your-repo-name/g, res.data || this.domain)
         this.fs.write(location, newConfig)
       } else {
+        const url = new URL(this.prismic.base)
+        url.host = `${res.data || this.domain}.${url.host}`
         url.pathname = '/api/v2'
-        this.fs.writeJSON(location, {
-          apiEndpoint: url.toString(),
-        })
+        this.fs.writeJSON(location, {apiEndpoint: url.toString()})
       }
     })
   }

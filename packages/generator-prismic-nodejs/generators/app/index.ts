@@ -25,17 +25,8 @@ export default class PrismicNodeJS extends PrismicGenerator {
 
   async configuring() {
     const customTypes = this.readCustomTypesFrom('custom_types')
-    return this.prismic.createRepository({
-      domain: this.domain,
-      framework: 'node',
-      customTypes,
-    })
-    .then(res => {
-      const url = new URL(this.prismic.base)
-      url.host = `${res.data || this.domain}.${url.host}`
-      this.log(`A new repsitory has been created at: ${url.toString()}`)
-      return res
-    })
+
+    return this.maybeCreatePrismicRepository({domain: this.domain, framework: 'node', customTypes}, this.existingRepo)
     .then(res => {
       const oldConfig = this.readDestination('prismic-configuration.js')
       const newConfig = oldConfig.replace(/your-repo-name/g, res.data || this.domain)

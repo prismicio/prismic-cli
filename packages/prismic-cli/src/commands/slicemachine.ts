@@ -56,12 +56,13 @@ export default class Slicemachine extends Command {
     }),
 
     framework: flags.string({
-      options: ['nextjs', 'nuxt'],
+      description: 'framework to use, see list for options',
+      exclusive: ['list'],
     }),
 
     list: flags.boolean({
       description: 'List local Slices.',
-      exclusive: ['add-storybook', 'setup', 'create-slice', 'bootstrap', 'sliceName', 'domain', 'library', 'framework', 'folder', 'skip-install', 'develop'],
+      exclusive: ['add-storybook', 'setup', 'create-slice', 'bootstrap', 'sliceName', 'domain', 'library', 'framework', 'folder', 'skip-install', 'develop', 'existing-repo'],
       default: false,
     }),
 
@@ -92,6 +93,12 @@ export default class Slicemachine extends Command {
       hidden: true,
       dependsOn: ['develop'],
       // default: 'https://silo2hqf53.execute-api.us-east-1.amazonaws.com/prod/slices',
+    }),
+
+    'existing-repo': flags.boolean({
+      description: 'Connect to an existing Prismic repository when running --setup or --bootstrap',
+      default: false,
+      exclusive: ['add-storybook', 'create-slice', 'develop'],
     }),
   }
 
@@ -172,7 +179,12 @@ export default class Slicemachine extends Command {
 
     const folder = flags.folder || process.cwd()
 
-    const opts = {...flags, prismic: this.prismic, path: folder}
+    const opts = {
+      ...flags,
+      prismic: this.prismic,
+      path: folder,
+      existingRepo: flags['existing-repo'] || false,
+    }
 
     if (flags['create-slice']) {
       return this.handleCreateSlice(folder, opts)
@@ -183,7 +195,7 @@ export default class Slicemachine extends Command {
     }
 
     if (flags.setup) {
-      const domain = await this.validateDomain(flags.domain)
+      const domain = await this.validateDomain(flags.domain, opts.existingRepo)
       const isAuthenticated = await this.prismic.isAuthenticated()
       if (!isAuthenticated) {
         await this.login()
@@ -238,7 +250,7 @@ export default class Slicemachine extends Command {
         await this.login()
       }
 
-      const domain = await this.validateDomain(flags.domain)
+      const domain = await this.validateDomain(flags.domain, opts.existingRepo)
 
       return this.prismic.createRepository({domain, framework: ''}) /* the framework is already registered on intercom, default value is '' for wroom */
       .then(res => {
