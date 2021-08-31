@@ -55,31 +55,7 @@ export default class StoryBookNext extends Generator {
 
     this.fs.extendJSON(this.destinationPath(SM_FILE), smJson)
 
-    // the default next teamplte doesn't contain a bablerc
-
-    const smfile = this.readDestinationJSON(SM_FILE) as unknown as SliceMachineJson
-
-    const libraries = smfile.libraries || []
-
-    // read sm file for local libraries.
-    const localLibs = libraries.filter(lib => lib.startsWith('@/')).map(lib => lib.substring(2))
-
-    const stories = localLibs.reduce<ReadonlyArray<string>>((acc, p) => {
-      return acc.concat([
-        `../${p}/**/*.stories.[tj]s`,
-        `../.slicemachine/assets/${p}/**/*.stories.[tj]s`,
-      ])
-    }, [])
-
-    const storiesString = JSON.stringify(stories)
-
-    const storyBookEntry = `
-module.exports = {
-  stories: ${storiesString}
-}
-`
-    // TODO: what to do if main.js already axists?
-    this.writeDestination('.storybook/main.js',  storyBookEntry)
+    this.fs.copy(this.templatePath(), this.destinationPath(), {globOptions: {dot: true}})
   }
 
   async install() {
