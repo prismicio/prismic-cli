@@ -38,7 +38,7 @@ export interface TemplateOptions extends Generator.GeneratorOptions {
   prismic: Prismic;
   domain: string;
   pm?: 'yarn' | 'npm' | undefined;
-  existingRepo: boolean;
+  existingRepo?: boolean;
 }
 
 export interface PkgJson  {
@@ -65,7 +65,7 @@ export default abstract class PrismicGenerator extends Generator {
     this.domain = opts.domain
     this.prismic = opts.prismic
     this.pm = opts.pm
-    this.existingRepo = opts.existingRepo
+    this.existingRepo = opts.existingRepo || false
   }
 
   /**

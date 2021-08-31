@@ -109,6 +109,8 @@ describe('prismic-yeoman-generator', () => {
 
   describe('readCustomTypesFrom old layout', () => {
     fancy
+    .stdout()
+    .stderr()
     .add('generator', () => {
       const g = generator()
       const project =  path.resolve(__dirname, './__stubs__/fake-theme-master')
@@ -125,6 +127,7 @@ describe('prismic-yeoman-generator', () => {
 
   describe('readCustomTypesFrom new layout', () => {
     fancy
+    .stderr()
     .add('generator', () => {
       const g = generator()
       const project =  path.resolve(__dirname, './__stubs__/fake-theme-new-custom-types')
@@ -144,6 +147,8 @@ describe('prismic-yeoman-generator', () => {
     const source = 'https://github.com/prismicio/fake-theme/archive/master.zip'
 
     fancy
+    .stderr()
+    .stdout()
     .add('generator', () => {
       const g = generator()
       g.destinationRoot(g.path)
@@ -163,6 +168,8 @@ describe('prismic-yeoman-generator', () => {
     .it('should download a zip file from the source and extract it to mem-fs')
 
     fancy
+    .stdout()
+    .stderr()
     .add('generator', () => {
       const g = generator()
       g.destinationRoot(g.path)
@@ -187,6 +194,8 @@ describe('prismic-yeoman-generator', () => {
     }
 
     fancy
+    .stdout()
+    .stderr()
     .stub(cli, 'progress', () => fakeProgress)
     .add('generator', () => {
       const g = generator()
@@ -209,6 +218,8 @@ describe('prismic-yeoman-generator', () => {
     .it('should show a progress bar if content-length is given')
 
     fancy
+    .stdout()
+    .stderr()
     .add('generator', () => {
       const g = generator()
       g.destinationRoot(g.path)
