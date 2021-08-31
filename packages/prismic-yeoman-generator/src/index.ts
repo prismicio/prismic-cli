@@ -68,6 +68,12 @@ export default abstract class PrismicGenerator extends Generator {
     this.existingRepo = opts.existingRepo
   }
 
+  /**
+   * Conditionally create a prismic repo.
+   * @param {CreateRepositoryArgs} createRepositoryArgs - Parameters to uses when creating a repository.
+   * @param {Boolean} [existingRepo = false] - skip creating a new prismic repository.
+   * @returns {Promise<{data: String}>} - data being a conformation of the repository name.
+   */
   async maybeCreatePrismicRepository(createRepositoryArgs: CreateRepositoryArgs, existingRepo = this.existingRepo): Promise<{data: string}> {
     if (existingRepo) return Promise.resolve({data: createRepositoryArgs.domain || this.domain})
 
