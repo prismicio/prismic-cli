@@ -60,11 +60,13 @@ describe('new', () => {
   })
 
   describe('nodejs-sdk', () => {
-    const fakeFolder = path.join(tmpDir, 'test-new-nodejs-sdk')
+    const testDir = path.join(tmpDir, 'test-new-nodejs')
+    const fakeFolder = path.join(testDir, 'new-repo')
+    const fakeFolderWithExistingRepo = path.join(testDir, 'existing-repo')
 
-    beforeEach(async () => {
-      if (fs.existsSync(fakeFolder)) {
-        await fs.rmdir(fakeFolder, {recursive: true})
+    before(async () => {
+      if (fs.existsSync(testDir)) {
+        await fs.rmdir(testDir, {recursive: true})
       }
     })
 
@@ -111,10 +113,10 @@ describe('new', () => {
       api.get('/prismicio/nodejs-sdk/archive/master.zip')
       .reply(200, StubNodeJSZip.toBuffer(), {'Content-Type': 'application/zip'})
     })
-    .command(['new', '--domain', fakeDomain, '--folder', fakeFolder, '--template', 'NodeJS', '--force', '--skip-install', '--existing-repo'])
+    .command(['new', '--domain', fakeDomain, '--folder', fakeFolderWithExistingRepo, '--template', 'NodeJS', '--force', '--skip-install', '--existing-repo'])
     .it('should not create a repo with called with --existing-repo', () => {
-      const configPath = path.join(fakeFolder, 'prismic-configuration.js')
-      expect(fs.existsSync(fakeFolder)).to.be.true
+      const configPath = path.join(fakeFolderWithExistingRepo, 'prismic-configuration.js')
+      expect(fs.existsSync(fakeFolderWithExistingRepo)).to.be.true
       const conf = require(configPath)
       expect(conf.apiEndpoint).to.include(fakeDomain)
     })

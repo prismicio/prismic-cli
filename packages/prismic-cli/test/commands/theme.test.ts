@@ -24,8 +24,10 @@ describe('theme', () => {
   const fakeBase = 'https://prismic.io'
   const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=xyz'
   const tmpDir = os.tmpdir()
+  const testDir = path.join(tmpDir, 'test-theme')
 
-  const fakeFolder = path.join(tmpDir, 'test-theme')
+  const fakeFolder = path.join(testDir, 'test-theme')
+  const fakeFolderWithExistingRepo = path.join(testDir, 'theme-with-existing-repo')
 
   const fakeSource = 'https://github.com/prismicio/fake-theme'
 
@@ -33,9 +35,9 @@ describe('theme', () => {
 
   const zip = ThemeZip.toBuffer()
 
-  beforeEach(async () => {
-    if (fs.existsSync(fakeFolder)) {
-      return fs.rmdir(fakeFolder, {recursive: true})
+  before(async () => {
+    if (fs.existsSync(testDir)) {
+      return fs.rmdir(testDir, {recursive: true})
     }
     return Promise.resolve()
   })
@@ -93,10 +95,10 @@ describe('theme', () => {
       'content-length': zip.length.toString(),
     })
   })
-  .command(['theme', fakeSource, '--domain', fakeDomain, '--folder', fakeFolder, '--conf', configFile, '--skip-install', '--existing-repo'])
+  .command(['theme', fakeSource, '--domain', fakeDomain, '--folder', fakeFolderWithExistingRepo, '--conf', configFile, '--skip-install', '--existing-repo'])
   .it('when passed existing repo it should not try to create a repository', () => {
-    const configPath = path.join(fakeFolder, configFile)
-    expect(fs.existsSync(fakeFolder)).to.be.true
+    const configPath = path.join(fakeFolderWithExistingRepo, configFile)
+    expect(fs.existsSync(fakeFolderWithExistingRepo)).to.be.true
     const conf = require(configPath)
     expect(conf.prismicRepo).to.include(fakeDomain)
   })
