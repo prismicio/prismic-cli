@@ -43,7 +43,16 @@ export default class extends PrismicGenerator {
   }
 
   async default() {
-    const opts = {framework: 'nextjs', force: this.force, domain: this.domain, prismic: this.prismic, path: this.destinationRoot(), pm: this.pm, ...this.options}
+    const opts = {
+      framework: 'nextjs',
+      force: this.force,
+      domain: this.domain,
+      prismic: this.prismic,
+      path: this.destinationRoot(),
+      pm: this.pm,
+      existingRepo: this.existingRepo,
+      ...this.options,
+    }
 
     if (this.options.slicemachine) {
       this.composeWith('prismic-nextjs:slicemachine', opts)

@@ -80,6 +80,7 @@ export default class Nuxt extends PrismicGenerator {
       prismic: this.prismic,
       force: this.force,
       pm: this.answers.pm,
+      existingRepo: this.existingRepo,
       ...this.options,
     }
 
