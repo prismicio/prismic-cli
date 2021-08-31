@@ -1,4 +1,4 @@
-import Generator, {SliceMachineJson, TemplateOptions} from '@prismicio/prismic-yeoman-generator'
+import Generator, {TemplateOptions} from '@prismicio/prismic-yeoman-generator'
 const {SM_FILE} = require('sm-commons/consts')
 
 export default class StoryBookNext extends Generator {
