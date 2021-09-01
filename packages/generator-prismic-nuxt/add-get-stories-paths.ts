@@ -1,14 +1,16 @@
 import * as babel from '@babel/core'
- 
-function ensureImportPlugin({/* types: t, */ template}) {
+import * as t from '@babel/types'
+
+function ensureImportPlugin(): babel.PluginObj {
   const importStatment = 'import { getStoriesPaths } from \'slice-machine-ui/helpers/storybook\''
-  const importAst = template.ast(importStatment, {sourceType: 'module'})
+  const importAst = babel.template.ast(importStatment, {sourceType: 'module'})
+
   return {
     visitor: {
       Program(path /* , state */) {
         const body = path.get('body')
         const imports = body.filter(p => p.isImportDeclaration())
-        const same = imports.filter(p => p.node.source.value !== importAst.source.value)
+        const same = imports.filter(p => p.isImportDeclaration() && t.isImportDeclaration(importAst) && p.node.source.value !== importAst.source.value)
 
         if (same.length === imports.length) path.unshiftContainer('body', importAst)
       },
@@ -16,13 +18,13 @@ function ensureImportPlugin({/* types: t, */ template}) {
   }
 }
 
-export function ensureImport(source) {
+export function ensureImport(source: string): string {
   const result = babel.transform(source, {plugins: [ensureImportPlugin]})
-  return result.code
+  return result?.code || source
 }
 
-function getKeys(t, properties) {
-  return properties.reduce((acc, curr) => {
+function getKeys(properties: Array<babel.types.ObjectMethod | babel.types.ObjectProperty | babel.types.SpreadElement>): Array<string> {
+  return properties.reduce<Array<string>>((acc, curr) => {
     if (t.isObjectProperty(curr) && t.isIdentifier(curr.key)) {
       return [...acc, curr.key.name]
     }
@@ -30,7 +32,7 @@ function getKeys(t, properties) {
   }, [])
 }
 
-function addStoriesPlugin({types: t}) {
+function addStoriesPlugin(): babel.PluginObj {
   return {
     visitor: {
       ObjectExpression(path) {
@@ -38,9 +40,9 @@ function addStoriesPlugin({types: t}) {
           t.callExpression(t.identifier('getStoriesPaths'), []),
         )
         if (t.isObjectExpression(path) && t.isExportDeclaration(path.parent)) {
-          const keys = getKeys(t, path.node.properties)
+          const keys = getKeys(path.node.properties)
           const hasStorybook = keys.includes('storybook')
-          // const hasIgnore = keys.includes('ignore')
+
           if (hasStorybook === false) {
             path.node.properties.push(
               t.objectProperty(
@@ -56,7 +58,7 @@ function addStoriesPlugin({types: t}) {
           } else {
             path.node.properties.forEach(prop => {
               if (t.isObjectProperty(prop) && t.isIdentifier(prop.key) && t.isObjectExpression(prop.value) && prop.key.name === 'storybook') {
-                const storybookKeys = getKeys(t, prop.value.properties)
+                const storybookKeys = getKeys(prop.value.properties)
                 const hasStories = storybookKeys.includes('stories')
                 if (hasStories === false) {
                   prop.value.properties.push(
@@ -71,9 +73,12 @@ function addStoriesPlugin({types: t}) {
                       const maybeElementIsThere = storyBookProps.value.elements.reduce((acc, elem) => {
                         if (acc) return acc
                         const same = (
+                          t.isSpreadElement(elem) &&
                           elem.type === elementToInsert.type &&
                           elem.argument &&
+                          t.isCallExpression(elem.argument) &&
                           elem.argument.type === elementToInsert.argument.type &&
+                          t.isIdentifier(elem.argument.callee) &&
                           elem.argument.callee.type === elementToInsert.argument.callee.type &&
                           elem.argument.callee.name === elementToInsert.argument.callee.name
                         )
@@ -93,12 +98,12 @@ function addStoriesPlugin({types: t}) {
   }
 }
 
-export function addStories(source) {
+export function addStories(source: string): string {
   const result = babel.transform(source, {plugins: [addStoriesPlugin]})
-  return result.code
+  return result?.code || source
 }
 
-export default function addGetStoriesPaths(source) {
+export default function addGetStoriesPaths(source: string): string {
   const result = babel.transform(source, {plugins: [ensureImportPlugin, addStoriesPlugin]})
-  return result.code
+  return result?.code || source
 }
