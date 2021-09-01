@@ -1,5 +1,5 @@
 import * as babel from '@babel/core'
-
+ 
 function ensureImportPlugin({/* types: t, */ template}) {
   const importStatment = 'import { getStoriesPaths } from \'slice-machine-ui/helpers/storybook\''
   const importAst = template.ast(importStatment, {sourceType: 'module'})
@@ -95,5 +95,10 @@ function upsertStoriesPlugin({types: t}) {
 
 export function upsertStories(source) {
   const result = babel.transform(source, {plugins: [upsertStoriesPlugin]})
+  return result.code
+}
+
+export default function addGetStoriesPaths(source) {
+  const result = babel.transform(source, {plugins: [ensureImportPlugin, upsertStoriesPlugin]})
   return result.code
 }
