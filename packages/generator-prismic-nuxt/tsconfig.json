@@ -4,8 +4,7 @@
     "importHelpers": true,
     "module": "commonjs",
     "strict": true,
-    "target": "es2017",
-    "allowJs": true
+    "target": "es2017"
   },
   "exclude": [
     "generators/app/templates",
