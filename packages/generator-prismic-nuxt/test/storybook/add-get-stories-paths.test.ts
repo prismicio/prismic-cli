@@ -1,5 +1,5 @@
 import {expect} from 'chai'
-import addGetStoriesPaths, {ensureImport, upsertStories} from '../../add-get-stories-paths'
+import addGetStoriesPaths, {ensureImport, addStories} from '../../add-get-stories-paths'
 
 describe('add-get-stories-paths', () => {
   describe('#ensureImport', () => {
@@ -29,13 +29,13 @@ describe('add-get-stories-paths', () => {
 
     it('should add a { storybook: { stories: [ ...getStoriesPaths() ] } } when no storybook property is found', () => {
       const input = 'export default {}'
-      const result = upsertStories(input)
+      const result = addStories(input)
       expect(result).to.equal("export default {\n  storybook: {\n    stories: [...getStoriesPaths()]\n  }\n};")
     })
 
     it('should add a { stories :[ ...getStoriesPaths() ] } when storybook property is found', () => {
       const input = 'export default {\n  storybook: {}\n}'
-      const result = upsertStories(input)
+      const result = addStories(input)
       expect(result).to.equal("export default {\n  storybook: {\n    stories: [...getStoriesPaths()]\n  }\n};")
     })
 
@@ -47,14 +47,14 @@ describe('add-get-stories-paths', () => {
       }`
       const expected = 'export default {\n  storybook: {\n    stories: ["foo", ...getStoriesPaths()]\n  }\n};'
 
-      const result = upsertStories(input)
+      const result = addStories(input)
 
       expect(result).to.equal(expected)
     })
 
     it('should not add ...getStoriesPaths() if it is already in the array', () => {
       const input = "export default {\n  storybook: {\n    stories: [...getStoriesPaths()]\n  }\n};"
-      const result = upsertStories(input)
+      const result = addStories(input)
       expect(input).equal(result)
     })
   })

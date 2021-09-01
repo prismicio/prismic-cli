@@ -30,7 +30,7 @@ function getKeys(t, properties) {
   }, [])
 }
 
-function upsertStoriesPlugin({types: t}) {
+function addStoriesPlugin({types: t}) {
   return {
     visitor: {
       ObjectExpression(path) {
@@ -93,12 +93,12 @@ function upsertStoriesPlugin({types: t}) {
   }
 }
 
-export function upsertStories(source) {
-  const result = babel.transform(source, {plugins: [upsertStoriesPlugin]})
+export function addStories(source) {
+  const result = babel.transform(source, {plugins: [addStoriesPlugin]})
   return result.code
 }
 
 export default function addGetStoriesPaths(source) {
-  const result = babel.transform(source, {plugins: [ensureImportPlugin, upsertStoriesPlugin]})
+  const result = babel.transform(source, {plugins: [ensureImportPlugin, addStoriesPlugin]})
   return result.code
 }
