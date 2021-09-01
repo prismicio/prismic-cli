@@ -1,5 +1,5 @@
 import {expect} from 'chai'
-import addGetStoriesPaths, {ensureImport, addStories} from '../../add-get-stories-paths'
+import addGetStoriesPaths, {ensureImport, addStories} from '../../generators/storybook/add-get-stories-paths'
 
 describe('add-get-stories-paths', () => {
   describe('#ensureImport', () => {

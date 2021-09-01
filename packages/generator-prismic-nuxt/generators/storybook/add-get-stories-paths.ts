@@ -8,11 +8,15 @@ function ensureImportPlugin(): babel.PluginObj {
   return {
     visitor: {
       Program(path /* , state */) {
-        const body = path.get('body')
-        const imports = body.filter(p => p.isImportDeclaration())
-        const same = imports.filter(p => p.isImportDeclaration() && t.isImportDeclaration(importAst) && p.node.source.value !== importAst.source.value)
+        const shouldImport = path.get('body').reduce((acc, elem) => {
+          if (acc === false) return acc
 
-        if (same.length === imports.length) path.unshiftContainer('body', importAst)
+          if (elem.isImportDeclaration() && t.isImportDeclaration(importAst) && elem.node.source.value === importAst.source.value) return false
+
+          return acc
+        }, true)
+
+        if (shouldImport) path.unshiftContainer('body', importAst)
       },
     },
   }
