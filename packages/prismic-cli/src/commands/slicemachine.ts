@@ -19,7 +19,7 @@ export default class Slicemachine extends Command {
   static flags = {
     help: flags.help({char: 'h'}),
 
-    force: flags.boolean({char: 'f'}),
+    force: flags.boolean({description: 'Over write local files.'}),
 
     setup: flags.boolean({
       description: 'Setup Slice Machine in an already existing project.',

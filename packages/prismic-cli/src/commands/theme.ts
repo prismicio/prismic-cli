@@ -40,9 +40,7 @@ export default class Theme extends Command {
       default: 'custom_types',
     }),
 
-    force: flags.boolean({
-      description: 'over-write local files',
-    }),
+    force: flags.boolean({description: 'Over write local files.'}),
 
     'skip-install': flags.boolean({
       description: 'Prevent running install command after generating project.',

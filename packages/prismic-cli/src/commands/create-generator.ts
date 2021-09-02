@@ -8,10 +8,10 @@ export default class CreateGenerator extends Command {
 
   static flags = {
     help: flags.help({char: 'h'}),
-    // flag with a value (-n, --name=VALUE)
+
     name: flags.string({char: 'n', description: 'Name for the generator.'}),
-    // flag with no value (-f, --force)
-    force: flags.boolean({char: 'f'}),
+
+    force: flags.boolean({description: 'Over write local files.'}),
 
     'skip-install': flags.boolean({
       default: false,
@@ -38,20 +38,20 @@ export default class CreateGenerator extends Command {
       },
     }),
 
-    path: flags.string({
+    folder: flags.string({
       char: 'f',
       description: 'Project where to create the generator.',
     }),
   }
 
   async run() {
-    const {flags} = this.parse(CreateGenerator)
+    const {flags: {folder, ...flags}} = this.parse(CreateGenerator)
 
     const env = createEnv()
     env.register(require.resolve('@prismicio/prismic-generator-generator'), 'generator')
 
     return new Promise((resolve, reject) => {
-      env.run('generator', flags, error => {
+      env.run('generator', {...flags, path: folder}, error => {
         if (error) return reject(error)
         return resolve(null)
       })
