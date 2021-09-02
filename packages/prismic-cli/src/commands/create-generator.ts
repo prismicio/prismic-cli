@@ -13,9 +13,7 @@ export default class CreateGenerator extends Command {
 
     force: flags.boolean({description: 'Over write local files.'}),
 
-    'skip-install': flags.boolean({
-      default: false,
-    }),
+    'skip-install': flags.boolean({description: 'prevent packages from being installed'}),
 
     pm: flags.string({
       char: 'p',
