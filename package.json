@@ -13,11 +13,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
@@ -27,6 +22,7 @@
     "clean": "yarn workspaces run clean",
     "prepack": "yarn workspaces run prepack",
     "test": "yarn workspaces run test",
-    "posttest": "eslint . --ext .ts --config .eslintrc"
+    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "prepare": "husky install"
   }
 }
