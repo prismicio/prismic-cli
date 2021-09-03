@@ -1,9 +1,6 @@
-import PrismicGenerator, {TemplateOptions, SliceMachineJson} from '@prismicio/prismic-yeoman-generator'
-import modifyNuxtConfig from './modify-nuxt-config'
+import PrismicGenerator, {TemplateOptions} from '@prismicio/prismic-yeoman-generator'
+import addGetStoriesPaths from './add-get-stories-paths'
 const {SM_FILE} = require('sm-commons/consts')
-import * as npath from 'path'
-
-const path = npath.posix
 export default class StoryBookNuxt extends PrismicGenerator {
   /**
    * initializing - Your initialization methods (checking current project state, getting configs, etc)
@@ -51,16 +48,9 @@ export default class StoryBookNuxt extends PrismicGenerator {
 
     this.fs.extendJSON(this.destinationPath(SM_FILE), smJson)
 
-    const smfile = this.readDestinationJSON(SM_FILE) as unknown as SliceMachineJson
-
-    const libraries: Array<string> = smfile.libraries || []
-
-    // read sm file for local libraries.
-    const localLibs = libraries.filter(lib => lib.startsWith('@' + path.sep)).map(lib => lib.substring(2))
-
     const config = this.readDestination('nuxt.config.js')
 
-    const updatedConfig = modifyNuxtConfig(config, localLibs)
+    const updatedConfig = addGetStoriesPaths(config)
 
     this.writeDestination('nuxt.config.js', updatedConfig)
   }
