@@ -11,7 +11,7 @@ export default class CreateGenerator extends Command {
 
     name: flags.string({char: 'n', description: 'Name for the generator.'}),
 
-    force: flags.boolean({description: 'Over write local files.'}),
+    force: flags.boolean({description: 'Overwrite local files.'}),
 
     'skip-install': flags.boolean({description: 'prevent packages from being installed'}),
 
