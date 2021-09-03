@@ -217,7 +217,7 @@ Mocking/stubbing dependencies can be tricky due package versions for nested depe
 [eslint](https://eslint.org/) is automatically run after the `test` script, but it can also be invoked by running `npm run posttest` or `yarn posttest`, optionally with a `--fix` flag.
 
 ## Deployment
-[leran](https://lerna.js.org/) is used for managing versions and publishing.
+[lerna](https://lerna.js.org/) is used for managing versions and publishing.
 update versions with `lerna version [semantic-version] --exact`
 Publish with `lerna publish [--dist-tag alpha]`
 
