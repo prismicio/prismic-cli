@@ -8,25 +8,25 @@
     "eslint-config-oclif": "^3.1",
     "eslint-config-oclif-typescript": "^0.1",
     "husky": "^6.0.0",
-    "lerna": "^3.22.1"
+    "lerna": "^3.22.1",
+    "lint-staged": "^11.1.2"
   },
   "workspaces": [
     "packages/*"
   ],
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
     ]
   },
+  "lint-staged": {
+    "*.ts": "yarn posttest"
+  },
   "scripts": {
     "clean": "yarn workspaces run clean",
     "prepack": "yarn workspaces run prepack",
     "test": "yarn workspaces run test",
-    "posttest": "eslint . --ext .ts --config .eslintrc"
+    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "prepare": "husky install"
   }
 }
