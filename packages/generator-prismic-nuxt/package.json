@@ -11,6 +11,12 @@
     "generators"
   ],
   "dependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/generator": "^7.15.4",
+    "@babel/parser": "^7.15.4",
+    "@babel/template": "^7.14.5",
+    "@babel/traverse": "^7.15.4",
+    "@babel/types": "^7.15.4",
     "@prismicio/prismic-yeoman-generator": "^4.0.6",
     "chalk": "^4.1.1",
     "create-nuxt-app": "^3.5.0",
@@ -21,6 +27,8 @@
     "tslib": "^1"
   },
   "devDependencies": {
+    "@types/babel__core": "^7.1.15",
+    "@types/babel__template": "^7.4.1",
     "@types/mocha": "^5",
     "@types/node": "^14.14.10",
     "chai": "^4",
