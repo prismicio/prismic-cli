@@ -43,7 +43,16 @@ export default class extends PrismicGenerator {
   }
 
   async default() {
-    const opts = {framework: 'nextjs', force: this.force, domain: this.domain, prismic: this.prismic, path: this.destinationRoot(), pm: this.pm, ...this.options}
+    const opts = {
+      framework: 'nextjs',
+      force: this.force,
+      domain: this.domain,
+      prismic: this.prismic,
+      path: this.destinationRoot(),
+      pm: this.pm,
+      existingRepo: this.existingRepo,
+      ...this.options,
+    }
 
     if (this.options.slicemachine) {
       this.composeWith('prismic-nextjs:slicemachine', opts)
@@ -83,15 +92,7 @@ export default class extends PrismicGenerator {
     this.fs.extendJSON(this.destinationPath('package.json'), pkjJson)
 
     if (!this.options.slicemachine) {
-      this.prismic.createRepository({
-        domain: this.domain,
-        framework: 'next',
-      }).then(res => {
-        const url = new URL(this.prismic.base)
-        url.host = `${res.data || this.domain}.${url.host}`
-        this.log(`A new repository has been created at: ${url.toString()}`)
-        return res
-      })
+      this.maybeCreatePrismicRepository({domain: this.domain, framework: 'next'}, this.existingRepo)
     }
   }
 

@@ -6,6 +6,7 @@ import {fs} from '../utils'
 import {execSync} from 'child_process'
 import {lookpath} from 'lookpath'
 import * as inquirer from 'inquirer'
+import {detect, PkgJson} from '../utils/framework'
 
 const globby = require('fast-glob')
 
@@ -56,16 +57,18 @@ export default class Slicemachine extends Command {
     }),
 
     framework: flags.string({
-      options: ['nextjs', 'nuxt'],
+      description: 'framework to use, see list for options',
+      exclusive: ['list'],
     }),
 
     list: flags.boolean({
       description: 'List local Slices.',
-      exclusive: ['add-storybook', 'setup', 'create-slice', 'bootstrap', 'sliceName', 'domain', 'library', 'framework', 'folder', 'skip-install', 'develop'],
+      exclusive: ['add-storybook', 'setup', 'create-slice', 'bootstrap', 'sliceName', 'domain', 'library', 'framework', 'folder', 'skip-install', 'develop', 'existing-repo'],
       default: false,
     }),
 
     folder: flags.string({
+      char: 'f',
       description: 'Output directory.',
     }),
 
@@ -91,7 +94,12 @@ export default class Slicemachine extends Command {
       description: 'Use a different custom-type endpoint.',
       hidden: true,
       dependsOn: ['develop'],
-      // default: 'https://silo2hqf53.execute-api.us-east-1.amazonaws.com/prod/slices',
+    }),
+
+    'existing-repo': flags.boolean({
+      description: 'Connect to an existing Prismic repository when running --setup or --bootstrap',
+      default: false,
+      exclusive: ['add-storybook', 'create-slice', 'develop'],
     }),
   }
 
@@ -172,7 +180,12 @@ export default class Slicemachine extends Command {
 
     const folder = flags.folder || process.cwd()
 
-    const opts = {...flags, prismic: this.prismic, path: folder}
+    const opts = {
+      ...flags,
+      prismic: this.prismic,
+      path: folder,
+      existingRepo: flags['existing-repo'] || false,
+    }
 
     if (flags['create-slice']) {
       return this.handleCreateSlice(folder, opts)
@@ -183,11 +196,12 @@ export default class Slicemachine extends Command {
     }
 
     if (flags.setup) {
-      const domain = await this.validateDomain(flags.domain)
       const isAuthenticated = await this.prismic.isAuthenticated()
       if (!isAuthenticated) {
         await this.login()
       }
+
+      const domain = await this.validateDomain(flags.domain, opts.existingRepo)
 
       return this.handleSetup(folder, {...opts, domain})
     }
@@ -227,35 +241,7 @@ export default class Slicemachine extends Command {
     }
 
     if (flags.bootstrap) {
-      const smFilePath = path.join(folder, SM_FILE)
-
-      if (fs.existsSync(smFilePath) === false) {
-        return this.warn(`${SM_FILE} file not found in: ${smFilePath}`)
-      }
-
-      const isAuthenticated = await this.prismic.isAuthenticated()
-      if (!isAuthenticated) {
-        await this.login()
-      }
-
-      const domain = await this.validateDomain(flags.domain)
-
-      return this.prismic.createRepository({domain, framework: ''}) /* the framework is already registered on intercom, default value is '' for wroom */
-      .then(res => {
-        const url = new URL(this.prismic.base)
-        url.hostname = `${res.data}.${url.hostname}`
-        return this.log(`Your Slice Machine repository was successfully created! ${url.toString()}`)
-      })
-      .then(() => fs.readFile(smFilePath, 'utf-8'))
-      .then(str => JSON.parse(str))
-      .then(json => {
-        const url = new URL(this.prismic.base)
-        url.hostname = `${domain}.cdn.${url.hostname}`
-        url.pathname = 'api/v2'
-        return JSON.stringify({...json, apiEndpoint: url.toString()}, null, 2)
-      }).then(smFile => {
-        return fs.writeFile(smFilePath, smFile)
-      })
+      return this.handleBootStrap(folder, flags['existing-repo'], flags.domain)
     }
 
     if (flags.develop) {
@@ -273,6 +259,43 @@ export default class Slicemachine extends Command {
     if (!flags['create-slice'] && !flags['add-storybook'] && !flags.setup && !flags.list) {
       return this._help()
     }
+  }
+
+  private async handleBootStrap(folder: string, existingRepo = false, maybeDomain?: string) {
+    const smFilePath = path.join(folder, SM_FILE)
+    const pkgJsonPath = path.join(folder, 'package.json')
+    const hasPackageJson = fs.existsSync(pkgJsonPath)
+    const packageJson: PkgJson = hasPackageJson ? JSON.parse(fs.readFileSync(pkgJsonPath, 'utf-8')) : {}
+
+    if (fs.existsSync(smFilePath) === false) {
+      return this.warn(`${SM_FILE} file not found in: ${smFilePath}`)
+    }
+
+    const isAuthenticated = await this.prismic.isAuthenticated()
+    if (!isAuthenticated) {
+      await this.login()
+    }
+
+    const domain = await this.validateDomain(maybeDomain, existingRepo)
+    const framework = await detect(packageJson) || ''
+
+    const maybeCreateRepo = () => existingRepo ? Promise.resolve({data: domain}) : this.prismic.createRepository({domain, framework}) /* the framework is already registered on intercom, default value is '' for wroom */
+
+    return maybeCreateRepo().then(res => {
+      const url = new URL(this.prismic.base)
+      url.hostname = `${res.data}.${url.hostname}`
+      return this.log(`Your Slice Machine repository was successfully created! ${url.toString()}`)
+    })
+    .then(() => fs.readFile(smFilePath, 'utf-8'))
+    .then(str => JSON.parse(str))
+    .then(json => {
+      const url = new URL(this.prismic.base)
+      url.hostname = `${domain}.cdn.${url.hostname}`
+      url.pathname = 'api/v2'
+      return JSON.stringify({...json, apiEndpoint: url.toString()}, null, 2)
+    }).then(smFile => {
+      return fs.writeFile(smFilePath, smFile)
+    })
   }
 
   private checkIsInASlicemachineProject(): string {

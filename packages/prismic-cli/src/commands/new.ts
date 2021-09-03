@@ -32,6 +32,11 @@ export default class New extends Command {
       description: 'Prevent running install command after generating project.',
       default: false,
     }),
+
+    'existing-repo': flags.boolean({
+      description: 'Connect to an existing Prismic repository.',
+      default: false,
+    }),
   }
 
   static args = []
@@ -45,7 +50,8 @@ export default class New extends Command {
 
     const {flags} = this.parse(New)
 
-    const domain = await this.validateDomain(flags.domain)
+    const existingRepo = flags['existing-repo'] || false
+    const domain = await this.validateDomain(flags.domain, existingRepo)
     const folder = await this.validateFolder(flags.folder, domain, flags.force)
 
     const generators = names.map(value => {
@@ -71,6 +77,7 @@ export default class New extends Command {
         domain,
         path: folder,
         prismic: this.prismic,
+        existingRepo,
       }, ((err: Error) => {
         if (err) return reject(err)
         return resolve(null)

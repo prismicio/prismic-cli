@@ -80,6 +80,7 @@ export default class Nuxt extends PrismicGenerator {
       prismic: this.prismic,
       force: this.force,
       pm: this.answers.pm,
+      existingRepo: this.existingRepo,
       ...this.options,
     }
 
@@ -178,15 +179,7 @@ export default class Nuxt extends PrismicGenerator {
     // add: convert filters to https://github.com/mrmlnc/fast-glob#options-1 filters become ingore in the globOptions
 
     if (!this.answers.slicemachine) {
-      this.prismic.createRepository({
-        domain: this.domain,
-        framework: 'nuxt',
-      }).then(res => {
-        const url = new URL(this.prismic.base)
-        url.host = `${res.data || this.domain}.${url.host}`
-        this.log(`A new repository has been created at: ${url.toString()}`)
-        return res
-      })
+      this.maybeCreatePrismicRepository({domain: this.domain, framework: 'nuxt'}, this.existingRepo)
     }
   }
 

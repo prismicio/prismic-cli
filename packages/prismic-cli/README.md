@@ -112,6 +112,7 @@ OPTIONS
   -f, --folder=folder      Name of the project folder.
   -h, --help               show CLI help
   -t, --template=template  Prismic template for the project.
+  --existing-repo          Connect to an existing Prismic repository.
   --force                  Overwrite local files.
   --skip-install           Prevent running install command after generating project.
 ```
@@ -142,20 +143,21 @@ USAGE
   $ prismic slicemachine
 
 OPTIONS
-  -d, --domain=domain      Prismic repo to create.
-  -h, --help               show CLI help
-  --add-storybook          Add Storybook to a Slice Machine project.
-  --bootstrap              Reconfigure a Slice Machine project.
-  --create-slice           Add a Slice to a Slice Machine project.
-  --develop                Run Slice Machine.
-  --folder=folder          Output directory.
-  --force                  Overwrite local files.
-  --framework=nextjs|nuxt
-  --library=library        Name of the Slice library.
-  --list                   List local Slices.
-  --setup                  Setup Slice Machine in an already existing project.
-  --skip-install           Prevent npm install from running.
-  --sliceName=sliceName    Name of the Slice.
+  -d, --domain=domain    Prismic repo to create.
+  -f, --folder=folder    Output directory.
+  -h, --help             show CLI help
+  --add-storybook        Add Storybook to a Slice Machine project.
+  --bootstrap            Reconfigure a Slice Machine project.
+  --create-slice         Add a Slice to a Slice Machine project.
+  --develop              Run Slice Machine.
+  --existing-repo        Connect to an existing Prismic repository when running --setup or --bootstrap
+  --force                Overwrite local files.
+  --framework=framework  framework to use, see list for options
+  --library=library      Name of the Slice library.
+  --list                 List local Slices.
+  --setup                Setup Slice Machine in an already existing project.
+  --skip-install         Prevent npm install from running.
+  --sliceName=sliceName  Name of the Slice.
 
 ALIASES
   $ prismic sm
@@ -189,6 +191,8 @@ OPTIONS
   --customTypes=customTypes  [default: custom_types] Path to the Custom Types directory in the theme.
 
   --documents=documents      [default: documents] Path to the documents in the theme.
+
+  --existing-repo            Connect to an existing Prismic repository.
 
   --force                    Overwrite local files.
 

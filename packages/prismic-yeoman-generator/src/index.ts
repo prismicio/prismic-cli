@@ -15,7 +15,7 @@ const {snakelize} = require('sm-commons/utils/str')
 const path = npath.posix
 
 import type Prismic from 'prismic-cli/src/prismic/communication'
-import type {CustomType, CustomTypeMetaData, SliceMachineCustomType} from 'prismic-cli/src/prismic/communication'
+import type {CreateRepositoryArgs, CustomType, CustomTypeMetaData, SliceMachineCustomType} from 'prismic-cli/src/prismic/communication'
 
 function pascalCaseToSnakeCase(str: string): string {
   return snakelize(str)
@@ -38,6 +38,7 @@ export interface TemplateOptions extends Generator.GeneratorOptions {
   prismic: Prismic;
   domain: string;
   pm?: 'yarn' | 'npm' | undefined;
+  existingRepo?: boolean;
 }
 
 export interface PkgJson  {
@@ -55,6 +56,8 @@ export default abstract class PrismicGenerator extends Generator {
 
   pm: 'yarn' | 'npm' | undefined;
 
+  existingRepo: boolean;
+
   constructor(args: string | string[], opts: TemplateOptions) {
     super(args, opts)
     this.path = opts.path
@@ -62,6 +65,24 @@ export default abstract class PrismicGenerator extends Generator {
     this.domain = opts.domain
     this.prismic = opts.prismic
     this.pm = opts.pm
+    this.existingRepo = opts.existingRepo || false
+  }
+
+  /**
+   * Conditionally create a prismic repo.
+   * @param {CreateRepositoryArgs} createRepositoryArgs - Parameters to uses when creating a repository.
+   * @param {Boolean} [existingRepo = false] - skip creating a new prismic repository.
+   * @returns {Promise<{data: String}>} - data being a conformation of the repository name.
+   */
+  async maybeCreatePrismicRepository(createRepositoryArgs: CreateRepositoryArgs, existingRepo = this.existingRepo): Promise<{data: string}> {
+    if (existingRepo) return Promise.resolve({data: createRepositoryArgs.domain || this.domain})
+
+    return this.prismic.createRepository(createRepositoryArgs).then(res => {
+      const url = new URL(this.prismic.base)
+      url.host = `${res.data}.${url.host}`
+      this.log(`A new repository has been created at: ${url.toString()}`)
+      return res
+    })
   }
 
   /**

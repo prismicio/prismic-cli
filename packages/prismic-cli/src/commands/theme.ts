@@ -47,6 +47,11 @@ export default class Theme extends Command {
       default: false,
     }),
 
+    'existing-repo': flags.boolean({
+      description: 'Connect to an existing Prismic repository.',
+      default: false,
+    }),
+
   }
 
   static args = [{
@@ -63,7 +68,8 @@ export default class Theme extends Command {
 
     const {flags, args} = this.parse(Theme)
 
-    const domain = await this.validateDomain(flags.domain)
+    const existingRepo = flags['existing-repo'] || false
+    const domain = await this.validateDomain(flags.domain, existingRepo)
     const folder = await this.validateFolder(flags.folder, domain, flags.force)
     const theme = await this.validateTheme(flags['theme-url'] || args.source)
 
@@ -79,6 +85,7 @@ export default class Theme extends Command {
         path: folder,
         prismic: this.prismic,
         configPath: flags.conf,
+        existingRepo,
         ...flags,
       }, ((err: Error, results: any) => {
         if (err) reject(err)
