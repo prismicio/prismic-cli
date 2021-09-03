@@ -1,24 +1,3 @@
-# [4.2.0-beta.0](https://github.com/prismicio/prismic-cli/compare/v4.1.1...v4.2.0-beta.0) (2021-09-03)
-
-
-### Bug Fixes
-
-* -f flag inconsistency ([0444dec](https://github.com/prismicio/prismic-cli/commit/0444dec69f4fcbec205f323a4071bc195059905c))
-* **husky:** updated husky and now pre-commit hooks should work again ([b25be3f](https://github.com/prismicio/prismic-cli/commit/b25be3f6afa49502721acb5e3cde75fd41d33163))
-* lint-staged config ([fc974d0](https://github.com/prismicio/prismic-cli/commit/fc974d053402fe6cafa9c56092c65827c5d4836b))
-* **meta-generator:** flag consistency ([bf5aadf](https://github.com/prismicio/prismic-cli/commit/bf5aadf8135fbfe64cf858da239a30d46b253887))
-* typo ([17b529c](https://github.com/prismicio/prismic-cli/commit/17b529c9550efa847d825c823669359aa8635e0f))
-* typo ([810f86d](https://github.com/prismicio/prismic-cli/commit/810f86d7999320647ec8cc03dc6b3e09893bcf1e))
-* typo ([1450ecc](https://github.com/prismicio/prismic-cli/commit/1450ecc04efc5bb341815e1f01f03631ff7d2f5d))
-* typo ([57fd39c](https://github.com/prismicio/prismic-cli/commit/57fd39c624e02266bc2f79040c15c2e8ca4886f6))
-
-
-### Features
-
-* **nuxt modify config:** refactored to use `getStoriesPaths` function ([1044aeb](https://github.com/prismicio/prismic-cli/commit/1044aebc1627f6bc0ff251251609d255a2d76e15))
-
-
-
 ## [4.1.1](https://github.com/prismicio/prismic-cli/compare/v4.1.0...v4.1.1) (2021-08-12)
 
 
