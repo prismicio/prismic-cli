@@ -68,6 +68,7 @@ export default class Slicemachine extends Command {
     }),
 
     folder: flags.string({
+      char: 'f',
       description: 'Output directory.',
     }),
 
