@@ -2,10 +2,5 @@
   "extends": [
     "oclif",
     "oclif-typescript"
-  ],
-  "ignorePatterns": [
-    "yarn.lock",
-    "*.log",
-    "package.json"
   ]
 }

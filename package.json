@@ -20,7 +20,7 @@
     ]
   },
   "lint-staged": {
-    "*": "yarn posttest"
+    "*.ts": "yarn posttest"
   },
   "scripts": {
     "clean": "yarn workspaces run clean",
