@@ -26,7 +26,7 @@ export default class New extends Command {
       description: 'Prismic template for the project.',
     }),
 
-    force: flags.boolean({description: 'Over write local files.'}),
+    force: flags.boolean({description: 'Overwrite local files.'}),
 
     'skip-install': flags.boolean({
       description: 'Prevent running install command after generating project.',
