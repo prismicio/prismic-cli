@@ -20,7 +20,7 @@ $ npm install -g prismic-cli
 $ prismic COMMAND
 running command...
 $ prismic (-v|--version|version)
-prismic-cli/4.2.0-beta.0 darwin-x64 node-v16.1.0
+prismic-cli/4.2.0-beta.0 darwin-x64 node-v16.7.0
 $ prismic --help [COMMAND]
 USAGE
   $ prismic COMMAND
