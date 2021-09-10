@@ -1,3 +1,26 @@
+# [4.2.0-beta.1](https://github.com/prismicio/prismic-cli/compare/v4.2.0-beta.0...v4.2.0-beta.1) (2021-09-10)
+
+
+### Bug Fixes
+
+* add existingRepo to sub0generators when running new with slicemachhine ([6e7445a](https://github.com/prismicio/prismic-cli/commit/6e7445a1d24219e39b943c0b573a39bdbf8aca78))
+* linting errors ([bb05700](https://github.com/prismicio/prismic-cli/commit/bb057007b036267de291d486ccfc394c6de627b4))
+* missed f char in slicemachine ([7e1714c](https://github.com/prismicio/prismic-cli/commit/7e1714ce8428567688cad800589457533831f6f0))
+* **prismic-yeoman-generator:** made existingRepo and optional property ([8f519f7](https://github.com/prismicio/prismic-cli/commit/8f519f78c5791a494ae59f5a59e48721416ad47d))
+* **tests on windows:** use multiple tmp directories in tests ([7cff7a9](https://github.com/prismicio/prismic-cli/commit/7cff7a9035fe2f015aeebd64aa685993df7eaa46))
+
+
+### Features
+
+* **existing-repo:** add existing repo flag ([65c729d](https://github.com/prismicio/prismic-cli/commit/65c729de0774a5ec8520ce2d593f3ffb96d97162))
+
+
+### Reverts
+
+* Revert "v4.2.0-beta.0" ([b2e473e](https://github.com/prismicio/prismic-cli/commit/b2e473ed5cf46a23fa6f9dd9683b70d8c673c845))
+
+
+
 ## [4.1.1](https://github.com/prismicio/prismic-cli/compare/v4.1.0...v4.1.1) (2021-08-12)
 
 
