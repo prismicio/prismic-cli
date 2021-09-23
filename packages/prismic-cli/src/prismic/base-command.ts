@@ -130,6 +130,7 @@ export default abstract class PrismicCommand extends Command {
     if (this.isAbsoluteUrlToZip(source)) return source
     if (this.isGithubUrl(source) === false) return Promise.reject(new Error(`Could not guess where to find zip from ${source}`))
     const url = new URL(source)
+    url.pathname = url.pathname.replace(/.git$/, '')
 
     const maybeRepoAndBranch = /(\/.*\/.*\/)tree\/(.*)/.exec(url.pathname)
     if (maybeRepoAndBranch) {
