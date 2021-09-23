@@ -59,7 +59,16 @@ export default class Nuxt extends PrismicGenerator {
     const nuxtPrompts = NuxtPrompts.map(p => {
       if (p.name === 'name') return {...p, default: this.domain}
       // do the same for github user name
-      if (p.name === 'gitUsername') return {...p, default: this.user.github.username}
+      if (p.name === 'gitUsername') return {
+        ...p,
+        default: () => {
+          try {
+            return this.user.github.username()
+          } catch {
+            return this.user.git.name() || this.user.git.email()
+          }
+        },
+      }
       return p
     })
     const prompts = [...nuxtPrompts, {
