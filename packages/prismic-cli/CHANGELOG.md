@@ -1,3 +1,7 @@
+# [4.2.0](https://github.com/prismicio/prismic-cli/compare/v4.2.0-beta.3...v4.2.0) (2021-09-23)
+
+
+
 # [4.2.0-beta.3](https://github.com/prismicio/prismic-cli/compare/v4.2.0-beta.2...v4.2.0-beta.3) (2021-09-23)
 
 
