@@ -18,6 +18,8 @@ describe('prismic/base-command', () => {
     const repoName = 'fake-repo'
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', sinon.fake.returns(config))
     .nock(fakeBase, api => {
       return api
@@ -143,6 +145,19 @@ describe('prismic/base-command', () => {
       expect(error.message).to.equal('Could not resolve https://github.com/prismicio/fake/archive/main.zip or https://github.com/prismicio/fake/archive/master.zip')
     })
     .it('throws if not found')
+
+    test
+    .add('cmd', () => {
+      const opts = {} as IConfig
+      return new T([], opts)
+    })
+    .nock('https://github.com', api => {
+      api.head('/prismicio/fake/archive/main.zip').reply(200)
+    })
+    .it('should handle urls ending in .git', async ctx => {
+      const result = await ctx.cmd.maybeGitHubRepo('https://github.com/prismicio/fake.git')
+      expect(result).to.equal('https://github.com/prismicio/fake/archive/main.zip')
+    })
 
     // TODO: some other error for line 116
   })

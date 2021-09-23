@@ -1,5 +1,4 @@
 import {flags} from '@oclif/command'
-import {cli} from 'cli-ux'
 import * as inquirer from 'inquirer'
 import {Command} from '../prismic'
 import prismicGenerators, {names} from '../prismic/yeoman-env'
@@ -26,13 +25,15 @@ export default class New extends Command {
       description: 'Prismic template for the project.',
     }),
 
-    force: flags.boolean({
-      description: 'Over write local files.',
-      default: false,
-    }),
+    force: flags.boolean({description: 'Overwrite local files.'}),
 
     'skip-install': flags.boolean({
       description: 'Prevent running install command after generating project.',
+      default: false,
+    }),
+
+    'existing-repo': flags.boolean({
+      description: 'Connect to an existing Prismic repository.',
       default: false,
     }),
   }
@@ -48,7 +49,8 @@ export default class New extends Command {
 
     const {flags} = this.parse(New)
 
-    const domain = await this.validateDomain(flags.domain)
+    const existingRepo = flags['existing-repo'] || false
+    const domain = await this.validateDomain(flags.domain, existingRepo)
     const folder = await this.validateFolder(flags.folder, domain, flags.force)
 
     const generators = names.map(value => {
@@ -74,6 +76,7 @@ export default class New extends Command {
         domain,
         path: folder,
         prismic: this.prismic,
+        existingRepo,
       }, ((err: Error) => {
         if (err) return reject(err)
         return resolve(null)
@@ -89,10 +92,5 @@ export default class New extends Command {
       message: 'Template to use',
       choices: options,
     }).then(res => res.template)
-  }
-
-  async registerCustomGenerator(generator: string, namespace? : string) {
-    const name = namespace ? namespace : await cli.prompt('name')
-    prismicGenerators.register(generator, name)
   }
 }

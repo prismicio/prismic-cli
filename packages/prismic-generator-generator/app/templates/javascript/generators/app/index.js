@@ -52,32 +52,13 @@ class App extends PrismicGenerator {
       this.composeWith('prismic-<%= name %>:storybook', opts)
     } else {
       const customTypes = this.readCustomTypesFrom('custom_types')
-
-      return this.prismic.createRepository({
-        domain: this.domain,
-        customTypes,
-      }).then(res => {
-        const url = new URL(this.prismic.base)
-        url.host = `${res.data || this.domain}.${url.host}`
-        this.log(`A new repository has been created at: ${url.toString()}`)
-        return res
-      })
+      return this.maybeCreatePrismicRepository({domain: this.domain, framework: '<%= name %>', customTypes}, this.existingRepo)
     }
   }
 <% } else { %>
   async writing() {
     const customTypes = this.readCustomTypesFrom('custom_types')
-    return this.prismic.createRepository({
-      domain: this.domain,
-      customTypes,
-      framework: '<%= name %>'
-    }).then(res => {
-      const url = new URL(this.prismic.base)
-      url.host = `${res.data || this.domain}.${url.host}`
-      this.log(`A new repsitory has been created at: ${url.toString()}`)
-      return res
-    })
-    .then(res => {
+    return this.maybeCreatePrismicRepository({domain: this.domain, framework: '<%= name %>', customTypes}, this.existingRepo).then(res => {
       const location = path.join(this.path, 'prismic-configuration.js')
       const oldConfig = this.fs.read(location)
       const newConfig = oldConfig.replace(/your-repo-name/g, res.data || this.domain)

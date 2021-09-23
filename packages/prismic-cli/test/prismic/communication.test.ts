@@ -164,6 +164,8 @@ describe('prismic/communication.ts', () => {
     const fakeServer = sinon.fake.resolves('fake server called')
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({base: fakeBase, cookies: ''})))
     .stub(fs, 'writeFileSync', fakeWriteFileSync)
     .stub(fs, 'writeFile', fakeWriteFile)
@@ -194,6 +196,8 @@ describe('prismic/communication.ts', () => {
     const fakeServer = sinon.fake.resolves(null)
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', sinon.fake.returns(JSON.stringify({base: fakeBase, cookies: ''})))
     .stub(fs, 'writeFileSync', fakeWriteFileSync)
     .stub(fs, 'writeFile', fakeWriteFile)
@@ -220,6 +224,8 @@ describe('prismic/communication.ts', () => {
     const config = JSON.stringify({base: fakeBase, cookies: fakeCookies}, null, '\t')
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', sinon.fake.returns(config))
     .add('prismic', () => new Prismic())
     .do(async ctx => {
@@ -233,6 +239,7 @@ describe('prismic/communication.ts', () => {
     .it('should fail if subdomain is not defined')
 
     test
+    .stderr()
     .stub(fs, 'readFileSync', sinon.fake.returns(config))
     .add('prismic', () => new Prismic())
     .do(async ctx => {
@@ -336,6 +343,8 @@ describe('prismic/communication.ts', () => {
     const configWithOauth = JSON.stringify({base: fakeBase, oauthAccessToken: 'token'})
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', sinon.fake.returns(config))
     .add('prismic', () => new Prismic())
     .nock(fakeBase, api => {
@@ -390,6 +399,8 @@ describe('prismic/communication.ts', () => {
     .it('should ask to reAuthenticate if create repo fails')
 
     test
+    .stdout()
+    .stderr()
     .nock('https://prismic.io', api => {
       api.post('/authentication/newrepository?app=slicemachine' /* query */).reply(401)
       // api.post('/authentication/newrepository?app=slicemachine', /* query */).reply(200, {domain: repoName})
@@ -411,6 +422,8 @@ describe('prismic/communication.ts', () => {
     .it('create asks to reAuthenticate on failure')
 
     test
+    .stdout()
+    .stderr()
     .nock('https://prismic.io', api => {
       api.post('/authentication/newrepository?app=slicemachine' /* query */).reply(303)
       // api.post('/authentication/newrepository?app=slicemachine', /* query */).reply(200, {domain: repoName})

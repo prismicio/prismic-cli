@@ -17,6 +17,7 @@ describe('new', () => {
     expect(New.flags.help).to.exist
     expect(New.flags['skip-install']).to.exist
     expect(New.flags.template).to.exist
+    expect(New.flags['existing-repo']).to.exist
   })
 
   const fakeDomain = 'fake-domain'
@@ -59,16 +60,19 @@ describe('new', () => {
   })
 
   describe('nodejs-sdk', () => {
-    const fakeFolder = path.join(tmpDir, 'test-new-nodejs-sdk')
+    const testDir = path.join(tmpDir, 'test-new-nodejs')
+    const fakeFolder = path.join(testDir, 'new-repo')
+    const fakeFolderWithExistingRepo = path.join(testDir, 'existing-repo')
 
-    beforeEach(async () => {
-      if (fs.existsSync(fakeFolder)) {
-        await fs.rmdir(fakeFolder, {recursive: true})
+    before(async () => {
+      if (fs.existsSync(testDir)) {
+        await fs.rmdir(testDir, {recursive: true})
       }
     })
 
     test
     .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
     .nock('https://auth.prismic.io', api => {
@@ -91,6 +95,31 @@ describe('new', () => {
       const conf = require(configPath)
       expect(conf.apiEndpoint).to.include(fakeDomain)
     })
+
+    test
+    .stdout()
+    .stderr()
+    .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+    })
+    .nock(fakeBase, api => {
+      return api
+      .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => false)
+    })
+    .nock('https://github.com', api => {
+      api.get('/prismicio/nodejs-sdk/archive/master.zip')
+      .reply(200, StubNodeJSZip.toBuffer(), {'Content-Type': 'application/zip'})
+    })
+    .command(['new', '--domain', fakeDomain, '--folder', fakeFolderWithExistingRepo, '--template', 'NodeJS', '--force', '--skip-install', '--existing-repo'])
+    .it('should not create a repo with called with --existing-repo', () => {
+      const configPath = path.join(fakeFolderWithExistingRepo, 'prismic-configuration.js')
+      expect(fs.existsSync(fakeFolderWithExistingRepo)).to.be.true
+      const conf = require(configPath)
+      expect(conf.apiEndpoint).to.include(fakeDomain)
+    })
   })
 
   describe('next', () => {
@@ -103,6 +132,8 @@ describe('new', () => {
     })
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(lookpath, 'lookpath', async () => false)
@@ -174,6 +205,8 @@ describe('new', () => {
     })
 
     test
+    .stderr()
+    .stdout()
     .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(lookpath, 'lookpath', async () => false)
@@ -209,7 +242,7 @@ describe('new', () => {
       const pathToNuxtConfig = path.join(fakeFolder, 'nuxt.config.js')
       expect(fs.existsSync(pathToNuxtConfig), 'should create nuxt.config.js').to.be.true
       const config = await fs.readFile(pathToNuxtConfig, {encoding: 'utf-8'})
-      expect(config, 'should add stories to nuxt config').to.include('stories: ["~/slices/**/*.stories.[tj]s", "~/.slicemachine/assets/slices/**/*.stories.[tj]s"]')
+      expect(config, 'should add stories to nuxt config').to.include('stories: [...getStoriesPaths()]')
       done()
     })
   })

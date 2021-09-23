@@ -44,9 +44,9 @@ export default abstract class PrismicCommand extends Command {
     return this.prismic.login(maybePort, maybeBase, maybeAuthUrl)
   }
 
-  async validateDomain(name: string | undefined): Promise<string> {
+  async validateDomain(name: string | undefined, existingRepo = false): Promise<string> {
     const base = new URL(this.prismic.base)
-    const validate = this.prismic.validateRepositoryName
+    const validate = (domain: string) => this.prismic.validateRepositoryName(domain, existingRepo)
     const isValid = (name) ? validate(name) : Promise.reject(new Error(''))
 
     return isValid.catch(_ => {
@@ -130,6 +130,7 @@ export default abstract class PrismicCommand extends Command {
     if (this.isAbsoluteUrlToZip(source)) return source
     if (this.isGithubUrl(source) === false) return Promise.reject(new Error(`Could not guess where to find zip from ${source}`))
     const url = new URL(source)
+    url.pathname = url.pathname.replace(/.git$/, '')
 
     const maybeRepoAndBranch = /(\/.*\/.*\/)tree\/(.*)/.exec(url.pathname)
     if (maybeRepoAndBranch) {

@@ -26,19 +26,15 @@ export default class extends PrismicGenerator {
   }
 
   async configuring() {
-    this.log('Createing repository')
+    this.log('Creating repository')
+
     const customTypes = this.readCustomTypesFrom('custom_types')
-    return this.prismic.createRepository({
+
+    return this.maybeCreatePrismicRepository({
       domain: this.domain,
       framework: 'react',
       customTypes,
     }).then(res => {
-      const url = new URL(this.prismic.base)
-      url.host = `${res.data}.${url.host}`
-      this.log(`A new repsitory has been created at: ${url.toString()}`)
-      return res
-    })
-    .then(res => {
       const location = path.join('src', 'prismic-configuration.js')
       const oldConfig = this.readDestination(location)
       const newConfig = oldConfig.replace(/your-repo-name/g, res.data || this.domain)

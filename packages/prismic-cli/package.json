@@ -1,7 +1,7 @@
 {
   "name": "prismic-cli",
   "description": "Command line to bootstrap prismic projects.",
-  "version": "4.1.1",
+  "version": "4.2.0-beta.3",
   "author": "prismic.io developers",
   "bin": {
     "prismic": "bin/run"
@@ -20,8 +20,8 @@
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^3",
-    "@prismicio/prismic-generator-generator": "4.0.2",
-    "@prismicio/prismic-yeoman-generator": "^4.0.7",
+    "@prismicio/prismic-generator-generator": "4.2.0-beta.3",
+    "@prismicio/prismic-yeoman-generator": "4.2.0-beta.3",
     "@types/adm-zip": "^0.4.33",
     "@types/inquirer": "^7.3.1",
     "@types/node": "^14.14.10",
@@ -36,12 +36,12 @@
     "email-validator": "^2.0.4",
     "fast-glob": "^3.2.5",
     "fs-extra": "^9.1.0",
-    "generator-prismic-angular2": "^4.0.4",
-    "generator-prismic-nextjs": "^4.0.7",
-    "generator-prismic-nodejs": "^4.0.4",
-    "generator-prismic-nuxt": "^4.0.6",
-    "generator-prismic-react": "^4.0.4",
-    "generator-prismic-vue": "^4.0.4",
+    "generator-prismic-angular2": "4.2.0-beta.3",
+    "generator-prismic-nextjs": "4.2.0-beta.3",
+    "generator-prismic-nodejs": "4.2.0-beta.3",
+    "generator-prismic-nuxt": "4.2.0-beta.3",
+    "generator-prismic-react": "4.2.0-beta.3",
+    "generator-prismic-vue": "4.2.0-beta.3",
     "inquirer": "^7.3.3",
     "is-valid-path": "^0.1.1",
     "koa": "^2.13.1",
@@ -59,7 +59,6 @@
     "yeoman-generator": "^4.12.0"
   },
   "devDependencies": {
-    "@types/hapi__hapi": "^20.0.9",
     "@oclif/dev-cli": "^1",
     "@oclif/test": "^1",
     "@types/babel__generator": "^7.6.2",
@@ -67,6 +66,7 @@
     "@types/chai": "^4",
     "@types/cookie": "^0.4.0",
     "@types/fs-extra": "^9.0.7",
+    "@types/hapi__hapi": "^20.0.9",
     "@types/is-valid-path": "^0.1.0",
     "@types/koa": "^2.13.3",
     "@types/koa-bodyparser": "^4.3.1",
@@ -83,6 +83,7 @@
     "nock": "^13.0.5",
     "nyc": "^14",
     "rimraf": "^3.0.2",
+    "standard-changelog": "^2.0.27",
     "ts-node": "^8",
     "typescript": "^3.3"
   },
@@ -119,7 +120,7 @@
     "posttest": "eslint . --ext .ts --config .eslintrc",
     "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "test": "nyc --extension .ts mocha \"test/**/*.test.ts\"",
-    "version": "oclif-dev readme && git add README.md"
+    "version": "oclif-dev readme && git add README.md && standard-changelog && git add CHANGELOG.md"
   },
   "types": "lib/index.d.ts",
   "gitHead": "a36c058ffb375807bed3d47981f699af42346aad"

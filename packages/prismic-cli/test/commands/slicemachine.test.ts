@@ -5,6 +5,8 @@ import * as sinon from 'sinon'
 import {fs} from '../../src/utils'
 import * as lookpath from 'lookpath'
 import * as child_process from 'child_process'
+import SliceMachine from '../../src/commands/slicemachine'
+
 const {SM_FILE} = require('sm-commons/consts')
 
 const globby = require('fast-glob')
@@ -15,9 +17,29 @@ const fakeBase = 'https://prismic.io'
 const fakeCookies = 'SESSION=tea; DOMAIN=.prismic.io; X_XSFR=biscuits; prismic-auth=xyz'
 
 describe('slicemachine', () => {
+  test.it('flags', () => {
+    expect(SliceMachine.flags['add-storybook']).to.exist
+    expect(SliceMachine.flags.bootstrap).to.exist
+    expect(SliceMachine.flags['create-slice']).to.exist
+    expect(SliceMachine.flags.customTypeEndpoint).to.exist
+    expect(SliceMachine.flags.develop).to.exist
+    expect(SliceMachine.flags.domain).to.exist
+    expect(SliceMachine.flags['existing-repo']).to.exist
+    expect(SliceMachine.flags.folder).to.exist
+    expect(SliceMachine.flags.force).to.exist
+    expect(SliceMachine.flags.framework).to.exist
+    expect(SliceMachine.flags.help).to.exist
+    expect(SliceMachine.flags.library).to.exist
+    expect(SliceMachine.flags.list).to.exist
+    expect(SliceMachine.flags.setup).to.exist
+    expect(SliceMachine.flags['skip-install']).to.exist
+    expect(SliceMachine.flags.sliceName).to.exist
+  })
+
   describe('Next.js', () => {
-    const appName = 'test-slicemachine-next'
-    const fakeFolder = path.join(tmpDir, appName)
+    const nextFolder = path.join(tmpDir, 'test-sm-next')
+    const fakeFolder = path.join(nextFolder, 'setup')
+    const fakeFolderForExistingRepo = path.join(tmpDir)
 
     before(async () => {
       if (fs.existsSync(fakeFolder)) {
@@ -37,6 +59,8 @@ describe('slicemachine', () => {
     }
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(fs, 'existsSync', () => true)
@@ -66,6 +90,8 @@ describe('slicemachine', () => {
     })
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
     .command(['slicemachine', '--create-slice', '--library', 'slices', '--sliceName', 'MySlice', '--folder', fakeFolder, '--force', '--framework', 'nextjs'])
@@ -78,6 +104,8 @@ describe('slicemachine', () => {
     })
 
     test
+    .stdout()
+    .stderr()
     .stdin('y\n', 1000)
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
@@ -87,11 +115,42 @@ describe('slicemachine', () => {
       const pathToStoryBook = path.join(fakeFolder, '.storybook/main.js')
       expect(fs.existsSync(pathToStoryBook), 'should add main.js to storybook').to.be.true
     })
+
+    test
+    .stdout()
+    .stderr()
+    .stub(fs, 'readFileSync', fakeReadFileSync)
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(fs, 'existsSync', () => true)
+    .stub(lookpath, 'lookpath', async () => false)
+    .stdin('y\n', 1000) // TODO: force flag is being ignored
+    .nock(fakeBase, api => {
+      return api
+      .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
+    })
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+    })
+    .command(['slicemachine', '--setup', '--folder', fakeFolderForExistingRepo, '--framework', 'nextjs', '--domain', fakeDomain, '--force', '--skip-install', '--existing-repo'])
+    .it('does not create a new repo when --existing-repo is passed', _ => {
+      const pkJsonPath = path.join(fakeFolderForExistingRepo, 'package.json')
+      const smJsonPath = path.join(fakeFolderForExistingRepo, 'sm.json')
+      expect(fs.existsSync(pkJsonPath), 'should create package.json').to.be.true
+      expect(fs.existsSync(smJsonPath), 'should create sm.json').to.be.true
+
+      const smJson = require(smJsonPath)
+      const pkJson = require(pkJsonPath)
+
+      expect(smJson.apiEndpoint, 'sm.json should contain api endpoint').to.contain(fakeDomain)
+      expect(pkJson.scripts.slicemachine, 'package.json should contain slicemachine script').to.equal('start-slicemachine --port 9999')
+    })
   })
 
   describe('nuxt', () => {
-    const appName = 'test-slicemachine-nuxt'
-    const fakeFolder = path.join(tmpDir, appName)
+    const nuxtFolder = path.join(tmpDir, 'sm-nuxt')
+    const fakeFolder = path.join(nuxtFolder, 'test-sm-setup')
+    const fakeFolderForExistingRepo = path.join(nuxtFolder, 'test-sm-existing-nuxt')
 
     const fakeReadFileSync: any = (args: string): string => {
       if (args.endsWith('.yo-rc.json')) return JSON.stringify({'generator-prismic-nuxt': {framework: 'nuxt'}})
@@ -99,14 +158,17 @@ describe('slicemachine', () => {
     }
 
     before(async () => {
-      if (fs.existsSync(fakeFolder)) {
-        await fs.rmdir(fakeFolder, {recursive: true})
+      if (fs.existsSync(nuxtFolder)) {
+        await fs.rmdir(nuxtFolder, {recursive: true})
       }
       const pathToTemplate = path.resolve(__dirname, '../__stubs__/nuxt-template')
-      return fs.copy(pathToTemplate, fakeFolder)
+      await fs.copy(pathToTemplate, fakeFolder)
+      return fs.copy(pathToTemplate, fakeFolderForExistingRepo)
     })
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
     .stub(fs, 'existsSync', () => true)
@@ -136,6 +198,8 @@ describe('slicemachine', () => {
     })
 
     test
+    .stdout()
+    .stderr()
     .stdin('y\n', 1000) // TODO: force flag doesn't work
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
@@ -158,6 +222,8 @@ describe('slicemachine', () => {
     })
 
     test
+    .stdout()
+    .stderr()
     .stdin('y\n', 1000) // TODO: force flag doesn't work
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
@@ -166,10 +232,40 @@ describe('slicemachine', () => {
     .command(['slicemachine', '--add-storybook', '--framework', 'nuxt', '--folder', fakeFolder, '--force', '--skip-install'])
     .it('add-storybook', async (_, done) => {
       const pathToNuxtConfig = path.join(fakeFolder, 'nuxt.config.js')
-      expect(fs.existsSync(pathToNuxtConfig)).to.be.true
+      expect(fs.existsSync(pathToNuxtConfig), 'nuxt config not found').to.be.true
       const config = await fs.readFile(pathToNuxtConfig, {encoding: 'utf-8'})
-      expect(config).to.include('stories: ["~/slices/**/*.stories.[tj]s", "~/.slicemachine/assets/slices/**/*.stories.[tj]s"]')
+      expect(config).to.include('stories: [...getStoriesPaths()]')
       done()
+    })
+
+    test
+    .stdout()
+    .stderr()
+    .stub(fs, 'readFileSync', fakeReadFileSync)
+    .stub(fs, 'writeFile', () => Promise.resolve())
+    .stub(fs, 'existsSync', () => true)
+    .stdin('y\n', 1000) // TODO: Force flag is being ignored
+    .stub(lookpath, 'lookpath', async () => false)
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+    })
+    .nock(fakeBase, api => {
+      return api
+      .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
+    })
+    .command(['slicemachine', '--setup', '--folder', fakeFolderForExistingRepo, '--framework', 'nuxt', '--domain', fakeDomain, '--force', '--skip-install', '--existing-repo'])
+    .it('setup with existing repo does not create a new repo', _ => {
+      const pkJsonPath = path.join(fakeFolderForExistingRepo, 'package.json')
+      const smJsonPath = path.join(fakeFolderForExistingRepo, 'sm.json')
+      expect(fs.existsSync(pkJsonPath), 'should create package.json').to.be.true
+      expect(fs.existsSync(smJsonPath), 'should crete sm.json').to.be.true
+
+      const smJson = require(smJsonPath)
+      const pkJson = require(pkJsonPath)
+
+      expect(smJson.apiEndpoint, 'sm.json should contain apiEndpoint').to.contain(fakeDomain)
+      expect(pkJson.scripts.slicemachine, 'should add slicemachine to package.json scripts').to.equal('start-slicemachine --port 9999')
     })
   })
 
@@ -201,6 +297,8 @@ describe('slicemachine', () => {
     .stub(fs, 'writeFile', boostrapFakeWriteFile)
 
     setup
+    .stdout()
+    .stderr()
     .nock('https://auth.prismic.io', api => {
       api.get('/validate?token=xyz').reply(200, {})
       api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
@@ -219,10 +317,50 @@ describe('slicemachine', () => {
     })
 
     setup
+    .stdout()
     .stderr()
     .stub(fs, 'existsSync', () => false)
     .command(['slicemachine', '--bootstrap', '--domain', fakeDomain])
     .it('Should fail if no sm.json file is found', ctx => expect(ctx.stderr).to.contain('sm.json file not found'))
+
+    setup
+    .stdout()
+    .stderr()
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+    })
+    .nock(fakeBase, api => {
+      return api
+      .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
+      .post('/authentication/newrepository?app=slicemachine').reply(200, fakeDomain)
+    })
+    .command(['slicemachine', '--bootstrap', '--domain', fakeDomain])
+    .it('should reconfigure a projects sm.json file', () => {
+      expect(boostrapFakeWriteFile.called).to.be.true
+      const lastWriteArgs = boostrapFakeWriteFile.lastCall.args
+      const data = lastWriteArgs[lastWriteArgs.length - 1]
+      expect(data).to.contain(`https://${fakeDomain}.cdn.prismic.io/api/v2`)
+    })
+
+    setup
+    .stdout()
+    .stderr()
+    .nock('https://auth.prismic.io', api => {
+      api.get('/validate?token=xyz').reply(200, {})
+      api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+    })
+    .nock(fakeBase, api => {
+      return api
+      .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true)
+    })
+    .command(['slicemachine', '--bootstrap', '--domain', fakeDomain, '--existing-repo'])
+    .it('existing-repo flag should not create a new repo', () => {
+      expect(boostrapFakeWriteFile.called).to.be.true
+      const lastWriteArgs = boostrapFakeWriteFile.lastCall.args
+      const data = lastWriteArgs[lastWriteArgs.length - 1]
+      expect(data).to.contain(`https://${fakeDomain}.cdn.prismic.io/api/v2`)
+    })
   })
 
   describe('develop', () => {
@@ -241,6 +379,8 @@ describe('slicemachine', () => {
     }
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
     .nock('https://auth.prismic.io', fakeAuth)
@@ -253,6 +393,8 @@ describe('slicemachine', () => {
     })
 
     test
+    .stdout()
+    .stderr()
     .stub(fs, 'readFileSync', fakeReadFileSync)
     .stub(fs, 'writeFile', () => Promise.resolve())
     .nock('https://auth.prismic.io', fakeAuth)
