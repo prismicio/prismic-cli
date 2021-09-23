@@ -1,6 +1,6 @@
 {
   "name": "generator-prismic-nuxt",
-  "version": "4.2.0-beta.1",
+  "version": "4.2.0-beta.2",
   "main": "generators/app",
   "license": "Apache-2.0",
   "private": false,
@@ -17,7 +17,7 @@
     "@babel/template": "^7.14.5",
     "@babel/traverse": "^7.15.4",
     "@babel/types": "^7.15.4",
-    "@prismicio/prismic-yeoman-generator": "4.2.0-beta.1",
+    "@prismicio/prismic-yeoman-generator": "4.2.0-beta.2",
     "chalk": "^4.1.1",
     "create-nuxt-app": "^3.5.0",
     "inquirer": "^7.3.3",

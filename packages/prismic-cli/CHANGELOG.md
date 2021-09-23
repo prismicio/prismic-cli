@@ -1,3 +1,13 @@
+# [4.2.0-beta.2](https://github.com/prismicio/prismic-cli/compare/v4.2.0-beta.1...v4.2.0-beta.2) (2021-09-23)
+
+
+### Bug Fixes
+
+* **new nuxt:** default argument for github username can throw if no config is found ([bed519f](https://github.com/prismicio/prismic-cli/commit/bed519f4c673677f00624fd767a55f812c951c68))
+* **theme:** add support for urls ending in .git ([86d3684](https://github.com/prismicio/prismic-cli/commit/86d3684161829c9130b90abbe2c03edbdc051568))
+
+
+
 # [4.2.0-beta.1](https://github.com/prismicio/prismic-cli/compare/v4.2.0-beta.0...v4.2.0-beta.1) (2021-09-10)
 
 
