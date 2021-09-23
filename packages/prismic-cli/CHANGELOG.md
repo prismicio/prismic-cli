@@ -1,3 +1,12 @@
+# [4.2.0-beta.3](https://github.com/prismicio/prismic-cli/compare/v4.2.0-beta.2...v4.2.0-beta.3) (2021-09-23)
+
+
+### Bug Fixes
+
+* **nuxt:** github user name prompt ([bed4cfa](https://github.com/prismicio/prismic-cli/commit/bed4cfa8bb55703aa524f5584e8a66a06fb042e8))
+
+
+
 # [4.2.0-beta.2](https://github.com/prismicio/prismic-cli/compare/v4.2.0-beta.1...v4.2.0-beta.2) (2021-09-23)
 
 
