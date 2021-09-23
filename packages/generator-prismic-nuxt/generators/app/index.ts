@@ -61,9 +61,10 @@ export default class Nuxt extends PrismicGenerator {
       // do the same for github user name
       if (p.name === 'gitUsername') return {
         ...p,
-        default: () => {
+        default: async () => {
           try {
-            return this.user.github.username()
+            const username = await this.user.github.username()
+            return username
           } catch {
             return this.user.git.name() || this.user.git.email()
           }
