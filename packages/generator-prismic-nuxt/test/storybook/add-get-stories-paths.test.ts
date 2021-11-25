@@ -24,104 +24,125 @@ describe('add-get-stories-paths', () => {
       expect(result).to.equal(input)
     })
   })
+  const expectedCode = '...getStoriesPaths().map(path => path.replace("../", "~/"))'
 
   describe('upsertStories', () => {
-    it('should add a { storybook: { stories: [ ...getStoriesPaths() ] } } when no storybook property is found', () => {
+    it(`should add { stories: ${expectedCode} } when no storybook property is found`, () => {
       const input = 'export default {}'
       const result = addStories(input)
-      expect(result).to.equal('export default {\n  storybook: {\n    stories: [...getStoriesPaths()]\n  }\n};')
+      const wanted =
+`export default {
+  storybook: {
+    stories: [${expectedCode}]
+  }
+};`
+      expect(result).to.equal(wanted)
     })
 
-    it('should add a { stories :[ ...getStoriesPaths() ] } when storybook property is found', () => {
+    it(`should add a { stories : ${expectedCode} } when storybook property is found`, () => {
       const input = 'export default {\n  storybook: {}\n}'
       const result = addStories(input)
-      expect(result).to.equal('export default {\n  storybook: {\n    stories: [...getStoriesPaths()]\n  }\n};')
+      const wanted =
+`export default {
+  storybook: {
+    stories: [${expectedCode}]
+  }
+};`
+      expect(result).to.equal(wanted)
     })
 
-    it('should add ...getStoriesPaths() to the stories array', () => {
+    it(`should add ${expectedCode} to the stories array`, () => {
       const input = `export default {
         storybook: {
           stories: ["foo"]
         },
       }`
-      const expected = 'export default {\n  storybook: {\n    stories: ["foo", ...getStoriesPaths()]\n  }\n};'
+      const wanted =
+`export default {
+  storybook: {
+    stories: ["foo", ${expectedCode}]
+  }
+};`
 
       const result = addStories(input)
 
-      expect(result).to.equal(expected)
+      expect(result).to.equal(wanted)
     })
 
-    it('should not add ...getStoriesPaths() if it is already in the array', () => {
+    it(`should not add ${expectedCode} if it is already in the array`, () => {
+      const wanted =
+`export default {
+  storybook: {
+    stories: [${expectedCode}]
+  }
+};`
+      const result = addStories(wanted)
+      expect(wanted).equal(result)
+    })
+
+    it('should update the old ...getStoriesPath', () => {
       const input = 'export default {\n  storybook: {\n    stories: [...getStoriesPaths()]\n  }\n};'
+      const wanted =
+`export default {
+  storybook: {
+    stories: [${expectedCode}]
+  }
+};`
       const result = addStories(input)
-      expect(input).equal(result)
+      expect(result).equal(wanted)
     })
   })
 
   it('should add import and stories to export default {}', () => {
     const input = 'export default {};'
-    const expected = '' +
-    'import { getStoriesPaths } from \'slice-machine-ui/helpers/storybook\';\n' +
-    'export default {\n' +
-    '  storybook: {\n' +
-    '    stories: [...getStoriesPaths()]\n' +
-    '  }\n' +
-    '};'
+    const wanted =
+`import { getStoriesPaths } from 'slice-machine-ui/helpers/storybook';
+export default {
+  storybook: {
+    stories: [${expectedCode}]
+  }
+};`
     const result = addGetStoriesPaths(input)
 
-    expect(result).to.equal(expected)
+    expect(result).to.equal(wanted)
   })
 
   it('should add import and stories to export default { storybook: {}}', () => {
     const input = 'export default { storybook: {}};'
-    const expected = '' +
-    'import { getStoriesPaths } from \'slice-machine-ui/helpers/storybook\';\n' +
-    'export default {\n' +
-    '  storybook: {\n' +
-    '    stories: [...getStoriesPaths()]\n' +
-    '  }\n' +
-    '};'
+    const wanted =
+`import { getStoriesPaths } from 'slice-machine-ui/helpers/storybook';
+export default {
+  storybook: {
+    stories: [${expectedCode}]
+  }
+};`
     const result = addGetStoriesPaths(input)
 
-    expect(result).to.equal(expected)
-  })
-
-  it('should add import and stories to export default { storybook: {}}', () => {
-    const input = 'export default { storybook: {}};'
-    const expected = '' +
-    'import { getStoriesPaths } from \'slice-machine-ui/helpers/storybook\';\n' +
-    'export default {\n' +
-    '  storybook: {\n' +
-    '    stories: [...getStoriesPaths()]\n' +
-    '  }\n' +
-    '};'
-    const result = addGetStoriesPaths(input)
-
-    expect(result).to.equal(expected)
+    expect(result).to.equal(wanted)
   })
 
   it('should add import and stories to export default { storybook: { stories: ["foo"]}}', () => {
     const input = 'export default { storybook: { stories: ["foo"]}};'
-    const expected = '' +
-    'import { getStoriesPaths } from \'slice-machine-ui/helpers/storybook\';\n' +
-    'export default {\n' +
-    '  storybook: {\n' +
-    '    stories: ["foo", ...getStoriesPaths()]\n' +
-    '  }\n' +
-    '};'
+    const wanted =
+`import { getStoriesPaths } from 'slice-machine-ui/helpers/storybook';
+export default {
+  storybook: {
+    stories: ["foo", ${expectedCode}]
+  }
+};`
     const result = addGetStoriesPaths(input)
 
-    expect(result).to.equal(expected)
+    expect(result).to.equal(wanted)
   })
 
   it('should not add any duplicates', () => {
-    const input = '' +
-    'import { getStoriesPaths } from \'slice-machine-ui/helpers/storybook\';\n' +
-    'export default {\n' +
-    '  storybook: {\n' +
-    '    stories: ["foo", ...getStoriesPaths()]\n' +
-    '  }\n' +
-    '};'
+    const input =
+`import { getStoriesPaths } from 'slice-machine-ui/helpers/storybook';
+export default {
+  storybook: {
+    stories: ["foo", ${expectedCode}]
+  }
+};`
     const result = addGetStoriesPaths(input)
 
     expect(result).to.equal(input)
