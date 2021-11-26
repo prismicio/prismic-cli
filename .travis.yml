@@ -4,11 +4,16 @@ os:
 #  - osx
 
 node_js:
+  - node
   - 16
   - 14
 
 jobs:
   include:
+    - os: windows
+      node_js: 16
+      env: YARN_GPG=no # so windows exits
+      
     - os: windows
       node_js: 16
       env: YARN_GPG=no # so windows exits
