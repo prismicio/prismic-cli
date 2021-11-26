@@ -11,9 +11,8 @@ node_js:
 jobs:
   include:
     - os: windows
-      node_js: 16
       env: YARN_GPG=no # so windows exits
-      
+
     - os: windows
       node_js: 16
       env: YARN_GPG=no # so windows exits
