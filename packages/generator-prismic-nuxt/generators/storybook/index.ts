@@ -34,9 +34,11 @@ export default class StoryBookNuxt extends PrismicGenerator {
         'build-storybook': 'nuxt storybook build',
       },
       devDependencies: {
+        sass: '^1.35.1',
         '@storybook/vue': '6.1.21',
         'vue-loader': '15.9.6',
         '@nuxtjs/storybook': '3.3.1',
+        'sass-loader': '^10.1.1',
       },
     }
 
