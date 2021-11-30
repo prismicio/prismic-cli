@@ -39,6 +39,7 @@ export default class StoryBookNuxt extends PrismicGenerator {
         'vue-loader': '15.9.6',
         '@nuxtjs/storybook': '3.3.1',
         'sass-loader': '^10.1.1',
+        'slice-machine-ui': '^0.1.2',
       },
     }
 
