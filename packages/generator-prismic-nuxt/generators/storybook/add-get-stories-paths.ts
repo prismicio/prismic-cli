@@ -40,9 +40,28 @@ function addStoriesPlugin(): babel.PluginObj {
   return {
     visitor: {
       ObjectExpression(path) {
-        const elementToInsert = t.spreadElement(
-          t.callExpression(t.identifier('getStoriesPaths'), []),
-        )
+        const elementToInsert = t.spreadElement(t.callExpression(
+          t.memberExpression(
+            t.callExpression(t.identifier('getStoriesPaths'), []),
+            t.identifier('map'),
+          ),
+          [
+            t.arrowFunctionExpression(
+              [t.identifier('path')],
+              t.callExpression(
+                t.memberExpression(
+                  t.identifier('path'),
+                  t.identifier('replace'),
+                ),
+                [
+                  t.stringLiteral('../'),
+                  t.stringLiteral('~/'),
+                ],
+              ),
+            ),
+          ],
+        ))
+
         if (t.isObjectExpression(path) && t.isExportDeclaration(path.parent)) {
           const keys = getKeys(path.node.properties)
           const hasStorybook = keys.includes('storybook')
@@ -74,6 +93,18 @@ function addStoriesPlugin(): babel.PluginObj {
                 } else {
                   prop.value.properties.forEach(storyBookProps => {
                     if (t.isObjectProperty(storyBookProps) && t.isIdentifier(storyBookProps.key) && t.isArrayExpression(storyBookProps.value) && storyBookProps.key.name === 'stories') {
+                      // clean up old getStoriesPaths
+                      storyBookProps.value.elements.forEach((elem, i, arr) => {
+                        if (
+                          t.isSpreadElement(elem) &&
+                          t.isCallExpression(elem.argument) &&
+                          t.isIdentifier(elem.argument.callee) &&
+                          elem.argument.callee.name === 'getStoriesPaths'
+                        ) {
+                          arr.splice(i, 1)
+                        }
+                      })
+
                       const maybeElementIsThere = storyBookProps.value.elements.reduce((acc, elem) => {
                         if (acc) return acc
                         const same = (
@@ -82,9 +113,13 @@ function addStoriesPlugin(): babel.PluginObj {
                           elem.argument &&
                           t.isCallExpression(elem.argument) &&
                           elem.argument.type === elementToInsert.argument.type &&
-                          t.isIdentifier(elem.argument.callee) &&
+                          t.isMemberExpression(elem.argument.callee) &&
                           elem.argument.callee.type === elementToInsert.argument.callee.type &&
-                          elem.argument.callee.name === elementToInsert.argument.callee.name
+                          t.isCallExpression(elem.argument.callee.object) &&
+                          elem.argument.callee.object.type === elementToInsert.argument.callee.object.type &&
+                          t.isIdentifier(elem.argument.callee.object.callee) &&
+                          t.isIdentifier(elementToInsert.argument.callee.object.callee) &&
+                          elem.argument.callee.object.callee.name === elementToInsert.argument.callee.object.callee.name
                         )
                         return same
                       }, false)

@@ -242,7 +242,7 @@ describe('new', () => {
       const pathToNuxtConfig = path.join(fakeFolder, 'nuxt.config.js')
       expect(fs.existsSync(pathToNuxtConfig), 'should create nuxt.config.js').to.be.true
       const config = await fs.readFile(pathToNuxtConfig, {encoding: 'utf-8'})
-      expect(config, 'should add stories to nuxt config').to.include('stories: [...getStoriesPaths()]')
+      expect(config, 'should add stories to nuxt config').to.include('stories: [...getStoriesPaths().map(path => path.replace("../", "~/"))]')
       done()
     })
   })
