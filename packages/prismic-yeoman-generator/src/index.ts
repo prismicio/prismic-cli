@@ -202,7 +202,7 @@ export default abstract class PrismicGenerator extends Generator {
     const customTypes: Array<CustomType> = []
 
     this.env.sharedFs.each(file => {
-      if (file.isNew && file.path.startsWith(pathToFolder) && file.basename === 'index.json' && file.path !== toIgnore) {
+      if (file.path.startsWith(pathToFolder) && file.basename === 'index.json' && file.path !== toIgnore) {
         const ct = this.readDestinationJSON(file.path) as unknown as SliceMachineCustomType
         const {json, label, ...meta} = ct
         // renaming these properties for now
@@ -216,7 +216,7 @@ export default abstract class PrismicGenerator extends Generator {
   /**
    * Read custom-types from mem-fs. This is used to send custom types during repo creation
    *
-   * @param {?string} customTypesDirectory - the directory to read the custom types from defaults to 'custom_types'
+   * @param {?string} maybeCustomTypesDirectory - the directory to read the custom types from defaults to 'custom_types'
    * @returns {Array<CustomType>} - or an empty array
    *
    * @example
