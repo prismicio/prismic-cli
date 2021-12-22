@@ -202,6 +202,7 @@ describe('new', () => {
       slicemachine: true,
       library: 'slices',
       sliceName: 'MySlice',
+      ci: 'none',
     })
 
     test
