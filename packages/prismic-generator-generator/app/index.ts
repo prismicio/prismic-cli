@@ -98,13 +98,9 @@ export default class extends Generator {
       this.templatePath(template),
       this.destinationPath(),
       opts,
+      {},
+      {globOptions: {dot: true}},
     )
-
-    this.moveDestination('_.gitignore', '.gitignore')
-    this.moveDestination('_package.json', 'package.json')
-    if (this.language === 'typescript') {
-      this.moveDestination('_tsconfig.json', 'tsconfig.json')
-    }
 
     if (!this.slicemachine) {
       this.deleteDestination(path.join('generators', 'slicemachine'))
