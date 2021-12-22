@@ -26,7 +26,7 @@
     "@types/inquirer": "^7.3.1",
     "@types/node": "^14.14.10",
     "@types/qs": "^6.9.5",
-    "@types/yeoman-generator": "^4.11.3",
+    "@types/yeoman-generator": "^5.2.7",
     "adm-zip": "^0.5.1",
     "axios": "^0.21.0",
     "chalk": "^4.1.1",
@@ -48,6 +48,8 @@
     "koa-bodyparser": "^4.3.0",
     "libnpmconfig": "^1.2.1",
     "lookpath": "^1.2.0",
+    "mem-fs": "^2.2.1",
+    "mem-fs-editor": "^9.4.0",
     "qs": "^6.9.4",
     "semver": "^7.3.5",
     "serialize-error": "^8.0.1",
@@ -55,8 +57,8 @@
     "sm-commons": "^0.0.23",
     "tmp-promise": "^3.0.2",
     "tslib": "^1",
-    "yeoman-environment": "^2.10.3",
-    "yeoman-generator": "^4.12.0"
+    "yeoman-environment": "^3.8.1",
+    "yeoman-generator": "^5.4.2"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",

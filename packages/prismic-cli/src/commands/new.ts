@@ -70,18 +70,8 @@ export default class New extends Command {
       choices: generators,
     }).then(res => res.template)
 
-    return new Promise((resolve, reject) => {
-      prismicGenerators.run(template, {
-        ...flags,
-        domain,
-        path: folder,
-        prismic: this.prismic,
-        existingRepo,
-      }, ((err: Error) => {
-        if (err) return reject(err)
-        return resolve(null)
-      }) as (err: Error | null) => void)
-    })
+    // @ts-expect-error
+    return prismicGenerators.run(template, {...flags, domain, path: folder, prismic: this.prismic, existingRepo})
   }
 
   async validateTemplate(template: string | undefined, options: Array<string>): Promise<string> {

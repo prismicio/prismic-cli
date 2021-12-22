@@ -1,5 +1,6 @@
 // see https://github.com/oclif/oclif/blob/master/src/generators/app.ts
 import * as Generator from 'yeoman-generator'
+Object.assign(Generator.prototype, require('yeoman-generator/lib/actions/install'))
 import axios from 'axios'
 import * as tmp from 'tmp-promise'
 import * as AdmZip from 'adm-zip'
