@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "devDependencies": {
-    "@commitlint/cli": "^11.0.0",
+    "@commitlint/cli": "^16.0.1",
     "@commitlint/config-conventional": "^11.0.0",
     "eslint": "^7",
     "eslint-config-oclif": "^3.1",
