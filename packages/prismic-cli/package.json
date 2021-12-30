@@ -16,7 +16,6 @@
     "@babel/traverse": "^7.12.12",
     "@babel/types": "^7.12.12",
     "@hapi/hapi": "^20.1.5",
-    "@koa/cors": "^3.1.0",
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^3",
