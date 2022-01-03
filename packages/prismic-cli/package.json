@@ -32,7 +32,7 @@
     "chalk": "^4.1.1",
     "cli-ux": "^5.5.1",
     "cookie": "^0.4.1",
-    "create-nuxt-app": "^3.5.0",
+    "create-nuxt-app": "^4.0.0",
     "email-validator": "^2.0.4",
     "fast-glob": "^3.2.5",
     "fs-extra": "^9.1.0",
