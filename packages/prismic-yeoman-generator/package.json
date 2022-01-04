@@ -1,6 +1,6 @@
 {
   "name": "@prismicio/prismic-yeoman-generator",
-  "version": "4.2.0",
+  "version": "4.2.1-alpha.0",
   "description": "custom yeoman generator for building projects with prismic",
   "main": "src",
   "repository": "https://github.com/prismicio/prismic-cli",
@@ -43,7 +43,7 @@
     "ejs": "^3.1.6",
     "lodash.camelcase": "^4.3.0",
     "lookpath": "^1.2.0",
-    "prismic-cli": "4.2.0",
+    "prismic-cli": "4.2.1-alpha.0",
     "sm-commons": "^0.0.23",
     "tmp-promise": "^3.0.2",
     "tslib": "^1",
