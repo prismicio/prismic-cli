@@ -1,3 +1,7 @@
+## [4.2.1-alpha.1](https://github.com/prismicio/prismic-cli/compare/v4.2.1-alpha.0...v4.2.1-alpha.1) (2022-01-12)
+
+
+
 ## [4.2.1-alpha.0](https://github.com/prismicio/prismic-cli/compare/v4.2.0...v4.2.1-alpha.0) (2022-01-04)
 
 
