@@ -167,12 +167,8 @@ export default class Slicemachine extends Command {
   }
 
   async envRun(generatorName: string, options: Record<string, any>): Promise<void> {
-    return new Promise((resolve, reject) => {
-      return env.run(generatorName, options, err => {
-        if (err) return reject(err)
-        return resolve()
-      })
-    })
+    // @ts-expect-error
+    return env.run(generatorName, options)
   }
 
   async run() {

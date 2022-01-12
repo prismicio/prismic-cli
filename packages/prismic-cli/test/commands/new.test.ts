@@ -202,6 +202,7 @@ describe('new', () => {
       slicemachine: true,
       library: 'slices',
       sliceName: 'MySlice',
+      ci: 'none',
     })
 
     test
@@ -221,7 +222,7 @@ describe('new', () => {
       api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
     })
     .command(['new', '--template', 'Nuxt', '--domain', fakeDomain, '--folder', fakeFolder, '--force', '--skip-install'])
-    .it('should generate a nuxt slicemachine project', async (_, done) => {
+    .it('should generate a nuxt slicemachine project', async () => {
       const pkJsonPath = path.join(fakeFolder, 'package.json')
       const smJsonPath = path.join(fakeFolder, 'sm.json')
       expect(fs.existsSync(pkJsonPath), 'package.json').to.be.true
@@ -243,7 +244,6 @@ describe('new', () => {
       expect(fs.existsSync(pathToNuxtConfig), 'should create nuxt.config.js').to.be.true
       const config = await fs.readFile(pathToNuxtConfig, {encoding: 'utf-8'})
       expect(config, 'should add stories to nuxt config').to.include('stories: [...getStoriesPaths().map(path => path.replace("../", "~/"))]')
-      done()
     })
   })
 })

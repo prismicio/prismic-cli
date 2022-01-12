@@ -48,11 +48,7 @@ export default class CreateGenerator extends Command {
     const env = createEnv()
     env.register(require.resolve('@prismicio/prismic-generator-generator'), 'generator')
 
-    return new Promise((resolve, reject) => {
-      env.run('generator', {...flags, path: folder}, error => {
-        if (error) return reject(error)
-        return resolve(null)
-      })
-    })
+    // @ts-expect-error
+    return env.run('generator', {...flags, path: folder})
   }
 }
