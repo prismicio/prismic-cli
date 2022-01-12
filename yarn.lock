@@ -2980,10 +2980,10 @@ byte-size@^5.0.1:
   resolved "https://registry.yarnpkg.com/byte-size/-/byte-size-5.0.1.tgz#4b651039a5ecd96767e71a3d7ed380e48bed4191"
   integrity sha512-/XuKeqWocKsYa/cBY1YbSJSWWqTi4cFgr9S6OyM7PBaPbr9zvNGwWP33vt0uqGhwDdN+y3yhbXVILEUpnwEWGw==
 
-cac@^6.3.8, cac@^6.7.3:
-  version "6.7.3"
-  resolved "https://registry.yarnpkg.com/cac/-/cac-6.7.3.tgz#10410b8611677990cc2e3c8b576d471c1d71b768"
-  integrity sha512-ECVqVZh74qgSuZG9YOt2OJPI3wGcf+EwwuF/XIOYqZBD0KZYLtgPWqFPxmDPQ6joxI1nOlvVgRV6VT53Ooyocg==
+cac@^6.3.8, cac@^6.7.12:
+  version "6.7.12"
+  resolved "https://registry.yarnpkg.com/cac/-/cac-6.7.12.tgz#6fb5ea2ff50bd01490dbda497f4ae75a99415193"
+  integrity sha512-rM7E2ygtMkJqD9c7WnFU6fruFcN3xe4FM5yUmgxhZzIKJk4uHl9U/fhwdajGFQbQuv43FAUo1Fe8gX/oIKDeSA==
 
 cacache@^12.0.0, cacache@^12.0.3:
   version "12.0.4"
@@ -3195,7 +3195,7 @@ chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0, chalk@^2.3.0, chalk@^2.3.1, chalk@^2.4
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
-chalk@^4.0.0, chalk@^4.1.0, chalk@^4.1.1:
+chalk@^4.0.0, chalk@^4.1.0, chalk@^4.1.1, chalk@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.2.tgz#aac4e2b7734a740867aeb16bf02aad556a1e7a01"
   integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==
@@ -3424,10 +3424,10 @@ cmd-shim@^4.0.1:
   dependencies:
     mkdirp-infer-owner "^2.0.0"
 
-cna-template@^3.7.1:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/cna-template/-/cna-template-3.7.1.tgz#a3eeff39fe80115b000fb8397bdb579a323c3644"
-  integrity sha512-v6vYQxtpltTv6421A/zJ9g5T3ch9u0lObHbuB3UubnC7/TZEDwCSk02Nn8ODDB/mWWPr1kwa+55TNWyVpYhi7w==
+cna-template@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/cna-template/-/cna-template-4.0.0.tgz#73a4f2021ff96117f94c656ad92e07734386de20"
+  integrity sha512-V9XOZ36LePGvL5aWUI0P4BtRKqKMgD5lHuOXs352aiNL0QBB5TxmkKJ3BRhCOkp/njmytUuKyQYDh5XfHV0AVQ==
 
 code-point-at@^1.0.0:
   version "1.1.0"
@@ -3820,14 +3820,14 @@ create-error-class@^3.0.0:
   dependencies:
     capture-stack-trace "^1.0.0"
 
-create-nuxt-app@^3.5.0:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/create-nuxt-app/-/create-nuxt-app-3.7.1.tgz#d3972d3dab4e3d2a7bc72c8270215c5f901746a6"
-  integrity sha512-SwBJJZm8cr9Yacof0GxEY8U2/XVrK8GNwiCOI7VnIH5FDStWJaEaDsXek28N41AF1Dna7CoQiipd5MYSdOZF6g==
+create-nuxt-app@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/create-nuxt-app/-/create-nuxt-app-4.0.0.tgz#6affb1a7960831c4153d084e97347e1aaf54a5da"
+  integrity sha512-0qOcL0gM5XUS/bsTRZ4y5XAs0kPXoQws7cLtt1hVnC7taybIQuGm5Dcwz8ciY7SqniMrlycFZVoQq1W7Yo7kgw==
   dependencies:
-    cac "^6.7.3"
-    chalk "^4.1.1"
-    cna-template "^3.7.1"
+    cac "^6.7.12"
+    chalk "^4.1.2"
+    cna-template "^4.0.0"
     cross-spawn "^7.0.3"
     envinfo "^7.8.1"
     lodash "^4.17.21"
