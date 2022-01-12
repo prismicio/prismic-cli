@@ -27,7 +27,7 @@
     "@types/qs": "^6.9.5",
     "@types/yeoman-generator": "^5.2.7",
     "adm-zip": "^0.5.1",
-    "axios": "^0.21.0",
+    "axios": "^0.24.0",
     "chalk": "^4.1.1",
     "cli-ux": "^5.5.1",
     "cookie": "^0.4.1",

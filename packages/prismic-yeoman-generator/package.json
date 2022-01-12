@@ -38,7 +38,7 @@
   "dependencies": {
     "@types/yeoman-generator": "^5.2.7",
     "adm-zip": "^0.5.1",
-    "axios": "^0.21.0",
+    "axios": "^0.24.0",
     "cli-ux": "^5.5.1",
     "ejs": "^3.1.6",
     "lodash.camelcase": "^4.3.0",
