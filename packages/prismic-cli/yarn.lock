@@ -618,17 +618,17 @@
   dependencies:
     fancy-test "^1.4.3"
 
-"@prismicio/prismic-generator-generator@4.2.0-beta.3":
-  version "4.2.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@prismicio/prismic-generator-generator/-/prismic-generator-generator-4.2.0-beta.3.tgz#f15fc25ceec9ed0344e0fb3d690779c3417cc3fe"
+"@prismicio/prismic-generator-generator@4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@prismicio/prismic-generator-generator/-/prismic-generator-generator-4.2.0.tgz#77b66e35179df7bf1eeae28e6ee89912c724ac26"
   dependencies:
     inquirer "^7.3.3"
     tslib "^1"
     yeoman-generator "^4.11.3"
 
-"@prismicio/prismic-yeoman-generator@4.2.0-beta.3":
-  version "4.2.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@prismicio/prismic-yeoman-generator/-/prismic-yeoman-generator-4.2.0-beta.3.tgz#8cb68718e9598d89f4d2ce603375a850da27fa26"
+"@prismicio/prismic-yeoman-generator@4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@prismicio/prismic-yeoman-generator/-/prismic-yeoman-generator-4.2.0.tgz#fbd5cc8c4b0bf42afef410e4858e70a6c0920046"
   dependencies:
     "@types/yeoman-generator" "^4.11.3"
     adm-zip "^0.5.1"
@@ -637,7 +637,7 @@
     ejs "^3.1.6"
     lodash.camelcase "^4.3.0"
     lookpath "^1.2.0"
-    prismic-cli "4.2.0-beta.3"
+    prismic-cli "4.2.0"
     sm-commons "^0.0.23"
     tmp-promise "^3.0.2"
     tslib "^1"
@@ -1286,8 +1286,8 @@ axios@^0.21.0:
     follow-redirects "^1.14.0"
 
 balanced-match@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.0.tgz"
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
 
 base64-js@^1.3.1:
   version "1.5.1"
@@ -1348,7 +1348,7 @@ boxen@^1.2.1:
 
 brace-expansion@^1.1.7:
   version "1.1.11"
-  resolved "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz"
+  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.11.tgz#3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
   dependencies:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
@@ -1784,7 +1784,7 @@ component-emitter@^1.2.1:
 
 concat-map@0.0.1:
   version "0.0.1"
-  resolved "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
 
 conf@^2.0.0:
   version "2.2.0"
@@ -2912,28 +2912,28 @@ fs-extra@^9.1.0:
 
 fs.realpath@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
 
 function-bind@^1.1.1:
   version "1.1.1"
-  resolved "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
+  resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
 
 functional-red-black-tree@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz"
 
-generator-prismic-angular2@4.2.0-beta.3:
-  version "4.2.0-beta.3"
-  resolved "https://registry.yarnpkg.com/generator-prismic-angular2/-/generator-prismic-angular2-4.2.0-beta.3.tgz#a0646e3a7808754438cae6f44c64c9740dbf9d47"
+generator-prismic-angular2@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/generator-prismic-angular2/-/generator-prismic-angular2-4.2.0.tgz#5c8a481fe25c903738b4b08e2208530e28a73c95"
   dependencies:
-    "@prismicio/prismic-yeoman-generator" "4.2.0-beta.3"
+    "@prismicio/prismic-yeoman-generator" "4.2.0"
     tslib "^1"
 
-generator-prismic-nextjs@4.2.0-beta.3:
-  version "4.2.0-beta.3"
-  resolved "https://registry.yarnpkg.com/generator-prismic-nextjs/-/generator-prismic-nextjs-4.2.0-beta.3.tgz#8bb5b8dff5df15ea385be35f271f5ce525a36f68"
+generator-prismic-nextjs@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/generator-prismic-nextjs/-/generator-prismic-nextjs-4.2.0.tgz#2f08e650c5ccfd07baa94de9347300bdc91470ec"
   dependencies:
-    "@prismicio/prismic-yeoman-generator" "4.2.0-beta.3"
+    "@prismicio/prismic-yeoman-generator" "4.2.0"
     chalk "^4.1.1"
     inquirer "^7.3.3"
     is-valid-path "^0.1.1"
@@ -2942,16 +2942,16 @@ generator-prismic-nextjs@4.2.0-beta.3:
     tslib "^1"
     yeoman-generator "^4.12.0"
 
-generator-prismic-nodejs@4.2.0-beta.3:
-  version "4.2.0-beta.3"
-  resolved "https://registry.yarnpkg.com/generator-prismic-nodejs/-/generator-prismic-nodejs-4.2.0-beta.3.tgz#70b2d854f9e585d8c824b55fcc0f1ca1c293e51b"
+generator-prismic-nodejs@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/generator-prismic-nodejs/-/generator-prismic-nodejs-4.2.0.tgz#7713b56afa560debc89b11d3c9e248742a763d65"
   dependencies:
-    "@prismicio/prismic-yeoman-generator" "4.2.0-beta.3"
+    "@prismicio/prismic-yeoman-generator" "4.2.0"
     tslib "^1"
 
-generator-prismic-nuxt@4.2.0-beta.3:
-  version "4.2.0-beta.3"
-  resolved "https://registry.yarnpkg.com/generator-prismic-nuxt/-/generator-prismic-nuxt-4.2.0-beta.3.tgz#7408941c3698f9bf401df8d62f2df3e8aa95dc57"
+generator-prismic-nuxt@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/generator-prismic-nuxt/-/generator-prismic-nuxt-4.2.0.tgz#aff83f9b96b0323ba8ba179fa643cd8bdd185c0a"
   dependencies:
     "@babel/core" "^7.15.0"
     "@babel/generator" "^7.15.4"
@@ -2959,7 +2959,7 @@ generator-prismic-nuxt@4.2.0-beta.3:
     "@babel/template" "^7.14.5"
     "@babel/traverse" "^7.15.4"
     "@babel/types" "^7.15.4"
-    "@prismicio/prismic-yeoman-generator" "4.2.0-beta.3"
+    "@prismicio/prismic-yeoman-generator" "4.2.0"
     chalk "^4.1.1"
     create-nuxt-app "^3.5.0"
     inquirer "^7.3.3"
@@ -2968,18 +2968,18 @@ generator-prismic-nuxt@4.2.0-beta.3:
     sm-commons "^0.0.23"
     tslib "^1"
 
-generator-prismic-react@4.2.0-beta.3:
-  version "4.2.0-beta.3"
-  resolved "https://registry.yarnpkg.com/generator-prismic-react/-/generator-prismic-react-4.2.0-beta.3.tgz#ce6ac4560e3889bca9df78206d3d952a29dea3b3"
+generator-prismic-react@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/generator-prismic-react/-/generator-prismic-react-4.2.0.tgz#ef077582b244af5e93777a877945aa3f4302f245"
   dependencies:
-    "@prismicio/prismic-yeoman-generator" "4.2.0-beta.3"
+    "@prismicio/prismic-yeoman-generator" "4.2.0"
     tslib "^1"
 
-generator-prismic-vue@4.2.0-beta.3:
-  version "4.2.0-beta.3"
-  resolved "https://registry.yarnpkg.com/generator-prismic-vue/-/generator-prismic-vue-4.2.0-beta.3.tgz#889ff9dde6bc5de1bdbe1b1ef4adfa93c4387b2d"
+generator-prismic-vue@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/generator-prismic-vue/-/generator-prismic-vue-4.2.0.tgz#7c21239757b820af63ed41f3650b3aec91086e36"
   dependencies:
-    "@prismicio/prismic-yeoman-generator" "4.2.0-beta.3"
+    "@prismicio/prismic-yeoman-generator" "4.2.0"
     tslib "^1"
 
 gensync@^1.0.0-beta.2:
@@ -3122,8 +3122,8 @@ glob@7.1.2:
     path-is-absolute "^1.0.0"
 
 glob@^7.0.0, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6:
-  version "7.1.6"
-  resolved "https://registry.npmjs.org/glob/-/glob-7.1.6.tgz"
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-7.2.0.tgz#d15535af7732e02e948f4c41628bd910293f6023"
   dependencies:
     fs.realpath "^1.0.0"
     inflight "^1.0.4"
@@ -3306,7 +3306,7 @@ has-values@^1.0.0:
 
 has@^1.0.3:
   version "1.0.3"
-  resolved "https://registry.npmjs.org/has/-/has-1.0.3.tgz"
+  resolved "https://registry.yarnpkg.com/has/-/has-1.0.3.tgz#722d7cbfc1f6aa8241f16dd814e011e1f41e8796"
   dependencies:
     function-bind "^1.1.1"
 
@@ -3455,7 +3455,7 @@ inflation@^2.0.0:
 
 inflight@^1.0.4:
   version "1.0.6"
-  resolved "https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz"
+  resolved "https://registry.yarnpkg.com/inflight/-/inflight-1.0.6.tgz#49bd6331d7d02d0c09bc910a1075ba8165b56df9"
   dependencies:
     once "^1.3.0"
     wrappy "1"
@@ -3506,7 +3506,7 @@ inquirer@^7.1.0, inquirer@^7.3.3:
 
 interpret@^1.0.0:
   version "1.4.0"
-  resolved "https://registry.npmjs.org/interpret/-/interpret-1.4.0.tgz"
+  resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.4.0.tgz#665ab8bc4da27a774a40584e812e3e0fa45b1a1e"
 
 is-accessor-descriptor@^0.1.6:
   version "0.1.6"
@@ -3547,6 +3547,12 @@ is-ci@^1.0.10:
 is-core-module@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/is-core-module/-/is-core-module-2.1.0.tgz"
+  dependencies:
+    has "^1.0.3"
+
+is-core-module@^2.8.0:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.8.1.tgz#f59fdfca701d5879d0a6b100a40aa1560ce27211"
   dependencies:
     has "^1.0.3"
 
@@ -4430,7 +4436,7 @@ min-indent@^1.0.0:
 
 minimatch@3.0.4, minimatch@^3.0.4:
   version "3.0.4"
-  resolved "https://registry.npmjs.org/minimatch/-/minimatch-3.0.4.tgz"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
   dependencies:
     brace-expansion "^1.1.7"
 
@@ -4714,7 +4720,7 @@ on-finished@^2.3.0:
 
 once@^1.3.0, once@^1.3.1, once@^1.4.0:
   version "1.4.0"
-  resolved "https://registry.npmjs.org/once/-/once-1.4.0.tgz"
+  resolved "https://registry.yarnpkg.com/once/-/once-1.4.0.tgz#583b1aa775961d4b113ac17d9c50baef9dd76bd1"
   dependencies:
     wrappy "1"
 
@@ -4897,7 +4903,7 @@ path-exists@^4.0.0:
 
 path-is-absolute@^1.0.0:
   version "1.0.1"
-  resolved "https://registry.npmjs.org/path-is-absolute/-/path-is-absolute-1.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/path-is-absolute/-/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
 
 path-is-inside@^1.0.1:
   version "1.0.2"
@@ -4914,6 +4920,10 @@ path-key@^3.0.0, path-key@^3.1.0:
 path-parse@^1.0.6:
   version "1.0.6"
   resolved "https://registry.npmjs.org/path-parse/-/path-parse-1.0.6.tgz"
+
+path-parse@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
 
 path-to-regexp@^1.7.0:
   version "1.8.0"
@@ -5017,9 +5027,9 @@ pretty-bytes@^5.2.0:
   version "5.4.1"
   resolved "https://registry.npmjs.org/pretty-bytes/-/pretty-bytes-5.4.1.tgz"
 
-prismic-cli@4.2.0-beta.3:
-  version "4.2.0-beta.3"
-  resolved "https://registry.yarnpkg.com/prismic-cli/-/prismic-cli-4.2.0-beta.3.tgz#472564cfac0c17dee5f368bdbaf16b8be425d90a"
+prismic-cli@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/prismic-cli/-/prismic-cli-4.2.0.tgz#93461e875ec0c55482096647f561d65f730f3956"
   dependencies:
     "@babel/generator" "^7.12.11"
     "@babel/parser" "^7.12.11"
@@ -5030,8 +5040,8 @@ prismic-cli@4.2.0-beta.3:
     "@oclif/command" "^1"
     "@oclif/config" "^1"
     "@oclif/plugin-help" "^3"
-    "@prismicio/prismic-generator-generator" "4.2.0-beta.3"
-    "@prismicio/prismic-yeoman-generator" "4.2.0-beta.3"
+    "@prismicio/prismic-generator-generator" "4.2.0"
+    "@prismicio/prismic-yeoman-generator" "4.2.0"
     "@types/adm-zip" "^0.4.33"
     "@types/inquirer" "^7.3.1"
     "@types/node" "^14.14.10"
@@ -5046,12 +5056,12 @@ prismic-cli@4.2.0-beta.3:
     email-validator "^2.0.4"
     fast-glob "^3.2.5"
     fs-extra "^9.1.0"
-    generator-prismic-angular2 "4.2.0-beta.3"
-    generator-prismic-nextjs "4.2.0-beta.3"
-    generator-prismic-nodejs "4.2.0-beta.3"
-    generator-prismic-nuxt "4.2.0-beta.3"
-    generator-prismic-react "4.2.0-beta.3"
-    generator-prismic-vue "4.2.0-beta.3"
+    generator-prismic-angular2 "4.2.0"
+    generator-prismic-nextjs "4.2.0"
+    generator-prismic-nodejs "4.2.0"
+    generator-prismic-nuxt "4.2.0"
+    generator-prismic-react "4.2.0"
+    generator-prismic-vue "4.2.0"
     inquirer "^7.3.3"
     is-valid-path "^0.1.1"
     koa "^2.13.1"
@@ -5270,7 +5280,7 @@ readable-stream@3, readable-stream@^3.0.0, readable-stream@^3.1.1, readable-stre
 
 rechoir@^0.6.2:
   version "0.6.2"
-  resolved "https://registry.npmjs.org/rechoir/-/rechoir-0.6.2.tgz"
+  resolved "https://registry.yarnpkg.com/rechoir/-/rechoir-0.6.2.tgz#85204b54dba82d5742e28c96756ef43af50e3384"
   dependencies:
     resolve "^1.1.6"
 
@@ -5395,7 +5405,15 @@ resolve-url@^0.2.1:
   version "0.2.1"
   resolved "https://registry.npmjs.org/resolve-url/-/resolve-url-0.2.1.tgz"
 
-resolve@^1.1.6, resolve@^1.10.0, resolve@^1.17.0, resolve@^1.8.1:
+resolve@^1.1.6:
+  version "1.21.0"
+  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.21.0.tgz#b51adc97f3472e6a5cf4444d34bc9d6b9037591f"
+  dependencies:
+    is-core-module "^2.8.0"
+    path-parse "^1.0.7"
+    supports-preserve-symlinks-flag "^1.0.0"
+
+resolve@^1.10.0, resolve@^1.17.0, resolve@^1.8.1:
   version "1.19.0"
   resolved "https://registry.npmjs.org/resolve/-/resolve-1.19.0.tgz"
   dependencies:
@@ -5580,8 +5598,8 @@ shebang-regex@^3.0.0:
   resolved "https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz"
 
 shelljs@^0.8.3:
-  version "0.8.4"
-  resolved "https://registry.npmjs.org/shelljs/-/shelljs-0.8.4.tgz"
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.8.5.tgz#de055408d8361bed66c669d2f000538ced8ee20c"
   dependencies:
     glob "^7.0.0"
     interpret "^1.0.0"
@@ -5949,6 +5967,10 @@ supports-hyperlinks@^2.1.0:
   dependencies:
     has-flag "^4.0.0"
     supports-color "^7.0.0"
+
+supports-preserve-symlinks-flag@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
 
 table@^6.0.9:
   version "6.7.1"
@@ -6477,7 +6499,7 @@ wrap-ansi@^7.0.0:
 
 wrappy@1:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/wrappy/-/wrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
 
 write-file-atomic@^2.0.0, write-file-atomic@^2.3.0, write-file-atomic@^2.4.2:
   version "2.4.3"
