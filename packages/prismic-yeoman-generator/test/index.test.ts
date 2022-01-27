@@ -11,6 +11,7 @@ import * as sinon from 'sinon'
 import * as cli from 'cli-ux'
 
 import {ObjectWritableMock} from 'stream-mock'
+import {createEnv} from 'yeoman-environment'
 
 import {Theme as fakeTheme} from './__stubs__'
 
@@ -22,6 +23,7 @@ describe('prismic-yeoman-generator', () => {
       prismic: {} as Prismic,
       force: false,
       path: path.join(os.tmpdir(), 'prismic-yeoman-generator-test'),
+      env: createEnv(),
     }
     return new Gen([], options)
   }

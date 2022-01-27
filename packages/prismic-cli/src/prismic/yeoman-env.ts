@@ -1,8 +1,12 @@
+/* eslint-disable unicorn/no-abusive-eslint-disable, @typescript-eslint/ban-ts-ignore */
+
 import {createEnv, GeneratorMeta} from 'yeoman-environment'
 
 const env = createEnv()
 
 export const all = env.lookup({
+  // @ts-ignore
+  lookups: ['generators'],
   packagePatterns: ['generator-prismic-*'],
 })
 

@@ -77,20 +77,7 @@ export default class Theme extends Command {
       require.resolve('../generators/theme'),
       'Theme',
     )
-
-    return new Promise((resolve, reject) => {
-      generator.run('Theme', {
-        domain,
-        source: theme,
-        path: folder,
-        prismic: this.prismic,
-        configPath: flags.conf,
-        existingRepo,
-        ...flags,
-      }, ((err: Error, results: any) => {
-        if (err) reject(err)
-        else resolve(results)
-      }) as (err: Error | null) => void)
-    })
+    // @ts-expect-error
+    return generator.run('Theme', {domain, source: theme, path: folder, prismic: this.prismic, configPath: flags.conf, existingRepo, ...flags})
   }
 }

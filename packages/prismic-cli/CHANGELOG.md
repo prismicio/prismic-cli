@@ -1,3 +1,19 @@
+## [4.2.1-alpha.1](https://github.com/prismicio/prismic-cli/compare/v4.2.1-alpha.0...v4.2.1-alpha.1) (2022-01-12)
+
+
+
+## [4.2.1-alpha.0](https://github.com/prismicio/prismic-cli/compare/v4.2.0...v4.2.1-alpha.0) (2022-01-04)
+
+
+### Bug Fixes
+
+* 'lib/generator` lookup issue ([989250e](https://github.com/prismicio/prismic-cli/commit/989250e39d7aa134cfeac572ab3d7c5d9e4dafa1))
+* **crete-generator:** issues with re-nameing files ([1d0a424](https://github.com/prismicio/prismic-cli/commit/1d0a424b7a77d49303d3cf0ca55e8a85aaa810bf))
+* **generator-nuxt:** update to how  getStoriesPaths is called in nuxt config ([5279f8a](https://github.com/prismicio/prismic-cli/commit/5279f8ae45e757d80e817d52f027476285e302a8))
+* linting issues ([98196b0](https://github.com/prismicio/prismic-cli/commit/98196b0d67bdf13a7e993182859496e1ea0808cd))
+
+
+
 # [4.2.0](https://github.com/prismicio/prismic-cli/compare/v4.2.0-beta.3...v4.2.0) (2021-09-23)
 
 
