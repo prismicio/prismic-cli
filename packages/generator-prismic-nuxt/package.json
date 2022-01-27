@@ -40,7 +40,7 @@
   },
   "scripts": {
     "clean": "del-cli generators/**/*.js generators/**/*.d.ts !generators/**/templates/**/*.js",
-    "prepack": "del-cli generators/**/*.js generators/**/*.d.tsm !generators/**/templates/**/*.js && tsc -b",
+    "prepack": "del-cli generators/**/*.js generators/**/*.d.ts !generators/**/templates/**/*.js && tsc -b",
     "test": "nyc --extension .ts mocha \"test/**/*.test.ts\""
   },
   "gitHead": "a36c058ffb375807bed3d47981f699af42346aad"
