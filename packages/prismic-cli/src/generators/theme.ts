@@ -3,7 +3,8 @@ import * as Framework from '../utils/framework'
 
 export interface ThemeOptions extends TemplateOptions {
   source: string;
-  configPath?: string;
+  configPath: string;
+  documentsPath: string;
 }
 
 export default class PrismicTheme extends PrismicGenerator {
