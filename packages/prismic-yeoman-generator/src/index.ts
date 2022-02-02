@@ -260,7 +260,7 @@ export default abstract class PrismicGenerator extends Generator {
     const documents: Document = {}
 
     this.env.sharedFs.each(file => {
-      if (file.isNew && file.path.startsWith(pathToDocuments) && file.basename !== 'index.json') {
+      if (file.path.startsWith(pathToDocuments) && file.basename !== 'index.json') {
         const name: string = file.stem
         const value = this.fs.readJSON(file.relative)
         documents[name] = value

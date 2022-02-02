@@ -77,7 +77,10 @@ export default class Theme extends Command {
       require.resolve('../generators/theme'),
       'Theme',
     )
+
+    const {conf: configPath, documents: documentsPath, customTypes: customTypesPath, ...rest} = flags
+
     // @ts-expect-error
-    return generator.run('Theme', {domain, source: theme, path: folder, prismic: this.prismic, configPath: flags.conf, existingRepo, ...flags})
+    return generator.run('Theme', {domain, source: theme, path: folder, prismic: this.prismic, configPath, existingRepo, documentsPath, customTypesPath, ...rest})
   }
 }
