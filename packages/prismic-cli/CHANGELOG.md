@@ -1,3 +1,12 @@
+## [4.2.2](https://github.com/prismicio/prismic-cli/compare/v4.2.1...v4.2.2) (2022-02-02)
+
+
+### Bug Fixes
+
+* theme not reading documents ([34d9a70](https://github.com/prismicio/prismic-cli/commit/34d9a7050854d7618a61c6b5a1ea09a727b6792b))
+
+
+
 ## [4.2.1](https://github.com/prismicio/prismic-cli/compare/v4.2.1-alpha.1...v4.2.1) (2022-01-27)
 
 
