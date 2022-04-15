@@ -64,7 +64,17 @@ export default class PrismicTheme extends PrismicGenerator {
     const location = this.destinationPath(this.configPath)
     if (this.existsDestination(this.configPath)) {
       const oldConfig = this.readDestination(this.configPath)
-      const newConfig = oldConfig.replace(/your-repo-name/g, this.domain)
+      // If a repository name to replace is declared using the
+      // "prismic:theme:replace-repo" special comment, use that as the old
+      // value. Otherwise, default to "your-repo-name".
+      const oldDomain =
+      oldConfig.match(/^\/\/prismic:theme:replace-repo (.*)$/m)?.[1] ||
+      'your-repo-name'
+      const newConfig = oldConfig
+      .replace(new RegExp(oldDomain, 'g'), this.domain)
+      // Remove the prismic:theme:replace-repo special comment
+      .replace(/^\/\/prismic:theme:replace-repo .*\r?\n?$/m, '')
+      console.log({newConfig})
       this.writeDestination(this.configPath, newConfig)
     } else {
       const url = new URL(this.prismic.base)

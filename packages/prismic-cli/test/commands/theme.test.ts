@@ -2,7 +2,7 @@ import {expect, test} from '@oclif/test'
 import * as path from 'path'
 import * as os from 'os'
 import {fs} from '../../src/utils'
-import {Theme as ThemeZip} from '../__stubs__/template'
+import {Theme as ThemeZip, ThemeWithReplaceRepo as ThemeWithReplaceRepoZip} from '../__stubs__/template'
 import Theme from '../../src/commands/theme'
 import * as lookpath from 'lookpath'
 
@@ -28,12 +28,15 @@ describe('theme', () => {
 
   const fakeFolder = path.join(testDir, 'test-theme')
   const fakeFolderWithExistingRepo = path.join(testDir, 'theme-with-existing-repo')
+  const fakeFolderWithReplaceRepo = path.join(testDir, 'theme-with-replace-repo')
 
   const fakeSource = 'https://github.com/prismicio/fake-theme'
+  const fakeSourceWithReplaceRepo = 'https://github.com/prismicio/fake-theme-with-replace-repo'
 
   const configFile = 'prismic-configuration.js'
 
   const zip = ThemeZip.toBuffer()
+  const themeWithReplaceRepoZip = ThemeWithReplaceRepoZip.toBuffer()
 
   before(async () => {
     if (fs.existsSync(testDir)) {
@@ -99,6 +102,37 @@ describe('theme', () => {
   .it('when passed existing repo it should not try to create a repository', () => {
     const configPath = path.join(fakeFolderWithExistingRepo, configFile)
     expect(fs.existsSync(fakeFolderWithExistingRepo)).to.be.true
+    const conf = require(configPath)
+    expect(conf.prismicRepo).to.include(fakeDomain)
+  })
+
+  test
+  .stderr()
+  .stub(lookpath, 'lookpath', async () => false)
+  .stub(fs, 'readFileSync', () => JSON.stringify({base: fakeBase, cookies: fakeCookies}))
+  .stub(fs, 'writeFile', () => Promise.resolve())
+  .nock(fakeBase, api => {
+    return api
+    .get(`/app/dashboard/repositories/${fakeDomain}/exists`).reply(200, () => true) // we should really rename this.
+    .post('/authentication/newrepository?app=slicemachine').reply(200, fakeDomain)
+  })
+  .nock('https://auth.prismic.io', api => {
+    api.get('/validate?token=xyz').reply(200, {})
+    api.get('/refreshtoken?token=xyz').reply(200, 'xyz')
+  })
+  .nock('https://github.com', api => {
+    api.head('/prismicio/fake-theme-with-replace-repo/archive/main.zip').reply(404)
+    api.head('/prismicio/fake-theme-with-replace-repo/archive/master.zip').reply(200)
+    return api.get('/prismicio/fake-theme-with-replace-repo/archive/master.zip')
+    .reply(200, themeWithReplaceRepoZip, {
+      'Content-Type': 'application/zip',
+      'content-length': zip.length.toString(),
+    })
+  })
+  .command(['theme', fakeSourceWithReplaceRepo, '--domain', fakeDomain, '--folder', fakeFolderWithReplaceRepo, '--conf', configFile, '--skip-install'])
+  .it('supports declaring the repository name to be replaced', () => {
+    const configPath = path.join(fakeFolderWithReplaceRepo, configFile)
+    expect(fs.existsSync(fakeFolderWithReplaceRepo)).to.be.true
     const conf = require(configPath)
     expect(conf.prismicRepo).to.include(fakeDomain)
   })

@@ -11,8 +11,14 @@ const themePath = path.resolve(__dirname, 'fake-theme-master')
 
 Theme.addLocalFolder(themePath, 'fake-theme-master')
 
+const ThemeWithReplaceRepo = new AdmZip()
+const themeWithReplaceRepoPath = path.resolve(__dirname, 'fake-theme-with-replace-repo-master')
+
+ThemeWithReplaceRepo.addLocalFolder(themeWithReplaceRepoPath, 'fake-theme-with-replace-repo-master')
+
 export {
   Theme,
+  ThemeWithReplaceRepo,
   NodeJS,
 }
 
