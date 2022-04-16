@@ -74,7 +74,6 @@ export default class PrismicTheme extends PrismicGenerator {
       .replace(new RegExp(oldDomain, 'g'), this.domain)
       // Remove the prismic:theme:replace-repo special comment
       .replace(/^\/\/prismic:theme:replace-repo .*\r?\n?$/m, '')
-      console.log({newConfig})
       this.writeDestination(this.configPath, newConfig)
     } else {
       const url = new URL(this.prismic.base)
