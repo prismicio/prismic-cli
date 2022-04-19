@@ -135,5 +135,6 @@ describe('theme', () => {
     expect(fs.existsSync(fakeFolderWithConfig)).to.be.true
     const conf = require(configPath)
     expect(conf.prismicRepo).to.include(fakeDomain)
+    expect(fs.existsSync(path.join(fakeFolderWithConfig, 'prismic-config.json'))).to.be.false
   })
 })

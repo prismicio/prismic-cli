@@ -79,7 +79,7 @@ export default class PrismicTheme extends PrismicGenerator {
     try {
       themeConfig = JSON.parse(this.readDestination('prismic-theme.json', {defaults: '{}'}))
     } catch {
-      console.error('An invalid `prismic-theme.json` was found. The configuration will be ignored.')
+      console.error("An invalid prismic-theme.json was found. The theme's configuration will be ignored.")
     }
 
     if (this.existsDestination(this.configPath)) {
@@ -92,6 +92,10 @@ export default class PrismicTheme extends PrismicGenerator {
       url.host = `${this.domain}.${url.host}`
       url.pathname = '/api/v2'
       this.fs.writeJSON(location, {apiEndpoint: url.toString()})
+    }
+
+    if (this.existsDestination('prismic-theme.json')) {
+      this.deleteDestination('prismic-theme.json')
     }
   }
 
