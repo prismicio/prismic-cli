@@ -21,9 +21,6 @@ jobs:
       node_js: 14
       env: YARN_GPG=no # so windows exits
 
-  
-cache: yarn
-
 script:
   - ./packages/prismic-cli/bin/run --version
   - ./packages/prismic-cli/bin/run --help
