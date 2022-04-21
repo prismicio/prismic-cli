@@ -7,6 +7,18 @@ export interface ThemeOptions extends TemplateOptions {
   documentsPath: string;
 }
 
+/**
+ * The contents of a `prismic-theme.json` file that a theme can include to
+ * configure the `prismic theme` command.
+ */
+interface ThemeConfig {
+  /**
+  * The Prismic repository name in the theme's Prismic configuration file (e.g.
+  * `prismic-configuration.js`) to replace with the new repository name.
+  */
+  replaceRepositoryName?: string;
+}
+
 export default class PrismicTheme extends PrismicGenerator {
   source: string
 
@@ -62,15 +74,28 @@ export default class PrismicTheme extends PrismicGenerator {
 
   async writing() {
     const location = this.destinationPath(this.configPath)
+
+    let themeConfig: ThemeConfig = {}
+    try {
+      themeConfig = JSON.parse(this.readDestination('prismic-theme.json', {defaults: '{}'}))
+    } catch {
+      console.error("An invalid prismic-theme.json was found. The theme's configuration will be ignored.")
+    }
+
     if (this.existsDestination(this.configPath)) {
       const oldConfig = this.readDestination(this.configPath)
-      const newConfig = oldConfig.replace(/your-repo-name/g, this.domain)
+      const oldRepoName = themeConfig.replaceRepositoryName || 'your-repo-name'
+      const newConfig = oldConfig.replace(new RegExp(oldRepoName, 'g'), this.domain)
       this.writeDestination(this.configPath, newConfig)
     } else {
       const url = new URL(this.prismic.base)
       url.host = `${this.domain}.${url.host}`
       url.pathname = '/api/v2'
       this.fs.writeJSON(location, {apiEndpoint: url.toString()})
+    }
+
+    if (this.existsDestination('prismic-theme.json')) {
+      this.deleteDestination('prismic-theme.json')
     }
   }
 
