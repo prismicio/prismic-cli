@@ -1,3 +1,20 @@
+## [4.2.3](https://github.com/prismicio/prismic-cli/compare/v4.2.2...v4.2.3) (2022-04-21)
+
+
+### Bug Fixes
+
+* change the order of the package manger prompt ([5f679c7](https://github.com/prismicio/prismic-cli/commit/5f679c7f94c0952561b89dfe91410ca27d8dfa79))
+* remove `prismic-theme.json` file after project creation ([20898c1](https://github.com/prismicio/prismic-cli/commit/20898c1e5ac4e465304ccb45ebf84cba42c23aa3))
+* silence deprication warnings ([df4483c](https://github.com/prismicio/prismic-cli/commit/df4483c57575f18fe07f1c1391598b8550cc3bb0))
+* suppress warnings from node ([f0b135d](https://github.com/prismicio/prismic-cli/commit/f0b135d1c0db6c4d1c04f40ea38ae4ebcfce79f8))
+
+
+### Features
+
+* support for a `prismic-theme.json` file in themes ([05e2a44](https://github.com/prismicio/prismic-cli/commit/05e2a44b69d0150071923863f8dd83989ab63b52))
+
+
+
 ## [4.2.2](https://github.com/prismicio/prismic-cli/compare/v4.2.1...v4.2.2) (2022-02-02)
 
 
