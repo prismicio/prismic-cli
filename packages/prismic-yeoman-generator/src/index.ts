@@ -110,7 +110,7 @@ export default abstract class PrismicGenerator extends Generator {
       type: 'list',
       name: 'pm',
       message: 'package manager',
-      choices: ['yarn', 'npm'],
+      choices: ['npm', 'yarn'],
     }).then(res => {
       this.pm = res.pm
       return res.pm
